@@ -28,7 +28,7 @@
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://generativelanguage.googleapis.com https://formspree.io; img-src 'self' data: https:;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://formspree.io; img-src 'self' data: https:;">
 <meta name="description" content="Mocha is your AI interview coach. Get firm-grade behavioral feedback in minutes. Used by students targeting consulting, finance, and tech roles.">
 <meta property="og:title" content="mocha — AI interview coaching">
 <meta property="og:description" content="Firm-grade behavioral interview coaching, powered by AI. One question a day. Get the offer.">
@@ -1201,7 +1201,7 @@ body {
 
 <!-- MOCHA UPGRADE MODAL -->
 <div id="upgrade-modal-overlay" onclick="if(event.target===this)closeUpgradeModal()" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(20,10,5,0.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:1.5rem;">
-  <div style="background:#fff;border-radius:20px;width:100%;max-width:420px;box-shadow:0 32px 80px rgba(0,0,0,0.22);animation:min 0.22s cubic-bezier(0.16,1,0.3,1);overflow:hidden;">
+  <div style="background:#fff;border-radius:20px;width:100%;max-width:400px;box-shadow:0 32px 80px rgba(0,0,0,0.22);overflow:hidden;">
     <div style="background:var(--ln);padding:1.5rem 1.75rem 1.25rem;border-bottom:1px solid var(--sil);position:relative;">
       <button onclick="closeUpgradeModal()" style="position:absolute;top:1rem;right:1rem;background:rgba(44,19,8,0.08);border:none;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:13px;color:var(--med);display:flex;align-items:center;justify-content:center;">&#x2715;</button>
       <div style="display:flex;align-items:center;gap:9px;margin-bottom:1.1rem;">
@@ -1210,35 +1210,12 @@ body {
         </div>
         <span style="font-family:'DM Serif Display',serif;font-size:15px;color:var(--esp);letter-spacing:-0.02em;">mocha</span>
       </div>
-      <div style="font-family:'DM Serif Display',Georgia,serif;font-size:1.15rem;color:#1a0f0a;letter-spacing:-0.01em;margin-bottom:5px;">You've used your free session</div>
-      <div style="font-size:13px;color:var(--med);line-height:1.55;">Mocha runs on Gemini AI. To keep practicing, add your own free API key — 30 seconds, no credit card.</div>
+      <div style="font-family:'DM Serif Display',Georgia,serif;font-size:1.15rem;color:#1a0f0a;letter-spacing:-0.01em;margin-bottom:5px;">You're on a roll.</div>
+      <div style="font-size:13px;color:var(--med);line-height:1.55;">Create a free account to keep practising, unlock all 8 tracks, and build your streak.</div>
     </div>
     <div style="padding:1.4rem 1.75rem;">
-      <div style="margin-bottom:1.1rem;">
-        <div style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--oat);margin-bottom:8px;">How to get your key</div>
-        <div style="display:flex;flex-direction:column;gap:7px;">
-          <div style="display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--esp);line-height:1.5;">
-            <span style="width:18px;height:18px;border-radius:50%;background:var(--ln);border:1px solid var(--sil);display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#8B4513;flex-shrink:0;margin-top:1px;">1</span>
-            Go to <a href="https://aistudio.google.com/apikey" target="_blank" style="color:#6b3520;font-weight:600;text-decoration:none;">aistudio.google.com/apikey</a>
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--esp);line-height:1.5;">
-            <span style="width:18px;height:18px;border-radius:50%;background:var(--ln);border:1px solid var(--sil);display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#8B4513;flex-shrink:0;margin-top:1px;">2</span>
-            Click "Create API key" — completely free
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--esp);line-height:1.5;">
-            <span style="width:18px;height:18px;border-radius:50%;background:var(--ln);border:1px solid var(--sil);display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#8B4513;flex-shrink:0;margin-top:1px;">3</span>
-            Paste below — stored only in your browser, never on our servers
-          </div>
-        </div>
-      </div>
-      <div style="margin-bottom:4px;">
-        <div style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1a0f0a;margin-bottom:5px;">Your Gemini API key</div>
-        <input id="gemini-key-input" type="password" placeholder="AIzaSy…" onkeydown="if(event.key==='Enter')saveGeminiKey()" style="width:100%;padding:10px 13px;border:1.5px solid #e8d8ce;border-radius:10px;font-size:13px;font-family:'DM Sans',sans-serif;color:#1a0f0a;outline:none;background:#fafaf9;box-sizing:border-box;" onfocus="this.style.borderColor='#2c1308'" onblur="this.style.borderColor='#e8d8ce'"/>
-        <div id="gemini-key-err" style="display:none;font-size:11px;color:#c0190f;margin-top:4px;font-weight:500;">Please paste a valid key (starts with AIzaSy…)</div>
-      </div>
-      <div style="font-size:10px;color:var(--oat);margin-bottom:1rem;">🔒 Stored locally only. Never sent to Mocha.</div>
-      <button onclick="saveGeminiKey()" style="width:100%;padding:11px;background:#1a0f0a;color:#fff;border:none;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:-0.01em;">Save &amp; continue practicing →</button>
-      <div style="text-align:center;margin-top:10px;font-size:11px;color:var(--oat);cursor:pointer;" onclick="closeUpgradeModal()">← go back</div>
+      <button onclick="closeUpgradeModal();openModal('signup')" style="width:100%;padding:12px;background:#2c1308;color:#fde8cc;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:-0.01em;margin-bottom:10px;">Create free account →</button>
+      <div style="text-align:center;font-size:11px;color:var(--oat);cursor:pointer;" onclick="closeUpgradeModal()">← back to practice</div>
     </div>
   </div>
 </div>
@@ -1262,7 +1239,7 @@ body {
           </button>
           <button class="btn-out" onclick="openModal('signup')">Create account →</button>
         </div>
-        <p class="hero-note">One free session, then bring your own free Gemini key — <b>completely unlimited.</b></p>
+        <p class="hero-note">One free session. Create a free account to unlock <b>unlimited practice.</b></p>
         <!-- Social proof stat bar -->
         <div class="stat-bar fadeup d2">
           <div class="stat-bar-item">
@@ -1786,72 +1763,65 @@ var micPerm = 'unknown';
 var twTimer = null;
 
 // ═══════════════════════════════════════════════════════════
-// MOCHA API CLIENT — single key, single function, no retries
-// One API call per user action. Fail fast, fail clean.
+// MOCHA API CLIENT — secure proxy, no keys in frontend
+// All AI traffic routes through /api/interview.
+// One call per user action. Fail fast, fail clean.
 // ═══════════════════════════════════════════════════════════
 
-var _GEMINI_KEY = ['AIzaSyAsv','dkZQrV2LZfGMH9rej','wf1ou58TxbTm8'].join('');
 var _activeRequest = false;
 var _lastRequestTime = 0;
 var REQUEST_COOLDOWN_MS = 3000; // 3s minimum between calls
 
-// Single unified Gemini call — all AI traffic goes through here, no exceptions
-function callGemini(prompt, onSuccess, onError) {
+// _callPayload — low-level POST to /api/interview
+// payload: { question, answer, industry, mode }
+// mode: 'grade' (default) | 'followup'
+function _callPayload(payload, onSuccess, onError) {
   var now = Date.now();
 
-  // Enforce one-at-a-time
   if (_activeRequest) {
     onError('A request is already in progress. Please wait.');
     return;
   }
-
-  // Enforce cooldown
   if (now - _lastRequestTime < REQUEST_COOLDOWN_MS) {
     onError('Please wait a moment before submitting again.');
     return;
   }
-
-  // Input sanitisation — hard cap prompt size to protect quota
-  if (!prompt || typeof prompt !== 'string') {
+  if (!payload || !payload.question || !payload.answer) {
     onError('Invalid input.');
     return;
   }
-  prompt = prompt.slice(0, 4000); // hard cap — never send giant prompts
+
+  // Hard-cap inputs client-side as a second line of defence
+  payload.question = String(payload.question).slice(0, 300);
+  payload.answer   = String(payload.answer).slice(0, 900);
 
   _activeRequest = true;
   _lastRequestTime = now;
 
   var abortCtrl = new AbortController();
-  var timeoutId = setTimeout(function() { abortCtrl.abort(); }, 20000);
+  var timeoutId = setTimeout(function() { abortCtrl.abort(); }, 22000);
 
-  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + _GEMINI_KEY, {
-    signal: abortCtrl.signal,
-    method: 'POST',
+  fetch('/api/interview', {
+    signal : abortCtrl.signal,
+    method : 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.4, maxOutputTokens: 900 }
-    })
+    body   : JSON.stringify(payload)
   }).then(function(res) {
     clearTimeout(timeoutId);
+    if (res.status === 429) {
+      _activeRequest = false;
+      onError('AI temporarily unavailable due to usage limits. Please try again shortly.');
+      return null;
+    }
     return res.json();
   }).then(function(data) {
+    if (!data) return; // already handled above
     _activeRequest = false;
     if (data.error) {
-      var msg = data.error.message || 'API error';
-      if (msg.indexOf('quota') > -1 || data.error.code === 429) {
-        onError('AI temporarily unavailable due to usage limits. Please try again shortly.');
-      } else {
-        onError('AI error: ' + msg.split('.')[0]); // show only first sentence, never full quota URL
-      }
+      onError('AI temporarily unavailable. Please try again shortly.');
       return;
     }
-    if (!data.candidates || !data.candidates.length) {
-      onError('No response from AI. Please try again.');
-      return;
-    }
-    var text = (data.candidates[0].content && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text) || '';
-    onSuccess(text);
+    onSuccess(data);
   }).catch(function(err) {
     clearTimeout(timeoutId);
     _activeRequest = false;
@@ -1863,10 +1833,29 @@ function callGemini(prompt, onSuccess, onError) {
   });
 }
 
-// Legacy shims — keep old references working
-function _getCurrentKey() { return _GEMINI_KEY; }
-function _rotateKey() { return _GEMINI_KEY; } // no-op: rotation removed
-var MOCHA_DEV_KEY = _GEMINI_KEY;
+// callGemini — kept for follow-up chat compatibility.
+// Wraps _callPayload using the current question context.
+// prompt arg is kept for signature compat but not forwarded — the
+// server re-builds a safe prompt from structured fields.
+function callGemini(prompt, onSuccess, onError) {
+  var ctx = window._fcContext || {};
+  var payload = {
+    question: ctx.question || '',
+    answer  : prompt.slice(prompt.lastIndexOf('Candidate follow-up: ') + 21, prompt.length).split('\n')[0].slice(0, 300),
+    industry: (appPersona || PERSONAS[0]).id,
+    mode    : 'followup'
+  };
+  _callPayload(payload, function(data) {
+    onSuccess(data.reply || '');
+  }, onError);
+}
+
+// Legacy shims — keep old references working, no keys anywhere
+function _getCurrentKey() { return ''; }
+function _rotateKey()     { return ''; }
+var MOCHA_DEV_KEY = '';
+var GEMINI_API_KEY = '';
+var HOST_KEY = '';
 
 // Per-user daily limit: 3 free sessions
 var USER_DAILY_LIMIT = 3;
@@ -1921,13 +1910,13 @@ function _showLimitReached() {
 function getGeminiClient() {
   var u = _getUserUsage();
   if (u.count >= USER_DAILY_LIMIT) return null;
-  return { key: _GEMINI_KEY };
+  return {};
 }
-function getActiveKey() { return _GEMINI_KEY; }
+function getActiveKey() { return ''; }
 function ensureGeminiKey(cb) {
   var usage = _getUserUsage();
   if (usage.count >= USER_DAILY_LIMIT) { _showLimitReached(); return; }
-  cb(_GEMINI_KEY);
+  cb('');
 }
 
 // No-ops — BYO key flow removed
@@ -1939,9 +1928,8 @@ function closeUpgradeModal() {
 }
 
 // Legacy compat
-var GEMINI_API_KEY = _GEMINI_KEY;
 var FREE_SESSIONS_USED = 0;
-var HOST_KEY = _GEMINI_KEY;
+var HOST_KEY = '';
 
 
 function sv(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) { if (e.name === 'QuotaExceededError') { console.warn('[Mocha] localStorage quota exceeded. Clearing history to free space.'); localStorage.removeItem('mocha_hist'); try { localStorage.setItem(k, JSON.stringify(v)); } catch(e2) {} } } }
@@ -1961,27 +1949,45 @@ function defaultHistory() {
 // ═══════════════════════════════════════
 // BOOT
 // ═══════════════════════════════════════
+// Global safety net — unhandled errors never crash the whole page
+window.addEventListener('unhandledrejection', function(e) {
+  console.error('[Mocha] Unhandled rejection:', e.reason);
+  e.preventDefault();
+});
+window.addEventListener('error', function(e) {
+  console.error('[Mocha] Error:', e.message);
+});
+
 window.addEventListener('load', function() {
-  renderLogos();
-  renderPersonas();
-  startHeroTypewriter();
+  // Each init call is isolated — a crash in one never kills the others
+  try { renderLogos(); } catch(e) { console.error('[Mocha] renderLogos:', e); }
+  try { renderPersonas(); } catch(e) { console.error('[Mocha] renderPersonas:', e); }
+  // Typewriter is ALWAYS started first, completely independent of API or auth
+  try { startHeroTypewriter(); } catch(e) { console.error('[Mocha] typewriter:', e); }
 
-  freeTries = lv('mocha_free') !== null ? lv('mocha_free') : 1;
-  if (freeTries > 0) {
-    document.getElementById('nav-free').style.display = 'inline-block';
+  try {
+    freeTries = lv('mocha_free') !== null ? lv('mocha_free') : 1;
+    var nf = document.getElementById('nav-free');
+    if (freeTries > 0 && nf) nf.style.display = 'inline-block';
+  } catch(e) { console.error('[Mocha] freeTries:', e); }
+
+  try {
+    var u = lv('mocha_user');
+    if (u) {
+      appUser = u;
+      appHistory = lv('mocha_hist') || [];
+      var pid = lv('mocha_persona') || 'consulting';
+      appPersona = PERSONAS.filter(function(p) { return p.id === pid; })[0] || PERSONAS[0];
+      launchApp();
+    } else {
+      showPage('page-land');
+    }
+  } catch(e) {
+    console.error('[Mocha] boot/auth:', e);
+    try { showPage('page-land'); } catch(e2) {}
   }
 
-  var u = lv('mocha_user');
-  if (u) {
-    appUser = u;
-    appHistory = lv('mocha_hist') || [];
-    var pid = lv('mocha_persona') || 'consulting';
-    appPersona = PERSONAS.filter(function(p) { return p.id === pid; })[0] || PERSONAS[0];
-    launchApp();
-  } else {
-    showPage('page-land');
-  }
-  checkMic();
+  try { checkMic(); } catch(e) { console.error('[Mocha] checkMic:', e); }
 });
 
 // ═══════════════════════════════════════
@@ -2882,21 +2888,17 @@ function doSubmit() {
   var p = appPersona || PERSONAS[0];
   var industryMap = { consulting:'consulting', banking:'finance', marketing:'general', product:'tech', retail:'general', nonprofit:'general', healthcare:'general', finance:'finance' };
   var industry = industryMap[p.id] || 'general';
-  var industryStd = industry === 'consulting' ? 'demand structure, personal ownership, quantified impact.' : industry === 'finance' ? 'demand precision, hard numbers, risk awareness.' : industry === 'tech' ? 'demand clear problem-solving and measurable impact.' : 'demand leadership, ownership, adaptive thinking.';
 
-  // LEAN PROMPT — industry rubric scoring, minimal tokens
-  var prompt = 'You are a behavioral interview scoring system used by top tech companies.\nEvaluate this answer using STAR + hiring rubrics. Be concise.\n\nIndustry: ' + industry + ' — ' + industryStd + '\nQuestion: ' + currentQ.text.slice(0, 200) + '\nAnswer: ' + answer.slice(0, 800) + '\n\nRespond ONLY with valid JSON, no markdown:\n{"star_breakdown":{"situation":"<present or MISSING>","task":"<clear or MISSING>","action":"<specific actions or MISSING>","result":"<quantified result or MISSING>","weak_components":"<missing parts>"},"industry_critique":"<2 sentences: signal to interviewer, key gap with fix>","improved_answer":"<4-5 sentence elite STAR rewrite, prose only, quantify impact>","interviewer_perspective":"<1 sentence: advance or not and why>","scores":{"structure":<1-10>,"clarity":<1-10>,"ownership":<1-10>,"impact":<1-10>},"overall":<1-10>,"verdict":"<one direct sentence about this candidate>"}';
-
-  callGemini(prompt, function(text) {
+  // Structured payload — prompt is built server-side, never in client
+  _callPayload({
+    question: currentQ.text.slice(0, 300),
+    answer  : answer.slice(0, 900),
+    industry: industry,
+    mode    : 'grade'
+  }, function(r) {
     clearInterval(li);
     _submitting = false;
-    var clean = text.replace(/```json|```/g, '').trim();
-    var r;
-    try { r = JSON.parse(clean); } catch(e) {
-      var m = clean.match(/\{[\s\S]*\}/);
-      try { r = m ? JSON.parse(m[0]) : null; } catch(e2) { r = null; }
-    }
-    if (!r) {
+    if (!r || typeof r.overall === 'undefined') {
       document.getElementById('fb-load').innerHTML = '<div style="color:var(--red);font-size:14px;margin-bottom:12px;">Couldn\'t parse feedback. Please try again.</div><button class="btn-out" onclick="goToPractice()" style="font-size:13px;padding:9px 18px;">Back to practice</button>';
       return;
     }
@@ -3064,12 +3066,16 @@ function sendFollowUp() {
   msgsEl.scrollTop = msgsEl.scrollHeight;
 
   var ctx = window._fcContext || {};
-  // Lean context — just essential fields, hard capped
-  var prompt = 'Mocha Coach — elite behavioral interview coach. Be direct, 2-3 sentences max.\n\nQuestion: ' + (ctx.question || '').slice(0, 120) + '\nCandidate follow-up: ' + msg + '\n\nGive one concrete, actionable tip. No bullets. No em dashes.';
 
-  callGemini(prompt, function(reply) {
+  _callPayload({
+    question: (ctx.question || '').slice(0, 200),
+    answer  : msg.slice(0, 300),
+    industry: (appPersona || PERSONAS[0]).id,
+    mode    : 'followup'
+  }, function(data) {
     var thinking = document.getElementById('fc-thinking');
     if (thinking) thinking.remove();
+    var reply = (data && data.reply) ? data.reply : 'Try to be more specific about your role and the measurable outcome.';
     msgsEl.innerHTML += '<div class="fc-msg ai">' + escHtml(reply) + '</div>';
     msgsEl.scrollTop = msgsEl.scrollHeight;
     _fcSending = false;

@@ -25,6 +25,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-Frame-Options" content="DENY">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://generativelanguage.googleapis.com https://formspree.io; img-src 'self' data: https:;">
 <meta name="description" content="Mocha is your AI interview coach. Get firm-grade behavioral feedback in minutes. Used by students targeting consulting, finance, and tech roles.">
 <meta property="og:title" content="mocha — AI interview coaching">
 <meta property="og:description" content="Firm-grade behavioral interview coaching, powered by AI. One question a day. Get the offer.">
@@ -383,11 +387,7 @@ body {
 /* ══════════════════════════════════════════════════════════════════
    LANDING PAGE
    ══════════════════════════════════════════════════════════════════ */
-.land-wrap { max-width: 1040px; margin: 0 auto; padding: 0 var(--s6); }
-.hero {
-  padding: 7rem 0 3.5rem;
-  max-width: 680px;
-}
+.land-wrap { max-width: 1080px; margin: 0 auto; padding: 0 var(--s6); }
 
 /* Kicker pill */
 .hero-kicker {
@@ -433,7 +433,7 @@ body {
 /* CTA row */
 .hero-acts { display: flex; gap: var(--s3); align-items: center; flex-wrap: wrap; margin-bottom: var(--s3); }
 .hero-note { font-size: var(--t-xs); color: var(--oat); margin-bottom: var(--s6); letter-spacing: 0.01em; }
-.hero-note b { font-weight: 600; color: var(--lt); }
+.hero-note b { font-weight: 600; color: var(--lt); text-decoration: underline; text-decoration-color: rgba(156,92,58,0.35); text-underline-offset: 2px; }
 
 /* Stat bar */
 .stat-bar {
@@ -450,6 +450,167 @@ body {
   font-family: 'DM Serif Display', serif;
 }
 .stat-bar-l { display: block; font-size: 10px; font-weight: 500; color: var(--oat); letter-spacing: 0.02em; text-transform: uppercase; }
+
+/* ── HERO LAYOUT: two-column on desktop ─────────────────────────── */
+.hero {
+  padding: 7rem 0 0;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  gap: 0 4rem;
+  align-items: start;
+}
+.hero-copy { grid-column: 1; padding-bottom: 4rem; }
+.hero-visual {
+  grid-column: 2; padding-top: 1.5rem; padding-bottom: 0; align-self: stretch;
+  opacity: 0; transform: translateY(20px);
+  animation: herovisualin 0.7s 0.25s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+@media(max-width: 860px) {
+  .hero { grid-template-columns: 1fr; gap: 2.5rem 0; padding: 5rem 0 0; }
+  .hero-copy { grid-column: 1; padding-bottom: 0; }
+  .hero-visual { grid-column: 1; padding-top: 0; }
+}
+
+/* ── PRODUCT MOCKUP CARD ─────────────────────────────────────────── */
+.hero-mockup {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid rgba(44,19,8,0.09);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 2px 0 rgba(44,19,8,0.05), 0 20px 60px rgba(44,19,8,0.13), 0 4px 16px rgba(44,19,8,0.07);
+  position: sticky;
+  top: 72px; /* stick below nav when scrolling */
+}
+
+/* Mockup top bar */
+.hm-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 18px;
+  border-bottom: 1px solid rgba(44,19,8,0.07);
+  background: #fffcf9;
+}
+.hm-brand { display: flex; align-items: center; gap: 9px; }
+.hm-logo-icon {
+  width: 26px; height: 26px; border-radius: 7px;
+  background: var(--ln);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Serif Display', serif;
+  font-size: 13px; color: var(--esp); font-style: italic;
+  box-shadow: 0 0 0 1px rgba(44,19,8,0.10);
+  flex-shrink: 0;
+}
+.hm-brand-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 14px; color: var(--esp); letter-spacing: -0.02em;
+}
+.hm-live {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 500; color: var(--lt);
+}
+.hm-live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #2d6a4f;
+  animation: livepulse 2.5s ease-in-out infinite;
+}
+@keyframes livepulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+/* Mockup body */
+.hm-body { display: flex; min-height: 320px; }
+
+/* Left sidebar — question list */
+.hm-sidebar {
+  width: 130px;
+  flex-shrink: 0;
+  padding: 16px 14px;
+  border-right: 1px solid rgba(44,19,8,0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #fffcf9;
+}
+.hm-q-row {
+  display: flex; align-items: center; gap: 7px;
+}
+.hm-q-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--sil); flex-shrink: 0;
+  transition: background 0.2s;
+}
+.hm-q-row.hm-active .hm-q-dot { background: var(--esp); }
+.hm-q-line {
+  height: 6px; border-radius: 3px;
+  background: var(--sil2); flex: 1;
+}
+.hm-q-row.hm-active .hm-q-line { background: rgba(44,19,8,0.14); }
+.hm-q-row:nth-child(1) .hm-q-line { max-width: 72%; }
+.hm-q-row:nth-child(2) .hm-q-line { max-width: 84%; }
+.hm-q-row:nth-child(3) .hm-q-line { max-width: 60%; }
+.hm-q-row:nth-child(4) .hm-q-line { max-width: 76%; }
+.hm-q-row:nth-child(5) .hm-q-line { max-width: 55%; }
+
+/* Right chat area */
+.hm-chat {
+  flex: 1;
+  padding: 18px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #ffffff;
+}
+
+.hm-msg {
+  font-size: 13px; line-height: 1.55;
+  padding: 10px 13px;
+  max-width: 82%;
+}
+.hm-msg-ai {
+  background: var(--cr);
+  border: 1px solid rgba(44,19,8,0.07);
+  border-radius: 4px 13px 13px 13px;
+  color: var(--esp);
+  align-self: flex-start;
+}
+.hm-msg-user {
+  background: var(--ln);
+  border: 1px solid rgba(44,19,8,0.09);
+  border-radius: 13px 13px 4px 13px;
+  color: var(--esp);
+  align-self: flex-end;
+  margin-left: auto;
+}
+.hm-msg-followup {
+  background: var(--cr);
+  border: 1px solid rgba(44,19,8,0.07);
+  border-radius: 4px 13px 13px 13px;
+  color: var(--esp);
+  align-self: flex-start;
+}
+
+/* Input row */
+.hm-input {
+  display: flex; align-items: center; justify-content: space-between;
+  border: 1px solid rgba(44,19,8,0.11);
+  border-radius: 11px;
+  padding: 10px 13px;
+  margin-top: auto;
+  background: #fff;
+}
+.hm-input-ph {
+  font-size: 13px; color: rgba(44,19,8,0.28);
+  font-weight: 400; letter-spacing: -0.005em;
+}
+.hm-send {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--esp);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── FADE-IN ANIMATION ──────────────────────────────────────────── */
+@keyframes herovisualin { to { opacity: 1; transform: none; } }
 
 /* ══════════════════════════════════════════════════════════════════
    TRUST BAND — school logos
@@ -1085,32 +1246,99 @@ body {
 <div class="page active" id="page-land" style="padding-top:52px;">
   <div class="land-wrap">
     <div class="hero fadeup">
-      <div class="hero-kicker">
-        <span class="kicker-dot"></span>
-        AI interview coach · Free to start
-      </div>
-      <h1 class="hero-h1">Land your<br>dream <em>internship.</em></h1>
-      <p class="hero-tagline" id="hero-tagline"><span class="tw-cursor"></span></p>
-      <div class="hero-acts">
-        <button class="btn-cta" onclick="startFree()">
-          Try it free now
-          <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3L12 7L8 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button class="btn-out" onclick="openModal('signup')">Create account →</button>
-      </div>
-      <p class="hero-note">One free session, then bring your own free Gemini key — <b>completely unlimited.</b></p>
-      <!-- Social proof stat bar -->
-      <div class="stat-bar fadeup d2">
-        <div class="stat-bar-item">
-          <span class="stat-bar-n">AI-powered</span>
-          <span class="stat-bar-l">Interview coaching</span>
+
+      <!-- ── LEFT: copy column ─────────────────────────────── -->
+      <div class="hero-copy">
+        <div class="hero-kicker">
+          <span class="kicker-dot"></span>
+          AI interview coach · Free to start
         </div>
-        <div class="stat-bar-div"></div>
-        <div class="stat-bar-item">
-          <span class="stat-bar-n">Fortune 50</span>
-          <span class="stat-bar-l">Firm-grade feedback</span>
+        <h1 class="hero-h1">Land your<br>dream <em>internship.</em></h1>
+        <p class="hero-tagline" id="hero-tagline"><span class="tw-cursor"></span></p>
+        <div class="hero-acts">
+          <button class="btn-cta" onclick="startFree()">
+            Try it free now
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3L12 7L8 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="btn-out" onclick="openModal('signup')">Create account →</button>
+        </div>
+        <p class="hero-note">One free session, then bring your own free Gemini key — <b>completely unlimited.</b></p>
+        <!-- Social proof stat bar -->
+        <div class="stat-bar fadeup d2">
+          <div class="stat-bar-item">
+            <span class="stat-bar-n">AI-powered</span>
+            <span class="stat-bar-l">Interview coaching</span>
+          </div>
+          <div class="stat-bar-div"></div>
+          <div class="stat-bar-item">
+            <span class="stat-bar-n">Fortune 50</span>
+            <span class="stat-bar-l">Firm-grade feedback</span>
+          </div>
         </div>
       </div>
+
+      <!-- ── RIGHT: product mockup visual ─────────────────── -->
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-mockup">
+
+          <!-- Top bar -->
+          <div class="hm-topbar">
+            <div class="hm-brand">
+              <div class="hm-logo-icon">m</div>
+              <span class="hm-brand-name">Mocha</span>
+            </div>
+            <div class="hm-live">
+              <div class="hm-live-dot"></div>
+              AI Interviewer
+            </div>
+          </div>
+
+          <!-- Two-column body -->
+          <div class="hm-body">
+
+            <!-- Left: question skeleton list -->
+            <div class="hm-sidebar">
+              <div class="hm-q-row hm-active">
+                <div class="hm-q-dot"></div>
+                <div class="hm-q-line"></div>
+              </div>
+              <div class="hm-q-row">
+                <div class="hm-q-dot"></div>
+                <div class="hm-q-line"></div>
+              </div>
+              <div class="hm-q-row">
+                <div class="hm-q-dot"></div>
+                <div class="hm-q-line"></div>
+              </div>
+              <div class="hm-q-row">
+                <div class="hm-q-dot"></div>
+                <div class="hm-q-line"></div>
+              </div>
+              <div class="hm-q-row">
+                <div class="hm-q-dot"></div>
+                <div class="hm-q-line"></div>
+              </div>
+            </div>
+
+            <!-- Right: live chat -->
+            <div class="hm-chat">
+              <div class="hm-msg hm-msg-ai">Tell me about a time you<br>led a team through uncertainty.</div>
+              <div class="hm-msg hm-msg-user">At my last internship, our roadmap shifted 3 times…</div>
+              <div class="hm-msg hm-msg-followup">What was the biggest challenge in<br>realigning the team each time?</div>
+              <div class="hm-input">
+                <span class="hm-input-ph">Type your answer…</span>
+                <div class="hm-send">
+                  <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+                    <path d="M7 11V3M3 7L7 3L11 7" stroke="#fde8cc" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
     </div>
     <div class="trust-band">
       <div class="trust-lbl">Used by students from</div>
@@ -1557,88 +1785,164 @@ var isRec = false;
 var micPerm = 'unknown';
 var twTimer = null;
 
-// ─── Gemini API — 1 free session on the house, then user adds their own free key ───
 // ═══════════════════════════════════════════════════════════
-// MOCHA API CLIENT — zero-backend, production-ready
-// MODE 1: 1 free AI call per 24h via dev key (localStorage rate limit)
-// MODE 2: user's own Gemini key (unlimited, stored locally)
+// MOCHA API CLIENT — single key, single function, no retries
+// One API call per user action. Fail fast, fail clean.
 // ═══════════════════════════════════════════════════════════
-// ⚠️ For scale: proxy this through a Cloudflare Worker to hide the key
-// See: https://developers.cloudflare.com/workers/
-var MOCHA_DEV_KEY = ['AIzaSyAE5KZs','Whnfz8qCVf1s','AFX_PevsGp7Qa5M'].join('');
 
-function _getRateLimitRecord() {
-  try {
-    var rec = JSON.parse(localStorage.getItem('mocha_rl') || '{}');
-    var today = new Date().toLocaleDateString('en-CA');
-    if (rec.date !== today) { rec = { date: today, count: 0 }; }
-    return rec;
-  } catch(e) { return { date: new Date().toLocaleDateString('en-CA'), count: 0 }; }
-}
+var _GEMINI_KEY = ['AIzaSyAsv','dkZQrV2LZfGMH9rej','wf1ou58TxbTm8'].join('');
+var _activeRequest = false;
+var _lastRequestTime = 0;
+var REQUEST_COOLDOWN_MS = 3000; // 3s minimum between calls
 
-function _saveRateLimitRecord(rec) {
-  try { localStorage.setItem('mocha_rl', JSON.stringify(rec)); } catch(e) {}
-}
+// Single unified Gemini call — all AI traffic goes through here, no exceptions
+function callGemini(prompt, onSuccess, onError) {
+  var now = Date.now();
 
-// Returns { key, isFallback } or null if limit hit and no user key
-// NOTE: Client-side rate limiting only — bypassable by clearing localStorage.
-// For production, proxy calls through a serverless function that rate-limits by IP.
-function getGeminiClient() {
-  var userKey = localStorage.getItem('mocha_gemini_key');
-  if (userKey && userKey.length > 20) return { key: userKey, isFallback: false };
-  var rec = _getRateLimitRecord();
-  if (rec.count < 1) return { key: MOCHA_DEV_KEY, isFallback: true };
-  return null;
-}
-
-function markFreeCallUsed() {
-  var rec = _getRateLimitRecord();
-  rec.count++;
-  _saveRateLimitRecord(rec);
-}
-
-// Legacy aliases for compatibility
-var GEMINI_API_KEY = MOCHA_DEV_KEY;
-var FREE_SESSIONS_USED = _getRateLimitRecord().count;
-var HOST_KEY = MOCHA_DEV_KEY;
-
-function getActiveKey() {
-  var client = getGeminiClient();
-  return client ? client.key : null;
-}
-
-function markFreeSessionUsed() { markFreeCallUsed(); }
-
-function ensureGeminiKey(cb) {
-  var client = getGeminiClient();
-  if (client) { cb(client.key); return; }
-  openUpgradeModal(cb);
-}
-
-function saveGeminiKey() {
-  var val = document.getElementById('gemini-key-input').value.trim();
-  if (!val || val.length < 20) {
-    var errEl = document.getElementById('gemini-key-err');
-    if (errEl) errEl.style.display = 'block';
+  // Enforce one-at-a-time
+  if (_activeRequest) {
+    onError('A request is already in progress. Please wait.');
     return;
   }
-  localStorage.setItem('mocha_gemini_key', val);
-  GEMINI_API_KEY = val;
-  var cb = window._upgradeModalCb;
-  closeUpgradeModal();
-  if (cb) cb(val);
+
+  // Enforce cooldown
+  if (now - _lastRequestTime < REQUEST_COOLDOWN_MS) {
+    onError('Please wait a moment before submitting again.');
+    return;
+  }
+
+  // Input sanitisation — hard cap prompt size to protect quota
+  if (!prompt || typeof prompt !== 'string') {
+    onError('Invalid input.');
+    return;
+  }
+  prompt = prompt.slice(0, 4000); // hard cap — never send giant prompts
+
+  _activeRequest = true;
+  _lastRequestTime = now;
+
+  var abortCtrl = new AbortController();
+  var timeoutId = setTimeout(function() { abortCtrl.abort(); }, 20000);
+
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + _GEMINI_KEY, {
+    signal: abortCtrl.signal,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.4, maxOutputTokens: 900 }
+    })
+  }).then(function(res) {
+    clearTimeout(timeoutId);
+    return res.json();
+  }).then(function(data) {
+    _activeRequest = false;
+    if (data.error) {
+      var msg = data.error.message || 'API error';
+      if (msg.indexOf('quota') > -1 || data.error.code === 429) {
+        onError('AI temporarily unavailable due to usage limits. Please try again shortly.');
+      } else {
+        onError('AI error: ' + msg.split('.')[0]); // show only first sentence, never full quota URL
+      }
+      return;
+    }
+    if (!data.candidates || !data.candidates.length) {
+      onError('No response from AI. Please try again.');
+      return;
+    }
+    var text = (data.candidates[0].content && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text) || '';
+    onSuccess(text);
+  }).catch(function(err) {
+    clearTimeout(timeoutId);
+    _activeRequest = false;
+    if (err.name === 'AbortError') {
+      onError('Request timed out. Check your connection and try again.');
+    } else {
+      onError('Connection error. Please try again.');
+    }
+  });
 }
 
-function openUpgradeModal(cb) {
-  window._upgradeModalCb = cb || null;
-  var m = document.getElementById('upgrade-modal-overlay');
-  if (m) { m.style.display = 'flex'; }
+// Legacy shims — keep old references working
+function _getCurrentKey() { return _GEMINI_KEY; }
+function _rotateKey() { return _GEMINI_KEY; } // no-op: rotation removed
+var MOCHA_DEV_KEY = _GEMINI_KEY;
+
+// Per-user daily limit: 3 free sessions
+var USER_DAILY_LIMIT = 3;
+function _getUserUsage() {
+  try {
+    var u = JSON.parse(localStorage.getItem('mocha_usage') || '{}');
+    var today = new Date().toLocaleDateString('en-CA');
+    if (u.date !== today) u = { date: today, count: 0 };
+    return u;
+  } catch(e) { return { date: new Date().toLocaleDateString('en-CA'), count: 0 }; }
+}
+function _saveUserUsage(u) {
+  try { localStorage.setItem('mocha_usage', JSON.stringify(u)); } catch(e) {}
+}
+function markFreeCallUsed() {
+  var u = _getUserUsage();
+  u.count++;
+  _saveUserUsage(u);
+}
+function markFreeSessionUsed() { markFreeCallUsed(); }
+
+// Show clean "come back tomorrow" UI
+function _showLimitReached() {
+  var existing = document.getElementById('limit-overlay');
+  if (existing) { existing.style.display = 'flex'; return; }
+  var overlay = document.createElement('div');
+  overlay.id = 'limit-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:550;background:rgba(10,5,2,0.55);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:1.5rem;';
+  var box = document.createElement('div');
+  box.style.cssText = 'background:#fffcf9;border-radius:20px;width:100%;max-width:360px;padding:2.5rem;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,0.2);';
+  var heading = document.createElement('div');
+  heading.style.cssText = 'font-size:1.6rem;color:#2c1308;margin-bottom:10px;letter-spacing:-0.03em;font-weight:400;';
+  heading.textContent = "You're on a roll.";
+  var body = document.createElement('div');
+  body.style.cssText = 'font-size:14px;color:#9c5c3a;line-height:1.75;margin-bottom:1.5rem;';
+  body.innerHTML = "You've used your 3 free sessions today.<br>Come back tomorrow to keep going.";
+  var note = document.createElement('div');
+  note.style.cssText = 'font-size:11px;color:#c48762;margin-bottom:1.5rem;';
+  note.textContent = 'More usage options coming soon.';
+  var btn = document.createElement('button');
+  btn.style.cssText = 'padding:10px 24px;background:#2c1308;color:#fde8cc;border:none;border-radius:99px;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:-0.01em;';
+  btn.textContent = 'Got it';
+  btn.onclick = function() { overlay.style.display = 'none'; };
+  box.appendChild(heading);
+  box.appendChild(body);
+  box.appendChild(note);
+  box.appendChild(btn);
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
 }
 
+function getGeminiClient() {
+  var u = _getUserUsage();
+  if (u.count >= USER_DAILY_LIMIT) return null;
+  return { key: _GEMINI_KEY };
+}
+function getActiveKey() { return _GEMINI_KEY; }
+function ensureGeminiKey(cb) {
+  var usage = _getUserUsage();
+  if (usage.count >= USER_DAILY_LIMIT) { _showLimitReached(); return; }
+  cb(_GEMINI_KEY);
+}
+
+// No-ops — BYO key flow removed
+function saveGeminiKey() {}
+function openUpgradeModal(cb) { _showLimitReached(); }
 function closeUpgradeModal() {
   var m = document.getElementById('upgrade-modal-overlay');
-  if (m) { m.style.display = 'none'; }
+  if (m) m.style.display = 'none';
 }
+
+// Legacy compat
+var GEMINI_API_KEY = _GEMINI_KEY;
+var FREE_SESSIONS_USED = 0;
+var HOST_KEY = _GEMINI_KEY;
+
 
 function sv(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) { if (e.name === 'QuotaExceededError') { console.warn('[Mocha] localStorage quota exceeded. Clearing history to free space.'); localStorage.removeItem('mocha_hist'); try { localStorage.setItem(k, JSON.stringify(v)); } catch(e2) {} } } }
 function lv(k) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch(e) { return null; } }
@@ -1681,7 +1985,7 @@ window.addEventListener('load', function() {
 });
 
 // ═══════════════════════════════════════
-// HERO TYPEWRITER
+// HERO TYPEWRITER — pure frontend, no AI dependency, infinite loop
 // ═══════════════════════════════════════
 var heroLines = [
   'AI coaching as rigorous as a McKinsey partner. One question a day.',
@@ -1690,44 +1994,50 @@ var heroLines = [
   'Five minutes a day. A sharper answer every time.'
 ];
 var heroLineIdx = 0;
+var _heroActive = false; // prevent duplicate loops
 
 function startHeroTypewriter() {
-  typeHeroLine();
+  if (_heroActive) return; // guard against duplicate calls
+  _heroActive = true;
+  _heroTypeLoop();
 }
 
-function typeHeroLine() {
+function _heroTypeLoop() {
   var el = document.getElementById('hero-tagline');
-  if (!el) return;
-  var str = heroLines[heroLineIdx];
+  if (!el) { _heroActive = false; return; } // element gone — stop cleanly
+  var str = heroLines[heroLineIdx % heroLines.length];
   var i = 0;
-  function step() {
+  function typeStep() {
+    var el2 = document.getElementById('hero-tagline');
+    if (!el2) { _heroActive = false; return; }
     if (i <= str.length) {
-      el.innerHTML = str.slice(0, i) + '<span class="tw-cursor"></span>';
+      el2.innerHTML = escHtml(str.slice(0, i)) + '<span class="tw-cursor"></span>';
       i++;
-      twTimer = setTimeout(step, 38 + Math.random() * 18);
+      twTimer = setTimeout(typeStep, 38 + Math.random() * 18);
     } else {
-      twTimer = setTimeout(eraseHeroLine, 3200);
+      twTimer = setTimeout(eraseStep, 3200);
     }
   }
-  step();
-}
-
-function eraseHeroLine() {
-  var el = document.getElementById('hero-tagline');
-  if (!el) return;
-  var txt = el.textContent;
-  var i = txt.length;
-  function step() {
-    if (i >= 0) {
-      el.innerHTML = txt.slice(0, i) + '<span class="tw-cursor"></span>';
-      i--;
-      twTimer = setTimeout(step, 18);
-    } else {
-      heroLineIdx = (heroLineIdx + 1) % heroLines.length;
-      twTimer = setTimeout(typeHeroLine, 320);
+  function eraseStep() {
+    var el2 = document.getElementById('hero-tagline');
+    if (!el2) { _heroActive = false; return; }
+    var txt = str;
+    var j = txt.length;
+    function step() {
+      var el3 = document.getElementById('hero-tagline');
+      if (!el3) { _heroActive = false; return; }
+      if (j >= 0) {
+        el3.innerHTML = escHtml(txt.slice(0, j)) + '<span class="tw-cursor"></span>';
+        j--;
+        twTimer = setTimeout(step, 16);
+      } else {
+        heroLineIdx = (heroLineIdx + 1) % heroLines.length;
+        twTimer = setTimeout(_heroTypeLoop, 280);
+      }
     }
+    step();
   }
-  step();
+  typeStep();
 }
 
 // ═══════════════════════════════════════
@@ -2372,14 +2682,17 @@ function updateTimer() {
   el.className = 'q-tmr' + (timeLeft < 30 ? ' hot' : '');
 }
 
-var MAX_ANSWER_WORDS = 500;
+var MAX_ANSWER_WORDS = 200; // hard cap — protects token budget
 function onInput() {
-  var v = document.getElementById('ans-ta').value;
-  // Trim to 500 words to prevent prompt abuse
+  var ta = document.getElementById('ans-ta');
+  var v = ta.value;
+  // Strip control chars except newlines/tabs (basic XSS-in-prompt prevention)
+  v = v.replace(/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/g, '');
+  if (v !== ta.value) ta.value = v;
   var words = v.trim() ? v.trim().split(/\s+/) : [];
   var w = words.length;
   if (w > MAX_ANSWER_WORDS) {
-    document.getElementById('ans-ta').value = words.slice(0, MAX_ANSWER_WORDS).join(' ');
+    ta.value = words.slice(0, MAX_ANSWER_WORDS).join(' ');
     w = MAX_ANSWER_WORDS;
   }
   document.getElementById('wc-lbl').textContent = w + ' word' + (w !== 1 ? 's' : '') + (w >= MAX_ANSWER_WORDS ? ' (max)' : '');
@@ -2536,18 +2849,19 @@ function stopMic() {
 // SUBMIT
 // ═══════════════════════════════════════
 function doSubmit() {
-  if (_submitting) return; // prevent double-tap
+  if (_submitting) return; // one action = one call
   clearInterval(timerInt);
   if (isRec) stopMic();
   var answer = document.getElementById('ans-ta').value.trim();
-  if (!answer) return;
+  if (!answer || answer.length < 10) return;
+
+  // Check daily usage limit
+  var usage = _getUserUsage();
+  if (usage.count >= USER_DAILY_LIMIT) { _showLimitReached(); return; }
+
   _submitting = true;
   var subBtn = document.getElementById('sub-btn');
   if (subBtn) { subBtn.disabled = true; subBtn.style.opacity = '0.5'; }
-  ensureGeminiKey(function(key) { _doSubmitWithKey(answer, key); });
-}
-
-function _doSubmitWithKey(answer, apiKey) {
 
   var isFree = !appUser;
   if (isFree) { freeTries = Math.max(0, freeTries - 1); sv('mocha_free', freeTries); }
@@ -2566,110 +2880,55 @@ function _doSubmitWithKey(answer, apiKey) {
   }, 2000);
 
   var p = appPersona || PERSONAS[0];
-
-  // Map persona to Mocha Coach industry context
-  var industryMap = {
-    consulting: 'consulting',
-    banking: 'finance',
-    marketing: 'general',
-    product: 'tech',
-    retail: 'general',
-    nonprofit: 'general',
-    healthcare: 'general',
-    finance: 'finance'
-  };
+  var industryMap = { consulting:'consulting', banking:'finance', marketing:'general', product:'tech', retail:'general', nonprofit:'general', healthcare:'general', finance:'finance' };
   var industry = industryMap[p.id] || 'general';
+  var industryStd = industry === 'consulting' ? 'demand structure, personal ownership, quantified impact.' : industry === 'finance' ? 'demand precision, hard numbers, risk awareness.' : industry === 'tech' ? 'demand clear problem-solving and measurable impact.' : 'demand leadership, ownership, adaptive thinking.';
 
-  var prompt = 'You are "Mocha Coach", an elite behavioral interview coach with 20 years placing candidates at McKinsey, Goldman Sachs, Google, and peer firms. You give feedback with the rigor and directness of a McKinsey partner — specific, honest, and ruthlessly actionable. Vague feedback is unacceptable.\n\nYou are given:\n- A behavioral interview question\n- A candidate\'s answer\n- An industry context: ' + industry + '\n\nEvaluate using the STAR method. For industry ' + industry + ': ' + (industry === 'consulting' ? 'demand structure, clear logic, personal ownership, and quantified impact. McKinsey standard: every claim needs evidence.' : industry === 'finance' ? 'demand precision, analytical rigour, risk awareness, and hard numbers. Goldman standard: imprecision signals weakness.' : industry === 'tech' ? 'demand clear problem-solving, technical execution, and measurable product/system impact.' : 'demand crisp communication, demonstrated leadership, real ownership, and adaptive thinking.') + '\n\nRespond ONLY with valid JSON — no markdown, no code fences:\n{"star_breakdown":{"situation":"<what situation was described — quote candidate directly, or write MISSING>","task":"<what task/goal was stated, or MISSING>","action":"<specific actions taken — quote candidate, or MISSING>","result":"<quantified result, or write MISSING — note if result was vague>","weak_components":"<comma-separated list of missing or underdeveloped components>"},"industry_critique":"<3 sentences. First: what the answer signals to a ' + industry + ' interviewer — be blunt. Second: the single strongest element. Third: the most critical gap, named precisely with a specific fix.>","improved_answer":"<Rewrite as a 5-6 sentence elite STAR answer optimised for ' + industry + '. Flowing prose only — no bullets, no em dashes, no hyphens as punctuation. Quantify impact. Match the vocabulary and standards of the industry.>","interviewer_perspective":"<2 sentences. Would this answer move to the next round? Be honest — if not, say exactly why not.>","scores":{"structure":<1-10>,"clarity":<1-10>,"ownership":<1-10>,"impact":<1-10>},"overall":<1-10>,"verdict":"<One direct sentence: what this answer signals about the candidate overall — warm but unsparing>"}\n\nInterview question: ' + currentQ.text + '\nCandidate answer: ' + answer;
+  // LEAN PROMPT — industry rubric scoring, minimal tokens
+  var prompt = 'You are a behavioral interview scoring system used by top tech companies.\nEvaluate this answer using STAR + hiring rubrics. Be concise.\n\nIndustry: ' + industry + ' — ' + industryStd + '\nQuestion: ' + currentQ.text.slice(0, 200) + '\nAnswer: ' + answer.slice(0, 800) + '\n\nRespond ONLY with valid JSON, no markdown:\n{"star_breakdown":{"situation":"<present or MISSING>","task":"<clear or MISSING>","action":"<specific actions or MISSING>","result":"<quantified result or MISSING>","weak_components":"<missing parts>"},"industry_critique":"<2 sentences: signal to interviewer, key gap with fix>","improved_answer":"<4-5 sentence elite STAR rewrite, prose only, quantify impact>","interviewer_perspective":"<1 sentence: advance or not and why>","scores":{"structure":<1-10>,"clarity":<1-10>,"ownership":<1-10>,"impact":<1-10>},"overall":<1-10>,"verdict":"<one direct sentence about this candidate>"}';
 
-  var _isFallbackKey = (getGeminiClient() || {}).isFallback;
-
-  var geminiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + apiKey;
-
-  if (window._activeAbortCtrl) { window._activeAbortCtrl.abort(); } // cancel any previous in-flight request
-  var _abortCtrl = new AbortController();
-  window._activeAbortCtrl = _abortCtrl;
-  var _timeout = setTimeout(function() { _abortCtrl.abort(); }, 20000); // 20s timeout
-
-  fetch(geminiUrl, { signal: _abortCtrl.signal,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.4, maxOutputTokens: 1400 }
-    })
-  }).then(function(res) {
-    clearTimeout(_timeout);
-    return res.json();
-  }).then(function(data) {
+  callGemini(prompt, function(text) {
     clearInterval(li);
-    if (data.error) {
-      _submitting = false;
-      clearInterval(li);
-      document.getElementById('fb-load').innerHTML = '<div style="color:var(--red);font-size:14px;margin-bottom:12px;">AI Error: ' + (data.error.message || 'Something went wrong. Check your API key.') + '</div><button class="btn-out" onclick="goToPractice()" style="font-size:13px;padding:9px 18px;">Back to practice</button>';
-      return;
-    }
-    if (!data.candidates || !data.candidates.length) {
-      _submitting = false;
-      clearInterval(li);
-      document.getElementById('fb-load').innerHTML = '<div style="color:var(--red);font-size:14px;margin-bottom:12px;">No response from AI. This may be a content filter or quota issue — please try again.</div><button class="btn-out" onclick="goToPractice()" style="font-size:13px;padding:9px 18px;">Back to practice</button>';
-      return;
-    }
-    var text = (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0] ? data.candidates[0].content.parts[0].text : '') || '';
+    _submitting = false;
     var clean = text.replace(/```json|```/g, '').trim();
     var r;
-    try {
-      r = JSON.parse(clean);
-    } catch(parseErr) {
-      // Gemini returned malformed JSON — try extracting the JSON object
-      var jsonMatch = clean.match(/\{[\s\S]*\}/);
-      try { r = jsonMatch ? JSON.parse(jsonMatch[0]) : null; } catch(e2) { r = null; }
-      if (!r) {
-        clearInterval(li);
-        document.getElementById('fb-load').innerHTML = '<div style="color:var(--red);font-size:14px;margin-bottom:12px;">Couldn\'t parse feedback. Please try again.</div><button class="btn-out" onclick="goToPractice()" style="font-size:13px;padding:9px 18px;">Back to practice</button>';
-        return;
-      }
+    try { r = JSON.parse(clean); } catch(e) {
+      var m = clean.match(/\{[\s\S]*\}/);
+      try { r = m ? JSON.parse(m[0]) : null; } catch(e2) { r = null; }
     }
-    _submitting = false;
-    if (_isFallbackKey) markFreeCallUsed(); // mark only on success
+    if (!r) {
+      document.getElementById('fb-load').innerHTML = '<div style="color:var(--red);font-size:14px;margin-bottom:12px;">Couldn\'t parse feedback. Please try again.</div><button class="btn-out" onclick="goToPractice()" style="font-size:13px;padding:9px 18px;">Back to practice</button>';
+      return;
+    }
+    markFreeCallUsed();
     renderFeedback(r, isFree);
     if (appUser) {
       var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
       var d = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: tz });
       appHistory.unshift({ q: currentQ.text, cat: currentQ.cat, score: r.overall, date: d, persona: p.role });
-      if (appHistory.length > 100) appHistory = appHistory.slice(0, 100); // cap at 100 sessions
+      if (appHistory.length > 100) appHistory = appHistory.slice(0, 100);
       sv('mocha_hist', appHistory);
-      // Only increment streak if not already practiced today
-      var todayStr = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD in local time
+      var todayStr = new Date().toLocaleDateString('en-CA');
       if (appUser.lastPracticed !== todayStr) {
-        // Check if yesterday was practiced (maintaining streak) or starting fresh
-        var yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
+        var yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
         var yStr = yesterday.toLocaleDateString('en-CA');
-        if (!appUser.lastPracticed) {
-          appUser.streak = 1; // first ever session
-        } else if (appUser.lastPracticed === yStr) {
-          appUser.streak = (appUser.streak || 0) + 1; // consecutive day
-        } else {
-          // Gap in practice — reset streak
-          appUser.streak = 1;
-        }
+        appUser.streak = !appUser.lastPracticed ? 1 : appUser.lastPracticed === yStr ? (appUser.streak || 0) + 1 : 1;
         appUser.lastPracticed = todayStr;
       }
       sv('mocha_user', appUser);
-      var streakDisplay = appUser.streak + (appUser.streak === 1 ? ' day' : ' days');
-      document.getElementById('streak-chip').textContent = streakDisplay + '-day streak';
+      document.getElementById('streak-chip').textContent = appUser.streak + (appUser.streak === 1 ? ' day' : ' days') + '-day streak';
     }
     var qs = QUESTIONS[p.id] || QUESTIONS.consulting;
     var idx = -1;
     for (var i = 0; i < qs.length; i++) { if (qs[i].text === currentQ.text) { idx = i; break; } }
     currentQ = qs[(idx + 1) % qs.length];
-  }).catch(function(err) {
-    _submitting = false;
-    clearTimeout(_timeout);
+  }, function(errMsg) {
     clearInterval(li);
-    var errMsg = err.name === 'AbortError' ? 'Request timed out (20s). Check your connection and try again.' : 'Something went wrong. Please try again.';
-    document.getElementById('fb-load').innerHTML = '<div style="color:var(--red);font-size:14px;margin-bottom:12px;">' + errMsg + '</div><button class="btn-out" onclick="goToPractice()" style="font-size:13px;padding:9px 18px;">Back to practice</button>';
+    _submitting = false;
+    // Re-enable submit button so user can try again without navigating back
+    var subBtn = document.getElementById('sub-btn');
+    if (subBtn) { subBtn.disabled = false; subBtn.style.opacity = '1'; }
+    document.getElementById('fb-load').innerHTML = '<div style="color:var(--red);font-size:14px;margin-bottom:12px;">' + escHtml(errMsg) + '</div><button class="btn-out" onclick="goToPractice()" style="font-size:13px;padding:9px 18px;">Back to practice</button>';
   });
 }
 
@@ -2728,10 +2987,12 @@ function renderFeedback(r, isFree) {
       fc.style.display = 'block';
       document.getElementById('fc-msgs').innerHTML = '';
       document.getElementById('fc-input').value = '';
+      _fcCount = 0; // reset follow-up counter for new session
+      var fcSendBtn = document.getElementById('fc-send');
+      if (fcSendBtn) fcSendBtn.disabled = false;
       window._fcContext = {
-        question: currentQ ? currentQ.text : '',
-        answer: document.getElementById('ans-ta') ? document.getElementById('ans-ta').value : '',
-        feedback: JSON.stringify(r)
+        question: currentQ ? currentQ.text : ''
+        // intentionally omit full answer + feedback JSON — reduces prompt size
       };
     }
   }
@@ -2771,19 +3032,30 @@ function renderHist() {
   rEl.innerHTML = rHtml;
 }
 // ═══════════════════════════════════════
-// FOLLOW-UP CHAT
+// FOLLOW-UP CHAT — max 2 follow-ups per session, uses callGemini
 // ═══════════════════════════════════════
 var _fcSending = false;
 var _submitting = false; // global in-flight lock
+var _fcCount = 0; // follow-up calls this session
+var FC_MAX = 2; // max follow-ups per feedback session
 
 function sendFollowUp() {
   if (_fcSending) return;
+  if (_fcCount >= FC_MAX) {
+    var msgsEl = document.getElementById('fc-msgs');
+    msgsEl.innerHTML += '<div class="fc-msg ai" style="color:var(--oat);font-style:italic;">Session limit reached. Start a new practice to ask more questions.</div>';
+    msgsEl.scrollTop = msgsEl.scrollHeight;
+    document.getElementById('fc-send').disabled = true;
+    return;
+  }
+
   var input = document.getElementById('fc-input');
-  var msg = input.value.trim().slice(0, 500); // max 500 chars
+  var msg = input.value.trim().slice(0, 300); // hard cap at 300 chars
   if (!msg) return;
 
   input.value = '';
   _fcSending = true;
+  _fcCount++;
   document.getElementById('fc-send').disabled = true;
 
   var msgsEl = document.getElementById('fc-msgs');
@@ -2792,36 +3064,24 @@ function sendFollowUp() {
   msgsEl.scrollTop = msgsEl.scrollHeight;
 
   var ctx = window._fcContext || {};
-  var fullPrompt = 'You are the Mocha Coach, an elite behavioral interview coach with the rigor of a McKinsey partner. The candidate just completed a practice session.\n\nInterview question: ' + (ctx.question || '') + '\n\nCandidate answer: ' + (ctx.answer || '') + '\n\nFeedback given: ' + (ctx.feedback || '') + '\n\nFollow-up from candidate: ' + msg + '\n\nRespond in 2-4 sentences. Be direct, specific, and actionable. No bullets. No em dashes. Give them something concrete they can act on immediately.';
+  // Lean context — just essential fields, hard capped
+  var prompt = 'Mocha Coach — elite behavioral interview coach. Be direct, 2-3 sentences max.\n\nQuestion: ' + (ctx.question || '').slice(0, 120) + '\nCandidate follow-up: ' + msg + '\n\nGive one concrete, actionable tip. No bullets. No em dashes.';
 
-  var _fcAbort = new AbortController();
-  var _fcTimeout = setTimeout(function() { _fcAbort.abort(); }, 15000);
-  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + (getActiveKey() || MOCHA_DEV_KEY), {
-    signal: _fcAbort.signal,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: fullPrompt }] }],
-      generationConfig: { temperature: 0.5, maxOutputTokens: 400 }
-    })
-  }).then(function(r) { clearTimeout(_fcTimeout); return r.json(); }).then(function(data) {
+  callGemini(prompt, function(reply) {
     var thinking = document.getElementById('fc-thinking');
     if (thinking) thinking.remove();
-    var reply = '';
-    if (data.candidates && data.candidates[0]) {
-      reply = data.candidates[0].content.parts[0].text || '';
-    } else if (data.error) {
-      reply = 'Error: ' + (data.error.message || 'Something went wrong.');
-    }
     msgsEl.innerHTML += '<div class="fc-msg ai">' + escHtml(reply) + '</div>';
     msgsEl.scrollTop = msgsEl.scrollHeight;
-  }).catch(function() {
+    _fcSending = false;
+    if (_fcCount < FC_MAX) document.getElementById('fc-send').disabled = false;
+    else document.getElementById('fc-send').disabled = true;
+  }, function(errMsg) {
     var thinking = document.getElementById('fc-thinking');
     if (thinking) thinking.remove();
-    msgsEl.innerHTML += '<div class="fc-msg ai" style="color:var(--red)">Something went wrong. Please try again.</div>';
+    msgsEl.innerHTML += '<div class="fc-msg ai" style="color:var(--red)">' + escHtml(errMsg) + '</div>';
     msgsEl.scrollTop = msgsEl.scrollHeight;
-  }).finally(function() {
     _fcSending = false;
+    _fcCount--; // don't count failed requests
     document.getElementById('fc-send').disabled = false;
   });
 }

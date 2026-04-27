@@ -7,11 +7,10 @@
 const GEMINI_ENDPOINT =
   'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
-// ── Rate-limit store (in-memory per cold-start, sufficient for edge bursts) ──
-// For persistent cross-instance limits, swap this Map for Upstash/Vercel KV.
-const ipWindowMs  = 24 * 60 * 60 * 1000; // 24 h
-const ipDailyLimit = 10; // server-side hard ceiling per IP per day
-const ipStore     = new Map(); // { ip -> { count, resetAt } }
+// ── Rate-limit store ─────────────────────────────────────────────
+const ipWindowMs   = 24 * 60 * 60 * 1000;
+const ipDailyLimit = 20;
+const ipStore      = new Map();
 
 function checkRateLimit(ip) {
   const now = Date.now();
@@ -25,21 +24,18 @@ function checkRateLimit(ip) {
   return true;
 }
 
-// ── Input validation ────────────────────────────────────────────────
+// ── Input validation ─────────────────────────────────────────────
 function sanitise(str, maxLen) {
   if (typeof str !== 'string') return '';
-  // Strip control chars that could manipulate prompt structure
   return str.replace(/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/g, '').slice(0, maxLen);
 }
 
-// ── Deterministic fallback — zero AI cost ──────────────────────────
-// Used when: API key missing, Gemini quota hit, network error.
-// Returns a structurally valid feedback object so the UI renders normally.
+// ── Deterministic fallback — zero AI cost ────────────────────────
 function buildFallback(question, answer) {
-  const words  = answer.trim().split(/\s+/).filter(Boolean).length;
-  const hasNumbers = /\d/.test(answer);
+  const words        = answer.trim().split(/\s+/).filter(Boolean).length;
+  const hasNumbers   = /\d/.test(answer);
   const hasSituation = /when|during|once|situation|time/.test(answer.toLowerCase());
-  const hasResult = /result|outcome|impact|led to|increased|decreased|improved/.test(answer.toLowerCase());
+  const hasResult    = /result|outcome|impact|led to|increased|decreased|improved/.test(answer.toLowerCase());
 
   const structureScore = hasSituation ? 6 : 4;
   const clarityScore   = words >= 80 ? 7 : words >= 40 ? 5 : 3;
@@ -49,50 +45,39 @@ function buildFallback(question, answer) {
 
   return {
     star_breakdown: {
-      situation : hasSituation ? 'Present — context provided'             : 'MISSING',
-      task      : 'Unable to assess — manual review recommended',
-      action    : words >= 40  ? 'Actions described'                      : 'MISSING',
-      result    : hasResult    ? 'Outcome mentioned'                      : 'MISSING',
+      situation      : hasSituation ? 'Present — context provided' : 'MISSING',
+      task           : 'Unable to assess — manual review recommended',
+      action         : words >= 40  ? 'Actions described'          : 'MISSING',
+      result         : hasResult    ? 'Outcome mentioned'          : 'MISSING',
       weak_components: [
         !hasSituation && 'Situation',
         !hasResult    && 'Result',
         !hasNumbers   && 'Quantification',
       ].filter(Boolean).join(', ') || 'None identified'
     },
-    industry_critique:
-      'Feedback service is temporarily unavailable. Review your answer for STAR structure and quantified outcomes.',
-    improved_answer:
-      'AI feedback is temporarily unavailable. Ensure your answer covers: a specific Situation, your Task, concrete Actions you took, and a measurable Result.',
-    interviewer_perspective:
-      'Automated assessment unavailable — please retry shortly.',
-    scores: {
-      structure : structureScore,
-      clarity   : clarityScore,
-      ownership : ownershipScore,
-      impact    : impactScore,
-    },
-    overall  : overall,
+    industry_critique     : 'AI feedback is temporarily unavailable. Review your answer for STAR structure and quantified outcomes.',
+    improved_answer       : 'Ensure your answer covers: a specific Situation, your Task, concrete Actions you took, and a measurable Result.',
+    interviewer_perspective: 'Automated assessment unavailable — please retry shortly.',
+    scores : { structure: structureScore, clarity: clarityScore, ownership: ownershipScore, impact: impactScore },
+    overall,
     verdict  : 'Automated feedback temporarily unavailable. Your answer has been recorded.',
     _fallback: true,
   };
 }
 
-// ── Main handler ────────────────────────────────────────────────────
+// ── Main handler ─────────────────────────────────────────────────
 export default async function handler(req, res) {
-  // ── CORS / method guard ──────────────────────────────────────────
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') { res.status(204).end(); return; }
   if (req.method !== 'POST')   { res.status(405).json({ error: 'Method not allowed' }); return; }
 
-  // ── Rate limit ───────────────────────────────────────────────────
   const ip = req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket?.remoteAddress || 'unknown';
   if (!checkRateLimit(ip)) {
     return res.status(429).json({ error: 'Daily limit reached. Please try again tomorrow.' });
   }
 
-  // ── Parse + validate body ────────────────────────────────────────
   let body;
   try {
     body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
@@ -101,11 +86,10 @@ export default async function handler(req, res) {
   }
 
   const { question, answer, industry, mode } = body || {};
-
   const cleanQuestion = sanitise(question, 300);
-  const cleanAnswer   = sanitise(answer,   900);  // ~200 words hard cap
+  const cleanAnswer   = sanitise(answer,   900);
   const cleanIndustry = sanitise(industry, 40);
-  const cleanMode     = sanitise(mode,     20);   // 'grade' | 'followup'
+  const cleanMode     = sanitise(mode,     20);
 
   if (!cleanQuestion || !cleanAnswer) {
     return res.status(400).json({ error: 'Question and answer are required.' });
@@ -114,8 +98,7 @@ export default async function handler(req, res) {
   // ── API key guard ────────────────────────────────────────────────
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    // Graceful degradation — return deterministic fallback, never a 500
-    console.warn('[mocha] GEMINI_API_KEY not set — returning fallback feedback');
+    console.warn('[mocha] GEMINI_API_KEY not set — returning fallback');
     return res.status(200).json(buildFallback(cleanQuestion, cleanAnswer));
   }
 
@@ -134,14 +117,12 @@ export default async function handler(req, res) {
 
   let prompt;
   if (cleanMode === 'followup') {
-    // Follow-up chat — minimal tokens
     prompt =
       `Mocha Coach — elite behavioral interview coach. Be direct, 2-3 sentences max.\n\n` +
       `Question: ${cleanQuestion}\n` +
       `Candidate follow-up: ${cleanAnswer}\n\n` +
       `Give one concrete, actionable tip. No bullets. No em dashes.`;
   } else {
-    // Main grading prompt
     prompt =
       `You are a behavioral interview scoring system used by top companies.\n` +
       `Evaluate this answer using STAR + hiring rubrics. Be concise.\n\n` +
@@ -157,9 +138,9 @@ export default async function handler(req, res) {
       `"overall":<1-10>,"verdict":"<one direct sentence about this candidate>"}`;
   }
 
-  // ── Call Gemini — single attempt, no retries ─────────────────────
+  // ── Call Gemini ──────────────────────────────────────────────────
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 18000); // 18s — under Vercel's 25s limit
+  const timeout    = setTimeout(() => controller.abort(), 18000);
 
   let geminiRes;
   try {
@@ -175,7 +156,6 @@ export default async function handler(req, res) {
   } catch (err) {
     clearTimeout(timeout);
     if (err.name === 'AbortError') {
-      // Timeout — return fallback, don't expose the error
       return res.status(200).json({ ...buildFallback(cleanQuestion, cleanAnswer), _timeout: true });
     }
     console.error('[mocha] Gemini fetch error:', err.message);
@@ -183,19 +163,19 @@ export default async function handler(req, res) {
   }
   clearTimeout(timeout);
 
-  // ── Parse Gemini response ─────────────────────────────────────────
   let data;
   try { data = await geminiRes.json(); } catch {
     return res.status(200).json(buildFallback(cleanQuestion, cleanAnswer));
   }
 
-  // Quota / API error — degrade gracefully, never expose raw error
+  // ── Log the FULL error so we can see it in Vercel logs ───────────
   if (data.error) {
-    const code = data.error.code;
-    if (code === 429 || (data.error.message || '').toLowerCase().includes('quota')) {
-      return res.status(429).json({ error: 'AI temporarily unavailable. Please try again shortly.' });
-    }
-    console.error('[mocha] Gemini API error:', data.error.message);
+    console.error('[mocha] Gemini error code:', data.error.code);
+    console.error('[mocha] Gemini error message:', data.error.message);
+    console.error('[mocha] Gemini error status:', data.error.status);
+    console.error('[mocha] API key starts with:', apiKey ? apiKey.substring(0, 10) + '...' : 'NOT SET');
+
+    // Return fallback instead of erroring — user still gets a score
     return res.status(200).json(buildFallback(cleanQuestion, cleanAnswer));
   }
 
@@ -204,12 +184,10 @@ export default async function handler(req, res) {
     return res.status(200).json(buildFallback(cleanQuestion, cleanAnswer));
   }
 
-  // For follow-up mode, return plain text
   if (cleanMode === 'followup') {
     return res.status(200).json({ reply: rawText.trim() });
   }
 
-  // For grade mode, parse JSON
   const cleaned = rawText.replace(/```json|```/g, '').trim();
   let parsed;
   try {

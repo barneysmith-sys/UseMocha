@@ -2452,9 +2452,17 @@ function signOut() {
   appUser = null;
   appHistory = [];
   appPersona = null;
+  // Clear persisted session so user stays signed out on refresh
+  localStorage.removeItem('mocha_user');
+  localStorage.removeItem('mocha_hist');
+  localStorage.removeItem('mocha_persona');
   document.getElementById('nav-user').style.display = 'none';
   document.getElementById('nav-guest').style.display = 'flex';
+  // Restart typewriter since we're back on the landing page
+  _heroActive = false;
+  if (twTimer) { clearTimeout(twTimer); twTimer = null; }
   showPage('page-land');
+  try { startHeroTypewriter(); } catch(e) {}
 }
 
 function launchApp() {

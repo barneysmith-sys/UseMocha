@@ -28,7 +28,15 @@
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://formspree.io; img-src 'self' data: https:;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline' https://www.googletagmanager.com; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://formspree.io https://www.google-analytics.com https://analytics.google.com; img-src 'self' data: https:;">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SPLL85SBFX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-SPLL85SBFX');
+</script>
 <meta name="description" content="Mocha is your AI interview coach. Get firm-grade behavioral feedback in minutes. Used by students targeting consulting, finance, and tech roles.">
 <meta property="og:title" content="mocha — AI interview coaching">
 <meta property="og:description" content="Firm-grade behavioral interview coaching, powered by AI. One question a day. Get the offer.">
@@ -1640,6 +1648,10 @@ body {
       <div class="mfl"><label>First name</label><input type="text" id="m-name" placeholder="Alex" autocomplete="given-name"></div>
       <div class="mfl"><label>Email</label><input type="email" id="m-email" placeholder="alex@university.edu" autocomplete="email"></div>
       <div class="mfl"><label>Password</label><input type="password" id="m-pass" placeholder="6 or more characters" autocomplete="new-password"></div>
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;margin-top:2px;">
+        <input type="checkbox" id="m-tos" style="margin-top:3px;width:15px;height:15px;flex-shrink:0;accent-color:#2c1308;cursor:pointer;">
+        <label for="m-tos" style="font-size:12px;color:#6b3520;line-height:1.5;cursor:pointer;">I agree to the <a href="/legal.html" target="_blank" style="color:#2c1308;font-weight:600;text-decoration:underline;">Terms of Service and Privacy Policy</a></label>
+      </div>
       <button class="btn-modal" onclick="doSignup()">Create account</button>
       <div class="modal-sw">Already have an account? <span class="modal-lnk" onclick="switchM('login')">Sign in</span></div>
     </div>
@@ -2356,6 +2368,13 @@ function sendToFormspree(name, email) {
 }
 
 function doSignup() {
+  var tosBox = document.getElementById('m-tos');
+  if (tosBox && !tosBox.checked) {
+    var lbl = document.getElementById('m-err');
+    if (lbl) { lbl.textContent = 'Please agree to the Terms of Service and Privacy Policy to continue.'; lbl.style.display = 'block'; }
+    else { alert('Please agree to the Terms of Service and Privacy Policy to continue.'); }
+    return;
+  }
   var name  = document.getElementById('m-name').value.trim();
   var email = document.getElementById('m-email').value.trim().toLowerCase();
   var pass  = document.getElementById('m-pass').value;

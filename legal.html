@@ -195,29 +195,31 @@ h1 {
 
 /* ── CONTACT CARD ────────────────────────────── */
 .contact-card {
-  background: var(--esp);
+  background: #ffffff;
+  border: 1px solid var(--sil);
   border-radius: 18px;
   padding: 2rem 2rem;
   margin-top: 0.75rem;
   text-align: center;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(44,19,8,0.04), 0 4px 16px rgba(44,19,8,0.03);
 }
 .contact-card::before {
   content: '';
   position: absolute; top: -40px; right: -40px;
   width: 160px; height: 160px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(232,187,126,0.12) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(232,187,126,0.08) 0%, transparent 65%);
   pointer-events: none;
 }
 .contact-card-h {
   font-family: 'DM Serif Display', serif;
   font-size: 1.35rem; font-weight: 400;
-  color: var(--ln); letter-spacing: -0.02em;
+  color: var(--esp); letter-spacing: -0.02em;
   margin-bottom: 0.5rem;
 }
 .contact-card-sub {
-  font-size: 13.5px; color: rgba(253,232,204,0.60);
+  font-size: 13.5px; color: var(--lt);
   line-height: 1.65; margin-bottom: 1.5rem;
   max-width: 420px; margin-left: auto; margin-right: auto;
 }
@@ -227,19 +229,19 @@ h1 {
 }
 .contact-link {
   display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(253,232,204,0.10);
-  border: 1px solid rgba(253,232,204,0.20);
+  background: var(--cr);
+  border: 1px solid var(--sil);
   border-radius: 99px; padding: 7px 15px;
   font-size: 12.5px; font-weight: 600;
-  color: var(--ln); text-decoration: none;
+  color: var(--esp); text-decoration: none;
   transition: all 0.15s;
 }
 .contact-link:hover {
-  background: rgba(253,232,204,0.18);
-  border-color: rgba(253,232,204,0.35);
-  color: var(--ln);
+  background: var(--ln);
+  border-color: var(--ln2);
+  color: var(--esp);
 }
-.contact-link svg { width: 13px; height: 13px; opacity: 0.8; }
+.contact-link svg { width: 13px; height: 13px; opacity: 0.7; }
 
 /* ── FOOTER ──────────────────────────────────── */
 .footer {

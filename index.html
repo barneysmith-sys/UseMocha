@@ -2123,6 +2123,65 @@ body {
   font-size: 11px; color: var(--oat); margin-top: 2px;
 }
 
+
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE 10/10 — FEEDBACK + PRACTICE + DASHBOARD
+   ═══════════════════════════════════════════════════════ */
+
+@media(max-width:480px) {
+  /* Feedback page */
+  .fb-pg { padding: 1.5rem 14px !important; }
+  .fb-title { font-size: 1.05rem !important; margin-bottom: 10px !important; }
+  .score-hero { border-radius: 16px; margin-bottom: 12px; }
+  .sh-num { font-size: clamp(3rem,13vw,4.2rem) !important; }
+  .sh-verd { font-size: 11px !important; padding: 4px 10px !important; }
+  .metrics { grid-template-columns: repeat(2,1fr) !important; gap: 8px; }
+  .met { padding: 12px 8px !important; }
+  .met-v { font-size: 1.35rem !important; }
+  .met-n { font-size: 8.5px !important; }
+  .crit-item { padding: 10px 12px !important; }
+  .crit-txt { font-size: 12px !important; line-height: 1.55 !important; }
+  .editorial { border-radius: 12px !important; padding: 14px !important; }
+  .editorial .ed-txt { font-size: 13px !important; line-height: 1.65 !important; }
+  #fb-rewrite { font-size: 13.5px !important; line-height: 1.7 !important; }
+  .fb-acts { flex-direction: column; gap: 8px; }
+  .fb-acts button { width: 100%; justify-content: center; }
+  .gate-box { border-radius: 14px !important; padding: 1.2rem !important; }
+  .share-card { border-radius: 14px !important; padding: 1.1rem !important; }
+  .share-card-score { font-size: 2.4rem !important; }
+  .uni-rank-card, .score-progress-card { border-radius: 12px !important; padding: 0.85rem 1rem !important; }
+
+  /* Practice page */
+  .prac-pg { padding: 1.5rem 14px !important; }
+  .q-txt { font-size: 1.15rem !important; line-height: 1.45 !important; }
+  .ctx-bar { padding: 10px 12px !important; border-radius: 12px !important; }
+  .ctx-tip { font-size: 11px !important; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .ans-box { border-radius: 14px !important; }
+  .ans-area { font-size: 14px !important; padding: 14px !important; }
+
+  /* Dashboard */
+  .dash-pg { padding: 1.5rem 14px !important; }
+  .stats-row { grid-template-columns: repeat(2,1fr) !important; gap: 8px !important; }
+  .stat-c { padding: 1rem 0.8rem !important; border-radius: 14px !important; }
+  .stat-n { font-size: 1.7rem !important; }
+  .today-card { border-radius: 16px !important; padding: 1.1rem 1.2rem !important; }
+  .tc-q { font-size: 0.95rem !important; line-height: 1.45 !important; }
+  .btn-go { font-size: 12px !important; padding: 7px 14px !important; }
+  .week-card, .sess-card { border-radius: 14px !important; }
+  .wday { width: 30px !important; height: 30px !important; font-size: 9px !important; }
+  .sess-item { padding: 10px 12px !important; }
+  .si-q { font-size: 12px !important; }
+  .streak-danger { border-radius: 14px !important; padding: 0.9rem 1rem !important; }
+  .continue-path-card { border-radius: 16px !important; }
+}
+
+@media(max-width:640px) and (min-width:481px) {
+  .fb-pg, .prac-pg, .dash-pg { padding-left: 16px !important; padding-right: 16px !important; }
+  .sh-num { font-size: 4rem !important; }
+  .stats-row { grid-template-columns: repeat(3,1fr) !important; }
+  .metrics { grid-template-columns: repeat(2,1fr) !important; }
+}
 </style>
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>

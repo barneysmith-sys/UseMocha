@@ -37,14 +37,11 @@
   gtag('js', new Date());
   gtag('config', 'G-SPLL85SBFX');
 </script>
-<meta name="description" content="Mocha is your AI interview coach. Get firm-grade behavioral feedback in minutes. Used by students targeting consulting, finance, and tech roles.">
-<meta property="og:title" content="mocha — AI interview coaching">
-<meta property="og:description" content="Firm-grade behavioral interview coaching, powered by AI. One question a day. Get the offer.">
+<meta name="description" content="Mocha: daily behavioral interview coaching at McKinsey, Goldman, and Google standard. Free. One question a day. Real feedback. Used at 14+ colleges.">
+<meta property="og:title" content="Mocha — Land your dream internship">
+<meta property="og:description" content="Free behavioral interview coaching. McKinsey standard. One question a day. Used at 14+ colleges.">
 <meta name="theme-color" content="#fde8cc">
-<title>Mocha AI Interview Coach</title>
-  
-<link rel="icon" href="/favicon.ico">
-
+<title>Mocha — Land your dream internship. Free interview coaching.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
@@ -63,16 +60,16 @@
   --ln:   #fde8cc;   /* linen — logo bg, warm fills */
   --ln2:  #f5d4a8;   /* linen deep — pressed, hover fills */
   --ln3:  #e8bb7e;   /* linen accent */
-  --esp:  #2c1308;   /* espresso — primary */
+  --esp:  #2c1308;   /* espresso — primary warm brown (text) */
   --esp2: #1a0b05;   /* deep espresso */
-  --roa:  #4a2010;   /* roast — hover */
+  --roa:  #4a2010;   /* roast hover */
   --med:  #6b3520;   /* medium roast — secondary */
   --lt:   #9c5c3a;   /* light roast — muted */
   --oat:  #c48762;   /* oat — very muted */
   --sil:  #e8d5c4;   /* silk — borders */
-  --sil2: #f2e6da;   /* silk light — dividers */
+  --sil2: #f2e6da;   /* silk light */
   --wh:   #ffffff;
-  --surf: #fffcf9;   /* warm white cards */
+  --surf: #fffcf9;   /* warm white */
 
   /* Semantic aliases (keep old code working) */
   --ink:  var(--esp);  --ink2: var(--roa);  --ink3: var(--med);
@@ -96,10 +93,13 @@
   --s5: 20px; --s6: 24px; --s7: 32px; --s8: 40px;
   --s9: 56px; --s10: 80px;
 
-  /* Type scale */
+  /* Modular type scale — 1.25 ratio, 15px base */
   --t-xs:  11px; --t-sm: 13px; --t-base: 15px;
-  --t-lg:  17px; --t-xl: 20px; --t-2xl: 26px;
-  --t-3xl: 36px; --t-4xl: 52px;
+  --t-lg:  17px; --t-xl: 21px; --t-2xl: 26px;
+  --t-3xl: 32px; --t-4xl: 48px; --t-5xl: 64px;
+  /* Section vertical rhythm — multiples of 8px */
+  --sec-pad: 6rem;  /* 96px — all sections */
+  --sec-pad-sm: 4rem; /* 64px — tight sections */
 
   /* Radii */
   --r:   8px;   /* compact — pills, chips */
@@ -109,16 +109,17 @@
   --rpill: 99px;
 
   /* Shadows — layered, warm-tinted */
-  --sh-xs: 0 1px 2px rgba(44,19,8,0.06);
-  --sh-sm: 0 1px 0 rgba(44,19,8,0.08), 0 2px 8px rgba(44,19,8,0.06);
-  --sh-md: 0 1px 0 rgba(44,19,8,0.10), 0 4px 16px rgba(44,19,8,0.08);
-  --sh-lg: 0 1px 0 rgba(44,19,8,0.12), 0 8px 32px rgba(44,19,8,0.10);
-  --sh-xl: 0 2px 0 rgba(44,19,8,0.12), 0 16px 48px rgba(44,19,8,0.14);
+  --sh-xs: 0 1px 2px rgba(0,0,0,0.06);
+  --sh-sm: 0 1px 0 rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.05);
+  --sh-md: 0 1px 0 rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.07);
+  --sh-lg: 0 1px 0 rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.09);
+  --sh-xl: 0 2px 0 rgba(0,0,0,0.08), 0 16px 48px rgba(0,0,0,0.12);
 }
 
 /* ── RESET + BASE ─────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
 body {
   font-family: 'DM Sans', system-ui, sans-serif;
   background: var(--cr);
@@ -132,9 +133,678 @@ body {
 /* ── PAGE SYSTEM ──────────────────────────────────────────────────── */
 .page { display: none; min-height: 100vh; }
 .page.active { display: block; }
+#page-land { background: var(--cr); }
 
-/* Page-specific backgrounds */
-#page-land { background: linear-gradient(180deg, #fef7f0 0%, #fef3e8 55%, #fde8cc 100%); }
+/* ═══════════════════════════════════════════════════════════
+   PAGE LOAD VEIL
+   ═══════════════════════════════════════════════════════════ */
+.pl-veil {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--cr); display: flex; align-items: center; justify-content: center;
+  pointer-events: none; transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1) 0.05s;
+}
+.pl-veil.gone { opacity: 0; }
+.pl-veil-logo { display: flex; align-items: center; gap: 11px; animation: veilIn 0.55s cubic-bezier(0.16,1,0.3,1) both; }
+@keyframes veilIn { from{opacity:0;transform:translateY(10px) scale(0.92)} to{opacity:1;transform:none} }
+.pl-veil-mark { width: 48px; height: 48px; border-radius: 13px; background: var(--ln); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 1px rgba(44,19,8,0.10), 0 4px 16px rgba(44,19,8,0.12); }
+.pl-veil-word { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--esp); letter-spacing: -0.03em; }
+
+/* ═══════════════════════════════════════════════════════════
+   SCROLL REVEAL
+   ═══════════════════════════════════════════════════════════ */
+.sr { opacity: 0; transform: translateY(22px); transition: opacity 0.62s cubic-bezier(0.16,1,0.3,1), transform 0.62s cubic-bezier(0.16,1,0.3,1); transition-delay: var(--d,0s); }
+.sr.on { opacity: 1; transform: none; }
+.sr-d1{--d:0.06s} .sr-d2{--d:0.13s} .sr-d3{--d:0.21s} .sr-d4{--d:0.29s}
+.sr-scale { opacity: 0; transform: translateY(28px) scale(0.98); transition: opacity 0.68s cubic-bezier(0.16,1,0.3,1), transform 0.68s cubic-bezier(0.16,1,0.3,1); }
+.sr-scale.on { opacity: 1; transform: none; }
+@keyframes hFadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
+@keyframes kdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.35;transform:scale(0.65)}}
+@keyframes livepulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* ═══════════════════════════════════════════════════════════
+   HERO — Chert/Cluely level: white, centered, product first
+   ═══════════════════════════════════════════════════════════ */
+.land-hero {
+  background: var(--cr);
+  padding: 0 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  display: flex; flex-direction: column; align-items: center;
+}
+.land-hero::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: var(--sil);
+}
+.hero-inner {
+  position: relative; z-index: 2;
+  max-width: 680px; width: 100%;
+  padding: 100px 0 0;
+}
+.hero-kicker {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--sil); border-radius: 99px;
+  padding: 5px 14px 5px 10px;
+  font-size: 11.5px; font-weight: 600; color: var(--med);
+  margin-bottom: 1.75rem;
+  background: #fff;
+  letter-spacing: 0.005em;
+  box-shadow: 0 1px 3px rgba(44,19,8,0.06);
+  opacity: 0; animation: hFadeUp 0.6s 0.2s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.kicker-dot { width: 6px; height: 6px; border-radius: 50%; background: #34C759; animation: kdot 2.5s ease-in-out infinite; }
+.hero-h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.9rem, 7.6vw, 5.2rem);
+  font-weight: 400; color: var(--esp);
+  letter-spacing: -0.047em; line-height: 0.94;
+  margin-bottom: 1rem;
+  opacity: 0; animation: hFadeUp 0.75s 0.3s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.hero-h1 em { font-style: italic; color: var(--lt); }
+.hero-social-proof {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11.5px; font-weight: 500; color: var(--oat);
+  margin-bottom: 1.4rem; letter-spacing: 0.005em;
+  opacity: 0; animation: hFadeUp 0.7s 0.38s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.hero-sp-dot { width: 6px; height: 6px; border-radius: 50%; background: #34C759; flex-shrink: 0; }
+.hero-tagline-wrap {
+  min-height: 52px; display: flex; align-items: center; justify-content: center;
+  margin-bottom: 2rem;
+  opacity: 0; animation: hFadeUp 0.7s 0.42s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.hero-tagline-txt {
+  font-size: 16px; font-weight: 400; color: rgba(44,19,8,0.48);
+  line-height: 1.6; max-width: 480px; text-align: center; display: block;
+}
+.tw-cursor {
+  display: inline-block; width: 2px; height: 0.85em;
+  background: var(--med); margin-left: 2px;
+  vertical-align: text-bottom; animation: twBlink 1s step-end infinite;
+}
+@keyframes twBlink{0%,100%{opacity:1}50%{opacity:0}}
+.hero-acts {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; flex-wrap: wrap; margin-bottom: 0.8rem;
+  opacity: 0; animation: hFadeUp 0.7s 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.hero-note {
+  font-size: 11.5px; color: var(--oat); margin-bottom: 0;
+  opacity: 0; animation: hFadeUp 0.7s 0.56s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.hero-note b { font-weight: 600; color: var(--lt); }
+
+/* ── HERO PRODUCT WINDOW ── */
+.hero-window-wrap {
+  position: relative; z-index: 2;
+  width: 100%; max-width: 900px;
+  margin: 3.2rem auto 0;
+  opacity: 0; animation: hFadeUp 1s 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+/* Soft shadow glow under the window */
+.hero-window-wrap::after {
+  content: '';
+  position: absolute; bottom: -40px; left: 10%; right: 10%; height: 80px;
+  background: radial-gradient(ellipse 70% 100% at 50% 0%, rgba(44,19,8,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-window {
+  background: #fff;
+  border: 1px solid var(--sil);
+  border-radius: 16px 16px 0 0;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(44,19,8,0.07),
+    0 -2px 0 rgba(44,19,8,0.04),
+    0 -12px 48px rgba(44,19,8,0.10),
+    0 -40px 100px rgba(44,19,8,0.07);
+}
+/* Window chrome bar */
+.hw-chrome {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 16px; background: var(--cr);
+  border-bottom: 1px solid var(--sil);
+}
+.hw-dots { display: flex; gap: 5px; }
+.hw-dot { width: 10px; height: 10px; border-radius: 50%; }
+.hw-dot-r { background: #EE6B5E; } .hw-dot-y { background: #F5C843; } .hw-dot-g { background: #58C142; }
+.hw-url {
+  flex: 1; text-align: center;
+  background: rgba(44,19,8,0.06); border-radius: 6px;
+  padding: 4px 14px; font-size: 11px; color: rgba(44,19,8,0.38);
+  font-family: 'DM Sans', sans-serif; max-width: 260px; margin: 0 auto;
+  border: 1px solid rgba(44,19,8,0.06);
+}
+.hw-badge {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 600; color: var(--med);
+}
+.hw-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #34C759; animation: livepulse 2.5s ease-in-out infinite; }
+/* Main 3-col layout */
+.hw-body {
+  display: grid;
+  grid-template-columns: 160px 1fr 200px;
+  height: 340px;
+}
+@media(max-width:720px){ .hw-body { grid-template-columns: 1fr; height: auto; } }
+/* Left: track list */
+.hw-tracks {
+  border-right: 1px solid var(--sil);
+  background: var(--cr);
+  padding: 14px 10px;
+  display: flex; flex-direction: column; gap: 2px;
+  overflow: hidden;
+}
+@media(max-width:720px){ .hw-tracks { display: none; } }
+.hw-track-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 9px; border-radius: 8px;
+  font-size: 12px; font-weight: 500; color: rgba(44,19,8,0.45);
+  cursor: default; transition: all 0.18s;
+}
+.hw-track-item.hw-active {
+  background: var(--esp); color: var(--ln);
+  box-shadow: 0 1px 3px rgba(44,19,8,0.20);
+}
+.hw-track-icon { font-size: 13px; flex-shrink: 0; }
+.hw-track-label { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hw-track-sep { height: 1px; background: var(--sil); margin: 4px 0; }
+/* Center: chat */
+.hw-chat {
+  display: flex; flex-direction: column;
+  background: #fff;
+  overflow: hidden;
+}
+.hw-chat-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-bottom: 1px solid var(--sil);
+  flex-shrink: 0;
+}
+.hw-q-pill {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--ln); border: 1px solid var(--sil);
+  border-radius: 99px; padding: 3px 10px;
+  font-size: 11px; font-weight: 600; color: var(--esp);
+}
+.hw-round { font-size: 10px; color: rgba(44,19,8,0.40); font-weight: 500; }
+.hw-messages {
+  flex: 1; overflow: hidden;
+  padding: 12px 14px 8px;
+  display: flex; flex-direction: column; gap: 8px;
+  justify-content: flex-end;
+  min-height: 0;
+}
+.hw-msg {
+  max-width: 86%; font-size: 12.5px; line-height: 1.55;
+  padding: 8px 12px;
+  opacity: 0; transform: translateY(6px);
+  transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.16,1,0.3,1);
+}
+.hw-msg.vis { opacity: 1; transform: none; }
+.hw-msg-q {
+  background: #fffcf9; border: 1px solid var(--sil);
+  border-radius: 4px 14px 14px 14px;
+  color: var(--esp); align-self: flex-start;
+  box-shadow: 0 1px 3px rgba(44,19,8,0.05);
+}
+.hw-msg-a {
+  background: var(--ln); border: 1px solid rgba(44,19,8,0.10);
+  border-radius: 14px 14px 4px 14px;
+  color: var(--esp); align-self: flex-end; margin-left: auto;
+  box-shadow: 0 1px 3px rgba(44,19,8,0.07);
+}
+.hw-typing {
+  display: flex; align-items: center; gap: 3px;
+  padding: 8px 12px; background: var(--cr);
+  border: 1px solid var(--sil); border-radius: 4px 12px 12px 12px;
+  align-self: flex-start; width: fit-content;
+  opacity: 0; transform: translateY(5px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+.hw-typing.vis { opacity: 1; transform: none; }
+.hw-tdot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: rgba(44,19,8,0.28);
+  animation: hwDot 1.2s ease-in-out infinite;
+}
+.hw-tdot:nth-child(2){animation-delay:0.18s}
+.hw-tdot:nth-child(3){animation-delay:0.36s}
+@keyframes hwDot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-4px)}}
+.hw-input-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border-top: 1px solid var(--sil);
+  flex-shrink: 0; background: #fffcf9;
+}
+.hw-input-ph {
+  flex: 1; font-size: 12.5px; color: rgba(44,19,8,0.28);
+  font-family: 'DM Sans', sans-serif;
+  transition: color 0.18s; background: rgba(44,19,8,0.04);
+  border-radius: 8px; padding: 6px 10px; border: 1px solid var(--sil);
+}
+.hw-send-btn {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--esp); display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0;
+  transition: background 0.15s, transform 0.15s;
+  box-shadow: 0 2px 6px rgba(44,19,8,0.28);
+}
+.hw-send-btn:hover { transform: scale(1.08); background: var(--roa); }
+/* Right: feedback panel */
+.hw-feedback {
+  border-left: 1px solid rgba(84,84,88,0.40);
+  background: #1C1C1E;
+  padding: 16px 14px;
+  display: flex; flex-direction: column; gap: 12px;
+  overflow: hidden; position: relative;
+  transition: opacity 0.4s ease;
+}
+@media(max-width:720px){ .hw-feedback { display: none; } }
+.hw-feedback::before {
+  content: ''; position: absolute; top: -50px; right: -50px;
+  width: 160px; height: 160px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,187,126,0.12) 0%, transparent 65%); pointer-events: none;
+}
+.hw-fb-top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-bottom: 11px;
+  border-bottom: 1px solid rgba(253,232,204,0.10);
+}
+.hw-fb-brand { display: flex; align-items: center; gap: 7px; }
+.hw-fb-logo { width: 22px; height: 22px; border-radius: 6px; background: rgba(253,232,204,0.12); display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display',serif; font-size: 11px; color: #fde8cc; font-style: italic; }
+.hw-fb-name { font-size: 11.5px; font-weight: 600; color: rgba(253,232,204,0.72); letter-spacing: -0.01em; }
+.hw-fb-live { display: flex; align-items: center; gap: 4px; font-size: 9px; font-weight: 600; color: rgba(253,232,204,0.30); letter-spacing: 0.06em; text-transform: uppercase; }
+.hw-fb-live-dot { width: 5px; height: 5px; border-radius: 50%; background: #34C759; animation: livepulse 2.5s ease-in-out infinite; }
+/* Score block */
+.hw-score-block { text-align: center; padding: 10px 0 12px; }
+.hw-score-num { font-family: 'DM Serif Display', serif; font-size: 3.2rem; color: #fde8cc; letter-spacing: -0.06em; line-height: 1; }
+.hw-score-denom { font-size: 13px; color: rgba(253,232,204,0.35); font-weight: 500; }
+.hw-verdict-pill { display: inline-flex; align-items: center; gap: 4px; background: rgba(52,199,89,0.14); border: 1px solid rgba(52,199,89,0.22); border-radius: 99px; padding: 3px 9px; font-size: 9.5px; font-weight: 700; color: #34C759; letter-spacing: 0.03em; margin-top: 7px; }
+.hw-verdict-dot { width: 4px; height: 4px; border-radius: 50%; background: #34C759; }
+/* Score bars */
+.hw-bars { display: flex; flex-direction: column; gap: 7px; }
+.hw-bar-row { display: flex; align-items: center; gap: 7px; }
+.hw-bar-label { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(253,232,204,0.32); width: 48px; flex-shrink: 0; }
+.hw-bar-track { flex: 1; height: 3px; background: rgba(253,232,204,0.11); border-radius: 2px; overflow: hidden; }
+.hw-bar-fill {
+  height: 100%; border-radius: 2px;
+  background: linear-gradient(90deg, #d4a853, rgba(232,187,126,0.60));
+  width: 0; transition: width 1.1s cubic-bezier(0.16,1,0.3,1) 0.4s;
+  box-shadow: 0 0 6px rgba(212,168,83,0.25);
+}
+.hw-bar-fill.anim { width: var(--w,70%); }
+.hw-bar-val { font-size: 10px; font-weight: 700; color: #d4a853; width: 22px; text-align: right; }
+/* Tag */
+.hw-fb-tag { font-size: 8.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(253,232,204,0.22); border-top: 1px solid rgba(253,232,204,0.08); padding-top: 10px; margin-top: auto; }
+
+/* ═══════════════════════════════════════════════════════════
+   TRUST BAND — scrolling university logos marquee
+   ═══════════════════════════════════════════════════════════ */
+.trust-band {
+  padding: 1.6rem 0 1.85rem;
+  border-top: 1px solid rgba(232,213,196,0.70); border-bottom: 1px solid rgba(232,213,196,0.70);
+  background: var(--cr); overflow: hidden;
+}
+.trust-lbl { font-size: 8.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--oat); text-align: center; margin-bottom: 1.1rem; }
+.trust-band-header { text-align: center; margin-bottom: 2rem; }
+.trust-band-h { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem,3.5vw,2.6rem); font-weight: 400; color: var(--esp); letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 0.5rem; }
+.trust-band-h em { font-style: italic; color: var(--lt); }
+.trust-band-sub { font-size: 14px; color: rgba(44,19,8,0.48); max-width: 460px; margin: 0 auto; line-height: 1.65; }
+.logos-row { display: flex; align-items: center; justify-content: center; gap: 2.75rem; flex-wrap: wrap; padding: 0.1rem 0; }
+.logo-school { display: flex; align-items: center; opacity: 1; transition: all 0.22s; filter: none; }
+.logo-school:hover { opacity: 1; transform: scale(1.04); }
+.logo-school img { height: 26px; width: auto; object-fit: contain; max-width: 100px; }
+
+/* ═══════════════════════════════════════════════════════════
+   STATS STRIP — espresso
+   ═══════════════════════════════════════════════════════════ */
+.stats-strip { background: #fefcfa; border-top: 1px solid rgba(232,213,196,0.55); border-bottom: 1px solid rgba(232,213,196,0.55); }
+.stats-strip-inner { max-width: 1060px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: repeat(5,1fr); }
+@media(max-width:640px){.stats-strip-inner{grid-template-columns:repeat(2,1fr);}} @media(max-width:480px){.stats-strip-inner{grid-template-columns:repeat(2,1fr);}}
+.stats-strip-item { padding: 1.5rem 1rem; border-right: 1px solid var(--sil); text-align: center; }
+.stats-strip-item:last-child{border-right:none;}
+@media(max-width:640px){.stats-strip-item:nth-child(2){border-right:none;}.stats-strip-item:nth-child(1),.stats-strip-item:nth-child(2){border-bottom:1px solid var(--sil);}}
+.stats-strip-n { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem,3vw,2.4rem); color: var(--esp); line-height: 1; letter-spacing: -0.04em; margin-bottom: 4px; font-weight: 400; font-style: normal !important; }
+.stats-strip-n em { font-style: normal !important; color: var(--lt); }
+.stats-strip-l { font-size: 8.5px; font-weight: 700; color: var(--oat); letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* ═══════════════════════════════════════════════════════════
+   PROBLEM / SOLUTION
+   ═══════════════════════════════════════════════════════════ */
+.ps-section { background: #ffffff; padding: 5.5rem 0 6rem; position: relative; overflow: hidden; }
+.ps-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg,transparent,var(--sil) 30%,var(--sil) 70%,transparent); }
+.ps-inner { max-width: 1060px; margin: 0 auto; padding: 0 32px; }
+.ps-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--oat); text-align: center; margin-bottom: 0.6rem; }
+.ps-headline { font-family: 'DM Serif Display', serif; font-size: clamp(1.9rem,4vw,2.9rem); font-weight: 400; color: var(--esp); letter-spacing: -0.04em; line-height: 1.05; text-align: center; margin-bottom: 3rem; }
+.ps-headline em { font-style: italic; color: var(--med); }
+.ps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; border-radius: 18px; overflow: hidden; box-shadow: 0 2px 0 rgba(44,19,8,0.06), 0 12px 40px rgba(44,19,8,0.10); }
+@media(max-width:700px){.ps-grid{grid-template-columns:1fr;}}
+.ps-problem { background: #fafafa; border: 1px solid rgba(44,19,8,0.07); padding: 2.5rem 2.25rem; border-radius: 18px 0 0 18px; }
+@media(max-width:700px){.ps-problem{border-radius:18px 18px 0 0;}}
+.ps-side-label { display: inline-flex; align-items: center; font-size: 9px; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; border-radius: 99px; padding: 4px 12px; margin-bottom: 1.25rem; }
+.ps-side-label.prob { color: var(--lt); background: var(--sil2); }
+.ps-side-label.sol { color: rgba(255,255,255,0.40); background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.10); }
+.ps-side-h { font-family: 'DM Serif Display', serif; font-size: clamp(1.4rem,2.6vw,1.85rem); font-weight: 400; letter-spacing: -0.03em; line-height: 1.12; margin-bottom: 1.5rem; }
+.ps-problem .ps-side-h { color: var(--esp); }
+.ps-problem .ps-side-h em { font-style: italic; color: var(--lt); }
+.ps-list { display: flex; flex-direction: column; gap: 11px; }
+.ps-item { display: flex; align-items: flex-start; gap: 10px; }
+.ps-icon { width: 24px; height: 24px; border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px; font-size: 11px; font-weight: 700; }
+.ps-problem .ps-icon { background: rgba(44,19,8,0.05); border: 1px solid rgba(44,19,8,0.08); color: var(--lt); }
+.ps-text { font-size: 13px; color: rgba(44,19,8,0.55); line-height: 1.62; }
+.ps-text strong { color: var(--esp); font-weight: 600; }
+.ps-solution { background: #1C1C1E; padding: 2.5rem 2.25rem; border-radius: 0 18px 18px 0; position: relative; overflow: hidden; }
+@media(max-width:700px){.ps-solution{border-radius:0 0 18px 18px;}}
+.ps-solution::before { content: ''; position: absolute; top: -50px; right: -50px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(196,135,98,0.16) 0%, transparent 65%); }
+.ps-solution .ps-side-h { color: #ffffff; }
+.ps-solution .ps-side-h em { font-style: italic; color: #FF9F0A; }
+.ps-solution .ps-icon { background: rgba(48,209,88,0.12); border: 1px solid rgba(48,209,88,0.18); color: #30D158;5,255,0.60); }
+.ps-solution .ps-text { color: rgba(235,235,245,0.60); }
+.ps-solution .ps-text strong { color: rgba(255,255,255,0.85); }
+.ps-proof { margin-top: 1.6rem; padding-top: 1.6rem; border-top: 1px solid rgba(84,84,88,0.65); display: flex; align-items: center; gap: 13px; }
+.ps-proof-score { font-family: 'DM Serif Display', serif; font-size: 2.4rem; color: #EBEBF5; letter-spacing: -0.05em; line-height: 1; }
+.ps-proof-text { font-size: 11.5px; color: rgba(255,255,255,0.30); line-height: 1.55; }
+.ps-proof-text strong { color: rgba(255,255,255,0.60); display: block; font-size: 12px; margin-bottom: 1px; }
+
+
+/* Solution panel shimmer border */
+.ps-solution { position: relative; overflow: hidden; }
+.ps-solution::after {
+  content: '';
+  position: absolute; top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: conic-gradient(from 0deg, transparent 0deg, rgba(253,232,204,0.08) 60deg, transparent 120deg);
+  animation: shimmerRot 8s linear infinite;
+  pointer-events: none;
+}
+@keyframes shimmerRot { to { transform: rotate(360deg); } }
+/* ═══════════════════════════════════════════════════════════
+   LIVE DEMO — browser window
+   ═══════════════════════════════════════════════════════════ */
+.demo-section { background: #ffffff; padding: 5.5rem 0 6rem; position: relative; }
+.demo-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg,transparent,var(--sil) 30%,var(--sil) 70%,transparent); }
+.demo-wrap { max-width: 1040px; margin: 0 auto; padding: 0 32px; }
+.demo-header { text-align: center; margin-bottom: 2.75rem; }
+.demo-tag { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--sil); border-radius: 99px; padding: 4px 11px; font-size: 9px; font-weight: 700; color: var(--med); letter-spacing: 0.09em; text-transform: uppercase; background: var(--surf); margin-bottom: 0.85rem; }
+.demo-tag-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--esp); animation: livepulse 2.5s ease-in-out infinite; }
+.demo-h { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem,3.5vw,2.6rem); font-weight: 400; color: var(--esp); letter-spacing: -0.04em; line-height: 1.06; margin-bottom: 0.65rem; }
+.demo-h em { font-style: italic; color: var(--med); }
+.demo-sub { font-size: 14px; color: rgba(44,19,8,0.47); line-height: 1.75; max-width: 420px; margin: 0 auto; }
+.demo-window { background: #fff; border: 1px solid rgba(44,19,8,0.09); border-radius: 18px; box-shadow: 0 2px 0 rgba(44,19,8,0.05), 0 20px 65px rgba(44,19,8,0.12), 0 4px 16px rgba(44,19,8,0.07); overflow: hidden; max-width: 900px; margin: 0 auto; }
+.dw-chrome { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: #fffcf9; border-bottom: 1px solid rgba(44,19,8,0.06); }
+.dw-dots { display: flex; gap: 5px; }
+.dw-dot { width: 9px; height: 9px; border-radius: 50%; }
+.dw-dot-r{background:#EE6B5E;} .dw-dot-y{background:#F5C843;} .dw-dot-g{background:#58C142;}
+.dw-url { flex: 1; background: rgba(44,19,8,0.05); border-radius: 5px; padding: 4px 11px; font-size: 10.5px; color: rgba(44,19,8,0.30); text-align: center; font-family: monospace; max-width: 260px; margin: 0 auto; }
+.dw-body { display: grid; grid-template-columns: 185px 1fr 225px; height: 400px; }
+@media(max-width:720px){.dw-body{grid-template-columns:1fr;height:auto;}}
+.dw-sidebar { border-right: 1px solid rgba(44,19,8,0.07); padding: 15px 12px; background: #fffcf9; display: flex; flex-direction: column; gap: 3px; }
+@media(max-width:720px){.dw-sidebar{display:none;}}
+.dw-sb-label { font-size: 8.5px; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(44,19,8,0.27); margin: 3px 0 6px 7px; }
+.dw-sb-item { display: flex; align-items: center; gap: 7px; padding: 7px 9px; border-radius: 7px; font-size: 11.5px; font-weight: 500; color: var(--med); cursor: default; transition: all 0.15s; }
+.dw-sb-item.dw-active { background: var(--esp); color: var(--ln); box-shadow: 0 1px 4px rgba(44,19,8,0.18); }
+.dw-sb-icon { width: 18px; height: 18px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+.dw-active .dw-sb-icon { background: rgba(253,232,204,0.15); }
+.dw-sb-item:not(.dw-active) .dw-sb-icon { background: var(--sil2); }
+.dw-sb-divider { height: 1px; background: rgba(44,19,8,0.06); margin: 6px 0; }
+.dw-progress { padding: 3px 7px; }
+.dw-prog-label { display: flex; justify-content: space-between; font-size: 9.5px; color: rgba(44,19,8,0.32); margin-bottom: 4px; }
+.dw-prog-track { height: 3px; background: var(--sil2); border-radius: 2px; overflow: hidden; margin-bottom: 8px; }
+.dw-prog-fill { height: 100%; background: linear-gradient(90deg,var(--esp),var(--med)); border-radius: 2px; width: 0; transition: width 1.5s cubic-bezier(0.16,1,0.3,1) 0.3s; }
+.dw-prog-fill.anim { width: var(--tw,60%); }
+.dw-main { padding: 0 !important; display: flex !important; flex-direction: column !important; overflow: hidden !important; background: #fff; flex: 1; }
+.dw-question-header { padding: 12px 15px 9px; border-bottom: 1px solid rgba(44,19,8,0.06); flex-shrink: 0; }
+.dw-q-company { display: inline-flex; align-items: center; gap: 4px; background: var(--ln); border: 1px solid var(--sil); padding: 2px 9px; border-radius: 99px; font-size: 10.5px; font-weight: 600; color: var(--esp); }
+.dw-q-company-dot { width: 11px; height: 11px; border-radius: 3px; background: var(--esp); display: flex; align-items: center; justify-content: center; font-size: 6.5px; color: var(--ln); font-weight: 800; font-family: monospace; }
+.dw-round-pill { background: rgba(44,19,8,0.06); color: var(--med); padding: 2px 8px; border-radius: 99px; font-size: 9.5px; font-weight: 600; }
+.dw-timer { display: flex; align-items: center; gap: 4px; font-size: 15px; font-weight: 700; font-family: 'DM Serif Display', serif; color: var(--esp); letter-spacing: -0.04em; }
+.dw-timer-live { width: 6px; height: 6px; border-radius: 50%; background: #34C759; animation: livepulse 2.5s ease-in-out infinite; }
+.dw-chat-panel { flex: 1; display: flex; flex-direction: column; background: #fff; overflow: hidden; }
+.dw-messages { flex: 1; overflow-y: auto; padding: 13px 15px 8px; display: flex; flex-direction: column; gap: 9px; scroll-behavior: smooth; scrollbar-width: none; }
+.dw-messages::-webkit-scrollbar{display:none;}
+.dw-bubble { display: flex; flex-direction: column; max-width: 84%; opacity: 0; transform: translateY(8px); transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16,1,0.3,1); }
+.dw-bubble.visible { opacity: 1; transform: none; }
+.dw-bubble-ai { align-self: flex-start; }
+.dw-bubble-ai .dw-bubble-name { font-size: 8.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--oat); margin-bottom: 3px; padding-left: 2px; }
+.dw-bubble-ai .dw-bubble-text { background: var(--cr); border: 1px solid rgba(44,19,8,0.08); border-radius: 4px 12px 12px 12px; padding: 8px 11px; font-size: 11.5px; line-height: 1.55; color: var(--esp); }
+.dw-bubble-user { align-self: flex-end; }
+.dw-bubble-user .dw-bubble-name { font-size: 8.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--oat); margin-bottom: 3px; text-align: right; padding-right: 2px; }
+.dw-bubble-user .dw-bubble-text { background: var(--ln); border: 1px solid rgba(44,19,8,0.10); border-radius: 12px 12px 4px 12px; padding: 8px 11px; font-size: 11.5px; line-height: 1.55; color: var(--esp); }
+.dw-typing-bubble { align-self: flex-start; opacity: 0; transform: translateY(7px); transition: opacity 0.22s ease, transform 0.22s ease; }
+.dw-typing-bubble.visible { opacity: 1; transform: none; }
+.dw-typing-bubble .dw-bubble-text { background: var(--cr); border: 1px solid rgba(44,19,8,0.08); border-radius: 4px 12px 12px 12px; padding: 9px 12px; display: flex; align-items: center; gap: 3px; }
+.dw-t-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(44,19,8,0.25); animation: dwDot 1.2s ease-in-out infinite; }
+.dw-t-dot:nth-child(2){animation-delay:0.18s;} .dw-t-dot:nth-child(3){animation-delay:0.36s;}
+@keyframes dwDot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-4px)}}
+.dw-input-bar { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(44,19,8,0.07); padding: 9px 13px; background: #fff; flex-shrink: 0; }
+.dw-input-text { font-size: 11.5px; color: rgba(44,19,8,0.25); flex: 1; overflow: hidden; transition: color 0.14s; }
+.dw-input-text.active { color: var(--esp); }
+.dw-input-send { width: 26px; height: 26px; border-radius: 50%; background: var(--esp); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.dw-input-send.flash { animation: dwSendFlash 0.36s cubic-bezier(0.34,1.56,0.64,1); }
+@keyframes dwSendFlash{0%{transform:scale(1)}50%{transform:scale(1.3);background:var(--roa)}100%{transform:scale(1)}}
+.dw-feedback { border-left: 1px solid rgba(84,84,88,0.40); background: #1C1C1E; padding: 15px 13px; overflow-y: auto; opacity: 0; transform: translateX(10px); transition: opacity 0.46s ease 0.15s, transform 0.46s cubic-bezier(0.16,1,0.3,1) 0.15s; }
+.dw-feedback.revealed { opacity: 1 !important; transform: none !important; }
+@media(max-width:720px){.dw-feedback{display:none;}}
+.dw-fb-header { display: flex; align-items: center; gap: 7px; margin-bottom: 13px; }
+.dw-fb-avatar { width: 27px; height: 27px; border-radius: 7px; background: rgba(253,232,204,0.12); display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 13px; color: #fde8cc; font-style: italic; }
+.dw-fb-title { font-size: 11.5px; font-weight: 700; color: #fde8cc; }
+.dw-fb-sub { font-size: 9.5px; color: rgba(253,232,204,0.42); margin-top: 1px; }
+.dw-score-ring-wrap { display: flex; justify-content: center; margin-bottom: 13px; }
+.dw-score-ring { position: relative; width: 66px; height: 66px; }
+.dw-score-ring svg { width: 66px; height: 66px; transform: rotate(-90deg); }
+.dw-ring-track { fill: none; stroke: rgba(253,232,204,0.12); stroke-width: 5; }
+.dw-ring-fill { fill: none; stroke: #d4a853; stroke-width: 5; stroke-dasharray: 195; stroke-dashoffset: 195; transition: stroke-dashoffset 1.4s cubic-bezier(0.16,1,0.3,1) 0.5s; stroke-linecap: round; }
+.dw-score-ring.anim .dw-ring-fill { stroke-dashoffset: 30; }
+.dw-score-label { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.dw-score-num { font-family: 'DM Serif Display', serif; font-size: 16px; color: #e8d4b0; letter-spacing: -0.04em; line-height: 1; }
+.dw-score-unit { font-size: 7.5px; font-weight: 700; color: var(--oat); letter-spacing: 0.05em; text-transform: uppercase; }
+.dw-fb-section { margin-bottom: 8px; }
+.dw-fb-section-title { font-size: 8px; font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase; color: rgba(212,168,83,0.50); margin-bottom: 6px; }
+.dw-tag { display: inline-flex; font-size: 9.5px; font-weight: 500; padding: 2px 8px; border-radius: 99px; margin: 1px; }
+.dw-tag-good { background: rgba(52,199,89,0.13); color: #34C759; font-weight: 600; }
+.dw-tag-imp { background: rgba(212,168,83,0.12); color: #d4a853; font-weight: 600; }
+.dw-fb-tip { font-size: 10.5px; line-height: 1.6; color: rgba(240,217,168,0.55); background: rgba(212,168,83,0.08); border-radius: 7px; padding: 7px 9px; margin: 8px 0 9px; border: 1px solid rgba(212,168,83,0.10); }
+.dw-next-btn { display: flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 600; color: #1c1410; background: #f0d9a8; border: none; border-radius: 99px; padding: 7px 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; width: 100%; justify-content: center; transition: opacity 0.12s; }
+.dw-next-btn:hover { opacity: 0.85; }
+
+/* ═══════════════════════════════════════════════════════════
+   CAREER TRACKS — scroll-pinned with STATE labels
+   ═══════════════════════════════════════════════════════════ */
+.tracks-section { background: var(--cr); position: relative; border-top: 1px solid rgba(232,213,196,0.50); }
+.tracks-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg,transparent,var(--sil) 30%,var(--sil) 70%,transparent); }
+.tracks-scroll-outer { height: calc(4 * 65vh); position: relative; }
+.tracks-sticky {
+  position: sticky; top: 0; height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  z-index: 1; overflow: hidden;
+}
+.tracks-inner { max-width: 1060px; margin: 0 auto; padding: 0 32px; width: 100%; }
+.tracks-state-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(44,19,8,0.25); margin-bottom: 0.5rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.tracks-state-label::before { content: ''; display: block; width: 24px; height: 1px; background: rgba(44,19,8,0.20); }
+.tracks-header { margin-bottom: 2.5rem; }
+.tracks-h { font-family: 'DM Serif Display', serif; font-size: clamp(1.9rem,3.8vw,2.9rem); font-weight: 400; color: var(--esp); letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 0.6rem; }
+.tracks-h em { color: var(--med); font-style: italic; }
+.tracks-sub { font-size: 14px; color: rgba(44,19,8,0.46); max-width: 420px; line-height: 1.7; }
+
+.tracks-layout { display: grid; grid-template-columns: 280px 1fr; gap: 3rem; align-items: center; }
+@media(max-width:780px){
+  .tracks-scroll-outer { height: auto !important; }
+  .tracks-sticky { position: static !important; height: auto !important; padding: 4rem 0; }
+  .tracks-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .hero-h1 { font-size: clamp(2.8rem,9vw,4rem); }
+  .ps-grid { border-radius: 14px; }
+  .demo-window { border-radius: 14px; }
+}
+.tracks-list { display: flex; flex-direction: column; gap: 3px; }
+.track-row {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 11px;
+  cursor: pointer; transition: all 0.18s; border: 1px solid transparent; position: relative;
+  opacity: 0; transform: translateX(-12px);
+  animation: trackRowIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+  animation-delay: var(--tr-d, 0s);
+}
+@keyframes trackRowIn { to { opacity: 1; transform: none; } }
+.track-row:hover { background: rgba(44,19,8,0.035); }
+.track-row.active { background: var(--ln); border-color: var(--sil); box-shadow: 0 1px 0 rgba(44,19,8,0.05), 0 3px 12px rgba(44,19,8,0.08); }
+.track-row-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; transition: all 0.18s; }
+.track-row:not(.active) .track-row-icon { background: var(--sil2); }
+.track-row.active .track-row-icon { background: rgba(44,19,8,0.09); }
+.track-row-text { flex: 1; min-width: 0; }
+.track-row-name { font-size: 13px; font-weight: 600; color: rgba(44,19,8,0.44); letter-spacing: -0.01em; transition: color 0.18s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.track-row.active .track-row-name { color: var(--esp); }
+.track-row-firms { font-size: 10px; color: rgba(44,19,8,0.27); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.track-row.active .track-row-firms { color: var(--lt); }
+.track-row-arrow { font-size: 11px; color: rgba(44,19,8,0.18); transition: all 0.18s; flex-shrink: 0; }
+.track-row.active .track-row-arrow { color: var(--med); transform: translateX(2px); }
+.track-preview { position: relative; }
+.track-card {
+  background: #fff; border: 1px solid rgba(44,19,8,0.08); border-radius: 18px; overflow: hidden;
+  box-shadow: 0 1px 0 rgba(44,19,8,0.05), 0 8px 32px rgba(44,19,8,0.09);
+  opacity: 0; transform: translateY(9px) scale(0.99);
+  transition: opacity 0.36s cubic-bezier(0.16,1,0.3,1), transform 0.36s cubic-bezier(0.16,1,0.3,1);
+  position: absolute; top: 0; left: 0; right: 0; pointer-events: none;
+}
+.track-card.active { opacity: 1; transform: none; pointer-events: auto; position: relative; }
+.tc-header { padding: 13px 15px; border-bottom: 1px solid rgba(44,19,8,0.06); display: flex; align-items: center; justify-content: space-between; background: #fffcf9; }
+.tc-badge { display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: var(--esp); }
+.tc-badge-icon { width: 20px; height: 20px; border-radius: 5px; background: var(--ln); display: flex; align-items: center; justify-content: center; font-size: 10px; }
+.tc-score { font-family: 'DM Serif Display', serif; font-size: 19px; color: var(--med); letter-spacing: -0.05em; }
+.tc-score span { font-size: 11px; opacity: 0.5; font-family: 'DM Sans', sans-serif; }
+/* Question display in card */
+.tc-q-meta { display: flex; align-items: center; gap: 8px; padding: 10px 15px 0; flex-wrap: wrap; }
+.tc-q-tag { font-size: 9.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; background: var(--ln); border: 1px solid var(--sil); border-radius: 4px; padding: 2px 8px; color: var(--esp); }
+.tc-pace { font-size: 9.5px; color: rgba(44,19,8,0.35); margin-left: auto; font-weight: 500; }
+.tc-body { padding: 12px 15px 15px; }
+.tc-q { font-family: 'DM Serif Display', serif; font-size: 14px; color: var(--esp); line-height: 1.45; margin-bottom: 10px; letter-spacing: -0.02em; font-weight: 400; }
+.tc-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px; }
+.tc-meta-cell { background: var(--cr); border: 1px solid rgba(44,19,8,0.07); border-radius: 8px; padding: 8px 10px; }
+.tc-meta-label { font-size: 8px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(44,19,8,0.30); margin-bottom: 3px; }
+.tc-meta-val { font-size: 12px; font-weight: 600; color: var(--esp); letter-spacing: -0.01em; }
+.tc-answer { font-size: 11.5px; color: rgba(44,19,8,0.50); line-height: 1.65; background: var(--cr); border: 1px solid rgba(44,19,8,0.07); border-radius: 9px; padding: 9px 11px; margin-bottom: 11px; font-style: italic; }
+.tc-feedback { display: flex; flex-direction: column; gap: 5px; }
+.tc-fb-row { display: flex; align-items: center; gap: 7px; }
+.tc-fb-label { font-size: 9.5px; font-weight: 600; color: rgba(44,19,8,0.34); width: 54px; flex-shrink: 0; }
+.tc-fb-bar { flex: 1; height: 3px; background: var(--sil2); border-radius: 2px; overflow: hidden; }
+.tc-fb-fill { height: 100%; background: linear-gradient(90deg,var(--med),var(--oat)); border-radius: 2px; width: 0; transition: width 0.85s cubic-bezier(0.16,1,0.3,1) 0.2s; }
+.track-card.active .tc-fb-fill { width: var(--tw,70%); }
+.tc-fb-val { font-size: 10.5px; font-weight: 700; color: var(--med); min-width: 22px; text-align: right; }
+.tc-try-btn { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 13px; padding: 9px 16px; background: var(--esp); color: var(--ln); border: none; border-radius: 99px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; width: 100%; transition: opacity 0.12s; letter-spacing: -0.01em; }
+.tc-try-btn:hover { opacity: 0.85; }
+
+/* ═══════════════════════════════════════════════════════════
+   WHERE IT LIVES — university section (STATE 04 style)
+   ═══════════════════════════════════════════════════════════ */
+.where-section {
+  background: #f0f4ff; padding: 5rem 0 5.5rem; position: relative; overflow: hidden;
+}
+.where-section::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 55% 60% at 85% 30%, rgba(255,255,255,0.55) 0%, transparent 60%);
+  pointer-events: none;
+}
+.where-inner { max-width: 1060px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+.where-state { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(44,19,8,0.38); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
+.where-state::before { content: ''; display: block; width: 28px; height: 1px; background: rgba(44,19,8,0.20); }
+.where-h { font-family: 'DM Serif Display', serif; font-size: clamp(2rem,4vw,3rem); font-weight: 400; color: var(--esp); letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 0.9rem; }
+.where-h em { font-style: italic; color: var(--med); }
+.where-sub { font-size: 15px; color: rgba(44,19,8,0.52); line-height: 1.7; max-width: 480px; margin-bottom: 3rem; }
+.where-logos { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 2rem; }
+@media(max-width:640px){.where-logos{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:860px){.where-logos{grid-template-columns:repeat(3,1fr);}}
+.where-logo-card {
+  background: rgba(255,255,255,0.85); border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 14px; padding: 1.1rem 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  transition: all 0.18s; min-height: 72px;
+}
+.where-logo-card:hover { background: #fff; border-color: rgba(44,19,8,0.14); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(44,19,8,0.08); }
+.where-logo-card img { height: 28px; width: auto; max-width: 110px; object-fit: contain; filter: none; opacity: 0.75; transition: opacity 0.18s; }
+.where-logo-card:hover img { filter: none; opacity: 1; }
+.where-logo-name { font-family: "DM Serif Display",Georgia,serif; font-size: 13.5px; font-weight: 400; color: var(--esp); letter-spacing: -0.02em; line-height: 1.2; }
+.where-logo-card:hover .where-logo-name { color: var(--esp); }
+.where-caption { font-size: 12px; color: rgba(44,19,8,0.38); text-align: center; font-style: italic; }
+
+/* ═══════════════════════════════════════════════════════════
+   FINAL CTA — warm linen, clean
+   ═══════════════════════════════════════════════════════════ */
+.final-cta {
+  background: #f2f3f5;
+  padding: var(--sec-pad) 24px;
+  text-align: center; position: relative; overflow: hidden;
+}
+.final-cta::before {
+  content: '';
+  position: absolute; top: -120px; right: -120px;
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(220,228,248,0.70) 0%, transparent 60%);
+  pointer-events: none; animation: orbFloat1 8s ease-in-out infinite;
+}
+.final-cta::after {
+  content: '';
+  position: absolute; bottom: -100px; left: -100px;
+  width: 420px; height: 420px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,218,200,0.50) 0%, transparent 60%);
+  pointer-events: none; animation: orbFloat2 10s ease-in-out infinite;
+}
+@keyframes orbFloat1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-20px,15px) scale(1.05)}}
+@keyframes orbFloat2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(15px,-20px) scale(1.04)}}
+.final-cta::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 100%, rgba(196,135,98,0.18) 0%, transparent 65%);
+  pointer-events: none;
+}
+.final-cta::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--sil), transparent);
+}
+.fca-inner { position: relative; z-index: 2; max-width: 600px; margin: 0 auto; }
+.fca-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(24,24,27,0.35); margin-bottom: 1.5rem; }
+.fca-h { font-family: 'DM Serif Display', serif; font-size: clamp(2.2rem,5.5vw,4rem); font-weight: 400; color: var(--esp); letter-spacing: -0.04em; line-height: 1.0; margin-bottom: 1rem; }
+.fca-h em { color: var(--lt); font-style: italic; }
+.fca-sub { font-size: 16px; color: rgba(24,24,27,0.50); line-height: 1.7; margin-bottom: 2.5rem; max-width: 400px; margin-left: auto; margin-right: auto; }
+.fca-btns { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 1.1rem; }
+.btn-cta-dark { padding: 13px 26px; background: var(--esp); color: var(--ln); border: none; border-radius: var(--rpill); font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; display: inline-flex; align-items: center; gap: 7px; transition: all 0.15s; letter-spacing: -0.01em; box-shadow: 0 1px 0 rgba(44,19,8,0.20), 0 2px 8px rgba(44,19,8,0.10); }
+.btn-cta-dark:hover { background: #09090b; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+.btn-out-dark { padding: 13px 26px; background: transparent; color: var(--esp); border: 1px solid rgba(44,19,8,0.20); border-radius: var(--rpill); font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; display: inline-flex; align-items: center; gap: 7px; transition: all 0.15s; letter-spacing: -0.01em; }
+.btn-out-dark:hover { border-color: rgba(44,19,8,0.40); background: rgba(44,19,8,0.04); }
+.fca-fine { font-size: 11px; color: rgba(24,24,27,0.32); letter-spacing: 0.02em; }
+
+/* ═══════════════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════════════ */
+.land-footer { background: var(--esp); padding: 1.75rem 32px; border-top: 1px solid rgba(253,232,204,0.07); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.footer-logo-m { font-family: 'DM Serif Display', serif; font-size: 14px; color: rgba(253,232,204,0.42); letter-spacing: -0.02em; display: flex; align-items: center; gap: 7px; }
+.land-footer-links { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+.land-footer-links a { font-size: 11.5px; color: rgba(253,232,204,0.24); text-decoration: none; transition: color 0.12s; }
+.land-footer-links a:hover { color: rgba(253,232,204,0.52); }
+.land-footer-copy { font-size: 10.5px; color: rgba(253,232,204,0.15); }
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════ */
+@media(max-width:860px){
+  .land-hero { padding: 100px 20px 0; min-height: auto; }
+  .hero-mockup-wrap { flex: none; margin-top: 2.5rem; }
+  .hero-h1 { font-size: clamp(2.6rem,9vw,3.8rem); }
+  .where-logos { grid-template-columns: repeat(4,1fr); }
+}
+@media(max-width:560px){
+  .nav { padding: 0 16px; }
+  .hero-stat-bar { flex-direction: column; gap: 0; width: 100%; max-width: 280px; margin-left: auto; margin-right: auto; }
+  .hero-stat-div { width: 100%; height: 1px; }
+  .tracks-h { font-size: 1.8rem; }
+  .fca-h { font-size: 2.2rem; }
+  .ps-grid { gap: 2px; }
+  .ps-problem, .ps-solution { padding: 2rem 1.4rem; }
+  .demo-section { padding: 4rem 0 5rem; }
+  .where-logos { grid-template-columns: repeat(2,1fr); }
+  .where-section { padding: 4rem 0 5rem; }
+  .final-cta, .land-footer { padding-left: 16px; padding-right: 16px; }
+}
 
 
 /* ══════════════════════════════════════════════════════════════════
@@ -628,9 +1298,9 @@ body {
    ══════════════════════════════════════════════════════════════════ */
 .trust-band { padding: 2.75rem 0 3.25rem; border-top: 1px solid var(--sil); background: #fef3e6; }
 .trust-lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--oat); text-align: center; margin-bottom: 1.5rem; }
-.logos-row { display: flex; align-items: center; justify-content: center; gap: 2.5rem; flex-wrap: wrap; padding: 0.25rem 0; }
-.logo-school { display: flex; align-items: center; opacity: 0.65; transition: all 0.2s; filter: sepia(0.3) saturate(0.8); }
-.logo-school:hover { opacity: 1; filter: sepia(0) saturate(1); transform: scale(1.04); }
+.logos-row { display: flex; align-items: center; justify-content: center; gap: 2.75rem; flex-wrap: wrap; padding: 0.1rem 0; }
+.logo-school { display: flex; align-items: center; opacity: 0.60; transition: all 0.2s; filter: grayscale(1) brightness(0.4); }
+.logo-school:hover { opacity: 1; filter: grayscale(0.2) brightness(0.8); transform: scale(1.04); }
 .logo-school img { height: 32px; width: auto; object-fit: contain; max-width: 130px; }
 
 /* ══════════════════════════════════════════════════════════════════
@@ -950,7 +1620,7 @@ body {
 .gate-box { background: var(--surf); border: 1px solid var(--sil); border-radius: var(--rlg); padding: 1.5rem; margin-bottom: 1rem; text-align: center; }
 .gate-t { font-size: 14px; font-weight: 700; color: var(--esp); margin-bottom: 5px; }
 .gate-s { font-size: var(--t-sm); color: var(--lt); margin-bottom: 1.1rem; line-height: 1.55; }
-.fb-acts { display: flex; gap: var(--s3); }
+.fb-acts { display: flex; gap: var(--s3); flex-wrap: wrap; }
 
 /* ══════════════════════════════════════════════════════════════════
    DASHBOARD
@@ -1170,7 +1840,7 @@ body {
   </button>
   <div class="nav-right" id="nav-guest">
     <span class="nav-free" id="nav-free">1 free try</span>
-    <button class="btn-nav" onclick="openModal('signup')">Get started</button>
+    <button class="btn-nav" onclick="openModal('signup')">Start free</button>
   </div>
   <div class="nav-right" id="nav-user" style="display:none;">
     <span class="nav-free" id="streak-chip" style="display:inline-block;background:var(--ln);color:var(--esp);border:1px solid var(--sil);">5-day streak</span>
@@ -1219,162 +1889,367 @@ body {
         <div style="width:28px;height:28px;border-radius:8px;overflow:hidden;flex-shrink:0;box-shadow:0 1px 4px rgba(44,19,8,0.12);">
           <svg width="28" height="28" viewBox="0 0 28 28"><rect width="28" height="28" fill="#fde8cc"/><text x="3" y="21" font-family="Georgia,serif" font-style="italic" font-size="20" fill="#2c1308">m</text></svg>
         </div>
-        <span style="font-family:'DM Serif Display',serif;font-size:15px;color:var(--esp);letter-spacing:-0.02em;">mocha</span>
+        <span style="font-family:Georgia,serif;font-size:15px;color:var(--esp);letter-spacing:-0.02em;">mocha</span>
       </div>
-      <div style="font-family:'DM Serif Display',Georgia,serif;font-size:1.15rem;color:#1a0f0a;letter-spacing:-0.01em;margin-bottom:5px;">You're on a roll.</div>
+      <div style="font-family:Georgia,serif;font-size:1.15rem;color:#1a0f0a;letter-spacing:-0.01em;margin-bottom:5px;">You're on a roll.</div>
       <div style="font-size:13px;color:var(--med);line-height:1.55;">Create a free account to keep practising, unlock all 8 tracks, and build your streak.</div>
     </div>
     <div style="padding:1.4rem 1.75rem;">
-      <button onclick="closeUpgradeModal();openModal('signup')" style="width:100%;padding:12px;background:#2c1308;color:#fde8cc;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:-0.01em;margin-bottom:10px;">Create free account →</button>
+      <button onclick="closeUpgradeModal();openModal('signup')" style="width:100%;padding:12px;background:#2c1308;color:#fde8cc;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:system-ui,sans-serif;letter-spacing:-0.01em;margin-bottom:10px;">Create free account →</button>
       <div style="text-align:center;font-size:11px;color:var(--oat);cursor:pointer;" onclick="closeUpgradeModal()">← back to practice</div>
     </div>
   </div>
 </div>
 
-<div class="page active" id="page-land" style="padding-top:52px;">
-  <div class="land-wrap">
-    <div class="hero fadeup">
+<!-- PAGE LOAD VEIL -->
+<div class="pl-veil" id="pl-veil">
+  <div class="pl-veil-logo">
+    <div class="pl-veil-mark">
+      <svg width="28" height="28" viewBox="0 0 28 28"><rect width="28" height="28" rx="7" fill="#fde8cc"/><text x="14" y="21" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="20" fill="#2c1308">m</text></svg>
+    </div>
+    <span class="pl-veil-word">mocha</span>
+  </div>
+</div>
 
-      <!-- ── LEFT: copy column ─────────────────────────────── -->
-      <div class="hero-copy">
-        <div class="hero-kicker">
-          <span class="kicker-dot"></span>
-          AI interview coach · Free to start
-        </div>
-        <h1 class="hero-h1">Land your<br>dream <em>internship.</em></h1>
-        <p class="hero-tagline" id="hero-tagline"><span class="tw-cursor"></span></p>
-        <div class="hero-acts">
-          <button class="btn-cta" onclick="startFree()">
-            Try it free now
-            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3L12 7L8 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <button class="btn-out" onclick="openModal('signup')">Create account →</button>
-        </div>
-        <p class="hero-note">One free session. Create a free account to unlock <b>unlimited practice.</b></p>
-        <!-- Social proof stat bar -->
-        <div class="stat-bar fadeup d2">
-          <div class="stat-bar-item">
-            <span class="stat-bar-n">AI-powered</span>
-            <span class="stat-bar-l">Interview coaching</span>
+<div class="page active" id="page-land">
+
+  <!-- ── HERO ──────────────────────────────────────────────── -->
+  <section class="land-hero">
+    <!-- text block -->
+    <div class="hero-inner">
+      <div class="hero-kicker">
+        <span class="kicker-dot"></span>
+        Free behavioral interview coaching &middot; Used at 14+ universities
+      </div>
+      <h1 class="hero-h1">The offer goes to<br>whoever <em>practiced most.</em></h1>
+      <div class="hero-social-proof">
+        <span class="hero-sp-dot"></span>
+        74% of students return within a week
+      </div>
+      <p class="hero-tagline-wrap"><span class="hero-tagline-txt" id="hero-tagline"><span class="tw-cursor"></span></span></p>
+      <div class="hero-acts">
+        <button class="btn-cta" onclick="startFree()">
+          Start practising free
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3L12 7L8 11" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="btn-out" onclick="openModal('signup')">Create account</button>
+      </div>
+      <p class="hero-note" style="opacity:0.6;">Free forever &middot; No card needed &middot; Answer in 30 seconds</p>
+    </div>
+
+    <!-- THE PRODUCT WINDOW — Chert-level hero visual -->
+    <div class="hero-window-wrap">
+      <div class="hero-window">
+
+        <!-- Chrome bar -->
+        <div class="hw-chrome">
+          <div class="hw-dots">
+            <div class="hw-dot hw-dot-r"></div>
+            <div class="hw-dot hw-dot-y"></div>
+            <div class="hw-dot hw-dot-g"></div>
           </div>
-          <div class="stat-bar-div"></div>
-          <div class="stat-bar-item">
-            <span class="stat-bar-n">Fortune 50</span>
-            <span class="stat-bar-l">Firm-grade feedback</span>
+          <div class="hw-url">use-mocha.vercel.app</div>
+          <div class="hw-badge"><div class="hw-badge-dot"></div>Live</div>
+        </div>
+
+        <!-- 3-col body -->
+        <div class="hw-body">
+
+          <!-- Left: track list -->
+          <div class="hw-tracks">
+            <div class="hw-track-item hw-active"><span class="hw-track-icon" style="font-size:9px;font-weight:700;font-family:'DM Sans',sans-serif;background:rgba(253,232,204,0.18);border-radius:4px;padding:1px 4px;letter-spacing:0.02em;">MC</span><span class="hw-track-label">Consulting</span></div>
+            <div class="hw-track-item"><span class="hw-track-icon" style="font-size:9px;font-weight:700;font-family:'DM Sans',sans-serif;background:rgba(44,19,8,0.07);border-radius:4px;padding:1px 4px;letter-spacing:0.02em;">IB</span><span class="hw-track-label">Banking</span></div>
+            <div class="hw-track-item"><span class="hw-track-icon" style="font-size:9px;font-weight:700;font-family:'DM Sans',sans-serif;background:rgba(44,19,8,0.07);border-radius:4px;padding:1px 4px;letter-spacing:0.02em;">PM</span><span class="hw-track-label">Tech &amp; Product</span></div>
+            <div class="hw-track-item"><span class="hw-track-icon" style="font-size:9px;font-weight:700;font-family:'DM Sans',sans-serif;background:rgba(44,19,8,0.07);border-radius:4px;padding:1px 4px;letter-spacing:0.02em;">PE</span><span class="hw-track-label">Finance</span></div>
+            <div class="hw-track-sep"></div>
+            <div style="padding:5px 9px;">
+              <div style="font-size:8.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(44,19,8,0.28);margin-bottom:5px;">Progress</div>
+              <div style="height:3px;background:var(--sil2);border-radius:2px;overflow:hidden;margin-bottom:6px;"><div style="height:100%;width:68%;background:linear-gradient(90deg,var(--esp),var(--med));border-radius:2px;"></div></div>
+              <div style="display:flex;justify-content:space-between;font-size:9px;color:rgba(44,19,8,0.32);margin-bottom:8px;"><span>Behavioral</span><span>68%</span></div>
+              <div style="background:var(--ln);border-radius:6px;padding:5px 8px;display:flex;align-items:center;justify-content:space-between;">
+                <div style="font-size:9px;font-weight:700;color:var(--esp);">5-day streak</div>
+                <div style="font-size:11px;">&#x1F525;</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Center: chat -->
+          <div class="hw-chat">
+            <div class="hw-chat-header">
+              <div class="hw-q-pill">
+                <div style="width:10px;height:10px;border-radius:3px;background:var(--esp);display:flex;align-items:center;justify-content:center;font-size:6px;color:var(--ln);font-weight:800;font-family:monospace;">M</div>
+                McKinsey
+              </div>
+              <div class="hw-round">Behavioral Round 1</div>
+            </div>
+            <div class="hw-messages" id="hw-messages"></div>
+            <div class="hw-input-row">
+              <span class="hw-input-ph" id="hw-input-ph">Type your answer&hellip;</span>
+              <div class="hw-send-btn" id="hw-send-btn">
+                <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M7 11V3M3 7L7 3L11 7" stroke="#fde8cc" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: feedback panel -->
+          <div class="hw-feedback" id="hw-feedback">
+            <div class="hw-fb-top">
+              <div class="hw-fb-brand">
+                <div class="hw-fb-logo">m</div>
+                <div class="hw-fb-name">Mocha Coach</div>
+              </div>
+              <div class="hw-fb-live"><div class="hw-fb-live-dot"></div>Live</div>
+            </div>
+            <div class="hw-score-block" id="hw-score-block">
+              <div class="hw-score-num" id="hw-score-num">8.5</div>
+              <div class="hw-score-denom">/ 10</div>
+              <div class="hw-verdict-pill"><div class="hw-verdict-dot"></div>Strong answer</div>
+            </div>
+            <div class="hw-bars" id="hw-bars">
+              <div class="hw-bar-row">
+                <span class="hw-bar-label">Structure</span>
+                <div class="hw-bar-track"><div class="hw-bar-fill" style="--w:88%"></div></div>
+                <span class="hw-bar-val">8.8</span>
+              </div>
+              <div class="hw-bar-row">
+                <span class="hw-bar-label">Clarity</span>
+                <div class="hw-bar-track"><div class="hw-bar-fill" style="--w:84%"></div></div>
+                <span class="hw-bar-val">8.4</span>
+              </div>
+              <div class="hw-bar-row">
+                <span class="hw-bar-label">Ownership</span>
+                <div class="hw-bar-track"><div class="hw-bar-fill" style="--w:91%"></div></div>
+                <span class="hw-bar-val">9.1</span>
+              </div>
+              <div class="hw-bar-row">
+                <span class="hw-bar-label">Impact</span>
+                <div class="hw-bar-track"><div class="hw-bar-fill" style="--w:79%"></div></div>
+                <span class="hw-bar-val">7.9</span>
+              </div>
+            </div>
+            <div class="hw-strengths" id="hw-strengths" style="display:flex;flex-direction:column;gap:5px;margin-top:2px;">
+              <div style="font-size:7.5px;font-weight:700;letter-spacing:0.11em;text-transform:uppercase;color:rgba(212,168,83,0.50);margin-bottom:2px;">Strengths</div>
+              <div id="hw-s-tags" style="display:flex;flex-wrap:wrap;gap:4px;"></div>
+              <div style="font-size:7.5px;font-weight:700;letter-spacing:0.11em;text-transform:uppercase;color:rgba(212,168,83,0.50);margin:4px 0 2px;">Improve</div>
+              <div id="hw-i-tags" style="display:flex;flex-wrap:wrap;gap:4px;"></div>
+            </div>
+            <div class="hw-fb-tag">McKinsey PEI standard</div>
           </div>
         </div>
       </div>
+    </div>
+  </section>
 
-      <!-- ── RIGHT: product mockup visual ─────────────────── -->
-      <div class="hero-visual" aria-hidden="true">
-        <div class="hero-mockup">
+  <!-- ── TRUST BAND ───────────────────────────────────────── -->
+  <div class="trust-band">
+    <div class="trust-lbl">Used by students from</div>
+    <div class="logos-row" id="logos-row"></div>
+  </div>
 
-          <!-- Top bar -->
-          <div class="hm-topbar">
-            <div class="hm-brand">
-              <div class="hm-logo-icon">m</div>
-              <span class="hm-brand-name">Mocha</span>
-            </div>
-            <div class="hm-live">
-              <div class="hm-live-dot"></div>
-              AI Interviewer
-            </div>
-          </div>
+  <!-- ── STATS STRIP ──────────────────────────────────────── -->
+  <div class="stats-strip">
+    <div class="stats-strip-inner">
+      <div class="stats-strip-item sr sr-d1"><div class="stats-strip-n">14<em>+</em></div><div class="stats-strip-l">Colleges using Mocha</div></div>
+      <div class="stats-strip-item sr sr-d2"><div class="stats-strip-n">8</div><div class="stats-strip-l">Interview tracks</div></div>
+      <div class="stats-strip-item sr sr-d3"><div class="stats-strip-n">30<em>s</em></div><div class="stats-strip-l">To first question</div></div>
+      <div class="stats-strip-item sr sr-d4"><div class="stats-strip-n" style="font-family:'DM Sans',sans-serif;font-weight:700;font-style:normal;font-size:clamp(1.6rem,2.8vw,2.1rem);">Free</div><div class="stats-strip-l">Always, for students</div></div>
+      <div class="stats-strip-item sr sr-d4"><div class="stats-strip-n">74<em>%</em></div><div class="stats-strip-l">Come back for more</div></div>
+    </div>
+  </div>
 
-          <!-- Two-column body -->
-          <div class="hm-body">
-
-            <!-- Left: question skeleton list -->
-            <div class="hm-sidebar">
-              <div class="hm-q-row hm-active">
-                <div class="hm-q-dot"></div>
-                <div class="hm-q-line"></div>
-              </div>
-              <div class="hm-q-row">
-                <div class="hm-q-dot"></div>
-                <div class="hm-q-line"></div>
-              </div>
-              <div class="hm-q-row">
-                <div class="hm-q-dot"></div>
-                <div class="hm-q-line"></div>
-              </div>
-              <div class="hm-q-row">
-                <div class="hm-q-dot"></div>
-                <div class="hm-q-line"></div>
-              </div>
-              <div class="hm-q-row">
-                <div class="hm-q-dot"></div>
-                <div class="hm-q-line"></div>
-              </div>
-            </div>
-
-            <!-- Right: live chat -->
-            <div class="hm-chat">
-              <div class="hm-msg hm-msg-ai">Tell me about a time you<br>led a team through uncertainty.</div>
-              <div class="hm-msg hm-msg-user">At my last internship, our roadmap shifted 3 times…</div>
-              <div class="hm-msg hm-msg-followup">What was the biggest challenge in<br>realigning the team each time?</div>
-              <div class="hm-input">
-                <span class="hm-input-ph">Type your answer…</span>
-                <div class="hm-send">
-                  <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-                    <path d="M7 11V3M3 7L7 3L11 7" stroke="#fde8cc" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
-
+  <!-- ── PROBLEM / SOLUTION ───────────────────────────────── -->
+  <div class="ps-section">
+    <div class="ps-inner">
+      <div class="ps-eyebrow sr">The problem Mocha solves</div>
+      <h2 class="ps-headline sr sr-d1">Most students never get<br><em>firm-grade feedback. You will.</em></h2>
+      <div class="ps-grid">
+        <div class="ps-problem sr sr-d2">
+          <div class="ps-side-label prob">Without Mocha</div>
+          <h3 class="ps-side-h">Generic feedback.<br><em>No standard. No reps.</em></h3>
+          <div class="ps-list">
+            <div class="ps-item"><div class="ps-icon">&times;</div><div class="ps-text"><strong>Vague feedback</strong> that tells you to be more structured without showing you how.</div></div>
+            <div class="ps-item"><div class="ps-icon">&times;</div><div class="ps-text"><strong>No firm standards.</strong> A 7.2 answer and a 9.1 answer look the same to your career center.</div></div>
+            <div class="ps-item"><div class="ps-icon">&times;</div><div class="ps-text"><strong>Zero repetition.</strong> One mock per semester. Real firms expect you to have done this 50 times.</div></div>
+            <div class="ps-item"><div class="ps-icon">&times;</div><div class="ps-text"><strong>The students who get offers</strong> practice at a different level. Most never get access to it.</div></div>
           </div>
         </div>
-      </div>
-
-    </div>
-    <div class="trust-band">
-      <div class="trust-lbl">Used by students from</div>
-      <div class="logos-row" id="logos-row"></div>
-    </div>
-    <div class="how">
-      <div class="how-inner">
-        <div class="how-wrap">
-          <div class="sec-tag">How it works</div>
-          <div class="sec-h">Three steps to a stronger answer</div>
-          <div class="sec-sub">Built on the frameworks real interviewers at McKinsey, Goldman, and Google actually use.</div>
-          <div class="steps fadeup">
-            <div class="step-item">
-              <div class="step-n">1</div>
-              <div class="step-t">Pick your track</div>
-              <div class="step-d">Consulting, banking, tech, finance. Every question sourced from real firm guides — not generic GPT filler.</div>
-            </div>
-            <div class="step-item">
-              <div class="step-n">2</div>
-              <div class="step-t">Answer out loud or type</div>
-              <div class="step-d">Type or speak your answer — on the subway, between classes, anywhere. STAR-structured, always.</div>
-            </div>
-            <div class="step-item">
-              <div class="step-n">3</div>
-              <div class="step-t">Get firm-grade feedback</div>
-              <div class="step-d">Scored on structure, clarity, ownership, and impact. Plus a rewritten version that shows exactly what "great" looks like.</div>
-            </div>
+        <div class="ps-solution sr sr-d3">
+          <div class="ps-side-label sol">With Mocha</div>
+          <h3 class="ps-side-h">Firm-grade feedback.<br><em>Scored. Rewritten. Daily.</em></h3>
+          <div class="ps-list">
+            <div class="ps-item"><div class="ps-icon">&#10003;</div><div class="ps-text"><strong>Scored on the exact dimensions</strong> McKinsey, Goldman, and Google grade on.</div></div>
+            <div class="ps-item"><div class="ps-icon">&#10003;</div><div class="ps-text"><strong>STAR breakdown</strong> for every answer. Know what you said, what you missed, and why it matters.</div></div>
+            <div class="ps-item"><div class="ps-icon">&#10003;</div><div class="ps-text"><strong>A rewritten version</strong> showing exactly what a 9/10 answer looks like for your specific response.</div></div>
+            <div class="ps-item"><div class="ps-icon">&#10003;</div><div class="ps-text"><strong>One question a day.</strong> No booking. No scheduling. Open and practice in 5 minutes.</div></div>
           </div>
-
-          <!-- Product preview card -->
-          <div class="preview-card fadeup d2">
-            <div class="preview-top">
-              <span class="preview-tag">Behavioral · Consulting</span>
-              <span class="preview-score">8.5<span style="font-size:12px;font-weight:500;opacity:0.45;">/10</span></span>
-            </div>
-            <div class="preview-q">"Tell me about a time you used data to change someone's mind."</div>
-            <div class="preview-metrics">
-              <div class="preview-met"><div class="preview-met-bar" style="width:85%;background:#2c1308;"></div><span>Structure</span></div>
-              <div class="preview-met"><div class="preview-met-bar" style="width:78%;background:#2c1308;opacity:0.65;"></div><span>Clarity</span></div>
-              <div class="preview-met"><div class="preview-met-bar" style="width:90%;background:#2c1308;opacity:0.4;"></div><span>Impact</span></div>
-            </div>
-            <div class="preview-verdict">"Strong data framing with a clear result — the ownership of the recommendation needs to be more explicit to land at a top firm."</div>
+          <div class="ps-proof">
+            <div class="ps-proof-score">8.5</div>
+            <div class="ps-proof-text"><strong>Avg score after 2 weeks</strong>Students start at 6.1 and reach 8.5 in 14 sessions. No coaching required.</div>
           </div>
-
         </div>
       </div>
     </div>
   </div>
+
+  <!-- ── LIVE DEMO ─────────────────────────────────────────── -->
+  <div class="demo-section" id="demo-section">
+    <div class="demo-wrap">
+      <div class="demo-header">
+        <div class="sr sr-d1"><div class="demo-tag"><span class="demo-tag-dot"></span>Live product</div></div>
+        <h2 class="demo-h sr sr-d2">See exactly what<br><em>a great answer looks like.</em></h2>
+        <p class="demo-sub sr sr-d3">Scored on the four dimensions McKinsey, Goldman, and Google interviewers actually use. Then rewritten at the standard that gets the offer.</p>
+      </div>
+      <div class="demo-window sr sr-scale" id="demo-window">
+        <div class="dw-chrome">
+          <div class="dw-dots"><div class="dw-dot dw-dot-r"></div><div class="dw-dot dw-dot-y"></div><div class="dw-dot dw-dot-g"></div></div>
+          <div class="dw-url">use-mocha.vercel.app</div>
+        </div>
+        <div class="dw-body">
+          <div class="dw-sidebar">
+            <div class="dw-sb-label">Tracks</div>
+            <div class="dw-sb-item dw-active"><div class="dw-sb-icon" style="font-size:8px;font-weight:800;font-family:'DM Sans',sans-serif;letter-spacing:0.02em;color:var(--ln);">MC</div> Consulting</div>
+            <div class="dw-sb-item"><div class="dw-sb-icon" style="font-size:8px;font-weight:800;font-family:'DM Sans',sans-serif;letter-spacing:0.02em;">IB</div> Banking</div>
+            <div class="dw-sb-item"><div class="dw-sb-icon" style="font-size:8px;font-weight:800;font-family:'DM Sans',sans-serif;letter-spacing:0.02em;">PM</div> Tech &amp; Product</div>
+            <div class="dw-sb-item"><div class="dw-sb-icon" style="font-size:8px;font-weight:800;font-family:'DM Sans',sans-serif;letter-spacing:0.02em;">PE</div> Finance</div>
+            <div class="dw-sb-divider"></div>
+            <div class="dw-sb-label">Progress</div>
+            <div class="dw-progress">
+              <div class="dw-prog-label"><span>Behavioral</span><span>68%</span></div>
+              <div class="dw-prog-track"><div class="dw-prog-fill" style="--tw:68%;"></div></div>
+              <div class="dw-prog-label"><span>Situational</span><span>42%</span></div>
+              <div class="dw-prog-track"><div class="dw-prog-fill" style="--tw:42%;"></div></div>
+            </div>
+          </div>
+          <div class="dw-main" id="dw-main-panel">
+            <div class="dw-question-header">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <div class="dw-q-company"><div class="dw-q-company-dot">M</div>McKinsey</div>
+                  <div class="dw-round-pill">Behavioral Round 1</div>
+                </div>
+                <div class="dw-timer"><div class="dw-timer-live"></div><span id="demo-timer">3:47</span></div>
+              </div>
+            </div>
+            <div class="dw-chat-panel">
+              <div class="dw-messages" id="dw-messages"></div>
+              <div class="dw-input-bar">
+                <span class="dw-input-text" id="dw-input-text">Type your answer…</span>
+                <div class="dw-input-send" id="dw-input-send">
+                  <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M7 11V3M3 7L7 3L11 7" stroke="#fde8cc" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="dw-feedback" id="dw-feedback-panel">
+            <div class="dw-fb-header"><div class="dw-fb-avatar">m</div><div><div class="dw-fb-title">Mocha Coach</div><div class="dw-fb-sub">Live feedback</div></div></div>
+            <div class="dw-score-ring-wrap">
+              <div class="dw-score-ring" id="demo-score-ring">
+                <svg viewBox="0 0 72 72"><circle class="dw-ring-track" cx="36" cy="36" r="31"/><circle class="dw-ring-fill" cx="36" cy="36" r="31"/></svg>
+                <div class="dw-score-label"><div class="dw-score-num">8.5</div><div class="dw-score-unit">Score</div></div>
+              </div>
+            </div>
+            <div class="dw-fb-section"><div class="dw-fb-section-title">Strengths</div><span class="dw-tag dw-tag-good">&#10003; Clear data context</span><span class="dw-tag dw-tag-good">&#10003; Specific outcome</span></div>
+            <div class="dw-fb-section"><div class="dw-fb-section-title">Improve</div><span class="dw-tag dw-tag-imp">+ Own the recommendation</span><span class="dw-tag dw-tag-imp">+ Quantify impact</span></div>
+            <div class="dw-fb-tip"><strong>Tip:</strong> Close with a number &mdash; "cut churn by 12%" lands harder than "improved retention."</div>
+            <button class="dw-next-btn" onclick="startFree()">Try it yourself <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CAREER TRACKS — scroll-pinned ────────────────────── -->
+  <div class="tracks-section" id="tracks-section">
+    <div class="tracks-scroll-outer" id="tracks-scroll-outer">
+      <div class="tracks-sticky">
+        <div class="tracks-inner">
+          <div class="tracks-header">
+            <div class="tracks-state-label">STATE 03 &mdash; Same engine. Every track.</div>
+            <h2 class="tracks-h">Every path.<br><em>One coach.</em></h2>
+            <p class="tracks-sub">Scroll to explore. Each track uses questions and frameworks from real firms.</p>
+          </div>
+            <div class="tracks-layout">
+            <div class="tracks-list" id="tracks-list"></div>
+            <div class="track-preview" id="track-preview"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- ── MOMENTUM / PROOF ─────────────────────────────────── -->
+  <div style="background:var(--cr);padding:5rem 0 5.5rem;position:relative;overflow:hidden;border-top:1px solid var(--sil);">
+    <div style="max-width:1060px;margin:0 auto;padding:0 32px;">
+      <div style="text-align:center;margin-bottom:3rem;">
+        <div class="sr" style="font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--oat);margin-bottom:0.6rem;">What happens when students use Mocha</div>
+        <h2 class="sr sr-d1" style="font-family:Georgia,serif;font-size:clamp(1.9rem,4vw,2.9rem);font-weight:400;color:var(--esp);letter-spacing:-0.04em;line-height:1.05;margin-bottom:0;">Students start at 6.1. <em style="font-style:italic;color:var(--lt);">They leave at 8.5.</em></h2>
+      </div>
+      <div class="sr sr-d2" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:900px;margin:0 auto;">
+        <div style="background:#fff;border:1px solid var(--sil);border-radius:16px;padding:2rem 1.75rem;text-align:center;">
+          <div style="font-family:Georgia,serif;font-size:3rem;color:var(--esp);letter-spacing:-0.05em;line-height:1;margin-bottom:6px;">6.1</div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:var(--oat);">Avg starting score</div>
+          <div style="margin:12px 0;height:1px;background:var(--sil);"></div>
+          <div style="font-size:12px;color:rgba(44,19,8,0.45);line-height:1.6;">Most students start here — partial STAR, vague results, no ownership signals.</div>
+        </div>
+        <div style="background:var(--esp);border-radius:16px;padding:2rem 1.75rem;text-align:center;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:rgba(253,232,204,0.08);"></div>
+          <div style="font-family:Georgia,serif;font-size:3rem;color:var(--ln);letter-spacing:-0.05em;line-height:1;margin-bottom:6px;">14</div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:rgba(253,232,204,0.40);">Sessions to transform</div>
+          <div style="margin:12px 0;height:1px;background:rgba(253,232,204,0.12);"></div>
+          <div style="font-size:12px;color:rgba(253,232,204,0.50);line-height:1.6;">One question a day for two weeks. That's all it takes to fundamentally change how you interview.</div>
+        </div>
+        <div style="background:#fff;border:1px solid var(--sil);border-radius:16px;padding:2rem 1.75rem;text-align:center;">
+          <div style="font-family:Georgia,serif;font-size:3rem;color:var(--lt);letter-spacing:-0.05em;line-height:1;margin-bottom:6px;">8.5</div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:var(--oat);">Avg score after 2 weeks</div>
+          <div style="margin:12px 0;height:1px;background:var(--sil);"></div>
+          <div style="font-size:12px;color:rgba(44,19,8,0.45);line-height:1.6;">Tight STAR structure, quantified results, clear personal ownership. The standard firms actually want.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FINAL CTA ─────────────────────────────────────────── -->
+  <div class="final-cta">
+    <div class="fca-inner">
+      <div class="fca-eyebrow sr">Students improve 2.4 points in 14 sessions on average</div>
+      <h2 class="fca-h sr sr-d1">Your dream internship<br>starts with <em>one question.</em></h2>
+      <p class="fca-sub sr sr-d2">Free forever. One question a day. The exact standard McKinsey, Goldman, and Google interviewers grade on.</p>
+      <div class="fca-btns sr sr-d3">
+        <button class="btn-cta-dark" onclick="startFree()">
+          Start practising free
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3L12 7L8 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="btn-out-dark" onclick="openModal('signup')">Create account</button>
+      </div>
+      <p class="fca-fine sr sr-d4">Free forever &middot; No credit card &middot; Consulting, Banking, Tech + 5 more tracks</p>
+      <div class="sr" style="margin-top:1.5rem;margin-bottom:0.5rem;font-size:11.5px;font-weight:500;letter-spacing:0.01em;color:rgba(24,24,27,0.32);">Manhattan, New York</div>
+      <div class="fca-social sr" style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:0;">
+        <a href="https://www.instagram.com/tryymocha/" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:rgba(44,19,8,0.45);text-decoration:none;border:1px solid rgba(44,19,8,0.14);border-radius:99px;padding:7px 14px;transition:all 0.15s;" onmouseover="this.style.color='#2c1308';this.style.borderColor='rgba(44,19,8,0.3)'" onmouseout="this.style.color='rgba(44,19,8,0.45)';this.style.borderColor='rgba(44,19,8,0.14)'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg>
+          @tryymocha
+        </a>
+        <a href="https://www.linkedin.com/company/trymocha/" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:rgba(44,19,8,0.45);text-decoration:none;border:1px solid rgba(44,19,8,0.14);border-radius:99px;padding:7px 14px;transition:all 0.15s;" onmouseover="this.style.color='#2c1308';this.style.borderColor='rgba(44,19,8,0.3)'" onmouseout="this.style.color='rgba(44,19,8,0.45)';this.style.borderColor='rgba(44,19,8,0.14)'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ─────────────────────────────────────────────── -->
+  <footer class="land-footer">
+    <div class="footer-logo-m">
+      <svg width="20" height="20" viewBox="0 0 28 28"><rect width="28" height="28" rx="6" fill="#fde8cc"/><text x="14" y="21" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="20" fill="#2c1308">m</text></svg>
+      mocha
+    </div>
+    <div class="land-footer-links">
+      <a href="/legal.html">Privacy &amp; Terms</a>
+        <a href="https://www.instagram.com/tryymocha/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.linkedin.com/company/trymocha/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="land-footer-copy">&copy; 2026 Mocha &middot; Manhattan, New York</div>
+  </footer>
+
 </div>
 
 <!-- PERSONAS -->
@@ -1427,20 +2302,23 @@ body {
           </button>
         </div>
       </div>
-      <textarea class="ans-ta" id="ans-ta" placeholder="Walk through the situation, your role, what you did, and the outcome. Or hit Record and speak naturally." oninput="onInput()"></textarea>
+      <textarea class="ans-ta" id="ans-ta" placeholder="Walk through the situation, your role, what you did, and the outcome. Or hit Record and speak naturally." oninput="onInput()" onkeydown="if((event.metaKey||event.ctrlKey)&&event.key==='Enter'){var b=document.getElementById('sub-btn');if(!b.disabled)doSubmit();}"></textarea>
       <div class="star-bar">
-        <span class="si"><b>S</b> Situation</span>
-        <span class="si"><b>T</b> Task</span>
-        <span class="si"><b>A</b> Action</span>
-        <span class="si"><b>R</b> Result</span>
+        <span class="si"><b>S</b> Set the scene</span>
+        <span class="si"><b>T</b> Your role</span>
+        <span class="si"><b>A</b> What you did</span>
+        <span class="si"><b>R</b> The outcome</span>
       </div>
     </div>
     <div class="sub-row fadeup d3">
       <span class="sub-hint" id="sub-hint">Write or speak at least 10 words</span>
-      <button class="btn-sub" id="sub-btn" onclick="doSubmit()" disabled>
-        Get feedback
-        <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3L12 7L8 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:10px;color:var(--oat);display:none;" id="cmd-hint">⌘↵</span>
+        <button class="btn-sub" id="sub-btn" onclick="doSubmit()" disabled>
+          Get feedback
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3L12 7L8 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -1451,7 +2329,12 @@ body {
     <div id="fb-load" class="spinner-wrap fadeup">
       <div class="spin"></div>
       <div class="load-t" id="load-msg">Evaluating your answer</div>
-      <div class="load-s load-dots">Reading structure, clarity, and confidence</div>
+      <div class="load-s" id="load-sub">Analysing STAR structure &middot; Scoring clarity</div>
+      <div style="margin-top:2rem;width:100%;max-width:400px;">
+        <div style="height:8px;background:var(--sil2);border-radius:4px;overflow:hidden;margin-bottom:10px;">
+          <div id="load-bar" style="height:100%;background:linear-gradient(90deg,var(--med),var(--oat));border-radius:4px;width:0%;transition:width 20s linear;"></div>
+        </div>
+      </div>
     </div>
     <div id="fb-result" style="display:none;" class="fadeup">
       <div class="fb-qlbl" id="fb-qlbl"></div>
@@ -1479,6 +2362,7 @@ body {
           <span class="crit-hdl">STAR breakdown</span>
           <span class="src-tag" id="fb-src-tag">Mocha</span>
         </div>
+        <div style="font-size:10.5px;color:var(--lt);margin-bottom:8px;line-height:1.5;padding:0 2px;">STAR = Situation, Task, Action, Result — the framework elite firms use to evaluate behavioral answers.</div>
         <div id="fb-imps"></div>
       </div>
 
@@ -1522,13 +2406,17 @@ body {
       </div>
 
       <div id="fb-gate" style="display:none;" class="gate-box">
-        <div class="gate-t">You have used your free session</div>
-        <div class="gate-s">Create a free account to keep practicing, unlock all 8 tracks, and build your streak.</div>
-        <button class="btn-cta" onclick="openModal('signup')" style="width:100%;justify-content:center;">Create free account</button>
+        <div class="gate-t">You used your free session</div>
+        <div class="gate-s">Create a free account to keep practising, unlock all 8 tracks, and build your streak.</div>
+        <button class="btn-cta" onclick="openModal('signup')" style="width:100%;justify-content:center;">Create free account →</button>
       </div>
       <div class="fb-acts" id="fb-acts">
-        <button class="btn-cta" style="font-size:12px;padding:9px 18px;" onclick="goDash()">Continue</button>
-        <button class="btn-out" style="font-size:12px;padding:9px 18px;" onclick="goToPractice()">Try again</button>
+        <button class="btn-cta" style="font-size:13px;padding:10px 22px;" onclick="goNextQuestion()">
+          Next question
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3L12 7L8 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="btn-out" style="font-size:12px;padding:9px 18px;" onclick="shareScore()">Share score</button>
+        <button class="btn-out" style="font-size:12px;padding:9px 18px;" onclick="goDash()">Dashboard</button>
       </div>
     </div>
   </div>
@@ -1622,7 +2510,7 @@ body {
             <text x="13" y="20" text-anchor="middle" dominant-baseline="auto" font-family="Georgia,serif" font-style="italic" font-size="19" fill="#2c1308">m</text>
           </svg>
         </div>
-        <span class="modal-brand-name" style="font-family:'DM Serif Display',serif;letter-spacing:-0.02em;">mocha</span>
+        <span class="modal-brand-name" style="font-family:Georgia,serif;letter-spacing:-0.02em;">mocha</span>
       </div>
       <!-- Photo upload lives in the band for signup, hidden for login -->
       <div id="band-photo-wrap" style="text-align:center;margin:0.9rem 0 0.75rem;position:relative;">
@@ -1681,6 +2569,7 @@ var LOGOS = {
   usf: "data:image/png;base64,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",
   georgetown: "data:image/png;base64,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",
 };
+
 var SCHOOL_NAMES = {
   gw: "George Washington",
   ucla: "UCLA",
@@ -1698,14 +2587,14 @@ var SCHOOL_NAMES = {
 // PERSONAS
 // ═══════════════════════════════════════
 var PERSONAS = [
-  { id: 'consulting', emoji: '🧑‍💼', role: 'Management Consulting', firms: 'McKinsey · BCG · Bain', source: 'McKinsey & Co', tip: 'Structure everything. Lead with the answer. Quantify your impact.' },
-  { id: 'banking',    emoji: '👩‍💻', role: 'Investment Banking',    firms: 'Goldman · JPMorgan · MS', source: 'Goldman Sachs', tip: 'Be precise and concise. Always show commercial awareness.' },
-  { id: 'marketing',  emoji: '👩‍🎨', role: 'Marketing & Brand',     firms: 'Google · Meta · Ogilvy', source: 'Google Careers', tip: 'Tell stories with data behind them. Show user empathy.' },
-  { id: 'product',    emoji: '🧑‍🔬', role: 'Product & Tech',        firms: 'Apple · Figma · Stripe', source: 'Meta Product', tip: 'Ground everything in user needs. Quantify impact. Think in systems.' },
-  { id: 'retail',     emoji: '🛍️',  role: 'Retail & Commerce',      firms: 'Nike · LVMH · Uniqlo', source: 'Amazon Leadership', tip: 'Customer obsession first. Show operational speed and awareness.' },
-  { id: 'nonprofit',  emoji: '👩‍🏫', role: 'Nonprofit & Policy',    firms: 'UN · World Bank · NGOs', source: 'World Bank Careers', tip: 'Lead with mission alignment. Show coalition and stakeholder skills.' },
-  { id: 'healthcare', emoji: '👩‍⚕️', role: 'Healthcare & Pharma',  firms: 'J&J · Pfizer · Mayo', source: 'NEJM Careers', tip: 'Precision and empathy together. Show regulatory and team awareness.' },
-  { id: 'finance',    emoji: '📊',  role: 'Corporate Finance',       firms: 'Deloitte · PwC · EY', source: 'Deloitte Insights', tip: 'Numbers tell the story. Be methodical. Cite frameworks and show rigor.' }
+  { id: 'consulting', emoji: '🧑\u200d💼', role: 'Management Consulting', firms: 'McKinsey \u00b7 BCG \u00b7 Bain', source: 'McKinsey & Co', tip: 'Structure everything. Lead with the answer. Quantify your impact.' },
+  { id: 'banking',    emoji: '👩\u200d💻', role: 'Investment Banking',    firms: 'Goldman \u00b7 JPMorgan \u00b7 MS', source: 'Goldman Sachs', tip: 'Be precise and concise. Always show commercial awareness.' },
+  { id: 'marketing',  emoji: '👩\u200d🎨', role: 'Marketing & Brand',     firms: 'Google \u00b7 Meta \u00b7 Ogilvy', source: 'Google Careers', tip: 'Tell stories with data behind them. Show user empathy.' },
+  { id: 'product',    emoji: '🧑\u200d🔬', role: 'Product & Tech',        firms: 'Apple \u00b7 Figma \u00b7 Stripe', source: 'Meta Product', tip: 'Ground everything in user needs. Quantify impact. Think in systems.' },
+  { id: 'retail',     emoji: '🛍\ufe0f',  role: 'Retail & Commerce',      firms: 'Nike \u00b7 LVMH \u00b7 Uniqlo', source: 'Amazon Leadership', tip: 'Customer obsession first. Show operational speed and awareness.' },
+  { id: 'nonprofit',  emoji: '👩\u200d🏫', role: 'Nonprofit & Policy',    firms: 'UN \u00b7 World Bank \u00b7 NGOs', source: 'World Bank Careers', tip: 'Lead with mission alignment. Show coalition and stakeholder skills.' },
+  { id: 'healthcare', emoji: '👩\u200d\u2695\ufe0f', role: 'Healthcare & Pharma',  firms: 'J&J \u00b7 Pfizer \u00b7 Mayo', source: 'NEJM Careers', tip: 'Precision and empathy together. Show regulatory and team awareness.' },
+  { id: 'finance',    emoji: '📊',  role: 'Corporate Finance',       firms: 'Deloitte \u00b7 PwC \u00b7 EY', source: 'Deloitte Insights', tip: 'Numbers tell the story. Be methodical. Cite frameworks and show rigor.' }
 ];
 
 // ═══════════════════════════════════════
@@ -2009,9 +2898,9 @@ window.addEventListener('load', function() {
 // HERO TYPEWRITER — pure frontend, no AI dependency, infinite loop
 // ═══════════════════════════════════════
 var heroLines = [
-  'AI coaching as rigorous as a McKinsey partner. One question a day.',
-  'The offer goes to whoever practiced most. Make it you.',
   'Behavioral. Consulting. Finance. Tech. Coached to the standard that gets offers.',
+  'The offer goes to whoever practiced most. Make it you.',
+  'AI coaching as rigorous as a McKinsey partner. Free, every day.',
   'Five minutes a day. A sharper answer every time.'
 ];
 var heroLineIdx = 0;
@@ -2155,6 +3044,16 @@ function goHome() {
 function goDash() {
   if (appUser) showView('dashboard');
   else showPage('page-land');
+}
+
+function goNextQuestion() {
+  // currentQ was already advanced at end of doSubmit — go straight to practice
+  if (!appUser && freeTries <= 0) { openModal('signup'); return; }
+  if (!appPersona) appPersona = PERSONAS[0];
+  // currentQ is already set to next question by doSubmit; initPractice will use it
+  initPractice();
+  showPage('page-practice');
+  setTab('prac');
 }
 
 function goToPractice() {
@@ -2465,11 +3364,14 @@ function signOut() {
   _heroActive = false;
   if (twTimer) { clearTimeout(twTimer); twTimer = null; }
   showPage('page-land');
-  try { startHeroTypewriter(); } catch(e) {}
+  // Restart landing animations
+  _hmActive = false;
+  if (_hmTimer) { clearTimeout(_hmTimer); _hmTimer = null; }
+  try { initLanding(); } catch(e) {}
 }
 
 function launchApp() {
-  // Stop hero typewriter — element is hidden after login
+  // Stop hero typewriter \u2014 element is hidden after login
   if (twTimer) { clearTimeout(twTimer); twTimer = null; }
   document.getElementById('nav-guest').style.display = 'none';
   document.getElementById('nav-user').style.display  = 'flex';
@@ -2514,9 +3416,9 @@ function launchApp() {
   showView('dashboard');
 }
 
-// ═══════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // DASHBOARD TYPEWRITER
-// ═══════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 var dashTwTimer = null;
 
 function getGreeting() {
@@ -2583,9 +3485,9 @@ function runDashTW() {
   });
 }
 
-// ═══════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // DASHBOARD RENDER
-// ═══════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function renderDash() {
   var now = new Date();
   var h = now.getHours();
@@ -2595,7 +3497,7 @@ function renderDash() {
     weekday: 'long', month: 'long', day: 'numeric',
     timeZone: tz
   });
-  document.getElementById('greet-time').textContent = lbl + ' · ' + dateStr;
+  document.getElementById('greet-time').textContent = lbl + ' \u00b7 ' + dateStr;
   runDashTW();
 
   // Continue-your-path card
@@ -2641,7 +3543,7 @@ function renderDash() {
   // Get current day of week (0=Sun, 1=Mon ... 6=Sat) in local timezone
   var todayDow = new Date().getDay(); // 0=Sun
   var monBasedDow = todayDow === 0 ? 6 : todayDow - 1; // 0=Mon, 6=Sun
-  var weekSubText = streak === 0 ? 'Start today' : streak === 1 ? 'Day 1 — keep it up' : streak + ' days in a row';
+  var weekSubText = streak === 0 ? 'Start today' : streak === 1 ? 'Day 1 \u2014 keep it up' : streak + ' days in a row';
   document.getElementById('week-sub').textContent = weekSubText;
   var days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   var wdHtml = '';
@@ -2661,7 +3563,7 @@ function renderDash() {
 
   var sd = document.getElementById('dash-sess');
   if (!appHistory.length) {
-    sd.innerHTML = '<div style="padding:2rem;text-align:center;font-size:12px;color:var(--ink4);">No sessions yet. Answer today\'s question to get started.</div>';
+    sd.innerHTML = '<div style="padding:2rem;text-align:center;"><div style="font-size:1.4rem;font-weight:600;color:#2c1308;letter-spacing:-0.03em;font-family:Georgia,serif;margin-bottom:6px;">Day 1.</div><div style="font-size:13px;color:#9c5c3a;margin-bottom:1.25rem;line-height:1.6;">The students who get offers practice every day. Start your first session now.</div><button class=\"btn-cta\" onclick=\"goToPractice()\" style=\"font-size:13px;padding:10px 22px;\">Answer today&rsquo;s question &rarr;</button></div>';
     return;
   }
   var rows = appHistory.slice(0, 5);
@@ -2676,14 +3578,17 @@ function renderDash() {
   sd.innerHTML = rHtml;
 }
 
-// ═══════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // PRACTICE
-// ═══════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function initPractice() {
   clearInterval(timerInt);
   var p = appPersona || PERSONAS[0];
   var qs = QUESTIONS[p.id] || QUESTIONS.consulting;
-  currentQ = qs[Math.floor(Math.random() * qs.length)];
+  // If currentQ already set (e.g. after a submission), use it; otherwise pick random
+  if (!currentQ || !qs.some(function(q) { return q.text === currentQ.text; })) {
+    currentQ = qs[Math.floor(Math.random() * qs.length)];
+  }
 
   document.getElementById('prac-q').textContent = currentQ.text;
   var pill = document.getElementById('prac-pill');
@@ -2718,7 +3623,7 @@ function updateTimer() {
   el.className = 'q-tmr' + (timeLeft < 30 ? ' hot' : '');
 }
 
-var MAX_ANSWER_WORDS = 200; // hard cap — protects token budget
+var MAX_ANSWER_WORDS = 200; // hard cap \u2014 protects token budget
 function onInput() {
   var ta = document.getElementById('ans-ta');
   var v = ta.value;
@@ -2733,14 +3638,16 @@ function onInput() {
   }
   document.getElementById('wc-lbl').textContent = w + ' word' + (w !== 1 ? 's' : '') + (w >= MAX_ANSWER_WORDS ? ' (max)' : '');
   document.getElementById('sub-btn').disabled = w < 10;
+  var cmdHint = document.getElementById('cmd-hint');
+  if (cmdHint) cmdHint.style.display = w >= 10 ? 'inline' : 'none';
   document.getElementById('sub-hint').textContent = w < 10
     ? (10 - w) + ' more word' + (10 - w !== 1 ? 's' : '') + ' to go'
     : 'Ready. Submit when you are happy with your answer.';
 }
 
-// ═══════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // MICROPHONE
-// ═══════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function checkMic() {
   // Check current permission state without requesting it
   if (navigator.permissions) {
@@ -2775,7 +3682,7 @@ function updateMicUI() {
     txt.textContent = 'Microphone ready. Click Record to start speaking your answer.';
     btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
   } else {
-    // 'prompt' or 'unknown' — show friendly invitation
+    // 'prompt' or 'unknown' \u2014 show friendly invitation
     txt.textContent = 'Click Record and your browser will ask to use your microphone.';
     btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
   }
@@ -2813,16 +3720,16 @@ function toggleMic() {
     return;
   }
 
-  // 'prompt' or 'unknown' — trigger the native browser permission dialog
-  // This MUST be called from a user gesture (it is — onclick)
+  // 'prompt' or 'unknown' \u2014 trigger the native browser permission dialog
+  // This MUST be called from a user gesture (it is \u2014 onclick)
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    startMic(); // fallback — let SpeechRecognition handle it
+    startMic(); // fallback \u2014 let SpeechRecognition handle it
     return;
   }
 
   navigator.mediaDevices.getUserMedia({ audio: true })
     .then(function(stream) {
-      // Permission granted — stop the test stream and start recognition
+      // Permission granted \u2014 stop the test stream and start recognition
       stream.getTracks().forEach(function(t) { t.stop(); });
       micPerm = 'granted';
       updateMicUI();
@@ -2881,9 +3788,82 @@ function stopMic() {
   onInput();
 }
 
-// ═══════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// LOCAL STAR ANALYSIS \u2014 runs when API is unavailable
+// Gives users real structural value even without AI
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+function _localStarAnalysis(answer, question) {
+  if (!answer || answer.length < 10) return null;
+  var words = answer.trim().split(/\s+/);
+  var wc = words.length;
+  var text = answer.toLowerCase();
+
+  // STAR heuristics
+  var hasSituation = /when i|last year|at my|during|in \d{4}|internship|at .{3,20}(,| i )/.test(text);
+  var hasTask      = /had to|my role|tasked|responsible|challenge|goal|needed to|asked to/.test(text);
+  var hasAction    = /\b(i |i've |i built|i led|i created|i designed|i wrote|i ran|i launched|i pitched|i decided|i managed|i drove)\b/.test(text);
+  var hasResult    = /result|outcome|\d+%|\d+x|increased|decreased|reduced|saved|shipped|landed|closed|achieved|improved/.test(text);
+  var hasNumbers   = /\d+/.test(text);
+  var usesI        = /\b(i |i've |i built|i led)\b/.test(text);
+
+  // Score each dimension (same labels as real API)
+  var structScore  = Math.round(2 + (hasSituation?2:0) + (hasTask?2:0) + (hasAction?2:0) + (hasResult?2:0));
+  var clarityScore = Math.round(4 + (wc > 60 ? 2 : wc > 30 ? 1 : 0) + (wc < 200 ? 2 : 0) + (hasNumbers ? 1 : 0) + (usesI ? 1 : 0));
+  var ownerScore   = Math.round(3 + (usesI ? 3 : 0) + (hasAction ? 2 : 0) + (hasNumbers ? 1 : 0) + (wc > 40 ? 1 : 0));
+  var impactScore  = Math.round(3 + (hasResult ? 3 : 0) + (hasNumbers ? 2 : 0) + (wc > 50 ? 1 : 0) + (hasAction ? 1 : 0));
+
+  // Cap scores at 10
+  structScore  = Math.min(10, structScore);
+  clarityScore = Math.min(10, clarityScore);
+  ownerScore   = Math.min(10, ownerScore);
+  impactScore  = Math.min(10, impactScore);
+
+  var overall = Math.round((structScore + clarityScore + ownerScore + impactScore) / 4 * 10) / 10;
+
+  // Determine verdict
+  var verdict = overall >= 8 ? 'Strong answer' : overall >= 6 ? 'Good foundation' : overall >= 5 ? 'Needs sharpening' : 'Room to grow';
+
+  // STAR breakdown text
+  var situationTxt = hasSituation ? 'Present \u2014 context established' : 'MISSING';
+  var taskTxt      = hasTask      ? 'Present \u2014 challenge identified' : 'MISSING';
+  var actionTxt    = hasAction    ? 'Present \u2014 personal ownership shown' : 'MISSING \u2014 use "I decided / I built / I led" not "we"';
+  var resultTxt    = hasResult    ? (hasNumbers ? 'Present \u2014 quantified outcome' : 'Present \u2014 outcome stated (add a number)') : 'MISSING \u2014 add a specific number or named outcome';
+
+  var weakParts = [];
+  if (!hasSituation) weakParts.push('Situation context');
+  if (!hasAction)    weakParts.push('Personal action (use "I" not "we")');
+  if (!hasResult)    weakParts.push('Result');
+  if (!hasNumbers)   weakParts.push('Quantified impact');
+
+  // Industry critique based on structure
+  var p = appPersona || PERSONAS[0];
+  var framework = p.source || 'MBB PEI Framework';
+  var critique = 'Structural analysis only (AI feedback temporarily unavailable). Based on ' + framework + ': your answer ' + (structScore >= 7 ? 'shows reasonable STAR structure. You included numbers \u2014 good.' : 'is missing key STAR components. Focus on adding personal ownership and a quantified result.');
+
+  var perspective = 'Structural score ' + overall + '/10 against ' + framework + '. ' + (weakParts.length ? 'Partial STAR structure \u2014 see weak components above.' : 'Complete STAR structure \u2014 strengthen with more specific numbers.');
+
+  var rewrite = 'To meet ' + (p.firms || 'top firm') + ' standard: (1) Open with specific context \u2014 when, where, what was at stake. (2) State your personal responsibility in one sentence. (3) Describe 2-3 specific actions you personally took (use "I", not "we"). (4) Close with a quantified result \u2014 % change, $ amount, or clear named outcome.';
+
+  return {
+    overall: overall,
+    verdict: verdict,
+    scores: { structure: structScore, clarity: clarityScore, ownership: ownerScore, impact: impactScore },
+    star_breakdown: {
+      situation: situationTxt,
+      task:      taskTxt,
+      action:    actionTxt,
+      result:    resultTxt,
+      weak_components: weakParts.join(', ')
+    },
+    industry_critique:      critique,
+    interviewer_perspective: perspective,
+    improved_answer:         rewrite
+  };
+}
+
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // SUBMIT
-// ═══════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function doSubmit() {
   if (_submitting) return; // one action = one call
   clearInterval(timerInt);
@@ -2906,20 +3886,29 @@ function doSubmit() {
   setTab('');
   document.getElementById('fb-load').style.display = 'block';
   document.getElementById('fb-result').style.display = 'none';
+  var lb = document.getElementById('load-bar');
+  if (lb) { lb.style.width = '0%'; setTimeout(function(){ lb.style.width = '85%'; }, 50); }
 
-  var msgs = ['Evaluating your answer', 'Analyzing STAR structure', 'Scoring clarity and confidence', 'Writing your editorial critique'];
+  var msgs = [
+    ['Evaluating your answer', 'Reading for STAR structure'],
+    ['Scoring structure & clarity', 'Checking ownership signals'],
+    ['Writing your critique', 'Grading against firm standards'],
+    ['Almost done', 'Crafting your improved version']
+  ];
   var mi = 0;
   var li = setInterval(function() {
     mi = (mi + 1) % msgs.length;
     var el = document.getElementById('load-msg');
-    if (el) el.textContent = msgs[mi];
-  }, 2000);
+    var sl = document.getElementById('load-sub');
+    if (el) el.textContent = msgs[mi][0];
+    if (sl) sl.textContent = msgs[mi][1];
+  }, 2200);
 
   var p = appPersona || PERSONAS[0];
   var industryMap = { consulting:'consulting', banking:'finance', marketing:'general', product:'tech', retail:'general', nonprofit:'general', healthcare:'general', finance:'finance' };
   var industry = industryMap[p.id] || 'general';
 
-  // Structured payload — prompt is built server-side, never in client
+  // Structured payload \u2014 prompt is built server-side, never in client
   _callPayload({
     question: currentQ.text.slice(0, 300),
     answer  : answer.slice(0, 900),
@@ -2957,10 +3946,24 @@ function doSubmit() {
   }, function(errMsg) {
     clearInterval(li);
     _submitting = false;
-    // Re-enable submit button so user can try again without navigating back
-    var subBtn = document.getElementById('sub-btn');
-    if (subBtn) { subBtn.disabled = false; subBtn.style.opacity = '1'; }
-    document.getElementById('fb-load').innerHTML = '<div style="color:var(--red);font-size:14px;margin-bottom:12px;">' + escHtml(errMsg) + '</div><button class="btn-out" onclick="goToPractice()" style="font-size:13px;padding:9px 18px;">Back to practice</button>';
+    // Graceful fallback: run local STAR analysis so user always gets value
+    var localResult = _localStarAnalysis(answer, currentQ ? currentQ.text : '');
+    if (localResult) {
+      renderFeedback(localResult, isFree);
+      // Show a subtle banner that full AI is temporarily unavailable
+      var fbResult = document.getElementById('fb-result');
+      if (fbResult) {
+        var banner = document.createElement('div');
+        banner.style.cssText = 'background:var(--ln);border:1px solid var(--sil);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--med);margin-bottom:16px;display:flex;align-items:center;gap:8px;';
+        banner.innerHTML = '<svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M7 4.5V7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="9.5" r="0.7" fill="currentColor"/></svg><span style="flex:1;">Structural analysis only \u2014 AI coaching resets daily. <b style="color:var(--esp)">Full feedback resumes shortly.</b></span><button onclick="goToPractice()" style="font-size:10px;font-weight:600;color:var(--esp);background:none;border:1px solid var(--sil);border-radius:99px;padding:3px 10px;cursor:pointer;white-space:nowrap;font-family:inherit;">Try again</button>';
+        fbResult.insertBefore(banner, fbResult.firstChild);
+      }
+    } else {
+      // Last resort: show error with retry
+      var subBtnEl = document.getElementById('sub-btn');
+      if (subBtnEl) { subBtnEl.disabled = false; subBtnEl.style.opacity = '1'; }
+      document.getElementById('fb-load').innerHTML = '<div style="color:var(--red);font-size:14px;margin-bottom:12px;">' + escHtml(errMsg) + '</div><button class="btn-cta" onclick="goToPractice()" style="font-size:13px;padding:9px 18px;">Try again</button>';
+    }
   });
 }
 
@@ -2968,7 +3971,22 @@ function renderFeedback(r, isFree) {
   document.getElementById('fb-load').style.display   = 'none';
   document.getElementById('fb-result').style.display = 'block';
   document.getElementById('fb-qlbl').textContent    = currentQ ? currentQ.text : '';
-  document.getElementById('fb-score').textContent   = r.overall;
+  // Animate score counting up
+  (function() {
+    var target = parseFloat(r.overall) || 0;
+    var el = document.getElementById('fb-score');
+    if (!el) return;
+    var start = 0; var dur = 900; var startT = null;
+    function step(ts) {
+      if (!startT) startT = ts;
+      var p = Math.min((ts - startT) / dur, 1);
+      var ease = 1 - Math.pow(1 - p, 3);
+      el.textContent = (start + (target - start) * ease).toFixed(1);
+      if (p < 1) requestAnimationFrame(step);
+      else el.textContent = target;
+    }
+    requestAnimationFrame(step);
+  })();
   document.getElementById('fb-verdict').textContent = r.verdict || '';
   // Mocha Coach scores: structure, clarity, ownership, impact
   var sc = r.scores || {};
@@ -2998,7 +4016,7 @@ function renderFeedback(r, isFree) {
     iHtml += '</div>';
   }
   if (sb.weak_components) {
-    iHtml += '<div style="padding:8px 13px 12px;font-size:11px;color:var(--red);font-weight:500;">⚠ Weak areas: ' + escHtml(sb.weak_components) + '</div>';
+    iHtml += '<div style="padding:8px 13px 12px;font-size:11px;color:var(--red);font-weight:500;">\u26a0 Weak areas: ' + escHtml(sb.weak_components) + '</div>';
   }
   document.getElementById('fb-imps').innerHTML = iHtml;
 
@@ -3006,6 +4024,30 @@ function renderFeedback(r, isFree) {
   var intervEl = document.getElementById('fb-interv');
   if (intervEl) intervEl.textContent = r.interviewer_perspective || '';
   document.getElementById('fb-rewrite').textContent = r.improved_answer || '';
+
+  // Show score trend if user has history
+  if (appUser && appHistory.length > 0) {
+    var lastScore = appHistory[0].score;
+    var diff = Math.round((r.overall - lastScore) * 10) / 10;
+    var trendEl = document.getElementById('fb-score-trend');
+    if (!trendEl) {
+      trendEl = document.createElement('div');
+      trendEl.id = 'fb-score-trend';
+      trendEl.style.cssText = 'font-size:11px;font-weight:600;margin-top:4px;letter-spacing:0.02em;';
+      var shIn = document.querySelector('.sh-in');
+      if (shIn) shIn.appendChild(trendEl);
+    }
+    if (diff > 0) {
+      trendEl.style.color = 'var(--sage)';
+      trendEl.textContent = '\u2191 +' + diff + ' from last session';
+    } else if (diff < 0) {
+      trendEl.style.color = 'rgba(253,232,204,0.50)';
+      trendEl.textContent = '\u2193 ' + diff + ' from last session';
+    } else {
+      trendEl.style.color = 'rgba(253,232,204,0.38)';
+      trendEl.textContent = 'Same as last session';
+    }
+  }
 
   if (isFree && freeTries <= 0) {
     document.getElementById('fb-gate').style.display = 'block';
@@ -3024,15 +4066,15 @@ function renderFeedback(r, isFree) {
       if (fcSendBtn) fcSendBtn.disabled = false;
       window._fcContext = {
         question: currentQ ? currentQ.text : ''
-        // intentionally omit full answer + feedback JSON — reduces prompt size
+        // intentionally omit full answer + feedback JSON \u2014 reduces prompt size
       };
     }
   }
 }
 
-// ═══════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // HISTORY
-// ═══════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function renderHist() {
   var scores = appHistory.slice(0, 7).reverse();
   var bHtml = '';
@@ -3063,9 +4105,9 @@ function renderHist() {
   }
   rEl.innerHTML = rHtml;
 }
-// ═══════════════════════════════════════
-// FOLLOW-UP CHAT — max 2 follow-ups per session, uses callGemini
-// ═══════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// FOLLOW-UP CHAT \u2014 max 2 follow-ups per session, uses callGemini
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 var _fcSending = false;
 var _submitting = false; // global in-flight lock
 var _fcCount = 0; // follow-up calls this session
@@ -3092,7 +4134,7 @@ function sendFollowUp() {
 
   var msgsEl = document.getElementById('fc-msgs');
   msgsEl.innerHTML += '<div class="fc-msg user">' + escHtml(msg) + '</div>';
-  msgsEl.innerHTML += '<div class="fc-msg ai thinking" id="fc-thinking">Thinking…</div>';
+  msgsEl.innerHTML += '<div class="fc-msg ai thinking" id="fc-thinking">Thinking...</div>';
   msgsEl.scrollTop = msgsEl.scrollHeight;
 
   var ctx = window._fcContext || {};
@@ -3122,8 +4164,681 @@ function sendFollowUp() {
   });
 }
 
+function shareScore() {
+  var score = document.getElementById('fb-score') ? document.getElementById('fb-score').textContent : '8.5';
+  var q = document.getElementById('fb-qlbl') ? document.getElementById('fb-qlbl').textContent : 'a behavioral question';
+  var p = appPersona || PERSONAS[0];
+  var track = p ? p.role : 'Consulting';
+  var text = 'I just scored ' + score + '/10 on a ' + track + ' interview question with Mocha. Practice like the candidates who get the offer. https://use-mocha.vercel.app';
+  if (navigator.share) {
+    navigator.share({ title: 'My Mocha Score', text: text, url: 'https://use-mocha.vercel.app' }).catch(function(){});
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    // Show toast
+    var toast = document.createElement('div');
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#2c1308;color:#fde8cc;padding:10px 20px;border-radius:99px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.2);';
+    toast.textContent = 'Copied to clipboard';
+    document.body.appendChild(toast);
+    setTimeout(function() { document.body.removeChild(toast); }, 2200);
+  }
+}
+
 function escHtml(str) {
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// LANDING PAGE \u2014 Page Load Veil
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+(function() {
+  var veil = document.getElementById('pl-veil');
+  if (!veil) return;
+  // Remove veil after brief pause \u2014 feels like getfolk.app load
+  setTimeout(function() {
+    veil.classList.add('gone');
+    setTimeout(function() {
+      veil.style.display = 'none';
+    }, 750);
+  }, 520);
+})();
+
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// HERO CHAT LOOP \u2014 pure ES5 step-machine, zero nesting
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// HERO PRODUCT WINDOW \u2014 clean rewrite, no layout shifts
+// Three conversations cycling. Messages append into hw-messages.
+// Feedback panel animates in after user answer.
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+var _hwActive = false;
+var _hwTimer  = null;
+var _hwConvIdx = 0;
+var _hwStepIdx = 0;
+
+var HW_CONVS = [
+  {
+    q: 'Tell me about a time you led a team through uncertainty.',
+    a: 'I led a 4-person project when our lead dropped out two weeks before the deadline. I restructured the workstream, took on the client presentation myself, and we delivered on time.',
+    scores: { structure: 88, clarity: 84, ownership: 92, impact: 81 },
+    num: '8.6', verdict: 'Strong answer',
+    strengths: ['Clear ownership','Specific outcome'],
+    improve: ['Quantify the impact','Add timeline']
+  },
+  {
+    q: 'Describe a time you used data to change someone\'s mind.',
+    a: 'I built a bottom-up model that reframed the conversation. The partner changed her recommendation the same week. We hit 118% of target that quarter.',
+    scores: { structure: 91, clarity: 88, ownership: 85, impact: 94 },
+    num: '8.9', verdict: 'Excellent'
+  },
+  {
+    q: 'Walk me through a decision you made with incomplete information.',
+    a: 'I modeled three scenarios with the data I had, stress-tested the worst case, and recommended the conservative path. We were right.',
+    scores: { structure: 84, clarity: 90, ownership: 88, impact: 82 },
+    num: '8.5', verdict: 'Strong answer',
+    strengths: ['Clear decision logic','Honest about limits'],
+    improve: ['Add the result','Quantify impact']
+  }
+];
+
+function startHeroChatLoop() {
+  if (_hwActive) return;
+  _hwActive = true;
+  _hwConvIdx = 0;
+  _hwRunConv();
+}
+
+function _hwRunConv() {
+  if (!_hwActive) return;
+  var conv = HW_CONVS[_hwConvIdx % HW_CONVS.length];
+  var msgs = document.getElementById('hw-messages');
+  if (!msgs) return;
+
+  // Clear messages with fade
+  var existing = msgs.querySelectorAll('.hw-msg,.hw-typing');
+  existing.forEach(function(el) { el.style.transition='opacity 0.25s'; el.style.opacity='0'; });
+  setTimeout(function() {
+    msgs.innerHTML = '';
+    _hwShowQ(conv);
+  }, existing.length ? 300 : 0);
+}
+
+function _hwShowQ(conv) {
+  if (!_hwActive) return;
+  var msgs = document.getElementById('hw-messages');
+  if (!msgs) return;
+
+  // Show typing indicator
+  var typ = document.createElement('div');
+  typ.className = 'hw-typing';
+  typ.innerHTML = '<div class="hw-tdot"></div><div class="hw-tdot"></div><div class="hw-tdot"></div>';
+  msgs.appendChild(typ);
+  setTimeout(function() { typ.classList.add('vis'); }, 20);
+
+  _hwTimer = setTimeout(function() {
+    if (typ.parentNode) msgs.removeChild(typ);
+    // Show question
+    var qDiv = document.createElement('div');
+    qDiv.className = 'hw-msg hw-msg-q';
+    qDiv.textContent = conv.q;
+    msgs.appendChild(qDiv);
+    setTimeout(function() { qDiv.classList.add('vis'); }, 20);
+
+    // Hide feedback panel, reset score
+    _hwResetFeedback();
+
+    // After pause, show user typing then answer
+    _hwTimer = setTimeout(function() { _hwShowAnswer(conv); }, 1800);
+  }, 1200);
+}
+
+function _hwShowAnswer(conv) {
+  if (!_hwActive) return;
+  var msgs = document.getElementById('hw-messages');
+  if (!msgs) return;
+  var ph = document.getElementById('hw-input-ph');
+
+  // Simulate typing in input
+  if (ph) {
+    var words = conv.a.split(' ');
+    var typed = '';
+    var wi = 0;
+    var typeInterval = setInterval(function() {
+      if (wi >= Math.min(6, words.length)) {
+        clearInterval(typeInterval);
+        if (ph) { ph.textContent = 'Type your answer...'; ph.style.color=''; }
+        return;
+      }
+      typed += (wi > 0 ? ' ' : '') + words[wi];
+      if (ph) { ph.textContent = typed + '...'; ph.style.color = 'rgba(44,19,8,0.55)'; }
+      wi++;
+    }, 120);
+  }
+
+  _hwTimer = setTimeout(function() {
+    // Flash send button
+    var btn = document.getElementById('hw-send-btn');
+    if (btn) { btn.style.transform='scale(1.2)'; btn.style.background='var(--roa)'; setTimeout(function(){ btn.style.transform=''; btn.style.background=''; },280); }
+
+    // Show answer bubble
+    var aDiv = document.createElement('div');
+    aDiv.className = 'hw-msg hw-msg-a';
+    aDiv.textContent = conv.a;
+    msgs.appendChild(aDiv);
+    setTimeout(function() { aDiv.classList.add('vis'); }, 20);
+    if (ph) { ph.textContent = 'Type your answer...'; ph.style.color=''; }
+
+    // Show feedback after delay
+    _hwTimer = setTimeout(function() { _hwShowFeedback(conv); }, 900);
+  }, 900);
+}
+
+function _hwResetFeedback() {
+  var fills = document.querySelectorAll('.hw-bar-fill');
+  fills.forEach(function(f) { f.classList.remove('anim'); f.style.width='0'; });
+  var sTags = document.getElementById('hw-s-tags');
+  var iTags = document.getElementById('hw-i-tags');
+  if (sTags) sTags.innerHTML = '';
+  if (iTags) iTags.innerHTML = '';
+}
+
+function _hwShowFeedback(conv) {
+  if (!_hwActive) return;
+
+  // Animate score count-up
+  var numEl = document.getElementById('hw-score-num');
+  if (numEl) {
+    var target = parseFloat(conv.num);
+    var start = 5.0; var dur = 700; var startT = null;
+    function countUp(ts) {
+      if (!startT) startT = ts;
+      var p = Math.min((ts-startT)/dur,1);
+      var ease = 1-Math.pow(1-p,3);
+      numEl.textContent = (start+(target-start)*ease).toFixed(1);
+      if (p<1) requestAnimationFrame(countUp);
+      else numEl.textContent = conv.num;
+    }
+    requestAnimationFrame(countUp);
+  }
+
+  // Update verdict
+  var vEl = document.querySelector('.hw-verdict-pill');
+  if (vEl) vEl.innerHTML = '<div class="hw-verdict-dot"></div>' + conv.verdict;
+
+  // Render strengths + improve tags
+  var sTags = document.getElementById('hw-s-tags');
+  var iTags = document.getElementById('hw-i-tags');
+  if (sTags && conv.strengths) {
+    sTags.innerHTML = '';
+    conv.strengths.forEach(function(s) {
+      var t = document.createElement('div');
+      t.style.cssText = 'background:rgba(52,199,89,0.13);color:#34C759;font-size:9px;font-weight:600;padding:2px 7px;border-radius:99px;border:1px solid rgba(52,199,89,0.18);opacity:0;transition:opacity 0.3s ease;';
+      t.textContent = '\u2713 ' + s;
+      sTags.appendChild(t);
+      setTimeout(function(){ t.style.opacity='1'; }, 200);
+    });
+  }
+  if (iTags && conv.improve) {
+    iTags.innerHTML = '';
+    conv.improve.forEach(function(s) {
+      var t = document.createElement('div');
+      t.style.cssText = 'background:rgba(212,168,83,0.12);color:#d4a853;font-size:9px;font-weight:600;padding:2px 7px;border-radius:99px;border:1px solid rgba(212,168,83,0.18);opacity:0;transition:opacity 0.3s ease;';
+      t.textContent = '+ ' + s;
+      iTags.appendChild(t);
+      setTimeout(function(){ t.style.opacity='1'; }, 350);
+    });
+  }
+
+  // Update bar widths
+  var labels = ['structure','clarity','ownership','impact'];
+  var fills = document.querySelectorAll('.hw-bar-fill');
+  var vals  = document.querySelectorAll('.hw-bar-val');
+  var keys  = Object.keys(conv.scores);
+  fills.forEach(function(f,i) {
+    if (keys[i]) {
+      f.style.setProperty('--w', conv.scores[keys[i]] + '%');
+      setTimeout(function(){ f.classList.add('anim'); }, 50);
+    }
+  });
+  if (vals) {
+    var scoreVals = Object.values(conv.scores);
+    vals.forEach(function(v,i) {
+      if (scoreVals[i]) v.textContent = (scoreVals[i]/10).toFixed(1);
+    });
+  }
+
+  // Next conversation after pause
+  _hwTimer = setTimeout(function() {
+    _hwConvIdx = (_hwConvIdx + 1) % HW_CONVS.length;
+    _hwRunConv();
+  }, 4500);
+}
+
+// \u2550\u2550\u2550
+function initScrollReveal() {
+  // Also observe score bars in track cards \u2014 animate when visible
+  var barObs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        var fills = e.target.querySelectorAll('.tc-fb-fill, .dw-prog-fill');
+        fills.forEach(function(f) { f.classList.add('anim'); });
+        barObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('.track-card, .dw-sidebar').forEach(function(el) { barObs.observe(el); });
+
+  var els = document.querySelectorAll('.sr, .sr-scale, .dm-stmt');
+  if (!els.length) return;
+  if (!window.IntersectionObserver) {
+    for (var i = 0; i < els.length; i++) {
+      els[i].classList.add('on');
+    }
+    return;
+  }
+  var obs = new IntersectionObserver(function(entries) {
+    for (var j = 0; j < entries.length; j++) {
+      if (entries[j].isIntersecting) {
+        entries[j].target.classList.add('on');
+        obs.unobserve(entries[j].target);
+      }
+    }
+  }, { threshold: 0.12 });
+  for (var k = 0; k < els.length; k++) {
+    obs.observe(els[k]);
+  }
+}
+
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// DEMO WINDOW \u2014 scroll-triggered live chat (step-machine)
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+var _demoStarted = false;
+var _demoTimer = null;
+var _demoSteps = [];
+var _demoIdx = 0;
+
+var DEMO_CONV = [
+  {t:'wait', ms:300},
+  {t:'bubble', side:'ai', name:'Mocha Coach', text:'Tell me about a time you used data to persuade someone to change course. How did you structure your argument?'},
+  {t:'wait', ms:1200},
+  {t:'typing', ms:1400},
+  {t:'input', text:'During my junior year, I led the analytics workstream\u2026', ms:80},
+  {t:'bubble', side:'user', name:'You', text:'During my junior year, I led the analytics workstream for a go-to-market project. Our team was split on whether to enter a new segment \u2014 I built a revenue model show\u2026'},
+  {t:'send'},
+  {t:'wait', ms:500},
+  {t:'feedback'},
+  {t:'wait', ms:4000},
+  {t:'reset'}
+];
+
+function startDemoLoop() {
+  if (_demoStarted) return;
+  _demoStarted = true;
+  _demoSteps = DEMO_CONV;
+  _demoIdx = 0;
+  demoStep();
+}
+
+function demoStep() {
+  var msgsEl = document.getElementById('dw-messages');
+  if (!msgsEl) return;
+  if (_demoIdx >= _demoSteps.length) {
+    _demoIdx = 0;
+    demoStep();
+    return;
+  }
+  var s = _demoSteps[_demoIdx];
+  _demoIdx++;
+
+  if (s.t === 'wait') {
+    _demoTimer = setTimeout(demoStep, s.ms);
+    return;
+  }
+
+  if (s.t === 'bubble') {
+    var bDiv = document.createElement('div');
+    bDiv.className = 'dw-bubble dw-bubble-' + s.side;
+    bDiv.innerHTML = '<div class="dw-bubble-name">' + s.name + '</div><div class="dw-bubble-text">' + escHtml(s.text) + '</div>';
+    msgsEl.appendChild(bDiv);
+    setTimeout(function() { bDiv.classList.add('visible'); }, 20);
+    msgsEl.scrollTop = msgsEl.scrollHeight;
+    _demoTimer = setTimeout(demoStep, 120);
+    return;
+  }
+
+  if (s.t === 'typing') {
+    var tDiv = document.createElement('div');
+    tDiv.className = 'dw-typing-bubble';
+    tDiv.innerHTML = '<div class="dw-bubble-text"><div class="dw-t-dot"></div><div class="dw-t-dot"></div><div class="dw-t-dot"></div></div>';
+    msgsEl.appendChild(tDiv);
+    setTimeout(function() { tDiv.classList.add('visible'); }, 20);
+    msgsEl.scrollTop = msgsEl.scrollHeight;
+    _demoTimer = setTimeout(function() {
+      if (tDiv.parentNode) tDiv.parentNode.removeChild(tDiv);
+      demoStep();
+    }, s.ms);
+    return;
+  }
+
+  if (s.t === 'input') {
+    var inEl = document.getElementById('dw-input-text');
+    if (inEl) { inEl.textContent = s.text; inEl.classList.add('active'); }
+    _demoTimer = setTimeout(demoStep, s.ms);
+    return;
+  }
+
+  if (s.t === 'send') {
+    var sendEl = document.getElementById('dw-input-send');
+    if (sendEl) {
+      sendEl.classList.add('flash');
+      setTimeout(function() { sendEl.classList.remove('flash'); }, 400);
+    }
+    var inEl2 = document.getElementById('dw-input-text');
+    if (inEl2) { inEl2.textContent = 'Type your answer\u2026'; inEl2.classList.remove('active'); }
+    _demoTimer = setTimeout(demoStep, 300);
+    return;
+  }
+
+  if (s.t === 'feedback') {
+    var fbPanel = document.getElementById('dw-feedback-panel');
+    if (fbPanel) fbPanel.classList.add('revealed');
+    var ring = document.getElementById('demo-score-ring');
+    if (ring) ring.classList.add('anim');
+    var fills = document.querySelectorAll('.dw-prog-fill');
+    for (var f = 0; f < fills.length; f++) { fills[f].classList.add('anim'); }
+    _demoTimer = setTimeout(demoStep, 200);
+    return;
+  }
+
+  if (s.t === 'reset') {
+    var fbPanel2 = document.getElementById('dw-feedback-panel');
+    if (fbPanel2) fbPanel2.classList.remove('revealed');
+    var ring2 = document.getElementById('demo-score-ring');
+    if (ring2) ring2.classList.remove('anim');
+    var msgsEl2 = document.getElementById('dw-messages');
+    if (msgsEl2) msgsEl2.innerHTML = '';
+    _demoIdx = 0;
+    _demoTimer = setTimeout(demoStep, 800);
+    return;
+  }
+
+  demoStep();
+}
+
+function initDemoObserver() {
+  var dw = document.getElementById('demo-window');
+  if (!dw) return;
+  if (!window.IntersectionObserver) { startDemoLoop(); return; }
+  var obs2 = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) {
+      startDemoLoop();
+      obs2.unobserve(dw);
+    }
+  }, { threshold: 0.3 });
+  obs2.observe(dw);
+}
+
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// CAREER TRACKS SWITCHER
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+var TRACKS_DATA = [
+  {
+    id: 'consulting', icon: 'MC', name: 'Management Consulting',
+    firms: 'McKinsey \u00b7 BCG \u00b7 Bain \u00b7 Deloitte',
+    q: '"Tell me about a time you influenced a stakeholder who had more information than you."',
+    answer: 'I built a bottom-up model that reframed the conversation. The partner changed her recommendation the same week.',
+    scores: [{label:'Structure', val:'9.1', w:91},{label:'Clarity', w:84, val:'8.4'},{label:'Impact', w:87, val:'8.7'}]
+  },
+  {
+    id: 'banking', icon: 'IB', name: 'Investment Banking',
+    firms: 'Goldman \u00b7 JPMorgan \u00b7 Morgan Stanley',
+    q: '"Walk me through a time you had to work under extreme deadline pressure."',
+    answer: 'I built a 3-statement model from scratch in 14 hours for a live deal. We closed at a 2.4x multiple above guidance.',
+    scores: [{label:'Structure', val:'8.8', w:88},{label:'Ownership', w:91, val:'9.1'},{label:'Impact', w:85, val:'8.5'}]
+  },
+  {
+    id: 'tech', icon: 'PM', name: 'Tech & Product',
+    firms: 'Amazon \u00b7 Google \u00b7 Meta \u00b7 Stripe',
+    q: '"Describe a time you took ownership of a project outside your scope."',
+    answer: 'I noticed our onboarding was bleeding users at step 3. I ran the analysis, proposed a fix, and got it shipped \u2014 activation jumped 22%.',
+    scores: [{label:'Ownership', val:'9.3', w:93},{label:'Structure', w:80, val:'8.0'},{label:'Impact', w:88, val:'8.8'}]
+  },
+  {
+    id: 'finance', icon: 'PE', name: 'Finance & PE',
+    firms: 'Blackstone \u00b7 KKR \u00b7 Citadel',
+    q: '"Tell me about a time you identified a risk others missed."',
+    answer: 'In a DCF review I flagged a terminal growth assumption that was 1.5x the industry norm. We revised the model and revised our bid.',
+    scores: [{label:'Analysis', val:'9.0', w:90},{label:'Clarity', w:82, val:'8.2'},{label:'Impact', w:86, val:'8.6'}]
+  },
+  {
+    id: 'marketing', icon: 'MK', name: 'Marketing',
+    firms: 'Google \u00b7 P&G \u00b7 Nike \u00b7 Apple',
+    q: '"Tell me about a campaign that underperformed. What did you learn?"',
+    answer: 'We launched with broad targeting and saw 0.4% CTR. I rebuilt the audience model, narrowed to intent signals \u2014 CTR went to 3.1%.',
+    scores: [{label:'Structure', val:'8.2', w:82},{label:'Clarity', w:88, val:'8.8'},{label:'Ownership', w:79, val:'7.9'}]
+  },
+  {
+    id: 'healthcare', icon: 'HC', name: 'Healthcare',
+    firms: 'McKinsey Health \u00b7 J&J \u00b7 CVS',
+    q: '"Describe a time you had to communicate a complex idea to a non-technical audience."',
+    answer: 'I translated a drug interaction model into a one-pager for hospital administrators \u2014 adoption increased 40% in 90 days.',
+    scores: [{label:'Clarity', val:'9.2', w:92},{label:'Impact', w:85, val:'8.5'},{label:'Structure', w:81, val:'8.1'}]
+  },
+  {
+    id: 'nonprofit', icon: 'NP', name: 'Nonprofit & Policy',
+    firms: 'UN \u00b7 Gates Foundation \u00b7 USAID',
+    q: '"Tell me about a time you had limited resources and had to make a real impact anyway."',
+    answer: 'With a $4K budget I coordinated 6 partners and ran a literacy program that reached 300+ students \u2014 94% showed measurable gains.',
+    scores: [{label:'Ownership', val:'9.0', w:90},{label:'Impact', w:92, val:'9.2'},{label:'Clarity', w:83, val:'8.3'}]
+  },
+  {
+    id: 'design', icon: 'DS', name: 'Design & Creative',
+    firms: 'IDEO \u00b7 Figma \u00b7 Airbnb \u00b7 Pentagram',
+    q: '"Walk me through a design decision that got pushback. How did you defend it?"',
+    answer: 'Engineering wanted to cut the interaction. I ran a 5-person usability test that showed 40% task-failure without it. It shipped.',
+    scores: [{label:'Clarity', val:'8.9', w:89},{label:'Structure', w:84, val:'8.4'},{label:'Impact', w:90, val:'9.0'}]
+  }
+];
+// First 4 tracks visible + "+4 more" pill; auto-advances every 3.2s
+var TRACKS_DISPLAY = 4;
+var _activeTrackIdx = 0;
+var _trackAutoTimer = null;
+var _userOverrode = false;
+var _userOverrodeTimer = null;
+
+var TRACKS_META = {
+  consulting:{ style:'STAR with depth probe', focus:'Leadership & ownership', structure:'Tight STAR', time:'90s', pressure:'HIGH' },
+  banking:{ style:'Situational + stakes', focus:'Performance under pressure', structure:'STAR + quantified result', time:'90s', pressure:'HIGH' },
+  tech:{ style:'Behavioral + ownership', focus:'Scale & impact', structure:'STAR with metrics', time:'90-120s', pressure:'MEDIUM' },
+  finance:{ style:'Analytical judgment', focus:'Risk & data reasoning', structure:'STAR + model', time:'90s', pressure:'HIGH' },
+  marketing:{ style:'Open-ended + insight', focus:'Campaign & results', structure:'Light STAR', time:'90-120s', pressure:'LOW' },
+  healthcare:{ style:'Stakeholder judgment', focus:'Communication & empathy', structure:'Narrative STAR', time:'90-120s', pressure:'MEDIUM' },
+  nonprofit:{ style:'Mission + constraint', focus:'Resource & impact', structure:'STAR + mission', time:'90s', pressure:'MEDIUM' },
+  design:{ style:'Process + tradeoff', focus:'Craft & decisions', structure:'Light scaffolding', time:'90-120s', pressure:'LOW' }
+};
+
+function renderTracks() {
+  var listEl = document.getElementById('tracks-list');
+  var prevEl = document.getElementById('track-preview');
+  if (!listEl || !prevEl) return;
+  var lHtml = '';
+  for (var i = 0; i < TRACKS_DISPLAY; i++) {
+    var tr = TRACKS_DATA[i]; var ac = i === 0 ? ' active' : '';
+    lHtml += '<div class="track-row' + ac + '" onclick="switchTrackUser(' + i + ')" style="--tr-d:' + (i * 0.07) + 's">';
+    lHtml += '<div class="track-row-icon">' + tr.icon + '</div>';
+    lHtml += '<div class="track-row-text"><div class="track-row-name">' + tr.name + '</div><div class="track-row-firms">' + tr.firms + '</div></div>';
+    lHtml += '<div class="track-row-arrow">&#8250;</div></div>';
+  }
+  lHtml += '<div style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:11px;cursor:pointer;border:1px solid rgba(44,19,8,0.09);background:rgba(44,19,8,0.025);margin-top:3px;" onclick="startFree()">';
+  lHtml += '<div style="font-size:11px;color:rgba(44,19,8,0.30);">&#x2795;</div>';
+  lHtml += '<div style="flex:1;font-size:12px;font-weight:500;color:rgba(44,19,8,0.38);">4 more: Healthcare, Nonprofit, Design, Marketing</div>';
+  lHtml += '<div style="font-size:11px;color:rgba(44,19,8,0.20);">&#8250;</div></div>';
+  listEl.innerHTML = lHtml;
+  // progress bar removed
+  var pHtml = '';
+  for (var j = 0; j < TRACKS_DISPLAY; j++) {
+    var tc = TRACKS_DATA[j]; var meta = TRACKS_META[tc.id] || {}; var ac2 = j===0?' active':'';
+    var pressCol = meta.pressure==='HIGH'?'#e85d5d':meta.pressure==='MEDIUM'?'var(--oat)':'#2d9b6e';
+    pHtml += '<div class="track-card' + ac2 + '">';
+    pHtml += '<div class="tc-header"><div class="tc-badge"><div class="tc-badge-icon">' + tc.icon + '</div>' + tc.name + '</div>';
+    pHtml += '<div style="display:flex;align-items:center;gap:5px;font-size:9px;font-weight:700;letter-spacing:0.07em;color:' + pressCol + '"><div style="width:6px;height:6px;border-radius:50%;background:' + pressCol + ';"></div>' + (meta.pressure||'') + ' PRESSURE</div></div>';
+    pHtml += '<div class="tc-q-meta"><span class="tc-q-tag">BEHAVIORAL &middot; ' + (meta.focus||'OWNERSHIP').toUpperCase().split(' ').slice(0,2).join(' ') + '</span><span class="tc-pace">PACE &middot; ' + (meta.time||'90s') + '</span></div>';
+    pHtml += '<div class="tc-body"><div class="tc-q">' + tc.q + '</div>';
+    pHtml += '<div class="tc-meta-grid">';
+    pHtml += '<div class="tc-meta-cell"><div class="tc-meta-label">Question style</div><div class="tc-meta-val">' + (meta.style||'STAR method') + '</div></div>';
+    pHtml += '<div class="tc-meta-cell"><div class="tc-meta-label">Evaluation focus</div><div class="tc-meta-val">' + (meta.focus||'Ownership') + '</div></div>';
+    pHtml += '<div class="tc-meta-cell"><div class="tc-meta-label">Structure expected</div><div class="tc-meta-val">' + (meta.structure||'Tight STAR') + '</div></div>';
+    pHtml += '<div class="tc-meta-cell"><div class="tc-meta-label">Time per answer</div><div class="tc-meta-val">' + (meta.time||'90s') + '</div></div>';
+    pHtml += '</div><div class="tc-feedback">';
+    for (var k = 0; k < tc.scores.length; k++) {
+      var sc = tc.scores[k];
+      pHtml += '<div class="tc-fb-row"><div class="tc-fb-label">' + sc.label + '</div><div class="tc-fb-bar"><div class="tc-fb-fill" style="--tw:' + sc.w + '%;"></div></div><div class="tc-fb-val">' + sc.val + '</div></div>';
+    }
+    pHtml += '</div><button class="tc-try-btn" onclick="startFree()">Practice this track &#8594;</button></div></div>';
+  }
+  prevEl.innerHTML = pHtml;
+  _activeTrackIdx = 0;
+}
+
+var _tcTypeTimer = null;
+function switchTrack(idx) {
+  if (idx < 0 || idx >= TRACKS_DISPLAY) return;
+  _activeTrackIdx = idx;
+  var rows = document.querySelectorAll('.track-row');
+  var cards = document.querySelectorAll('.track-card');
+  for (var i = 0; i < rows.length; i++) rows[i].classList.toggle('active', i===idx);
+  for (var j = 0; j < cards.length; j++) cards[j].classList.toggle('active', j===idx);
+  // Typewrite the question on the newly active card
+  if (_tcTypeTimer) clearInterval(_tcTypeTimer);
+  var activeCard = document.querySelector('.track-card.active');
+  if (activeCard) {
+    var qEl = activeCard.querySelector('.tc-q');
+    var fullText = TRACKS_DATA[idx] ? TRACKS_DATA[idx].q : '';
+    if (qEl && fullText) {
+      var pos = 0;
+      var speed = Math.max(18, Math.floor(1400 / fullText.length));
+      qEl.innerHTML = '<span class="tc-q-cursor"></span>';
+      _tcTypeTimer = setInterval(function() {
+        pos++;
+        if (qEl) qEl.innerHTML = fullText.slice(0, pos) + '<span class="tc-q-cursor"></span>';
+        if (pos >= fullText.length) {
+          clearInterval(_tcTypeTimer);
+          if (qEl) qEl.innerHTML = fullText; // remove cursor when done
+        }
+      }, speed);
+    }
+  }
+}
+function switchTrackUser(idx) {
+  _userOverrode = true; switchTrack(idx);
+  clearTimeout(_userOverrodeTimer);
+  _userOverrodeTimer = setTimeout(function(){ _userOverrode = false; }, 4000);
+}
+function startTrackAuto() {}
+function stopTrackAuto() { if (_trackAutoTimer) { clearInterval(_trackAutoTimer); _trackAutoTimer = null; } }
+
+
+var SCHOOL_LOCATIONS = {gw:"Washington D.C.",ucla:"Los Angeles",berkeley:"Bay Area",georgetown:"Washington D.C.",harvard:"Cambridge",au:"Washington D.C.",
+usf:"San Francisco",usc:"Los Angeles"};
+
+function renderWhere() {
+  var el = document.getElementById('where-logos');
+  if (!el) return;
+  var order = ['gw','ucla','berkeley','georgetown','harvard','au','usf','usc'];
+  var html2 = '';
+  for (var i = 0; i < order.length; i++) {
+    var k = order[i];
+    var name = SCHOOL_NAMES[k] || k;
+    html2 += '<div class="where-logo-card sr sr-d' + ((i%4)+1) + '">';
+    if (LOGOS[k]) {
+      html2 += '<img src="' + LOGOS[k] + '" alt="' + name + '" loading="lazy">';
+    }
+    html2 += '<div class="where-logo-name">' + name + '</div>';
+    html2 += '</div>';
+  }
+  el.innerHTML = html2;
+}
+
+function renderProofColleges() {
+  var el = document.getElementById('proof-colleges');
+  if (!el) return;
+  var order = ['gw','ucla','berkeley','georgetown','harvard','au','usf','usc'];
+  var html = '';
+  for (var i = 0; i < order.length; i++) {
+    var k = order[i];
+    if (!LOGOS[k]) continue;
+    html += '<div class="proof-college-card sr sr-d' + ((i % 4) + 1) + '">';
+    html += '<img src="' + LOGOS[k] + '" alt="' + (SCHOOL_NAMES[k] || k) + '" loading="lazy">';
+    html += '</div>';
+  }
+  el.innerHTML = html;
+}
+
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// DEMO TIMER COUNTDOWN
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+var _demoTimerSec = 227;
+var _demoTimerInt = null;
+function startDemoTimer() {
+  if (_demoTimerInt) return;
+  _demoTimerInt = setInterval(function() {
+    _demoTimerSec--;
+    if (_demoTimerSec < 0) _demoTimerSec = 347;
+    var m = Math.floor(_demoTimerSec / 60);
+    var s = _demoTimerSec % 60;
+    var el = document.getElementById('demo-timer');
+    if (el) el.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+  }, 1000);
+}
+
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// INIT ALL LANDING ANIMATIONS
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+function initLanding() {
+  if (document.getElementById('page-land') && document.getElementById('page-land').classList.contains('active')) {
+    startHeroChatLoop();
+    initScrollReveal();
+    initDemoObserver();
+    renderTracks();
+    renderProofColleges();
+    renderWhere();
+    startDemoTimer();
+    initTrackScrollDriver();
+  }
+}
+
+// \u2500\u2500 SCROLL-POSITION TRACK DRIVER \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// Uses scroll position within tracks-scroll-outer to drive active track.
+// Each track gets an equal slice of the outer container height.
+// The inner .tracks-sticky is position:sticky so it stays visible.
+function initTrackScrollDriver() {
+  var outer = document.getElementById('tracks-scroll-outer');
+  if (!outer) return;
+  var _trafPending = false;
+  function doCalc() {
+    _trafPending = false;
+    if (_userOverrode) return;
+    var rect = outer.getBoundingClientRect();
+    var scrolled = -rect.top;
+    if (scrolled < 0) return;
+    var trackH = (outer.offsetHeight - window.innerHeight) / TRACKS_DISPLAY;
+    if (trackH <= 0) return;
+    var idx = Math.min(Math.floor(scrolled / trackH), TRACKS_DISPLAY - 1);
+    if (idx !== _activeTrackIdx) switchTrack(idx);
+  }
+  window.addEventListener('scroll', function() {
+    if (!_trafPending) { _trafPending = true; requestAnimationFrame(doCalc); }
+  }, { passive: true });
+  window.addEventListener('resize', doCalc, { passive: true });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initLanding);
+} else {
+  setTimeout(initLanding, 0);
 }
 
 </script>

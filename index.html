@@ -2854,7 +2854,7 @@ body {
           <span class="crit-hdl">STAR breakdown</span>
           <span class="src-tag" id="fb-src-tag">Mocha</span>
         </div>
-        <div style="font-size:10.5px;color:var(--lt);margin-bottom:8px;line-height:1.5;padding:0 2px;">STAR = Situation, Task, Action, Result. The framework elite firms use to evaluate behavioral answers.</div>
+        <div id="fb-citation" style="font-size:10px;color:var(--oat);line-height:1.5;padding:0 2px;margin-bottom:8px;font-style:italic;"></div>
         <div id="fb-imps"></div>
       </div>
 
@@ -2862,7 +2862,7 @@ body {
       <div class="editorial">
         <div class="ed-lbl">
           <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><line x1="3" y1="4.5" x2="9" y2="4.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><line x1="3" y1="6.5" x2="7.5" y2="6.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><line x1="3" y1="8.5" x2="8.5" y2="8.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
-          Industry critique
+          <span id="fb-critique-label">Industry critique</span>
         </div>
         <div class="ed-txt" id="fb-editorial"></div>
       </div>
@@ -2871,7 +2871,7 @@ body {
       <div class="editorial" id="fb-interv-wrap" style="margin-top:11px;">
         <div class="ed-lbl">
           <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="4.5" r="2.5" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M1.5 10.5c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" fill="none"/></svg>
-          Interviewer perspective
+          <span id="fb-perspective-label">Interviewer perspective</span>
         </div>
         <div class="ed-txt" id="fb-interv"></div>
       </div>
@@ -3566,7 +3566,7 @@ function _callPayload(payload, onSuccess, onError) {
   _lastRequestTime = now;
 
   var abortCtrl = new AbortController();
-  var timeoutId = setTimeout(function() { abortCtrl.abort(); }, 22000);
+  var timeoutId = setTimeout(function() { abortCtrl.abort(); }, 12000);
 
   fetch('/api/interview', {
     signal : abortCtrl.signal,
@@ -4903,7 +4903,7 @@ function doSubmit() {
   }, 2200);
 
   var p = appPersona || PERSONAS[0];
-  var industryMap = { consulting:'consulting', banking:'finance', marketing:'general', product:'tech', retail:'general', nonprofit:'general', healthcare:'general', finance:'finance' };
+  var industryMap = { consulting:'consulting', banking:'banking', marketing:'marketing', product:'product', retail:'retail', nonprofit:'nonprofit', healthcare:'healthcare', finance:'finance' };
   var industry = industryMap[p.id] || 'general';
 
   // Structured payload \u2014 prompt is built server-side, never in client
@@ -4998,8 +4998,22 @@ function renderFeedback(r, isFree) {
   document.getElementById('fb-spec').textContent    = sc.ownership || r.specificity || 0;
   document.getElementById('fb-conf').textContent    = sc.impact    || r.confidence  || 0;
   var p = appPersona || PERSONAS[0];
-  var industryLabels = {consulting:'Consulting',banking:'Finance',marketing:'General',product:'Tech',retail:'General',nonprofit:'General',healthcare:'General',finance:'Finance'};
-  document.getElementById('fb-src-tag').textContent = industryLabels[p.id] || p.source;
+  var industryLabels = {
+    consulting : 'Consulting · MBB PEI',
+    banking    : 'Banking · Goldman/JPM',
+    product    : 'Tech · Amazon LPs',
+    finance    : 'Private Equity',
+    marketing  : 'Marketing · P&G/Airbnb',
+    nonprofit  : 'Social Impact · TFA/Gates',
+    healthcare : 'Healthcare · J&J/NHS',
+    retail     : 'Retail · Amazon/LVMH',
+    general    : 'Behavioral'
+  };
+  document.getElementById('fb-src-tag').textContent = industryLabels[p.id] || p.source || 'Behavioral';
+
+  // Show citation beneath the STAR header
+  var citationEl = document.getElementById('fb-citation');
+  if (citationEl) citationEl.textContent = r.citation || '';
 
   // STAR breakdown cards
   var sb = r.star_breakdown || {};
@@ -5027,6 +5041,91 @@ function renderFeedback(r, isFree) {
   var intervEl = document.getElementById('fb-interv');
   if (intervEl) intervEl.textContent = r.interviewer_perspective || '';
   document.getElementById('fb-rewrite').textContent = r.improved_answer || '';
+
+  // Dynamic section labels — make it clear whose voice this is
+  var critiqueLabels = {
+    consulting : 'McKinsey interviewer critique',
+    banking    : 'Goldman Sachs interviewer critique',
+    product    : 'Amazon bar-raiser critique',
+    finance    : 'Blackstone/KKR interviewer critique',
+    marketing  : 'P&G brand director critique',
+    nonprofit  : 'TFA/Gates Foundation critique',
+    healthcare : 'J&J/McKinsey Health critique',
+    retail     : 'Amazon Retail critique'
+  };
+  var perspLabels = {
+    consulting : 'Would a McKinsey interviewer advance you?',
+    banking    : 'Would a Goldman Sachs MD advance you?',
+    product    : 'Would an Amazon bar-raiser advance you?',
+    finance    : 'Would a Blackstone interviewer advance you?',
+    marketing  : 'Would a P&G brand director advance you?',
+    nonprofit  : 'Would a TFA selector advance you?',
+    healthcare : 'Would a J&J interviewer advance you?',
+    retail     : 'Would an Amazon Retail principal advance you?'
+  };
+  var clEl = document.getElementById('fb-critique-label');
+  var plEl = document.getElementById('fb-perspective-label');
+  if (clEl) clEl.textContent = critiqueLabels[p.id] || 'Industry critique';
+  if (plEl) plEl.textContent = perspLabels[p.id] || 'Interviewer perspective';
+
+  // ── v4 new fields ─────────────────────────────────────────────
+  // interviewer_verdict — the screenshot moment
+  var verdictBanner = document.getElementById('fb-interviewer-verdict');
+  if (!verdictBanner) {
+    verdictBanner = document.createElement('div');
+    verdictBanner.id = 'fb-interviewer-verdict';
+    verdictBanner.style.cssText = 'margin:12px 0 0;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:700;letter-spacing:0.01em;text-align:center;';
+    var intervSection = document.getElementById('fb-interv');
+    if (intervSection && intervSection.parentNode) {
+      intervSection.parentNode.insertBefore(verdictBanner, intervSection.nextSibling);
+    }
+  }
+  var iv = r.interviewer_verdict || '';
+  if (iv) {
+    verdictBanner.style.display = 'block';
+    if (iv === 'Would advance to next round') {
+      verdictBanner.style.background = 'rgba(74,222,128,0.12)';
+      verdictBanner.style.color = '#166534';
+      verdictBanner.style.border = '1px solid rgba(74,222,128,0.3)';
+    } else if (iv === 'On the fence') {
+      verdictBanner.style.background = 'rgba(228,187,126,0.15)';
+      verdictBanner.style.color = 'var(--esp)';
+      verdictBanner.style.border = '1px solid var(--sil)';
+    } else {
+      verdictBanner.style.background = 'rgba(239,68,68,0.08)';
+      verdictBanner.style.color = '#991b1b';
+      verdictBanner.style.border = '1px solid rgba(239,68,68,0.2)';
+    }
+    var icon = iv === 'Would advance to next round' ? '✓ ' : iv === 'On the fence' ? '~ ' : '✕ ';
+    verdictBanner.textContent = icon + iv;
+  } else {
+    verdictBanner.style.display = 'none';
+  }
+
+  // next_question — seeds the follow-up chat and shows a prompt
+  if (r.next_question) {
+    window._fcContext = window._fcContext || {};
+    window._fcContext.nextQuestion = r.next_question;
+    var nqEl = document.getElementById('fb-next-question');
+    if (!nqEl) {
+      nqEl = document.createElement('div');
+      nqEl.id = 'fb-next-question';
+      nqEl.style.cssText = 'margin-top:14px;padding:10px 14px;background:var(--ln);border:1px solid var(--sil);border-radius:10px;font-size:12px;color:var(--oat);cursor:pointer;';
+      var fcEl = document.getElementById('followup-chat');
+      if (fcEl && fcEl.parentNode) fcEl.parentNode.insertBefore(nqEl, fcEl);
+    }
+    nqEl.innerHTML = '<span style="font-weight:600;color:var(--esp);">Interviewer would ask:</span> ' + escHtml(r.next_question) + ' <span style="color:var(--med);font-size:11px;font-weight:600;margin-left:6px;">Ask this →</span>';
+    nqEl.onclick = function() {
+      var inp = document.getElementById('fc-input');
+      if (inp) { inp.value = r.next_question; inp.focus(); }
+    };
+    nqEl.style.display = 'block';
+  }
+
+  // share_line — pre-populate share card copy
+  if (r.share_line) {
+    try { window._shareLine = r.share_line; } catch(e) {}
+  }
 
   // Show score trend if user has history
   if (appUser && appHistory.length > 0) {
@@ -5173,10 +5272,11 @@ function sendFollowUp() {
 
 function shareScore() {
   var score = document.getElementById('fb-score') ? document.getElementById('fb-score').textContent : '8.5';
-  var q = document.getElementById('fb-qlbl') ? document.getElementById('fb-qlbl').textContent : 'a behavioral question';
   var p = appPersona || PERSONAS[0];
   var track = p ? p.role : 'Consulting';
-  var text = 'I just scored ' + score + '/10 on a ' + track + ' interview question with Mocha. Practice like the candidates who get the offer. https://use-mocha.vercel.app';
+  // Use AI-generated share_line if available, otherwise build a good default
+  var text = window._shareLine
+    || ('I scored ' + score + '/10 on a ' + track + ' interview question with Mocha. Practice at the standard McKinsey, Goldman, and Google actually grade on. https://use-mocha.vercel.app');
   if (navigator.share) {
     navigator.share({ title: 'My Mocha Score', text: text, url: 'https://use-mocha.vercel.app' }).catch(function(){});
   } else {
@@ -5185,12 +5285,11 @@ function shareScore() {
     document.body.appendChild(ta); ta.select();
     document.execCommand('copy');
     document.body.removeChild(ta);
-    // Show toast
     var toast = document.createElement('div');
     toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#2c1308;color:#fde8cc;padding:10px 20px;border-radius:99px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.2);';
-    toast.textContent = 'Copied to clipboard';
+    toast.textContent = 'Copied to clipboard ✓';
     document.body.appendChild(toast);
-    setTimeout(function() { document.body.removeChild(toast); }, 2200);
+    setTimeout(function() { if (document.body.contains(toast)) document.body.removeChild(toast); }, 2200);
   }
 }
 
@@ -5904,13 +6003,29 @@ function _getUniRank(score, track) {
 function updateShareCard(r) {
   var sc = r.scores || {};
   var score = parseFloat(r.overall) || 0;
-  var track = (appPersona ? appPersona.role : 'Consulting');
-  var firm = (appPersona ? appPersona.source : 'McKinsey');
+  var p = appPersona || PERSONAS[0];
 
-  // Score + verdict
+  // Map track to firm label shown on share card
+  var trackFirmMap = {
+    consulting : 'McKinsey · MBB PEI',
+    banking    : 'Goldman Sachs · IB',
+    product    : 'Amazon · FAANG',
+    finance    : 'Blackstone · PE',
+    marketing  : 'P&G · Brand',
+    nonprofit  : 'Gates Foundation',
+    healthcare : 'J&J · Healthcare',
+    retail     : 'Amazon Retail'
+  };
+  var cardTrack = trackFirmMap[p.id] || (p.source + ' · Behavioral');
+
+  // Use interviewer_verdict for the card headline if available — it's the screenshot moment
+  var verdictText = r.interviewer_verdict || r.verdict || 'Strong answer';
+  // Truncate verdict for card if too long
+  if (verdictText.length > 40) verdictText = verdictText.slice(0, 37) + '…';
+
   document.getElementById('sc-score').textContent = score.toFixed(1);
-  document.getElementById('sc-verdict').textContent = (r.verdict || 'Strong answer') + ' · Mocha';
-  document.getElementById('sc-track').textContent = firm + ' · Behavioral';
+  document.getElementById('sc-verdict').textContent = verdictText + ' · Mocha';
+  document.getElementById('sc-track').textContent = cardTrack;
 
   // Bars
   var dims = [

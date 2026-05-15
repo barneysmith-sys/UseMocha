@@ -39,9 +39,9 @@
 </script>
 <meta name="description" content="Mocha: daily behavioral interview coaching at McKinsey, Goldman, and Google standard. Free. One question a day. Real feedback. Used at 14+ colleges.">
 <meta property="og:title" content="Mocha — Land your dream internship">
-<meta property="og:description" content="Free behavioral interview coaching. McKinsey standard. One question a day. Used at 14+ colleges.">
+<meta property="og:description" content="Free behavioral interview coaching at McKinsey, Goldman, and Google standard. One question a day. Free forever.">
 <meta name="theme-color" content="#fde8cc">
-<title>Mocha — Land your dream internship. Free interview coaching.</title>
+<title>Mocha — Free behavioral interview coaching. McKinsey standard.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
@@ -196,7 +196,7 @@ body {
 .kicker-dot { width: 6px; height: 6px; border-radius: 50%; background: #34C759; animation: kdot 2.5s ease-in-out infinite; }
 .hero-h1 {
   font-family: 'DM Serif Display', serif;
-  font-size: clamp(2.9rem, 7.6vw, 5.2rem);
+  font-size: clamp(2.9rem, 7.4vw, 5rem);
   font-weight: 400; color: var(--esp);
   letter-spacing: -0.047em; line-height: 0.94;
   margin-bottom: 1rem;
@@ -239,7 +239,7 @@ body {
 /* ── HERO PRODUCT WINDOW ── */
 .hero-window-wrap {
   position: relative; z-index: 2;
-  width: 100%; max-width: 900px;
+  width: 100%; max-width: 1060px;
   margin: 3.2rem auto 0;
   opacity: 0; animation: hFadeUp 1s 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
   flex-shrink: 0;
@@ -399,7 +399,7 @@ body {
 /* Right: feedback panel */
 .hw-feedback {
   border-left: 1px solid rgba(253,232,204,0.10);
-  background: #0f0e0c;
+  background: #1a0f06;
   padding: 16px 14px;
   display: flex; flex-direction: column; gap: 12px;
   overflow: hidden; position: relative;
@@ -447,14 +447,14 @@ body {
 /* ── MOBILE HERO — no gap, Duolingo-clean ─────────────────── */
 @media(max-width:560px) {
   .hero-inner { padding-top: 72px; }
-  .hero-kicker { margin-bottom: 1.1rem; font-size: 11px; padding: 4px 12px 4px 8px; }
-  .hero-h1 { font-size: clamp(2.5rem,9.5vw,3.5rem) !important; line-height: 0.95; margin-bottom: 0.75rem; }
-  .hero-social-proof { margin-bottom: 1rem; font-size: 11.5px; }
-  .hero-tagline-wrap { min-height: 44px; height: 44px; margin-bottom: 1.5rem; }
-  .hero-acts { flex-direction: column; align-items: stretch; gap: 8px; max-width: 320px; margin: 0 auto; }
-  .btn-cta { width: 100%; justify-content: center; padding: 14px 20px; font-size: 14.5px; }
-  .btn-out { width: 100%; justify-content: center; }
-  .hero-note { font-size: 11px; margin-top: 0.5rem; }
+  .hero-kicker { display: none !important; }
+  .hero-h1 { font-size: clamp(2.5rem,9.5vw,3.5rem) !important; line-height: 0.95; margin-bottom: 1rem; }
+  .hero-social-proof { margin-bottom: 1.5rem; font-size: 12px; }
+  .hero-tagline-wrap { display: none !important; }
+  .hero-acts { flex-direction: column; align-items: stretch; gap: 0; max-width: 100%; margin: 0 auto; }
+  .hero-acts .btn-out { display: none !important; }
+  .btn-cta { width: 100%; justify-content: center; padding: 16px 20px; font-size: 15px; border-radius: 14px; }
+  .hero-note { display: none !important; }
   .hero-window-wrap { margin-top: 2rem; }
   .hw-body { height: 260px; }
 }
@@ -586,16 +586,18 @@ body {
 .ps-problem .ps-icon { background: rgba(44,19,8,0.05); border: 1px solid rgba(44,19,8,0.08); color: var(--lt); }
 .ps-text { font-size: 13px; color: rgba(44,19,8,0.55); line-height: 1.62; }
 .ps-text strong { color: var(--esp); font-weight: 600; }
-.ps-solution { background: var(--esp); padding: 2.5rem 2.25rem; border-radius: 0 18px 18px 0; position: relative; overflow: hidden; }
+.ps-solution { background: var(--esp); padding: 2.5rem 2.25rem; border-radius: 0 18px 18px 0; }
 @media(max-width:700px){.ps-solution{border-radius:0 0 18px 18px;}}
-.ps-solution::before { content: ''; position: absolute; top: -50px; right: -50px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(196,135,98,0.16) 0%, transparent 65%); }
-.ps-solution .ps-side-h { color: #fde8cc; }
+
+.ps-solution .ps-side-h { color: #fff5e6; font-size: 1.35rem; }
+
+
 .ps-solution .ps-side-h em { font-style: italic; color: #e8bb7e; }
-.ps-solution .ps-icon { background: rgba(253,232,204,0.11); border: 1px solid rgba(253,232,204,0.18); color: var(--ln3);5,255,0.60); }
-.ps-solution .ps-text { color: rgba(253,232,204,0.55); }
+.ps-solution .ps-icon { background: rgba(255,245,230,0.12); border: 1px solid rgba(255,245,230,0.20); color: #e8bb7e;5,255,0.60); }
+.ps-solution .ps-text { color: rgba(255,245,230,0.72); line-height: 1.65; }
 .ps-solution .ps-text strong { color: rgba(255,255,255,0.85); }
 .ps-proof { margin-top: 1.6rem; padding-top: 1.6rem; border-top: 1px solid rgba(253,232,204,0.15); display: flex; align-items: center; gap: 13px; }
-.ps-proof-score { font-family: 'DM Serif Display', serif; font-size: 2.4rem; color: #e8bb7e; letter-spacing: -0.05em; line-height: 1; }
+.ps-proof-score { font-family: 'DM Serif Display', serif; font-size: 2.6rem; letter-spacing: -0.05em; color: #e8bb7e; letter-spacing: -0.05em; line-height: 1; }
 .ps-proof-text { font-size: 11.5px; color: rgba(255,255,255,0.30); line-height: 1.55; }
 .ps-proof-text strong { color: rgba(255,255,255,0.60); display: block; font-size: 12px; margin-bottom: 1px; }
 
@@ -675,7 +677,7 @@ body {
 .dw-input-send { width: 26px; height: 26px; border-radius: 50%; background: var(--esp); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .dw-input-send.flash { animation: dwSendFlash 0.36s cubic-bezier(0.34,1.56,0.64,1); }
 @keyframes dwSendFlash{0%{transform:scale(1)}50%{transform:scale(1.3);background:var(--roa)}100%{transform:scale(1)}}
-.dw-feedback { border-left: 1px solid rgba(253,232,204,0.10); background: #0f0e0c; padding: 15px 13px; overflow-y: auto; opacity: 0; transform: translateX(10px); transition: opacity 0.46s ease 0.15s, transform 0.46s cubic-bezier(0.16,1,0.3,1) 0.15s; }
+.dw-feedback { border-left: 1px solid rgba(253,232,204,0.12); background: #1a0f06; padding: 15px 13px; overflow-y: auto; opacity: 0; transform: translateX(10px); transition: opacity 0.46s ease 0.15s, transform 0.46s cubic-bezier(0.16,1,0.3,1) 0.15s; }
 .dw-feedback.revealed { opacity: 1 !important; transform: none !important; }
 @media(max-width:720px){.dw-feedback{display:none;}}
 .dw-fb-header { display: flex; align-items: center; gap: 7px; margin-bottom: 13px; }
@@ -714,7 +716,7 @@ body {
 .tracks-inner { max-width: 1060px; margin: 0 auto; padding: 0 32px; width: 100%; }
 .tracks-state-label {
   font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
-  color: rgba(44,19,8,0.25); margin-bottom: 0.5rem;
+  color: var(--oat); margin-bottom: 0.5rem;
   display: flex; align-items: center; gap: 8px;
 }
 .tracks-state-label::before { content: ''; display: block; width: 24px; height: 1px; background: rgba(44,19,8,0.20); }
@@ -741,13 +743,28 @@ body {
   animation-delay: var(--tr-d, 0s);
 }
 @keyframes trackRowIn { to { opacity: 1; transform: none; } }
-.track-row:hover { background: rgba(44,19,8,0.035); }
+.track-row:hover { background: rgba(44,19,8,0.05); }
+.track-row:hover .track-row-name { color: var(--esp); }
 .track-row.active { background: var(--ln); border-color: var(--sil); box-shadow: 0 1px 0 rgba(44,19,8,0.05), 0 3px 12px rgba(44,19,8,0.08); }
-.track-row-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; transition: all 0.18s; }
-.track-row:not(.active) .track-row-icon { background: var(--sil2); }
-.track-row.active .track-row-icon { background: rgba(44,19,8,0.09); }
+.track-row.active .track-row-name { color: var(--esp); font-weight: 700; }
+.track-row.active .track-row.active .track-row-firms { color: var(--lt); }
+.track-row-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10.5px; font-weight: 800; letter-spacing: 0.01em;
+  flex-shrink: 0; transition: all 0.18s;
+  background: var(--ln); color: var(--esp);
+  border: 1px solid var(--sil);
+}
+.track-row.active .track-row-icon {
+  background: var(--esp); color: var(--ln);
+  border-color: var(--esp);
+}
+.track-row:hover .track-row-icon {
+  background: var(--ln2); border-color: var(--sil);
+}
 .track-row-text { flex: 1; min-width: 0; }
-.track-row-name { font-size: 13px; font-weight: 600; color: rgba(44,19,8,0.44); letter-spacing: -0.01em; transition: color 0.18s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.track-row-name { font-size: 13px; font-weight: 600; color: rgba(44,19,8,0.55); letter-spacing: -0.01em; transition: color 0.18s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .track-row.active .track-row-name { color: var(--esp); }
 .track-row-firms { font-size: 10px; color: rgba(44,19,8,0.27); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .track-row.active .track-row-firms { color: var(--lt); }
@@ -772,7 +789,7 @@ body {
 .tc-q-tag { font-size: 9.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; background: var(--ln); border: 1px solid var(--sil); border-radius: 4px; padding: 2px 8px; color: var(--esp); }
 .tc-pace { font-size: 9.5px; color: rgba(44,19,8,0.35); margin-left: auto; font-weight: 500; }
 .tc-body { padding: 12px 15px 15px; }
-.tc-q { font-family: 'DM Serif Display', serif; font-size: 14px; color: var(--esp); line-height: 1.45; margin-bottom: 10px; letter-spacing: -0.02em; font-weight: 400; }
+.tc-q { font-family: 'DM Serif Display', serif; font-size: 14.5px; color: var(--esp); line-height: 1.455; margin-bottom: 10px; letter-spacing: -0.02em; font-weight: 400; }
 .tc-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px; }
 .tc-meta-cell { background: var(--cr); border: 1px solid rgba(44,19,8,0.07); border-radius: 8px; padding: 8px 10px; }
 .tc-meta-label { font-size: 8px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(44,19,8,0.30); margin-bottom: 3px; }
@@ -1536,6 +1553,7 @@ body {
 .q-tmr.hot { background: var(--red-lt); color: var(--red); }
 .q-txt {
   font-family: 'DM Serif Display', serif;
+  max-width: 640px;
   font-size: 1.35rem; font-weight: 400;
   color: var(--esp); line-height: 1.45; letter-spacing: -0.02em; margin-bottom: 1.4rem;
 }
@@ -1628,7 +1646,7 @@ body {
 
 /* Score hero */
 .score-hero {
-  background: linear-gradient(150deg, #1a0f06 0%, var(--esp) 100%0%);
+  background: linear-gradient(150deg, #100804 0%, #1a0f06 100%);
   border-radius: var(--r2xl); padding: 1.6rem 1.7rem; margin-bottom: 12px;
   position: relative; overflow: hidden;
 }
@@ -1640,7 +1658,7 @@ body {
 .sh-in { display: flex; align-items: flex-end; gap: var(--s3); position: relative; }
 .sh-num {
   font-family: 'DM Serif Display', serif;
-  font-size: 5.2rem; font-weight: 400; color: var(--ln);
+  font-size: 5rem; letter-spacing: -0.06em; font-weight: 400; color: var(--ln);
   line-height: 1; letter-spacing: -0.04em;
 }
 .sh-den { font-size: var(--t-base); font-weight: 500; color: rgba(253,232,204,0.3); margin-bottom: 8px; }
@@ -1749,7 +1767,7 @@ body {
 
 /* Today question card */
 .today-card {
-  background: linear-gradient(150deg, #1a0f06 0%, var(--esp) 100%0%);
+  background: linear-gradient(150deg, #100804 0%, #1a0f06 100%);
   border-radius: var(--r2xl); padding: 1.7rem; margin-bottom: 12px;
   position: relative; overflow: hidden;
 }
@@ -1887,6 +1905,63 @@ body {
 .modal-sw { text-align: center; margin-top: 12px; font-size: 12px; color: var(--lt); }
 .modal-lnk { color: var(--med); font-weight: 600; cursor: pointer; }
 .modal-lnk:hover { color: var(--esp); }
+/* Google SSO button */
+.btn-google {
+  width: 100%; padding: 10px 13px;
+  background: #fff; color: #3c4043;
+  border: 1px solid #dadce0; border-radius: var(--rpill);
+  font-size: var(--t-sm); font-weight: 500;
+  cursor: pointer; font-family: 'DM Sans', sans-serif;
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  transition: background 0.12s, box-shadow 0.12s;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.btn-google:hover { background: #f8f9fa; box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
+.modal-divider {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 11px; color: var(--oat); font-weight: 500;
+}
+.modal-divider::before, .modal-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--sil);
+}
+/* College selector */
+.mfl select {
+  width: 100%; padding: 10px 13px;
+  border: 1px solid var(--sil); border-radius: var(--rlg);
+  font-family: 'DM Sans', sans-serif; font-size: var(--t-sm);
+  color: var(--esp); background: var(--surf); outline: none;
+  transition: border-color 0.12s, box-shadow 0.12s;
+  -webkit-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23c48762' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 13px center;
+}
+.mfl select:focus { border-color: var(--esp); box-shadow: 0 0 0 3px rgba(44,19,8,0.07); }
+/* College rank banner */
+.college-rank-banner {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--ln); border: 1px solid var(--sil);
+  border-radius: 12px; padding: 11px 14px; margin-bottom: 12px; cursor: pointer;
+}
+.crb-icon { font-size: 18px; flex-shrink: 0; }
+.crb-text { flex: 1; }
+.crb-main { font-size: 12.5px; font-weight: 600; color: var(--esp); }
+.crb-sub { font-size: 11px; color: var(--oat); margin-top: 1px; }
+.crb-badge {
+  background: var(--esp); color: var(--ln); font-size: 10px; font-weight: 700;
+  padding: 3px 9px; border-radius: 99px; white-space: nowrap; letter-spacing: 0.03em;
+}
+/* College set prompt */
+.college-set-prompt {
+  display: flex; align-items: center; gap: 10px;
+  background: #fff; border: 1px dashed var(--sil);
+  border-radius: 12px; padding: 10px 14px; margin-bottom: 12px; cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.college-set-prompt:hover { border-color: var(--oat); background: var(--surf); }
+.csp-icon { font-size: 16px; flex-shrink: 0; opacity: 0.7; }
+.csp-text { flex: 1; font-size: 12px; color: var(--lt); }
+.csp-cta { font-size: 11px; font-weight: 600; color: var(--med); white-space: nowrap; }
 
 /* ══════════════════════════════════════════════════════════════════
    UPGRADE MODAL
@@ -1906,35 +1981,30 @@ body {
 
   /* Hero */
   .hero-inner { padding-top: 68px; }
-  .hero-kicker { 
-    font-size: 10.5px; 
-    padding: 4px 12px 4px 8px; 
-    margin-bottom: 0.9rem;
-    white-space: nowrap;
-  }
+  .hero-kicker { display: none !important; }
   .hero-h1 { 
     font-size: clamp(2.4rem,9vw,3rem) !important; 
     line-height: 0.94; 
-    margin-bottom: 0.6rem; 
+    margin-bottom: 0.9rem; 
   }
-  .hero-social-proof { font-size: 11px; margin-bottom: 0.8rem; }
-  .hero-tagline-wrap { min-height: 40px; height: 40px; margin-bottom: 1.2rem; }
+  .hero-social-proof { font-size: 12px !important; margin-bottom: 1.5rem !important; }
+  .hero-tagline-wrap { display: none !important; }
   .hero-acts { 
     flex-direction: column; 
     align-items: stretch; 
-    gap: 8px; 
-    max-width: 300px; 
-    margin: 0 auto;
+    gap: 0 !important; 
+    max-width: 100% !important; 
+    margin: 0 !important;
   }
+  .hero-acts .btn-out { display: none !important; }
   .btn-cta { 
-    width: 100%; 
-    justify-content: center; 
-    padding: 14px 20px; 
-    font-size: 15px; 
-    border-radius: 99px;
+    width: 100% !important; 
+    justify-content: center !important; 
+    padding: 16px 20px !important; 
+    font-size: 15px !important; 
+    border-radius: 14px !important;
   }
-  .btn-out { width: 100%; justify-content: center; }
-  .hero-note { font-size: 10.5px; margin-top: 0.4rem; }
+  .hero-note { display: none !important; }
   .land-hero { padding: 0 16px 2rem; }
   .hero-window-wrap { margin-top: 1.6rem; }
   .hw-body { height: 250px; min-height: 250px; max-height: 250px; }
@@ -2182,9 +2252,69 @@ body {
   .stats-row { grid-template-columns: repeat(3,1fr) !important; }
   .metrics { grid-template-columns: repeat(2,1fr) !important; }
 }
+
+/* ── MOBILE HERO — YC-level simplicity (iPhone first) ──── */
+@media(max-width:480px) {
+  .land-hero { padding: 0 20px 2rem; }
+  .hero-inner { padding-top: 66px; }
+
+  /* Kicker — hidden on mobile. Noise above the fold. */
+  .hero-kicker { display: none !important; }
+
+  /* H1 — everything. Big, tight, no distractions. */
+  .hero-h1 {
+    font-size: clamp(2.6rem,10vw,3.2rem) !important;
+    line-height: 0.93 !important;
+    margin-bottom: 1rem !important;
+    letter-spacing: -0.04em !important;
+  }
+
+  /* Social proof — one clean credibility line, right below h1 */
+  .hero-social-proof {
+    font-size: 12px !important;
+    margin-bottom: 1.5rem !important;
+    gap: 5px !important;
+  }
+
+  /* Typewriter tagline — hidden on mobile. Doesn't earn its space above fold. */
+  .hero-tagline-wrap { display: none !important; }
+
+  /* CTAs — primary only, full width. Second CTA hidden on mobile. */
+  .hero-acts {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+  /* Hide the "Create account" secondary CTA on mobile */
+  .hero-acts .btn-out { display: none !important; }
+  .btn-cta {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 16px 20px !important;
+    font-size: 16px !important;
+    border-radius: 14px !important;
+  }
+
+  /* Fine print note — hidden on mobile */
+  .hero-note { display: none !important; }
+
+  /* Product window — breathes cleanly below CTA */
+  .hero-window-wrap { margin-top: 2rem !important; }
+  .hw-body { height: 240px !important; min-height: 240px !important; max-height: 240px !important; }
+  .hw-chrome { padding: 7px 12px !important; }
+}
 </style>
   <!-- Supabase -->
   <!-- Supabase: pure fetch() implementation, no CDN -->
+  <!-- PWA / Home Screen -->
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHJlY3Qgd2lkdGg9IjE4MCIgaGVpZ2h0PSIxODAiIHJ4PSI0MCIgZmlsbD0iI2ZkZThjYyIvPgogIDx0ZXh0IHg9IjkwIiB5PSIxMzUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLHNlcmlmIiBmb250LXN0eWxlPSJpdGFsaWMiIGZvbnQtc2l6ZT0iMTMwIiBmaWxsPSIjMmMxMzA4Ij5tPC90ZXh0Pgo8L3N2Zz4=">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Mocha">
+  <meta name="application-name" content="Mocha">
+  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Mocha%22%2C%22short_name%22%3A%22Mocha%22%2C%22start_url%22%3A%22%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23fef7f0%22%2C%22theme_color%22%3A%22%232c1308%22%2C%22icons%22%3A%5B%5D%7D">
 </head>
 <body>
 
@@ -2779,14 +2909,23 @@ body {
             Share your score
           </button>
         </div>
-        <!-- University rank card -->
-        <div class="uni-rank-card" id="uni-rank-card" style="display:none;">
-          <div class="uni-rank-icon">🏫</div>
-          <div class="uni-rank-text">
-            <div class="uni-rank-main" id="uni-rank-main">Top 24% at your university this week</div>
-            <div class="uni-rank-sub" id="uni-rank-sub">Based on 142 sessions from students at your school</div>
+        <!-- University rank / college prompt -->
+        <div id="uni-rank-card" style="display:none;">
+          <!-- When college is set and score is high: show rank -->
+          <div class="college-rank-banner" id="crb-set" style="display:none;">
+            <div class="crb-icon">🏛️</div>
+            <div class="crb-text">
+              <div class="crb-main" id="uni-rank-main">Top 24% at your university this week</div>
+              <div class="crb-sub" id="uni-rank-sub">Based on sessions from students at your school</div>
+            </div>
+            <div class="crb-badge" id="uni-rank-badge">Top 24%</div>
           </div>
-          <div class="uni-rank-badge" id="uni-rank-badge">Top 24%</div>
+          <!-- When college is not set: prompt to unlock rankings -->
+          <div class="college-set-prompt" id="crb-prompt" onclick="openCollegeModal()" style="display:none;">
+            <div class="csp-icon">🏛️</div>
+            <div class="csp-text">Sign in with your college to see how you rank against other students</div>
+            <div class="csp-cta">Set college →</div>
+          </div>
         </div>
         <!-- Score progress -->
         <div class="score-progress-card" id="score-progress-card" style="display:none;">
@@ -2802,9 +2941,10 @@ body {
 
 
       <div id="fb-gate" style="display:none;" class="gate-box">
-        <div class="gate-t">You used your free session</div>
-        <div class="gate-s">Create a free account to keep practising, unlock all 8 tracks, and build your streak.</div>
+        <div class="gate-t">Save your score. Keep your streak.</div>
+        <div class="gate-s">Free forever. Create an account to unlock all 8 tracks, track your improvement, and never lose your streak.</div>
         <button class="btn-cta" onclick="openModal('signup')" style="width:100%;justify-content:center;">Create free account →</button>
+        <div style="font-size:11px;color:var(--oat);text-align:center;margin-top:6px;">No card needed &middot; 30 seconds</div>
       </div>
       <div class="fb-acts" id="fb-acts">
         <button class="btn-cta" style="font-size:13px;padding:10px 22px;" onclick="goNextQuestion()">
@@ -2926,14 +3066,20 @@ body {
       </div>
       <div id="modal-top-content">
         <div class="modal-h" id="modal-h-text">Create your account</div>
-        <div class="modal-s" id="modal-s-text">Free forever. One magic link. No password.</div>
+        <div class="modal-s" id="modal-s-text">Free forever. No credit card. 30 seconds to start.</div>
       </div>
     </div>
     <div class="modal-body">
     <div id="m-signup">
+      <button class="btn-google" onclick="doGoogleSignIn()">
+        <svg width="17" height="17" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.124-.843 2.077-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/><path d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.548 0 9s.348 2.825.957 4.039l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.579c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.579 9 3.579z" fill="#EA4335"/></svg>
+        Continue with Google
+      </button>
+      <div class="modal-divider">or</div>
       <div class="mfl"><label>First name</label><input type="text" id="m-name" placeholder="Alex" autocomplete="given-name"></div>
       <div class="mfl"><label>Email</label><input type="email" id="m-email" placeholder="alex@university.edu" autocomplete="email"></div>
       <div class="mfl"><label>Password</label><input type="password" id="m-pass" placeholder="6 or more characters" autocomplete="new-password"></div>
+      <div class="mfl"><label>Your university <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--oat);">(optional — unlock rankings)</span></label><select id="m-college"><option value="">Select your university…</option><option value="Harvard University">Harvard University</option><option value="Columbia University">Columbia University</option><option value="NYU">NYU</option><option value="Georgetown University">Georgetown University</option><option value="UCLA">UCLA</option><option value="UC Berkeley">UC Berkeley</option><option value="USC">USC</option><option value="George Washington University">George Washington University</option><option value="University of San Francisco">University of San Francisco</option><option value="American University">American University</option><option value="Boston University">Boston University</option><option value="Northeastern University">Northeastern University</option><option value="University of Michigan">University of Michigan</option><option value="University of Virginia">University of Virginia</option><option value="NYU Stern">NYU Stern</option><option value="Wharton (Penn)">Wharton (Penn)</option><option value="Other">Other</option></select></div>
       <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;margin-top:2px;">
         <input type="checkbox" id="m-tos" style="margin-top:3px;width:15px;height:15px;flex-shrink:0;accent-color:#2c1308;cursor:pointer;">
         <label for="m-tos" style="font-size:12px;color:#6b3520;line-height:1.5;cursor:pointer;">I agree to the <a href="/legal.html" target="_blank" style="color:#2c1308;font-weight:600;text-decoration:underline;">Terms of Service and Privacy Policy</a></label>
@@ -2942,6 +3088,11 @@ body {
       <div class="modal-sw">Already have an account? <span class="modal-lnk" onclick="switchM('login')">Sign in</span></div>
     </div>
     <div id="m-login" style="display:none;">
+      <button class="btn-google" onclick="doGoogleSignIn()">
+        <svg width="17" height="17" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.124-.843 2.077-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/><path d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.548 0 9s.348 2.825.957 4.039l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.579c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.579 9 3.579z" fill="#EA4335"/></svg>
+        Continue with Google
+      </button>
+      <div class="modal-divider">or</div>
       <div class="mfl"><label>Email</label><input type="email" id="m-lemail" placeholder="alex@university.edu" autocomplete="email"></div>
       <div class="mfl"><label>Password</label><input type="password" id="m-lpass" placeholder="Your password" autocomplete="current-password"></div>
       <button class="btn-modal" id="btn-login" onclick="doLogin()">Sign in</button>
@@ -4005,34 +4156,7 @@ function _makeSalt() {
     .map(function(b) { return b.toString(16).padStart(2,'0'); }).join('');
 }
 
-async function doSignup() {
-  var tosBox = document.getElementById('m-tos');
-  if (tosBox && !tosBox.checked) {
-    showModalErr('Please agree to the Terms of Service to continue.');
-    return;
-  }
-  var name  = (document.getElementById('m-name') || {}).value.trim() || '';
-  var email = (document.getElementById('m-email') || {}).value.trim().toLowerCase();
-  var pass  = (document.getElementById('m-pass') || {}).value;
-  if (!name)  { showModalErr('Enter your first name.'); return; }
-  if (!email || email.indexOf('@') < 0) { showModalErr('Enter a valid email address.'); return; }
-  if (!pass || pass.length < 6) { showModalErr('Password must be at least 6 characters.'); return; }
-
-  var btn = document.getElementById('btn-signup');
-  if (btn) { btn.textContent = 'Creating account...'; btn.disabled = true; }
-
-  var ok = await _sbSignUp(email, pass, name);
-
-  if (btn) { btn.textContent = 'Create account'; btn.disabled = false; }
-  if (ok) {
-    // Auto sign in after signup
-    var signedIn = await _sbSignIn(email, pass);
-    if (!signedIn) {
-      // Supabase may require email confirmation — show message
-      showModalErr('Account created! Check your email to confirm, then sign in.');
-    }
-  }
-}
+// doSignup defined below with Google OAuth and college support
 
 function showModalErr(msg) {
   var el = document.getElementById('modal-err');
@@ -4060,6 +4184,157 @@ async function doLogin() {
 
   if (btn) { btn.textContent = 'Sign in'; btn.disabled = false; }
   // If ok, _onSupabaseSignIn fires automatically via onAuthStateChange
+}
+
+// ── GOOGLE OAUTH ──────────────────────────────────────────────
+// Supabase handles the OAuth flow — we just redirect to their endpoint.
+// On return, Supabase sets the session in the URL hash, which _initSupabase picks up.
+function doGoogleSignIn() {
+  // Build the Supabase Google OAuth URL
+  var redirectUrl = encodeURIComponent(window.location.origin + window.location.pathname);
+  var googleUrl = _SB_URL + '/auth/v1/authorize?provider=google&redirect_to=' + redirectUrl;
+  window.location.href = googleUrl;
+}
+
+// Handle OAuth callback — Supabase puts access_token in URL hash
+(function() {
+  var hash = window.location.hash;
+  if (hash && hash.indexOf('access_token=') !== -1) {
+    // Parse hash params
+    var params = {};
+    hash.replace(/^#/, '').split('&').forEach(function(pair) {
+      var parts = pair.split('=');
+      if (parts.length === 2) params[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
+    });
+    if (params.access_token) {
+      var session = {
+        access_token: params.access_token,
+        refresh_token: params.refresh_token || '',
+        user: null
+      };
+      // Fetch user info with this token
+      fetch(_SB_URL + '/auth/v1/user', {
+        headers: { 'apikey': _SB_KEY, 'Authorization': 'Bearer ' + params.access_token }
+      }).then(function(r) { return r.json(); }).then(function(user) {
+        if (user && user.id) {
+          session.user = user;
+          _sbSaveSession(session);
+          _sbFireAuth('SIGNED_IN', session);
+        }
+      }).catch(function(){});
+      // Clean the URL hash
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  }
+})();
+
+// ── COLLEGE SELECTOR ──────────────────────────────────────────
+var COLLEGE_KEY = 'mocha_college';
+function _getUserCollege() {
+  if (appUser && appUser.college) return appUser.college;
+  try { return localStorage.getItem(COLLEGE_KEY) || ''; } catch(e) { return ''; }
+}
+function _setUserCollege(college) {
+  if (appUser) { appUser.college = college; sv('mocha_user', appUser); }
+  try { localStorage.setItem(COLLEGE_KEY, college); } catch(e) {}
+  // Also update in Supabase user metadata if logged in
+  if (_sbSession && _sbSession.access_token && college) {
+    fetch(_SB_URL + '/auth/v1/user', {
+      method: 'PUT',
+      headers: _sbHeaders(),
+      body: JSON.stringify({ data: { college: college } })
+    }).catch(function(){});
+  }
+}
+
+function openCollegeModal() {
+  // Show a quick inline college picker sheet
+  var existing = document.getElementById('college-sheet');
+  if (existing) { existing.style.display = 'flex'; return; }
+  var sheet = document.createElement('div');
+  sheet.id = 'college-sheet';
+  sheet.style.cssText = 'position:fixed;inset:0;z-index:600;background:rgba(10,5,2,0.45);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:1.5rem;';
+  var box = document.createElement('div');
+  box.style.cssText = 'background:#fff;border-radius:20px;padding:1.75rem;width:100%;max-width:380px;box-shadow:0 2px 0 rgba(44,19,8,0.08),0 32px 80px rgba(10,5,2,0.22);';
+  var colleges = ['Harvard University','Columbia University','NYU','Georgetown University','UCLA','UC Berkeley','USC','George Washington University','University of San Francisco','American University','Boston University','Northeastern University','University of Michigan','University of Virginia','NYU Stern','Wharton (Penn)','Other'];
+  var opts = colleges.map(function(c) { return '<option value="' + c + '">' + c + '</option>'; }).join('');
+  box.innerHTML = '<div style="font-family:\'DM Serif Display\',serif;font-size:1.2rem;color:var(--esp);margin-bottom:6px;letter-spacing:-0.03em;">Set your university</div><div style="font-size:12px;color:var(--oat);margin-bottom:1.2rem;">Unlock rankings vs. other students at your school.</div><div class="mfl"><label>University</label><select id="college-sheet-select" style="width:100%;padding:10px 13px;border:1px solid var(--sil);border-radius:12px;font-family:\'DM Sans\',sans-serif;font-size:14px;color:var(--esp);background:var(--surf);outline:none;"><option value="">Select your university…</option>' + opts + '</select></div><button onclick="saveCollegeFromSheet()" style="width:100%;padding:12px;background:var(--esp);color:var(--ln);border:none;border-radius:99px;font-size:14px;font-weight:600;cursor:pointer;font-family:\'DM Sans\',sans-serif;margin-top:8px;">Save &amp; see ranking</button><button onclick="document.getElementById(\'college-sheet\').style.display=\'none\'" style="width:100%;padding:10px;background:none;border:none;font-size:12px;color:var(--oat);cursor:pointer;font-family:\'DM Sans\',sans-serif;margin-top:4px;">Not now</button>';
+  sheet.appendChild(box);
+  sheet.addEventListener('click', function(e) { if (e.target === sheet) sheet.style.display = 'none'; });
+  document.body.appendChild(sheet);
+}
+
+function saveCollegeFromSheet() {
+  var sel = document.getElementById('college-sheet-select');
+  if (!sel || !sel.value) return;
+  _setUserCollege(sel.value);
+  document.getElementById('college-sheet').style.display = 'none';
+  // Refresh the rank card
+  _refreshCollegeRankCard();
+}
+
+// doSignup also saves college
+var _origDoSignup = doSignup;
+async function doSignup() {
+  var tosBox = document.getElementById('m-tos');
+  if (tosBox && !tosBox.checked) {
+    showModalErr('Please agree to the Terms of Service to continue.');
+    return;
+  }
+  var name  = (document.getElementById('m-name') || {}).value.trim() || '';
+  var email = (document.getElementById('m-email') || {}).value.trim().toLowerCase();
+  var pass  = (document.getElementById('m-pass') || {}).value;
+  var college = (document.getElementById('m-college') || {}).value || '';
+  if (!name)  { showModalErr('Enter your first name.'); return; }
+  if (!email || email.indexOf('@') < 0) { showModalErr('Enter a valid email address.'); return; }
+  if (!pass || pass.length < 6) { showModalErr('Password must be at least 6 characters.'); return; }
+
+  var btn = document.getElementById('btn-signup');
+  if (btn) { btn.textContent = 'Creating account...'; btn.disabled = true; }
+
+  var ok = await _sbSignUp(email, pass, name);
+
+  if (btn) { btn.textContent = 'Create account'; btn.disabled = false; }
+  if (ok) {
+    if (college) { try { localStorage.setItem(COLLEGE_KEY, college); } catch(e) {} }
+    var signedIn = await _sbSignIn(email, pass);
+    if (!signedIn) {
+      showModalErr('Account created! Check your email to confirm, then sign in.');
+    }
+  }
+}
+
+function _refreshCollegeRankCard() {
+  // Called after feedback renders or college is saved
+  var wrap = document.getElementById('uni-rank-card');
+  if (!wrap) return;
+  var college = _getUserCollege();
+  var crbSet = document.getElementById('crb-set');
+  var crbPrompt = document.getElementById('crb-prompt');
+  wrap.style.display = 'block';
+  if (college) {
+    if (crbSet) crbSet.style.display = 'flex';
+    if (crbPrompt) crbPrompt.style.display = 'none';
+    // Update text with college name
+    var scoreEl = document.getElementById('fb-score');
+    var score = scoreEl ? parseFloat(scoreEl.textContent) : 0;
+    var rankObj = _getUniRank(score, appPersona ? appPersona.id : 'consulting');
+    var rank = rankObj.percentile;
+    var mainEl = document.getElementById('uni-rank-main');
+    var subEl = document.getElementById('uni-rank-sub');
+    var badgeEl = document.getElementById('uni-rank-badge');
+    if (mainEl) mainEl.textContent = 'Top ' + rank + '% at ' + college + ' this week';
+    if (subEl) subEl.textContent = 'Based on ' + rankObj.sessions + ' sessions from students at your school';
+    if (badgeEl) badgeEl.textContent = 'Top ' + rank + '%';
+  } else if (!appUser) {
+    // Guest: show the "set college" prompt to drive signups
+    if (crbSet) crbSet.style.display = 'none';
+    if (crbPrompt) crbPrompt.style.display = 'flex';
+  } else {
+    // Logged in but no college: show prompt
+    if (crbSet) crbSet.style.display = 'none';
+    if (crbPrompt) crbPrompt.style.display = 'flex';
+  }
 }
 
 function toggleProfileDropdown() {
@@ -5655,23 +5930,8 @@ function updateShareCard(r) {
   });
   document.getElementById('sc-bars').innerHTML = bHtml;
 
-  // University rank
-  var rank = _getUniRank(score, track);
-  var rankEl = document.getElementById('uni-rank-card');
-  var rankMain = document.getElementById('uni-rank-main');
-  var rankSub = document.getElementById('uni-rank-sub');
-  var rankBadge = document.getElementById('uni-rank-badge');
-  if (rankEl && rank.percentile <= 40) {
-    rankEl.style.display = 'flex';
-    rankMain.textContent = 'Top ' + rank.percentile + '% at your university this week';
-    rankSub.textContent = 'Based on ' + rank.sessions + ' sessions from students at your school';
-    rankBadge.textContent = 'Top ' + rank.percentile + '%';
-    // Colour badge based on rank
-    if (rank.percentile <= 10) {
-      rankBadge.style.background = '#1a3a0a';
-      rankBadge.style.color = '#4ade80';
-    }
-  }
+  // University rank — college-aware
+  _refreshCollegeRankCard();
 
   // Score progress (if logged in and has history)
   if (appUser && appHistory.length >= 2) {
@@ -5798,34 +6058,6 @@ async function doPasswordReset() {
       succ.innerHTML = '\u2713 Reset link sent. Check your inbox and click the link to set a new password.';
     }
   }
-}
-
-// Also handle login with reset token
-var _origDoLogin = doLogin;
-function doLogin() {
-  var email = document.getElementById('m-lemail').value.trim().toLowerCase();
-  var pass  = document.getElementById('m-lpass').value.trim().toUpperCase();
-  // Check if they're using a reset token
-  try {
-    var resetData = localStorage.getItem('mocha_reset_token');
-    if (resetData) {
-      var rd = JSON.parse(resetData);
-      var tokenAge = Date.now() - rd.ts;
-      if (rd.email === email && rd.token === pass && tokenAge < 3600000) { // 1hr window
-        var stored = lv('mocha_user');
-        if (stored) {
-          appUser = stored;
-          appHistory = lv('mocha_hist') || [];
-          localStorage.removeItem('mocha_reset_token');
-          try { localStorage.setItem('mocha_session', JSON.stringify({ email: email, ts: Date.now() })); } catch(e) {}
-          closeModal();
-          launchApp();
-          return;
-        }
-      }
-    }
-  } catch(e) {}
-  _origDoLogin();
 }
 
 // switchM — extend to handle reset panel

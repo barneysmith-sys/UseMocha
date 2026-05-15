@@ -1838,34 +1838,70 @@ body {
 @media(max-width:500px) { .ht-hd,.ht-row { grid-template-columns: 1fr 60px 80px; } .ht-date { display:none; } }
 
 /* ══════════════════════════════════════════════════════════════════
-   MODAL SYSTEM
+   MODAL SYSTEM — Bottom sheet on mobile, centered card on desktop
    ══════════════════════════════════════════════════════════════════ */
 .overlay {
   position: fixed; inset: 0; z-index: 500;
-  background: rgba(10,5,2,0.4);
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  display: none; align-items: center; justify-content: center; padding: var(--s6);
+  background: rgba(10,5,2,0.45);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  display: none; align-items: flex-end; justify-content: center;
 }
 .overlay.open { display: flex; }
+
+/* Desktop: centered card */
+@media(min-width:601px) {
+  .overlay { align-items: center; padding: 1.5rem; }
+  .modal { border-radius: var(--r2xl) !important; max-height: 92vh; }
+  @keyframes modalIn { from{opacity:0;transform:scale(0.97) translateY(8px)} to{opacity:1;transform:none} }
+}
+
+/* Mobile: bottom sheet */
+@media(max-width:600px) {
+  .modal {
+    border-radius: 24px 24px 0 0 !important;
+    max-height: 92dvh;
+    animation: sheetUp 0.28s cubic-bezier(0.16,1,0.3,1) !important;
+  }
+  @keyframes sheetUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+}
+
 .modal {
-  background: var(--wh); border-radius: var(--r2xl);
-  width: 100%; max-width: 420px;
-  box-shadow: 0 2px 0 rgba(44,19,8,0.08), 0 32px 80px rgba(10,5,2,0.22);
+  background: var(--wh);
+  border-radius: var(--r2xl);
+  width: 100%; max-width: 440px;
+  box-shadow: 0 -4px 40px rgba(10,5,2,0.18), 0 2px 0 rgba(44,19,8,0.06);
   animation: modalIn 0.22s cubic-bezier(0.16,1,0.3,1);
   overflow: hidden; display: flex; flex-direction: column;
+  max-height: 92dvh;
 }
-@keyframes modalIn { from{opacity:0;transform:scale(0.96) translateY(10px)} to{opacity:1;transform:none} }
+
+/* Sheet drag handle — visible on mobile only */
+.modal-handle {
+  display: none;
+  width: 36px; height: 4px;
+  background: rgba(44,19,8,0.12); border-radius: 2px;
+  margin: 10px auto -2px; flex-shrink: 0;
+}
+@media(max-width:600px) { .modal-handle { display: block; } }
+
+/* Compact header on mobile — less height so form is in view */
 .modal-top-band {
-  background: linear-gradient(135deg, var(--esp) 0%, var(--roa) 100%);
-  padding: 1.5rem 1.75rem 1.25rem;
-  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, var(--esp) 0%, #3d1a0a 100%);
+  padding: 1rem 1.5rem 1rem;
+  position: relative; overflow: hidden; flex-shrink: 0;
+}
+@media(max-width:600px) {
+  .modal-top-band { padding: 0.75rem 1.25rem 0.85rem; }
+  .modal-h { font-size: 1.15rem !important; margin-bottom: 1px !important; }
+  .modal-s { font-size: 11px !important; }
+  .modal-brand { margin-bottom: 0.6rem !important; }
 }
 .modal-top-band::before {
   content:''; position:absolute; right:-30px; top:-30px;
   width:120px; height:120px; border-radius:50%;
   background: radial-gradient(circle, rgba(253,232,204,0.06) 0%, transparent 65%);
 }
-.modal-brand { display: flex; align-items: center; gap: var(--s3); margin-bottom: 1.1rem; position: relative; }
+.modal-brand { display: flex; align-items: center; gap: var(--s3); margin-bottom: 0.8rem; position: relative; }
 .modal-brand-icon { border-radius: 6px; overflow: hidden; flex-shrink: 0; }
 .modal-brand-name {
   font-family: 'DM Serif Display', serif;
@@ -1874,48 +1910,82 @@ body {
 }
 .modal-h { font-family: 'DM Serif Display', serif; font-size: 1.3rem; font-weight: 400; color: var(--ln); letter-spacing: -0.03em; margin-bottom: 3px; position: relative; }
 .modal-s { font-size: var(--t-sm); color: rgba(253,232,204,0.55); position: relative; }
-.modal-body { padding: 1.4rem 1.75rem; }
+
+/* Modal body — scrollable so nothing gets clipped */
+.modal-body {
+  padding: 1.2rem 1.5rem 1.4rem;
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+@media(max-width:600px) { .modal-body { padding: 1rem 1.25rem 1.5rem; } }
+
 .modal-x {
-  position: absolute; top: 1rem; right: 1rem;
+  position: absolute; top: 0.85rem; right: 0.85rem;
   background: rgba(253,232,204,0.12); border: none;
-  width: 24px; height: 24px; border-radius: 50%;
+  width: 26px; height: 26px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-size: 12px; color: rgba(253,232,204,0.7); cursor: pointer;
   transition: background 0.12s; z-index: 2;
 }
 .modal-x:hover { background: rgba(253,232,204,0.22); }
-.mfl { margin-bottom: 10px; }
-.mfl label { display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--esp); margin-bottom: 5px; }
+
+/* Photo upload — hidden on mobile signup (friction, nobody does it) */
+@media(max-width:600px) { #modal-photo-upload { display: none !important; } }
+
+/* Form fields */
+.mfl { margin-bottom: 9px; }
+.mfl label {
+  display: block; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--esp); margin-bottom: 4px;
+}
 .mfl input {
   width: 100%; padding: 10px 13px;
   border: 1px solid var(--sil); border-radius: var(--rlg);
   font-family: 'DM Sans', sans-serif; font-size: var(--t-sm);
   color: var(--esp); background: var(--surf); outline: none;
   transition: border-color 0.12s, box-shadow 0.12s;
+  /* Prevent iOS zoom on focus — must be ≥16px rendered */
+  font-size: 16px;
 }
+/* Scale labels back for desktop where 16px inputs look large */
+@media(min-width:601px) { .mfl input { font-size: 14px; } }
 .mfl input:focus { border-color: var(--esp); box-shadow: 0 0 0 3px rgba(44,19,8,0.07); }
+
+/* University field — collapsed by default on mobile, revealed after email */
+.modal-university-row { transition: opacity 0.2s, max-height 0.25s; }
+@media(max-width:600px) {
+  .modal-university-row.hidden {
+    opacity: 0; max-height: 0; overflow: hidden; margin: 0; pointer-events: none;
+  }
+}
+
 .btn-modal {
-  width: 100%; padding: 11px; background: var(--esp); color: var(--ln);
-  border: none; border-radius: var(--rpill); font-size: var(--t-sm);
+  width: 100%; padding: 13px; background: var(--esp); color: var(--ln);
+  border: none; border-radius: var(--rpill); font-size: 15px;
   font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif;
-  transition: opacity 0.12s; margin-top: 4px;
+  transition: opacity 0.12s; margin-top: 6px;
   box-shadow: 0 1px 0 rgba(44,19,8,0.3);
+  /* Larger tap target on mobile */
+  min-height: 48px;
 }
 .btn-modal:hover { opacity: 0.85; }
 .modal-sw { text-align: center; margin-top: 12px; font-size: 12px; color: var(--lt); }
 .modal-lnk { color: var(--med); font-weight: 600; cursor: pointer; }
 .modal-lnk:hover { color: var(--esp); }
+
 /* Google SSO button */
 .btn-google {
-  width: 100%; padding: 10px 13px;
+  width: 100%; padding: 12px 13px;
   background: #fff; color: #3c4043;
   border: 1px solid #dadce0; border-radius: var(--rpill);
-  font-size: var(--t-sm); font-weight: 500;
+  font-size: 15px; font-weight: 500;
   cursor: pointer; font-family: 'DM Sans', sans-serif;
   display: flex; align-items: center; justify-content: center; gap: 9px;
   transition: background 0.12s, box-shadow 0.12s;
   margin-bottom: 12px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  min-height: 48px;
 }
 .btn-google:hover { background: #f8f9fa; box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
 .modal-divider {
@@ -1925,18 +1995,21 @@ body {
 .modal-divider::before, .modal-divider::after {
   content: ''; flex: 1; height: 1px; background: var(--sil);
 }
+
 /* College selector */
 .mfl select {
   width: 100%; padding: 10px 13px;
   border: 1px solid var(--sil); border-radius: var(--rlg);
-  font-family: 'DM Sans', sans-serif; font-size: var(--t-sm);
+  font-family: 'DM Sans', sans-serif; font-size: 16px;
   color: var(--esp); background: var(--surf); outline: none;
   transition: border-color 0.12s, box-shadow 0.12s;
   -webkit-appearance: none; appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23c48762' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right 13px center;
 }
+@media(min-width:601px) { .mfl select { font-size: 14px; } }
 .mfl select:focus { border-color: var(--esp); box-shadow: 0 0 0 3px rgba(44,19,8,0.07); }
+
 /* College rank banner */
 .college-rank-banner {
   display: flex; align-items: center; gap: 10px;
@@ -3037,6 +3110,8 @@ body {
 
 <div class="overlay" id="overlay" onclick="closeOv(event)">
   <div class="modal">
+    <!-- Drag handle — visible on mobile only -->
+    <div class="modal-handle"></div>
     <div class="modal-top-band">
       <button class="modal-x" onclick="closeModal()">&#x2715;</button>
       <div class="modal-brand">
@@ -3048,8 +3123,8 @@ body {
         </div>
         <span class="modal-brand-name" style="font-family:Georgia,serif;letter-spacing:-0.02em;">mocha</span>
       </div>
-      <!-- Photo upload lives in the band for signup, hidden for login -->
-      <div id="band-photo-wrap" style="text-align:center;margin:0.9rem 0 0.75rem;position:relative;">
+      <!-- Photo upload — hidden on mobile via CSS -->
+      <div id="modal-photo-upload" id="band-photo-wrap" style="text-align:center;margin:0.9rem 0 0.75rem;position:relative;">
         <div class="band-photo-circle" id="band-photo-circle" onclick="document.getElementById('photo-input').click()" title="Add a profile photo">
           <div id="band-photo-inner">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="opacity:0.55;">
@@ -3060,7 +3135,7 @@ body {
           </div>
         </div>
         <input type="file" id="photo-input" class="photo-input" accept="image/*" onchange="handlePhotoUpload(event)">
-        <div id="band-photo-edit" style="display:none;position:absolute;bottom:0;right:calc(50% - 32px);width:20px;height:20px;background:rgba(0,0,0,0.45);border-radius:50%;display:none;align-items:center;justify-content:center;cursor:pointer;" onclick="document.getElementById('photo-input').click()">
+        <div id="band-photo-edit" style="display:none;position:absolute;bottom:0;right:calc(50% - 32px);width:20px;height:20px;background:rgba(0,0,0,0.45);border-radius:50%;align-items:center;justify-content:center;cursor:pointer;" onclick="document.getElementById('photo-input').click()">
           <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 10L4 9.5L9.5 4L8 2.5L2.5 8L2 10Z" stroke="white" stroke-width="1" fill="none"/></svg>
         </div>
       </div>
@@ -3079,9 +3154,13 @@ body {
       <div class="mfl"><label>First name</label><input type="text" id="m-name" placeholder="Alex" autocomplete="given-name"></div>
       <div class="mfl"><label>Email</label><input type="email" id="m-email" placeholder="alex@university.edu" autocomplete="email"></div>
       <div class="mfl"><label>Password</label><input type="password" id="m-pass" placeholder="6 or more characters" autocomplete="new-password"></div>
-      <div class="mfl"><label>Your university <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--oat);">(optional — unlock rankings)</span></label><select id="m-college"><option value="">Select your university…</option><option value="Harvard University">Harvard University</option><option value="Columbia University">Columbia University</option><option value="NYU">NYU</option><option value="Georgetown University">Georgetown University</option><option value="UCLA">UCLA</option><option value="UC Berkeley">UC Berkeley</option><option value="USC">USC</option><option value="George Washington University">George Washington University</option><option value="University of San Francisco">University of San Francisco</option><option value="American University">American University</option><option value="Boston University">Boston University</option><option value="Northeastern University">Northeastern University</option><option value="University of Michigan">University of Michigan</option><option value="University of Virginia">University of Virginia</option><option value="NYU Stern">NYU Stern</option><option value="Wharton (Penn)">Wharton (Penn)</option><option value="Other">Other</option></select></div>
-      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;margin-top:2px;">
-        <input type="checkbox" id="m-tos" style="margin-top:3px;width:15px;height:15px;flex-shrink:0;accent-color:#2c1308;cursor:pointer;">
+      <!-- University: hidden on mobile until after email filled, always visible on desktop -->
+      <div class="mfl modal-university-row hidden" id="modal-uni-row">
+        <label>Your university <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--oat);">(optional — unlock rankings)</span></label>
+        <select id="m-college"><option value="">Select your university…</option><option value="Harvard University">Harvard University</option><option value="Columbia University">Columbia University</option><option value="NYU">NYU</option><option value="Georgetown University">Georgetown University</option><option value="UCLA">UCLA</option><option value="UC Berkeley">UC Berkeley</option><option value="USC">USC</option><option value="George Washington University">George Washington University</option><option value="University of San Francisco">University of San Francisco</option><option value="American University">American University</option><option value="Boston University">Boston University</option><option value="Northeastern University">Northeastern University</option><option value="University of Michigan">University of Michigan</option><option value="University of Virginia">University of Virginia</option><option value="NYU Stern">NYU Stern</option><option value="Wharton (Penn)">Wharton (Penn)</option><option value="Other">Other</option></select>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;margin-top:4px;">
+        <input type="checkbox" id="m-tos" style="margin-top:3px;width:16px;height:16px;flex-shrink:0;accent-color:#2c1308;cursor:pointer;">
         <label for="m-tos" style="font-size:12px;color:#6b3520;line-height:1.5;cursor:pointer;">I agree to the <a href="/legal.html" target="_blank" style="color:#2c1308;font-weight:600;text-decoration:underline;">Terms of Service and Privacy Policy</a></label>
       </div>
       <button class="btn-modal" id="btn-signup" onclick="doSignup()">Create account</button>
@@ -3096,13 +3175,13 @@ body {
       <div class="mfl"><label>Email</label><input type="email" id="m-lemail" placeholder="alex@university.edu" autocomplete="email"></div>
       <div class="mfl"><label>Password</label><input type="password" id="m-lpass" placeholder="Your password" autocomplete="current-password"></div>
       <button class="btn-modal" id="btn-login" onclick="doLogin()">Sign in</button>
-      <div style="text-align:center;margin:-4px 0 10px;">
+      <div style="text-align:center;margin:6px 0 10px;">
         <span class="modal-lnk" style="font-size:12px;color:var(--oat);" onclick="switchM('reset')">Forgot password?</span>
       </div>
       <div class="modal-sw">New here? <span class="modal-lnk" onclick="switchM('signup')">Create an account</span></div>
     </div>
 
-    <!-- UPDATE PASSWORD PANEL (shown after reset link) -->
+    <!-- UPDATE PASSWORD PANEL -->
     <div id="m-update-password" style="display:none;">
       <div style="text-align:center;margin-bottom:1.2rem;">
         <div style="font-size:13px;color:var(--lt);line-height:1.6;margin-bottom:1rem;">Enter your new password below.</div>
@@ -3126,6 +3205,7 @@ body {
         ✓ If an account exists for that email, we've sent reset instructions. Check your inbox.
       </div>
       <div class="modal-sw" style="margin-top:12px;">Remember it? <span class="modal-lnk" onclick="switchM('login')">Sign in</span></div>
+    </div>
     </div><!-- modal-body -->
   </div><!-- modal -->
 </div><!-- overlay -->
@@ -3949,28 +4029,57 @@ function startFree() {
 // ═══════════════════════════════════════
 function openModal(type) {
   document.getElementById('overlay').classList.add('open');
+  // Lock body scroll on mobile when sheet is open
+  document.body.style.overflow = 'hidden';
   switchM(type);
 }
-function closeModal() { document.getElementById('overlay').classList.remove('open'); }
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
 function closeOv(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
 function switchM(type) {
   document.getElementById('m-signup').style.display = type === 'signup' ? 'block' : 'none';
   document.getElementById('m-login').style.display  = type === 'login'  ? 'block' : 'none';
   var h = document.getElementById('modal-h-text');
   var s = document.getElementById('modal-s-text');
-  var photoWrap = document.getElementById('band-photo-wrap');
+  var photoWrap = document.getElementById('modal-photo-upload');
   if (h && s) {
     if (type === 'signup') {
       h.textContent = 'Create your account';
       s.textContent = 'Free forever. Unlimited practice.';
-      if (photoWrap) photoWrap.style.display = 'block';
+      if (photoWrap) photoWrap.style.display = '';
     } else {
       h.textContent = 'Welcome back';
       s.textContent = 'Good to have you.';
       if (photoWrap) photoWrap.style.display = 'none';
     }
   }
+  // Reset university row on each open — show on desktop, hide on mobile until password filled
+  var uniRow = document.getElementById('modal-uni-row');
+  if (uniRow) {
+    if (window.innerWidth <= 600) {
+      uniRow.classList.add('hidden');
+    } else {
+      uniRow.classList.remove('hidden');
+    }
+  }
 }
+
+// Reveal university field on mobile once password field has content
+(function() {
+  document.addEventListener('DOMContentLoaded', function() {
+    var passField = document.getElementById('m-pass');
+    if (passField) {
+      passField.addEventListener('blur', function() {
+        if (passField.value.length >= 1 && window.innerWidth <= 600) {
+          var uniRow = document.getElementById('modal-uni-row');
+          if (uniRow) uniRow.classList.remove('hidden');
+        }
+      });
+    }
+  });
+})();
 
 var pendingPhoto = null;
 

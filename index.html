@@ -4328,14 +4328,44 @@ function doGoogleSignIn() {
   if (!client) { console.warn('[mocha] Supabase SDK not loaded'); return; }
   client.auth.signInWithOAuth({
     provider: 'google',
-    options : { redirectTo: window.location.origin }
+    options : { redirectTo: window.location.origin + '/?auth=1' }
   });
 }
 
-// Called at startup — SDK's detectSessionInUrl:true handles the rest via onAuthStateChange
+// Called at startup — grabs token from URL immediately before page can clear it
 async function _handleOAuthCallback() {
-  // Just init the client — onAuthStateChange above fires automatically
-  // if there's a session in the URL or localStorage
+  // Grab hash immediately — browser may clear it on next tick
+  var rawHash = window.location.hash;
+  var rawSearch = window.location.search;
+
+  // Check for access_token in hash (implicit flow)
+  if (rawHash && rawHash.indexOf('access_token=') !== -1) {
+    history.replaceState(null, '', window.location.pathname);
+    var params = {};
+    rawHash.replace(/^#/, '').split('&').forEach(function(pair) {
+      var kv = pair.split('=');
+      if (kv.length >= 2) params[decodeURIComponent(kv[0])] = decodeURIComponent(kv.slice(1).join('='));
+    });
+    if (params.access_token) {
+      var sess = { access_token: params.access_token, refresh_token: params.refresh_token || '', user: null };
+      try {
+        var r = await fetch(_SB_URL + '/auth/v1/user', {
+          headers: { 'apikey': _SB_KEY, 'Authorization': 'Bearer ' + params.access_token }
+        });
+        var user = await r.json();
+        if (user && user.id) {
+          sess.user = user;
+          _sbSaveSession(sess);
+          _sbSession = sess;
+          try { closeModal(); } catch(e) {}
+          _onSupabaseSignIn(user);
+          return;
+        }
+      } catch(e) {}
+    }
+  }
+
+  // SDK handles PKCE code exchange via detectSessionInUrl + onAuthStateChange
   _getSupabaseClient();
 }
 

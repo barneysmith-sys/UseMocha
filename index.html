@@ -4296,46 +4296,59 @@ async function doLogin() {
 }
 
 // ── GOOGLE OAUTH ──────────────────────────────────────────────
-// Supabase handles the OAuth flow — we just redirect to their endpoint.
-// On return, Supabase sets the session in the URL hash, which _initSupabase picks up.
 function doGoogleSignIn() {
-  // Build the Supabase Google OAuth URL
-  var redirectUrl = encodeURIComponent(window.location.origin + window.location.pathname);
+  // Store which page we came from so we can return after auth
+  try { localStorage.setItem('mocha_oauth_return', window.location.href); } catch(e) {}
+  // Redirect to Supabase OAuth — it handles PKCE and returns with session in hash
+  var redirectUrl = encodeURIComponent(window.location.origin);
   var googleUrl = _SB_URL + '/auth/v1/authorize?provider=google&redirect_to=' + redirectUrl;
   window.location.href = googleUrl;
 }
 
-// Handle OAuth callback — Supabase puts access_token in URL hash
-(function() {
+// Handle OAuth callback — runs after DOM ready so all functions exist
+function _handleOAuthCallback() {
   var hash = window.location.hash;
-  if (hash && hash.indexOf('access_token=') !== -1) {
-    // Parse hash params
-    var params = {};
-    hash.replace(/^#/, '').split('&').forEach(function(pair) {
-      var parts = pair.split('=');
-      if (parts.length === 2) params[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
-    });
-    if (params.access_token) {
-      var session = {
-        access_token: params.access_token,
-        refresh_token: params.refresh_token || '',
-        user: null
-      };
-      // Fetch user info with this token
-      fetch(_SB_URL + '/auth/v1/user', {
-        headers: { 'apikey': _SB_KEY, 'Authorization': 'Bearer ' + params.access_token }
-      }).then(function(r) { return r.json(); }).then(function(user) {
-        if (user && user.id) {
-          session.user = user;
-          _sbSaveSession(session);
-          _sbFireAuth('SIGNED_IN', session);
-        }
-      }).catch(function(){});
-      // Clean the URL hash
-      history.replaceState(null, '', window.location.pathname + window.location.search);
+  if (!hash || hash.indexOf('access_token=') === -1) return;
+
+  // Parse hash params
+  var params = {};
+  hash.replace(/^#/, '').split('&').forEach(function(pair) {
+    var kv = pair.split('=');
+    if (kv.length >= 2) {
+      params[decodeURIComponent(kv[0])] = decodeURIComponent(kv.slice(1).join('='));
     }
-  }
-})();
+  });
+
+  if (!params.access_token) return;
+
+  // Clean URL immediately so refresh doesn't re-trigger
+  history.replaceState(null, '', window.location.pathname);
+
+  var session = {
+    access_token : params.access_token,
+    refresh_token: params.refresh_token || '',
+    user         : null
+  };
+
+  // Save session and fetch user info
+  fetch(_SB_URL + '/auth/v1/user', {
+    headers: {
+      'apikey'       : _SB_KEY,
+      'Authorization': 'Bearer ' + params.access_token
+    }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(user) {
+    if (user && user.id) {
+      session.user = user;
+      _sbSaveSession(session);  // uses the same key as _initSupabase
+      _sbSession = session;
+      closeModal();
+      _onSupabaseSignIn(user);
+    }
+  })
+  .catch(function(e) { console.warn('[mocha] OAuth callback error:', e); });
+}
 
 // ── COLLEGE SELECTOR ──────────────────────────────────────────
 var COLLEGE_KEY = 'mocha_college';
@@ -6316,11 +6329,13 @@ function switchM(type) {
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', function() {
+    _handleOAuthCallback();  // Must run first — picks up Google Auth token from URL hash
     _initSupabase();
     _checkPasswordReset();
-    initLanding();     // Start landing page animations
+    initLanding();
   });
 } else {
+  _handleOAuthCallback();  // Must run first
   _initSupabase();
   setTimeout(initLanding, 0);
 }

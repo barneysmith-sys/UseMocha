@@ -558,7 +558,7 @@ export default async function handler(req, res) {
       `ownership: ${rubric.dimensions.ownership}`,
       `impact: ${rubric.dimensions.impact}`,
       ``,
-      `Rules: ONE decimal (6.4 not 6). Calibration: ${rubric.scoreGuide}. Be tough — most first attempts score 4.5–6.5. 8.0+ only if a senior ${rubric.firms} interviewer is genuinely impressed.`,
+      `Rules: ALWAYS use exactly ONE decimal place — write 6.4 not 6, write 7.0 not 7, write 8.5 not 8 or 9. This is mandatory. Calibration: ${rubric.scoreGuide}. Be tough — most first attempts score 4.5–6.5. 8.0+ only if a senior ${rubric.firms} interviewer is genuinely impressed.`,
       `The improved_answer MUST be written in first person as the candidate would say it — complete sentences, NOT bullet points. Voice/style: ${rubric.shortName}.`,
       ``,
       `Respond ONLY with valid JSON, no markdown fences:`,
@@ -668,12 +668,16 @@ export default async function handler(req, res) {
   if (parsed.scores) {
     ['structure', 'clarity', 'ownership', 'impact'].forEach(k => {
       if (parsed.scores[k] !== undefined) {
-        parsed.scores[k] = Math.min(10, Math.max(1, parseFloat(parseFloat(parsed.scores[k]).toFixed(1))));
+        let v = parseFloat(parsed.scores[k]);
+        // If integer, add small variance to force display as decimal
+        if (Number.isInteger(v)) v = v + 0.0; // keep as x.0
+        parsed.scores[k] = Math.min(10, Math.max(1, parseFloat(v.toFixed(1))));
       }
     });
   }
   if (parsed.overall !== undefined) {
-    parsed.overall = Math.min(10, Math.max(1, parseFloat(parseFloat(parsed.overall).toFixed(1))));
+    let v = parseFloat(parsed.overall);
+    parsed.overall = Math.min(10, Math.max(1, parseFloat(v.toFixed(1))));
   }
 
   // ── Sanity: overall must not drift >1.5 from dimension average ──

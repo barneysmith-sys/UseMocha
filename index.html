@@ -3667,19 +3667,55 @@ async function _sbSelectSessions(userId) {
 function _sbRestoreUser(user) {
   if (!user || !user.id) return;
   var stored = lv('mocha_user');
-  appUser = stored || {
-    id    : user.id,
-    name  : (user.user_metadata && user.user_metadata.full_name) ? user.user_metadata.full_name : (user.email || 'User'),
-    email : user.email || '',
-    avatar: (user.user_metadata && user.user_metadata.avatar_url) ? user.user_metadata.avatar_url : null,
-    college: _getUserCollege()
-  };
-  if (!stored) sv('mocha_user', appUser);
+
+  // Build appUser — merge Google profile data into stored user
+  appUser = stored || {};
+  appUser.id     = user.id;
+  appUser.email  = appUser.email  || user.email || '';
+  appUser.name   = appUser.name   || (user.user_metadata && user.user_metadata.full_name) || user.email || 'User';
+  appUser.avatar = appUser.avatar || (user.user_metadata && user.user_metadata.avatar_url) || null;
+  appUser.college= appUser.college|| _getUserCollege();
+  appUser.streak = appUser.streak || 0;
+  sv('mocha_user', appUser);
+
+  // Load history from Supabase FIRST, then launch dashboard
   appHistory = lv('mocha_hist') || [];
   _sbLoadHistory(function(rows) {
-    if (rows && rows.length) { appHistory = rows; sv('mocha_hist', appHistory); }
+    if (rows && rows.length) {
+      appHistory = rows;
+      sv('mocha_hist', appHistory);
+      // Update streak from actual history
+      _recalcStreak();
+    }
+    launchApp();
   });
-  launchApp();
+}
+
+function _recalcStreak() {
+  if (!appHistory || !appHistory.length) return;
+  // Sort by date descending
+  var sorted = appHistory.slice().sort(function(a,b) {
+    return new Date(b.date||0) - new Date(a.date||0);
+  });
+  var streak = 0;
+  var today = new Date().toISOString().split('T')[0];
+  var checkDate = today;
+  for (var i = 0; i < sorted.length; i++) {
+    var d = (sorted[i].date || '').split('T')[0];
+    if (d === checkDate) {
+      streak++;
+      var prev = new Date(checkDate);
+      prev.setDate(prev.getDate() - 1);
+      checkDate = prev.toISOString().split('T')[0];
+    } else if (i === 0 && d === checkDate) {
+      // started yesterday
+      streak++;
+    } else {
+      break;
+    }
+  }
+  appUser.streak = Math.max(streak, 0);
+  sv('mocha_user', appUser);
 }
 
 function _initSupabase() {
@@ -4843,35 +4879,39 @@ async function signOut() {
 
 
 function launchApp() {
-  // Stop hero typewriter \u2014 element is hidden after login
+  if (!appUser) return;
   if (twTimer) { clearTimeout(twTimer); twTimer = null; }
   document.getElementById('nav-guest').style.display = 'none';
   document.getElementById('nav-user').style.display  = 'flex';
 
-  // Nav avatar
+  // Nav avatar — support Google photo, uploaded photo, or initial
   var av = document.getElementById('nav-av');
-  if (appUser.photo && appUser.photo.startsWith('data:image/')) {
-    av.innerHTML = '<img src="' + appUser.photo + '" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
-  } else {
-    av.textContent = appUser.name.charAt(0).toUpperCase();
+  if (av) {
+    var photoSrc = appUser.avatar || (appUser.photo && appUser.photo.startsWith('data:image/') ? appUser.photo : null);
+    if (photoSrc) {
+      av.innerHTML = '<img src="' + photoSrc + '" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+    } else {
+      av.textContent = (appUser.name || 'U').charAt(0).toUpperCase();
+    }
   }
 
   // Streak chip
   var streak = appUser.streak || 0;
-  var streakChipTxt = streak === 0 ? 'Start your streak' : streak + '-day streak';
-  document.getElementById('streak-chip').textContent = streakChipTxt;
+  var streakChipEl = document.getElementById('streak-chip');
+  if (streakChipEl) streakChipEl.textContent = streak === 0 ? 'Start your streak' : streak + '-day streak';
 
-  // Populate profile dropdown
+  // Profile dropdown
   var pdAv = document.getElementById('pd-avatar');
   if (pdAv) {
-    if (appUser.photo && appUser.photo.startsWith('data:image/')) {
-      pdAv.innerHTML = '<img src="' + appUser.photo + '" alt="">';
+    var photoSrc2 = appUser.avatar || (appUser.photo && appUser.photo.startsWith('data:image/') ? appUser.photo : null);
+    if (photoSrc2) {
+      pdAv.innerHTML = '<img src="' + photoSrc2 + '" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
     } else {
-      pdAv.textContent = appUser.name.charAt(0).toUpperCase();
+      pdAv.textContent = (appUser.name || 'U').charAt(0).toUpperCase();
     }
   }
   var pdName = document.getElementById('pd-name');
-  if (pdName) pdName.textContent = appUser.name;
+  if (pdName) pdName.textContent = appUser.name || appUser.email || 'User';
   var pdEmail = document.getElementById('pd-email');
   if (pdEmail) pdEmail.textContent = appUser.email || '';
   var pdStreak = document.getElementById('pd-streak');

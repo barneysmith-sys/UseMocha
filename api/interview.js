@@ -402,7 +402,7 @@ function buildFallback(question, answer, industry, rid) {
 
   const rubric = RUBRICS[industry] || RUBRICS.consulting;
 
-  const share_line = `I scored ${overall}/10 on a ${rubric.shortName} question. ${!hasNumbers ? 'Adding hard numbers is my next fix.' : !hasAction ? 'Ownership language is my gap.' : 'Working on it with Mocha.'} use-mocha.vercel.app`;
+  const share_line = `I scored ${overall}/10 on a ${rubric.shortName} question. ${!hasNumbers ? 'Adding hard numbers is my next fix.' : !hasAction ? 'Ownership language is my gap.' : 'Working on it with Mocha.'} usemocha.app`;
 
   return {
     _fallback     : true,
@@ -676,7 +676,7 @@ export default async function handler(req, res) {
   // ── Ensure share_line exists ─────────────────────────────────────
   if (!parsed.share_line) {
     const score = parsed.overall || 0;
-    parsed.share_line = `I scored ${score}/10 on a ${rubric.shortName} question with Mocha. use-mocha.vercel.app`;
+    parsed.share_line = `I scored ${score}/10 on a ${rubric.shortName} question with Mocha. usemocha.app`;
   }
 
   // ── Inject metadata ──────────────────────────────────────────────

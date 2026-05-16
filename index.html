@@ -4297,57 +4297,80 @@ async function doLogin() {
 
 // ── GOOGLE OAUTH ──────────────────────────────────────────────
 function doGoogleSignIn() {
-  // Store which page we came from so we can return after auth
-  try { localStorage.setItem('mocha_oauth_return', window.location.href); } catch(e) {}
-  // Redirect to Supabase OAuth — it handles PKCE and returns with session in hash
   var redirectUrl = encodeURIComponent(window.location.origin);
-  var googleUrl = _SB_URL + '/auth/v1/authorize?provider=google&redirect_to=' + redirectUrl;
+  // flow_type=pkce tells Supabase to use PKCE and return ?code= on callback
+  var googleUrl = _SB_URL + '/auth/v1/authorize?provider=google&redirect_to=' + redirectUrl + '&flow_type=pkce';
   window.location.href = googleUrl;
 }
 
-// Handle OAuth callback — runs after DOM ready so all functions exist
+// Handle OAuth callback — Supabase PKCE returns ?code= in query string
 function _handleOAuthCallback() {
-  var hash = window.location.hash;
-  if (!hash || hash.indexOf('access_token=') === -1) return;
+  var search = window.location.search;
+  var hash   = window.location.hash;
 
-  // Parse hash params
-  var params = {};
-  hash.replace(/^#/, '').split('&').forEach(function(pair) {
-    var kv = pair.split('=');
-    if (kv.length >= 2) {
-      params[decodeURIComponent(kv[0])] = decodeURIComponent(kv.slice(1).join('='));
-    }
-  });
+  // PKCE flow: Supabase returns ?code=xxx
+  var codeMatch = search.match(/[?&]code=([^&]+)/);
+  if (codeMatch) {
+    var code = decodeURIComponent(codeMatch[1]);
+    // Clean URL immediately
+    history.replaceState(null, '', window.location.pathname);
+    // Exchange code for session via Supabase token endpoint
+    fetch(_SB_URL + '/auth/v1/token?grant_type=pkce', {
+      method : 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': _SB_KEY },
+      body   : JSON.stringify({ auth_code: code })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data && data.access_token) {
+        var session = {
+          access_token : data.access_token,
+          refresh_token: data.refresh_token || '',
+          user         : data.user || null
+        };
+        _sbSaveSession(session);
+        _sbSession = session;
+        if (data.user && data.user.id) {
+          closeModal();
+          _onSupabaseSignIn(data.user);
+        }
+      }
+    })
+    .catch(function(e) { console.warn('[mocha] PKCE exchange error:', e); });
+    return;
+  }
 
-  if (!params.access_token) return;
-
-  // Clean URL immediately so refresh doesn't re-trigger
-  history.replaceState(null, '', window.location.pathname);
-
-  var session = {
-    access_token : params.access_token,
-    refresh_token: params.refresh_token || '',
-    user         : null
-  };
-
-  // Save session and fetch user info
-  fetch(_SB_URL + '/auth/v1/user', {
-    headers: {
-      'apikey'       : _SB_KEY,
-      'Authorization': 'Bearer ' + params.access_token
-    }
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(user) {
-    if (user && user.id) {
-      session.user = user;
-      _sbSaveSession(session);  // uses the same key as _initSupabase
-      _sbSession = session;
-      closeModal();
-      _onSupabaseSignIn(user);
-    }
-  })
-  .catch(function(e) { console.warn('[mocha] OAuth callback error:', e); });
+  // Implicit flow fallback: #access_token= in hash (older Supabase configs)
+  if (hash && hash.indexOf('access_token=') !== -1) {
+    var params = {};
+    hash.replace(/^#/, '').split('&').forEach(function(pair) {
+      var kv = pair.split('=');
+      if (kv.length >= 2) {
+        params[decodeURIComponent(kv[0])] = decodeURIComponent(kv.slice(1).join('='));
+      }
+    });
+    if (!params.access_token) return;
+    history.replaceState(null, '', window.location.pathname);
+    var session = {
+      access_token : params.access_token,
+      refresh_token: params.refresh_token || '',
+      user         : null
+    };
+    fetch(_SB_URL + '/auth/v1/user', {
+      headers: { 'apikey': _SB_KEY, 'Authorization': 'Bearer ' + params.access_token }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(user) {
+      if (user && user.id) {
+        session.user = user;
+        _sbSaveSession(session);
+        _sbSession = session;
+        closeModal();
+        _onSupabaseSignIn(user);
+      }
+    })
+    .catch(function(e) { console.warn('[mocha] implicit callback error:', e); });
+  }
 }
 
 // ── COLLEGE SELECTOR ──────────────────────────────────────────

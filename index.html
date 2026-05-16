@@ -3092,12 +3092,39 @@ body {
 <div class="page" id="page-feedback" style="padding-top:52px;">
   <div class="fb-pg">
     <div id="fb-load" class="spinner-wrap fadeup">
-      <div class="spin"></div>
+      <!-- Animated coffee cup -->
+      <div style="margin-bottom:1.5rem;">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Cup body -->
+          <path d="M12 24h40l-4 20a4 4 0 01-4 4H20a4 4 0 01-4-4L12 24z" fill="var(--ln)" stroke="var(--esp)" stroke-width="1.5"/>
+          <!-- Cup handle -->
+          <path d="M52 28h4a4 4 0 010 8h-4" stroke="var(--esp)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <!-- Saucer -->
+          <ellipse cx="32" cy="49" rx="22" ry="3" fill="var(--sil2)" stroke="var(--esp)" stroke-width="1"/>
+          <!-- Steam lines — animated -->
+          <g class="coffee-steam">
+            <path d="M24 18 Q26 14 24 10" stroke="var(--oat)" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.6">
+              <animate attributeName="opacity" values="0.6;0;0.6" dur="2s" begin="0s" repeatCount="indefinite"/>
+              <animate attributeName="d" values="M24 18 Q26 14 24 10;M24 18 Q22 14 24 10;M24 18 Q26 14 24 10" dur="2s" repeatCount="indefinite"/>
+            </path>
+            <path d="M32 16 Q34 12 32 8" stroke="var(--oat)" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.6">
+              <animate attributeName="opacity" values="0;0.6;0" dur="2s" begin="0.4s" repeatCount="indefinite"/>
+              <animate attributeName="d" values="M32 16 Q34 12 32 8;M32 16 Q30 12 32 8;M32 16 Q34 12 32 8" dur="2s" repeatCount="indefinite"/>
+            </path>
+            <path d="M40 18 Q42 14 40 10" stroke="var(--oat)" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.6">
+              <animate attributeName="opacity" values="0.6;0;0.6" dur="2s" begin="0.8s" repeatCount="indefinite"/>
+              <animate attributeName="d" values="M40 18 Q42 14 40 10;M40 18 Q38 14 40 10;M40 18 Q42 14 40 10" dur="2s" repeatCount="indefinite"/>
+            </path>
+          </g>
+          <!-- Coffee surface inside cup -->
+          <ellipse cx="32" cy="26" rx="16" ry="3" fill="var(--esp)" opacity="0.15"/>
+        </svg>
+      </div>
       <div class="load-t" id="load-msg">Evaluating your answer</div>
       <div class="load-s" id="load-sub">Analysing STAR structure &middot; Scoring clarity</div>
       <div style="margin-top:2rem;width:100%;max-width:400px;">
-        <div style="height:8px;background:var(--sil2);border-radius:4px;overflow:hidden;margin-bottom:10px;">
-          <div id="load-bar" style="height:100%;background:linear-gradient(90deg,var(--med),var(--oat));border-radius:4px;width:0%;transition:width 20s linear;"></div>
+        <div style="height:4px;background:var(--sil2);border-radius:4px;overflow:hidden;margin-bottom:10px;">
+          <div id="load-bar" style="height:100%;background:linear-gradient(90deg,var(--esp),var(--oat));border-radius:4px;width:0%;transition:width 25s linear;"></div>
         </div>
       </div>
     </div>
@@ -3959,7 +3986,7 @@ function _callPayload(payload, onSuccess, onError) {
   _lastRequestTime = now;
 
   var abortCtrl = new AbortController();
-  var timeoutId = setTimeout(function() { abortCtrl.abort(); }, 12000);
+  var timeoutId = setTimeout(function() { abortCtrl.abort(); }, 55000);
 
   fetch('/api/interview', {
     signal : abortCtrl.signal,
@@ -3975,16 +4002,20 @@ function _callPayload(payload, onSuccess, onError) {
     }
     return res.json();
   }).then(function(data) {
-    if (!data) return; // already handled above
+    if (!data) return;
     _activeRequest = false;
     if (data.error) {
       onError('Feedback is taking longer than usual. Please try again in a moment.');
       return;
     }
-    // Cache successful responses
+    // Always call onSuccess — even fallback responses have valid scores
+    // The _fallback flag is handled by renderFeedback to show appropriate UI
     if (payload.mode !== 'followup') {
       var cKey = (payload.question || '').slice(0,100) + '|' + (payload.answer || '').slice(0,80);
-      try { _responseCache[cKey] = JSON.parse(JSON.stringify(data)); } catch(e) {}
+      // Only cache real AI responses, not fallbacks
+      if (!data._fallback) {
+        try { _responseCache[cKey] = JSON.parse(JSON.stringify(data)); } catch(e) {}
+      }
     }
     onSuccess(data);
   }).catch(function(err) {
@@ -5508,10 +5539,10 @@ function renderFeedback(r, isFree) {
   document.getElementById('fb-verdict').textContent = r.verdict || '';
   // Mocha Coach scores: structure, clarity, ownership, impact
   var sc = r.scores || {};
-  document.getElementById('fb-clarity').textContent = sc.structure || r.clarity || 0;
-  document.getElementById('fb-star').textContent    = sc.clarity   || r.star    || 0;
-  document.getElementById('fb-spec').textContent    = sc.ownership || r.specificity || 0;
-  document.getElementById('fb-conf').textContent    = sc.impact    || r.confidence  || 0;
+  document.getElementById('fb-clarity').textContent = parseFloat(sc.structure || r.clarity || 0).toFixed(1);
+  document.getElementById('fb-star').textContent    = parseFloat(sc.clarity   || r.star    || 0).toFixed(1);
+  document.getElementById('fb-spec').textContent    = parseFloat(sc.ownership || r.specificity || 0).toFixed(1);
+  document.getElementById('fb-conf').textContent    = parseFloat(sc.impact    || r.confidence  || 0).toFixed(1);
   var p = appPersona || PERSONAS[0];
   var industryLabels = {
     consulting : 'Consulting · MBB PEI',

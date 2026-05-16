@@ -4301,20 +4301,20 @@ function _getSupabaseClient() {
   if (window._sbClient) return window._sbClient;
   if (window.supabase && window.supabase.createClient) {
     window._sbClient = window.supabase.createClient(_SB_URL, _SB_KEY, {
-      auth: { persistSession: true, autoRefreshToken: true }
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     });
-    // Listen for auth state changes — fires when OAuth callback completes
+    // Listen for auth state — fires when SDK detects session in URL or storage
     window._sbClient.auth.onAuthStateChange(function(event, session) {
       if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session && session.user) {
+        var already = appUser && appUser.id;
         _sbSaveSession({
           access_token : session.access_token,
           refresh_token: session.refresh_token || '',
           user         : session.user
         });
         _sbSession = { access_token: session.access_token, refresh_token: session.refresh_token, user: session.user };
-        // Only call _onSupabaseSignIn if not already signed in
-        if (!appUser || !appUser.id) {
-          closeModal();
+        if (!already) {
+          try { closeModal(); } catch(e) {}
           _onSupabaseSignIn(session.user);
         }
       }
@@ -4332,25 +4332,11 @@ function doGoogleSignIn() {
   });
 }
 
-// Handle OAuth callback — SDK processes the code automatically via onAuthStateChange
+// Called at startup — SDK's detectSessionInUrl:true handles the rest via onAuthStateChange
 async function _handleOAuthCallback() {
-  var client = _getSupabaseClient();
-  if (!client) return;
-  // getSession triggers the SDK to exchange the auth code if present in URL
-  var result = await client.auth.getSession();
-  var session = result && result.data && result.data.session;
-  if (session && session.access_token && session.user) {
-    _sbSaveSession({
-      access_token : session.access_token,
-      refresh_token: session.refresh_token || '',
-      user         : session.user
-    });
-    _sbSession = { access_token: session.access_token, refresh_token: session.refresh_token, user: session.user };
-    if (!appUser || !appUser.id) {
-      closeModal();
-      _onSupabaseSignIn(session.user);
-    }
-  }
+  // Just init the client — onAuthStateChange above fires automatically
+  // if there's a session in the URL or localStorage
+  _getSupabaseClient();
 }
 
 // ── COLLEGE SELECTOR ──────────────────────────────────────────

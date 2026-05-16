@@ -4857,7 +4857,7 @@ function _refreshScoreProgress() {
   card.style.display = 'flex';
 }
 
-// Pro modal — placeholder for now, shows coming soon
+// Pro modal — collects waitlist email
 function openProModal() {
   var sheet = document.createElement('div');
   sheet.style.cssText = 'position:fixed;inset:0;z-index:600;background:rgba(10,5,2,0.5);backdrop-filter:blur(12px);display:flex;align-items:flex-end;justify-content:center;padding:0;';
@@ -4865,19 +4865,46 @@ function openProModal() {
     '<div style="width:36px;height:4px;background:rgba(44,19,8,0.12);border-radius:2px;margin:0 auto 1.5rem;"></div>' +
     '<div style="font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ln3);background:var(--esp);display:inline-block;padding:3px 10px;border-radius:99px;margin-bottom:10px;">✦ Mocha Pro</div>' +
     '<div style="font-family:\'DM Serif Display\',serif;font-size:1.6rem;color:var(--esp);letter-spacing:-0.04em;line-height:1.1;margin-bottom:6px;">Unlimited coaching.<br><em>McKinsey standard.</em></div>' +
-    '<div style="font-size:13px;color:var(--oat);margin-bottom:1.5rem;line-height:1.5;">Get AI feedback that never hits quota, your full score history, and see exactly how you rank at your university.</div>' +
-    '<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem;">' +
-    ['Unlimited sessions — no daily limit','Priority AI — never falls back to structural analysis','Score progression chart','Real university rankings (vs. simulated)','Export your feedback as PDF'].map(function(f){
+    '<div style="font-size:13px;color:var(--oat);margin-bottom:1.2rem;line-height:1.5;">Unlimited sessions, real AI that never hits quota, and full score history. $9/month when we launch.</div>' +
+    '<div style="display:flex;flex-direction:column;gap:7px;margin-bottom:1.2rem;">' +
+    ['Unlimited sessions — no daily limit','Priority AI — never falls back','Score progression chart','Real university rankings'].map(function(f){
       return '<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--esp);">' +
         '<div style="width:18px;height:18px;border-radius:50%;background:rgba(44,19,8,0.08);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--esp);flex-shrink:0;">✓</div>' + f + '</div>';
     }).join('') +
     '</div>' +
-    '<button onclick="this.parentNode.parentNode.remove();alert(\'Pro coming soon! You\'ll be first to know — we\'ll email you when it launches.\')" style="width:100%;padding:14px;background:var(--esp);color:var(--ln);border:none;border-radius:99px;font-size:15px;font-weight:700;cursor:pointer;font-family:\'DM Sans\',sans-serif;margin-bottom:8px;">Join the Pro waitlist — $9/mo</button>' +
-    '<div style="text-align:center;font-size:11px;color:var(--oat);">No charge now · We\'ll email you when Pro launches</div>' +
+    '<div style="display:flex;gap:8px;margin-bottom:10px;">' +
+    '<input id="pro-waitlist-email" type="email" placeholder="your@email.com" style="flex:1;padding:12px 14px;border:1.5px solid rgba(44,19,8,0.12);border-radius:12px;font-size:14px;font-family:\'DM Sans\',sans-serif;color:var(--esp);background:#fff;outline:none;">' +
+    '<button onclick="_joinProWaitlist()" style="padding:12px 18px;background:var(--esp);color:var(--ln);border:none;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;font-family:\'DM Sans\',sans-serif;white-space:nowrap;">Join waitlist</button>' +
+    '</div>' +
+    '<div style="text-align:center;font-size:11px;color:var(--oat);">No charge now · $9/month at launch</div>' +
     '</div>';
   sheet.addEventListener('click', function(e) { if (e.target === sheet) sheet.remove(); });
   document.body.appendChild(sheet);
 }
+
+window._joinProWaitlist = function() {
+  var email = document.getElementById('pro-waitlist-email');
+  if (!email || !email.value || email.value.indexOf('@') < 0) {
+    email.style.borderColor = '#ff3b30';
+    setTimeout(function() { email.style.borderColor = ''; }, 1500);
+    return;
+  }
+  // Save locally
+  try { localStorage.setItem('mocha_pro_waitlist', email.value); } catch(e) {}
+  // Submit to Formspree
+  fetch('https://formspree.io/f/xyzwvqrp', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({ email: email.value, source: 'pro_waitlist', score: document.getElementById('sc-score') ? document.getElementById('sc-score').textContent : '', user: appUser ? appUser.email : '' })
+  }).catch(function(){});
+  // Show success
+  var sheet = email.closest('div[style*="border-radius:24px"]');
+  if (sheet) sheet.innerHTML = '<div style="text-align:center;padding:2rem 1rem;">' +
+    '<div style="font-size:2.5rem;margin-bottom:1rem;">☕</div>' +
+    '<div style="font-family:\'DM Serif Display\',serif;font-size:1.4rem;color:var(--esp);letter-spacing:-0.03em;margin-bottom:8px;">You\'re on the list.</div>' +
+    '<div style="font-size:13px;color:var(--oat);line-height:1.5;">We\'ll email you when Pro launches. First 50 get 50% off forever.</div>' +
+    '</div>';
+};
 
 function toggleProfileDropdown() {
   var dd = document.getElementById('profile-dropdown');
@@ -6607,30 +6634,105 @@ function updateShareCard(r) {
 
 // Share score function
 function shareScore() {
-  var score = document.getElementById('sc-score').textContent;
-  var verdict = (document.getElementById('sc-verdict').textContent || '').split(' · ')[0];
-  var track = document.getElementById('sc-track').textContent;
-  var text = 'I just scored ' + score + '/10 on a ' + track + ' behavioral. ' + verdict + '. Daily practice with Mocha: mocha.app';
+  var score  = document.getElementById('sc-score') ? document.getElementById('sc-score').textContent : '7.5';
+  var track  = document.getElementById('sc-track') ? document.getElementById('sc-track').textContent : 'McKinsey · MBB PEI';
+  var streak = appUser ? (appUser.streak || 0) : 0;
+  var sessions = appHistory ? appHistory.length : 0;
+
+  // Three viral share options
+  var options = [
+    {
+      label  : '🔥 Started my streak',
+      icon   : '🔥',
+      title  : 'Day 1.',
+      text   : 'Just started practising behavioral interviews with Mocha. Day 1 — scored ' + score + '/10 on a ' + track + ' question. Free at usemocha.app',
+    },
+    {
+      label  : '📈 I\'m improving',
+      icon   : '📈',
+      title  : 'Getting better.',
+      text   : 'Session ' + sessions + ' with Mocha. Scored ' + score + '/10 on a ' + track + ' question. My answers are getting sharper — free daily practice at usemocha.app',
+    },
+    {
+      label  : '🎯 I\'m ready',
+      icon   : '🎯',
+      title  : score + '/10',
+      text   : 'Scored ' + score + '/10 on a ' + track + ' behavioral. Mocha grades at McKinsey, Goldman, and Amazon standard — free at usemocha.app',
+    }
+  ];
+
+  // Use AI share line as the "ready" option if available
+  if (window._shareLine) options[2].text = window._shareLine + ' usemocha.app';
+
+  // Build modal
+  var overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:700;background:rgba(10,5,2,0.55);backdrop-filter:blur(12px);display:flex;align-items:flex-end;justify-content:center;';
+
+  var sheet = document.createElement('div');
+  sheet.style.cssText = 'background:var(--cr);border-radius:24px 24px 0 0;padding:0 0 env(safe-area-inset-bottom,16px);width:100%;max-width:480px;box-shadow:0 -4px 40px rgba(10,5,2,0.18);overflow:hidden;';
+
+  // Header
+  var header = '<div style="padding:1.2rem 1.4rem 0;">' +
+    '<div style="width:36px;height:4px;background:rgba(44,19,8,0.12);border-radius:2px;margin:0 auto 1.2rem;"></div>' +
+    '<div style="font-family:\'DM Serif Display\',serif;font-size:1.2rem;color:var(--esp);letter-spacing:-0.03em;margin-bottom:4px;">Share your score</div>' +
+    '<div style="font-size:12px;color:var(--oat);margin-bottom:1.2rem;">Pick the moment that fits.</div>' +
+    '</div>';
+
+  // Options
+  var optHtml = '<div style="padding:0 1rem;">';
+  options.forEach(function(opt, i) {
+    optHtml += '<button onclick="window._doShare(' + i + ')" style="width:100%;text-align:left;background:#fff;border:1.5px solid rgba(44,19,8,0.08);border-radius:14px;padding:12px 14px;margin-bottom:8px;cursor:pointer;font-family:\'DM Sans\',sans-serif;display:flex;align-items:flex-start;gap:10px;transition:border-color 0.15s;">' +
+      '<span style="font-size:1.2rem;flex-shrink:0;line-height:1.3;">' + opt.icon + '</span>' +
+      '<div style="flex:1;">' +
+        '<div style="font-size:13px;font-weight:700;color:var(--esp);margin-bottom:2px;">' + opt.title + '</div>' +
+        '<div style="font-size:11.5px;color:var(--oat);line-height:1.45;">' + opt.text.slice(0, 90) + (opt.text.length > 90 ? '…' : '') + '</div>' +
+      '</div>' +
+      '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:2px;opacity:0.35;"><path d="M3 8h10M9 4l4 4-4 4" stroke="var(--esp)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+      '</button>';
+  });
+  optHtml += '</div>';
+
+  // Cancel
+  var cancel = '<div style="padding:0 1rem 1.2rem;">' +
+    '<button onclick="this.closest(\'[data-share-overlay]\').remove()" style="width:100%;padding:12px;background:transparent;border:none;font-size:13px;color:var(--oat);cursor:pointer;font-family:\'DM Sans\',sans-serif;">Cancel</button>' +
+    '</div>';
+
+  sheet.innerHTML = header + optHtml + cancel;
+  overlay.setAttribute('data-share-overlay', '1');
+  overlay.appendChild(sheet);
+  overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
+
+  // Store options for the share handler
+  window._shareOptions = options;
+}
+
+window._doShare = function(idx) {
+  var opt = (window._shareOptions || [])[idx];
+  if (!opt) return;
+  var overlay = document.querySelector('[data-share-overlay]');
+  if (overlay) overlay.remove();
+
+  var shareText = opt.text;
+  var shareUrl  = 'https://usemocha.app';
 
   if (navigator.share) {
-    navigator.share({ text: text, url: 'https://usemocha.app' }).catch(function(){});
+    navigator.share({ title: 'Mocha', text: shareText, url: shareUrl }).catch(function(){});
   } else {
-    navigator.clipboard.writeText(text).then(function() {
-      var btn = document.querySelector('.share-btn');
-      if (btn) {
-        var orig = btn.innerHTML;
-        btn.innerHTML = '\u2713 Copied to clipboard';
-        btn.style.background = 'rgba(52,199,89,0.15)';
-        btn.style.borderColor = 'rgba(52,199,89,0.30)';
-        setTimeout(function() {
-          btn.innerHTML = orig;
-          btn.style.background = '';
-          btn.style.borderColor = '';
-        }, 2200);
-      }
+    // Copy to clipboard and show toast
+    var full = shareText + '\n\n' + shareUrl;
+    navigator.clipboard.writeText(full).then(function() {
+      var toast = document.createElement('div');
+      toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--esp);color:var(--ln);font-size:13px;font-weight:600;padding:10px 20px;border-radius:99px;z-index:800;font-family:\'DM Sans\',sans-serif;box-shadow:0 4px 20px rgba(10,5,2,0.25);';
+      toast.textContent = '✓ Copied to clipboard';
+      document.body.appendChild(toast);
+      setTimeout(function() { toast.remove(); }, 2500);
+    }).catch(function() {
+      // Fallback: open Twitter with pre-filled text
+      window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText) + '&url=' + encodeURIComponent(shareUrl), '_blank');
     });
   }
-}
+};
 
 // Streak danger detection — check on dashboard load
 function checkStreakDanger() {

@@ -4300,42 +4300,56 @@ async function doLogin() {
 function _getSupabaseClient() {
   if (window._sbClient) return window._sbClient;
   if (window.supabase && window.supabase.createClient) {
-    window._sbClient = window.supabase.createClient(_SB_URL, _SB_KEY);
+    window._sbClient = window.supabase.createClient(_SB_URL, _SB_KEY, {
+      auth: { persistSession: true, autoRefreshToken: true }
+    });
+    // Listen for auth state changes — fires when OAuth callback completes
+    window._sbClient.auth.onAuthStateChange(function(event, session) {
+      if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session && session.user) {
+        _sbSaveSession({
+          access_token : session.access_token,
+          refresh_token: session.refresh_token || '',
+          user         : session.user
+        });
+        _sbSession = { access_token: session.access_token, refresh_token: session.refresh_token, user: session.user };
+        // Only call _onSupabaseSignIn if not already signed in
+        if (!appUser || !appUser.id) {
+          closeModal();
+          _onSupabaseSignIn(session.user);
+        }
+      }
+    });
   }
   return window._sbClient || null;
 }
 
 function doGoogleSignIn() {
   var client = _getSupabaseClient();
-  if (!client) {
-    console.warn('[mocha] Supabase SDK not loaded yet');
-    return;
-  }
+  if (!client) { console.warn('[mocha] Supabase SDK not loaded'); return; }
   client.auth.signInWithOAuth({
     provider: 'google',
     options : { redirectTo: window.location.origin }
   });
 }
 
-// Handle OAuth callback — SDK reads session from URL automatically
+// Handle OAuth callback — SDK processes the code automatically via onAuthStateChange
 async function _handleOAuthCallback() {
   var client = _getSupabaseClient();
   if (!client) return;
-
-  // SDK automatically exchanges the code and stores the session
+  // getSession triggers the SDK to exchange the auth code if present in URL
   var result = await client.auth.getSession();
   var session = result && result.data && result.data.session;
-
   if (session && session.access_token && session.user) {
-    // Sync into our vanilla session system
     _sbSaveSession({
       access_token : session.access_token,
       refresh_token: session.refresh_token || '',
       user         : session.user
     });
     _sbSession = { access_token: session.access_token, refresh_token: session.refresh_token, user: session.user };
-    closeModal();
-    _onSupabaseSignIn(session.user);
+    if (!appUser || !appUser.id) {
+      closeModal();
+      _onSupabaseSignIn(session.user);
+    }
   }
 }
 

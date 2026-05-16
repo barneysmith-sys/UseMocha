@@ -28,7 +28,8 @@
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline' https://www.googletagmanager.com; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://formspree.io https://www.google-analytics.com https://analytics.google.com; img-src 'self' data: https:;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline' https://www.googletagmanager.com https://cdn.jsdelivr.net; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://formspree.io https://www.google-analytics.com https://analytics.google.com https://*.supabase.co https://generativelanguage.googleapis.com; img-src 'self' data: https:;">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-SPLL85SBFX"></script>
 <script>
@@ -4295,81 +4296,46 @@ async function doLogin() {
   // If ok, _onSupabaseSignIn fires automatically via onAuthStateChange
 }
 
-// ── GOOGLE OAUTH ──────────────────────────────────────────────
-function doGoogleSignIn() {
-  var redirectUrl = encodeURIComponent(window.location.origin);
-  // flow_type=pkce tells Supabase to use PKCE and return ?code= on callback
-  var googleUrl = _SB_URL + '/auth/v1/authorize?provider=google&redirect_to=' + redirectUrl + '&flow_type=pkce';
-  window.location.href = googleUrl;
+// ── GOOGLE OAUTH — uses official Supabase JS SDK ──────────────
+function _getSupabaseClient() {
+  if (window._sbClient) return window._sbClient;
+  if (window.supabase && window.supabase.createClient) {
+    window._sbClient = window.supabase.createClient(_SB_URL, _SB_KEY);
+  }
+  return window._sbClient || null;
 }
 
-// Handle OAuth callback — Supabase PKCE returns ?code= in query string
-function _handleOAuthCallback() {
-  var search = window.location.search;
-  var hash   = window.location.hash;
-
-  // PKCE flow: Supabase returns ?code=xxx
-  var codeMatch = search.match(/[?&]code=([^&]+)/);
-  if (codeMatch) {
-    var code = decodeURIComponent(codeMatch[1]);
-    // Clean URL immediately
-    history.replaceState(null, '', window.location.pathname);
-    // Exchange code for session via Supabase token endpoint
-    fetch(_SB_URL + '/auth/v1/token?grant_type=pkce', {
-      method : 'POST',
-      headers: { 'Content-Type': 'application/json', 'apikey': _SB_KEY },
-      body   : JSON.stringify({ auth_code: code })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (data && data.access_token) {
-        var session = {
-          access_token : data.access_token,
-          refresh_token: data.refresh_token || '',
-          user         : data.user || null
-        };
-        _sbSaveSession(session);
-        _sbSession = session;
-        if (data.user && data.user.id) {
-          closeModal();
-          _onSupabaseSignIn(data.user);
-        }
-      }
-    })
-    .catch(function(e) { console.warn('[mocha] PKCE exchange error:', e); });
+function doGoogleSignIn() {
+  var client = _getSupabaseClient();
+  if (!client) {
+    console.warn('[mocha] Supabase SDK not loaded yet');
     return;
   }
+  client.auth.signInWithOAuth({
+    provider: 'google',
+    options : { redirectTo: window.location.origin }
+  });
+}
 
-  // Implicit flow fallback: #access_token= in hash (older Supabase configs)
-  if (hash && hash.indexOf('access_token=') !== -1) {
-    var params = {};
-    hash.replace(/^#/, '').split('&').forEach(function(pair) {
-      var kv = pair.split('=');
-      if (kv.length >= 2) {
-        params[decodeURIComponent(kv[0])] = decodeURIComponent(kv.slice(1).join('='));
-      }
+// Handle OAuth callback — SDK reads session from URL automatically
+async function _handleOAuthCallback() {
+  var client = _getSupabaseClient();
+  if (!client) return;
+
+  // SDK automatically exchanges the code and stores the session
+  var result = await client.auth.getSession();
+  var session = result && result.data && result.data.session;
+
+  if (session && session.access_token && session.user) {
+    // Sync into our vanilla session system
+    _sbSaveSession({
+      access_token : session.access_token,
+      refresh_token: session.refresh_token || '',
+      user         : session.user
     });
-    if (!params.access_token) return;
-    history.replaceState(null, '', window.location.pathname);
-    var session = {
-      access_token : params.access_token,
-      refresh_token: params.refresh_token || '',
-      user         : null
-    };
-    fetch(_SB_URL + '/auth/v1/user', {
-      headers: { 'apikey': _SB_KEY, 'Authorization': 'Bearer ' + params.access_token }
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(user) {
-      if (user && user.id) {
-        session.user = user;
-        _sbSaveSession(session);
-        _sbSession = session;
-        closeModal();
-        _onSupabaseSignIn(user);
-      }
-    })
-    .catch(function(e) { console.warn('[mocha] implicit callback error:', e); });
+    _sbSession = { access_token: session.access_token, refresh_token: session.refresh_token, user: session.user };
+    closeModal();
+    _onSupabaseSignIn(session.user);
   }
 }
 

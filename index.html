@@ -3403,23 +3403,39 @@ async function _sbSelectSessions(userId) {
 }
 
 // ── INIT ──────────────────────────────────────────────────────
+// ── INIT ──────────────────────────────────────────────────────
+function _sbRestoreUser(user) {
+  if (!user || !user.id) return;
+  var stored = lv('mocha_user');
+  appUser = stored || {
+    id    : user.id,
+    name  : (user.user_metadata && user.user_metadata.full_name) ? user.user_metadata.full_name : (user.email || 'User'),
+    email : user.email || '',
+    avatar: (user.user_metadata && user.user_metadata.avatar_url) ? user.user_metadata.avatar_url : null,
+    college: _getUserCollege()
+  };
+  if (!stored) sv('mocha_user', appUser);
+  appHistory = lv('mocha_hist') || [];
+  _sbLoadHistory(function(rows) {
+    if (rows && rows.length) { appHistory = rows; sv('mocha_hist', appHistory); }
+  });
+  launchApp();
+}
+
 function _initSupabase() {
-  // Restore persisted session
   var saved = _sbLoadSession();
   if (saved && saved.access_token) {
     _sbSession = saved;
-    // Try to refresh to validate the token is still good
     if (saved.refresh_token) {
       _sbRefresh(saved.refresh_token).then(function(fresh) {
         if (fresh) {
-          _onSupabaseSignIn(fresh.user);
+          _sbRestoreUser(fresh.user);
         } else {
-          // Refresh failed — session expired, clear it
           _sbClearSession();
         }
       });
     } else {
-      _onSupabaseSignIn(saved.user);
+      _sbRestoreUser(saved.user);
     }
   }
 }
@@ -4315,7 +4331,15 @@ function _getSupabaseClient() {
         _sbSession = { access_token: session.access_token, refresh_token: session.refresh_token, user: session.user };
         if (!already) {
           try { closeModal(); } catch(e) {}
-          _onSupabaseSignIn(session.user);
+          appUser = {
+            id    : session.user.id,
+            name  : session.user.user_metadata && session.user.user_metadata.full_name ? session.user.user_metadata.full_name : (session.user.email || 'User'),
+            email : session.user.email || '',
+            avatar: session.user.user_metadata && session.user.user_metadata.avatar_url ? session.user.user_metadata.avatar_url : null,
+            college: _getUserCollege()
+          };
+          sv('mocha_user', appUser);
+          launchApp();
         }
       }
     });
@@ -4358,8 +4382,17 @@ async function _handleOAuthCallback() {
       var sess = { access_token: at, refresh_token: rt || '', user: user };
       _sbSaveSession(sess);
       _sbSession = sess;
+      // Build appUser from Google profile
+      appUser = {
+        id      : user.id,
+        name    : user.user_metadata && user.user_metadata.full_name ? user.user_metadata.full_name : (user.email || 'User'),
+        email   : user.email || '',
+        avatar  : user.user_metadata && user.user_metadata.avatar_url ? user.user_metadata.avatar_url : null,
+        college : _getUserCollege()
+      };
+      sv('mocha_user', appUser);
       try { closeModal(); } catch(e) {}
-      _onSupabaseSignIn(user);
+      launchApp();
     }
   } catch(e) {
     console.warn('[mocha] callback read error:', e);

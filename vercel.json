@@ -1,11 +1,10 @@
 {
-  "version": 2,
   "functions": {
     "api/interview.js": {
-      "maxDuration": 25
+      "maxDuration": 60
+    },
+    "api/callback.js": {
+      "maxDuration": 30
     }
-  },
-  "rewrites": [
-    { "source": "/api/interview", "destination": "/api/interview.js" }
-  ]
+  }
 }

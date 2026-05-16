@@ -4325,48 +4325,45 @@ function _getSupabaseClient() {
 
 function doGoogleSignIn() {
   var client = _getSupabaseClient();
-  if (!client) { console.warn('[mocha] Supabase SDK not loaded'); return; }
+  if (!client) { console.warn('[mocha] SDK not loaded'); return; }
   client.auth.signInWithOAuth({
     provider: 'google',
-    options : { redirectTo: window.location.origin + '/?auth=1' }
+    options : { redirectTo: 'https://usemocha.app/api/callback' }
   });
 }
 
-// Called at startup — grabs token from URL immediately before page can clear it
+// Handle OAuth callback — reads tokens from query params set by /api/callback
 async function _handleOAuthCallback() {
-  // Grab hash immediately — browser may clear it on next tick
-  var rawHash = window.location.hash;
-  var rawSearch = window.location.search;
+  var params = new URLSearchParams(window.location.search);
+  var at  = params.get('at');
+  var rt  = params.get('rt');
+  var uid = params.get('uid');
 
-  // Check for access_token in hash (implicit flow)
-  if (rawHash && rawHash.indexOf('access_token=') !== -1) {
-    history.replaceState(null, '', window.location.pathname);
-    var params = {};
-    rawHash.replace(/^#/, '').split('&').forEach(function(pair) {
-      var kv = pair.split('=');
-      if (kv.length >= 2) params[decodeURIComponent(kv[0])] = decodeURIComponent(kv.slice(1).join('='));
-    });
-    if (params.access_token) {
-      var sess = { access_token: params.access_token, refresh_token: params.refresh_token || '', user: null };
-      try {
-        var r = await fetch(_SB_URL + '/auth/v1/user', {
-          headers: { 'apikey': _SB_KEY, 'Authorization': 'Bearer ' + params.access_token }
-        });
-        var user = await r.json();
-        if (user && user.id) {
-          sess.user = user;
-          _sbSaveSession(sess);
-          _sbSession = sess;
-          try { closeModal(); } catch(e) {}
-          _onSupabaseSignIn(user);
-          return;
-        }
-      } catch(e) {}
-    }
+  if (!at) {
+    // No token in URL — just init SDK for session restoration
+    _getSupabaseClient();
+    return;
   }
 
-  // SDK handles PKCE code exchange via detectSessionInUrl + onAuthStateChange
-  _getSupabaseClient();
+  // Clean URL immediately
+  history.replaceState(null, '', '/');
+
+  try {
+    // Fetch full user object with the token
+    var r = await fetch(_SB_URL + '/auth/v1/user', {
+      headers: { 'apikey': _SB_KEY, 'Authorization': 'Bearer ' + at }
+    });
+    var user = await r.json();
+    if (user && user.id) {
+      var sess = { access_token: at, refresh_token: rt || '', user: user };
+      _sbSaveSession(sess);
+      _sbSession = sess;
+      try { closeModal(); } catch(e) {}
+      _onSupabaseSignIn(user);
+    }
+  } catch(e) {
+    console.warn('[mocha] callback read error:', e);
+  }
 }
 
 // ── COLLEGE SELECTOR ──────────────────────────────────────────

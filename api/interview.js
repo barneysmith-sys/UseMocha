@@ -583,7 +583,7 @@ export default async function handler(req, res) {
         contents        : [{ parts: [{ text: prompt }] }],
         generationConfig: {
           temperature    : 0.25,
-          maxOutputTokens: 2000,
+          maxOutputTokens: 4000,
           topP           : 0.8,
         },
       }),
@@ -631,13 +631,32 @@ export default async function handler(req, res) {
   }
 
   // ── Parse JSON from Gemini output ───────────────────────────────
-  const cleaned = rawText.replace(/^```json\s*/i, '').replace(/\s*```$/i, '').trim();
+  // Strip markdown fences wherever they appear
+  let cleaned = rawText
+    .replace(/```json\s*/gi, '')
+    .replace(/```\s*/gi, '')
+    .trim();
+
   let parsed;
   try {
     parsed = JSON.parse(cleaned);
   } catch {
+    // Try extracting the JSON object — handles leading/trailing text
     const match = cleaned.match(/\{[\s\S]*\}/);
-    try { parsed = match ? JSON.parse(match[0]) : null; } catch { parsed = null; }
+    if (match) {
+      try { parsed = JSON.parse(match[0]); } catch {
+        // Last resort — try to fix truncated JSON by finding last complete field
+        const truncated = match[0];
+        const lastComma = truncated.lastIndexOf(',"overall"');
+        if (lastComma > 0) {
+          try { parsed = JSON.parse(truncated.slice(0, lastComma) + '}'); } catch { parsed = null; }
+        } else {
+          parsed = null;
+        }
+      }
+    } else {
+      parsed = null;
+    }
   }
 
   if (!parsed) {

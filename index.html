@@ -2513,7 +2513,7 @@ body {
             <div class="hw-dot hw-dot-y"></div>
             <div class="hw-dot hw-dot-g"></div>
           </div>
-          <div class="hw-url">use-mocha.vercel.app</div>
+          <div class="hw-url">usemocha.app</div>
           <div class="hw-badge"><div class="hw-badge-dot"></div>Live</div>
         </div>
 
@@ -2667,7 +2667,7 @@ body {
       <div class="demo-window sr sr-scale" id="demo-window">
         <div class="dw-chrome">
           <div class="dw-dots"><div class="dw-dot dw-dot-r"></div><div class="dw-dot dw-dot-y"></div><div class="dw-dot dw-dot-g"></div></div>
-          <div class="dw-url">use-mocha.vercel.app</div>
+          <div class="dw-url">usemocha.app</div>
         </div>
         <div class="dw-body">
           <div class="dw-sidebar">
@@ -5385,9 +5385,9 @@ function shareScore() {
   var track = p ? p.role : 'Consulting';
   // Use AI-generated share_line if available, otherwise build a good default
   var text = window._shareLine
-    || ('I scored ' + score + '/10 on a ' + track + ' interview question with Mocha. Practice at the standard McKinsey, Goldman, and Google actually grade on. https://use-mocha.vercel.app');
+    || ('I scored ' + score + '/10 on a ' + track + ' interview question with Mocha. Practice at the standard McKinsey, Goldman, and Google actually grade on. https://usemocha.app');
   if (navigator.share) {
-    navigator.share({ title: 'My Mocha Score', text: text, url: 'https://use-mocha.vercel.app' }).catch(function(){});
+    navigator.share({ title: 'My Mocha Score', text: text, url: 'https://usemocha.app' }).catch(function(){});
   } else {
     var ta = document.createElement('textarea');
     ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
@@ -6192,7 +6192,7 @@ function shareScore() {
   var text = 'I just scored ' + score + '/10 on a ' + track + ' behavioral. ' + verdict + '. Daily practice with Mocha: mocha.app';
 
   if (navigator.share) {
-    navigator.share({ text: text, url: 'https://use-mocha.vercel.app' }).catch(function(){});
+    navigator.share({ text: text, url: 'https://usemocha.app' }).catch(function(){});
   } else {
     navigator.clipboard.writeText(text).then(function() {
       var btn = document.querySelector('.share-btn');

@@ -38,11 +38,11 @@
   gtag('js', new Date());
   gtag('config', 'G-SPLL85SBFX');
 </script>
-<meta name="description" content="Mocha: daily behavioral interview coaching at McKinsey, Goldman, and Google standard. Free. One question a day. Real feedback. Used at 14+ colleges.">
+<meta name="description" content="Free AI behavioral interview coaching at McKinsey, Goldman, and Google standard. One question a day. Real feedback. Used at 14+ universities.">
 <meta property="og:title" content="Mocha — Land your dream internship">
 <meta property="og:description" content="Free behavioral interview coaching at McKinsey, Goldman, and Google standard. One question a day. Free forever.">
 <meta name="theme-color" content="#fde8cc">
-<title>Mocha — Free behavioral interview coaching. McKinsey standard.</title>
+<title>Mocha — Land your dream internship.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
@@ -573,7 +573,7 @@ body {
 .ps-headline em { font-style: italic; color: var(--med); }
 .ps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; border-radius: 18px; overflow: hidden; box-shadow: 0 2px 0 rgba(44,19,8,0.06), 0 12px 40px rgba(44,19,8,0.10); }
 @media(max-width:700px){.ps-grid{grid-template-columns:1fr;}}
-.ps-problem { background: #fafafa; border: 1px solid rgba(44,19,8,0.07); padding: 2.5rem 2.25rem; border-radius: 18px 0 0 18px; }
+.ps-problem { background: var(--cr); border: 1px solid rgba(44,19,8,0.07); padding: 2.5rem 2.25rem; border-radius: 18px 0 0 18px; }
 @media(max-width:700px){.ps-problem{border-radius:18px 18px 0 0;}}
 .ps-side-label { display: inline-flex; align-items: center; font-size: 9px; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; border-radius: 99px; padding: 4px 12px; margin-bottom: 1.25rem; }
 .ps-side-label.prob { color: var(--lt); background: var(--sil2); }
@@ -603,17 +603,9 @@ body {
 .ps-proof-text strong { color: rgba(255,255,255,0.60); display: block; font-size: 12px; margin-bottom: 1px; }
 
 
-/* Solution panel shimmer border */
+/* Solution panel — clean espresso, no swirl */
 .ps-solution { position: relative; overflow: hidden; }
-.ps-solution::after {
-  content: '';
-  position: absolute; top: -50%; left: -50%;
-  width: 200%; height: 200%;
-  background: conic-gradient(from 0deg, transparent 0deg, rgba(253,232,204,0.08) 60deg, transparent 120deg);
-  animation: shimmerRot 8s linear infinite;
-  pointer-events: none;
-}
-@keyframes shimmerRot { to { transform: rotate(360deg); } }
+.ps-solution::after { display: none; }
 /* ═══════════════════════════════════════════════════════════
    LIVE DEMO — browser window
    ═══════════════════════════════════════════════════════════ */
@@ -2120,80 +2112,287 @@ body {
 
 
 /* ── SHARE CARD ──────────────────────────────────────────── */
+/* ── SHARE CARD — Cream/viral redesign ───────────────────── */
 .share-card-wrap {
   margin: 1.5rem 0 0;
   padding: 0;
 }
 .share-card {
-  background: var(--esp);
-  border-radius: 16px;
-  padding: 1.4rem 1.5rem;
+  background: var(--cr);
+  border: 1.5px solid rgba(44,19,8,0.10);
+  border-radius: 20px;
+  padding: 1.5rem 1.5rem 1.2rem;
   position: relative; overflow: hidden;
-  text-align: center;
+  text-align: left;
+  box-shadow: 0 1px 0 rgba(44,19,8,0.06), 0 8px 32px rgba(44,19,8,0.07);
 }
+/* Subtle warm texture overlay */
 .share-card::before {
   content: '';
-  position: absolute; top: -30px; right: -30px;
-  width: 120px; height: 120px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(232,187,126,0.12) 0%, transparent 65%);
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 90% 10%, rgba(232,187,126,0.15) 0%, transparent 60%);
   pointer-events: none;
+}
+/* Mocha M watermark */
+.share-card::after {
+  content: 'm';
+  position: absolute; right: 1.2rem; top: 50%;
+  transform: translateY(-50%);
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 5rem;
+  color: rgba(44,19,8,0.04);
+  pointer-events: none;
+  line-height: 1;
+  user-select: none;
+}
+/* Top row: Mocha logo + track badge */
+.sc-top-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.sc-logo {
+  display: flex; align-items: center; gap: 6px;
+}
+.sc-logo-mark {
+  width: 24px; height: 24px;
+  background: var(--esp); border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Serif Display', serif;
+  font-style: italic; font-size: 15px;
+  color: var(--ln); flex-shrink: 0;
+}
+.sc-logo-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 14px; color: var(--esp);
+  letter-spacing: -0.02em;
+}
+.sc-track-badge {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--oat);
+  background: rgba(44,19,8,0.06);
+  border-radius: 99px;
+  padding: 3px 9px;
+}
+/* Score display */
+.sc-score-row {
+  display: flex; align-items: baseline; gap: 4px;
+  margin-bottom: 4px;
 }
 .share-card-score {
   font-family: 'DM Serif Display', serif;
-  font-size: 2.8rem; color: var(--ln);
+  font-size: 3.2rem; color: var(--esp);
   letter-spacing: -0.05em; line-height: 1;
-  margin-bottom: 2px;
+}
+.sc-denom {
+  font-size: 14px; color: var(--oat);
+  font-weight: 500; margin-bottom: 2px;
 }
 .share-card-verdict {
   font-size: 11px; font-weight: 700;
-  letter-spacing: 0.06em; text-transform: uppercase;
-  color: rgba(253,232,204,0.50); margin-bottom: 1rem;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--lt); margin-bottom: 1.1rem;
 }
+/* Bars — cream version */
 .share-card-bars {
   display: grid; grid-template-columns: 1fr 1fr;
-  gap: 5px 12px; margin-bottom: 1.1rem; text-align: left;
+  gap: 5px 16px; margin-bottom: 1.2rem;
 }
 .share-card-bar-row {
-  display: flex; align-items: center; gap: 6px;
+  display: flex; align-items: center; gap: 7px;
 }
 .share-card-bar-label {
-  font-size: 9px; font-weight: 600; letter-spacing: 0.05em;
-  text-transform: uppercase; color: rgba(253,232,204,0.38);
-  width: 52px; flex-shrink: 0;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; color: var(--oat);
+  width: 48px; flex-shrink: 0;
 }
 .share-card-bar-track {
   flex: 1; height: 3px;
-  background: rgba(253,232,204,0.12);
+  background: rgba(44,19,8,0.08);
   border-radius: 2px; overflow: hidden;
 }
 .share-card-bar-fill {
   height: 100%; border-radius: 2px;
-  background: linear-gradient(90deg, #e8bb7e, rgba(253,232,204,0.45));
+  background: linear-gradient(90deg, var(--esp), var(--lt));
 }
 .share-card-val {
   font-size: 10px; font-weight: 700;
-  color: #e8bb7e; width: 20px; text-align: right;
+  color: var(--esp); width: 22px; text-align: right;
 }
-.share-card-tag {
-  font-size: 9.5px; color: rgba(253,232,204,0.30);
-  letter-spacing: 0.06em; text-transform: uppercase;
-  margin-bottom: 1rem;
+/* Share CTA row */
+.sc-bottom-row {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.sc-url {
+  font-size: 10px; color: var(--oat);
+  letter-spacing: 0.02em; font-weight: 500;
 }
 .share-btn {
   display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(253,232,204,0.12);
-  border: 1px solid rgba(253,232,204,0.22);
-  border-radius: 99px; padding: 8px 16px;
-  font-size: 12.5px; font-weight: 600;
+  background: var(--esp);
+  border: none;
+  border-radius: 99px; padding: 9px 16px;
+  font-size: 12px; font-weight: 700;
   color: var(--ln); cursor: pointer;
-  transition: all 0.15s; outline: none;
+  transition: opacity 0.15s; outline: none;
   font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.01em;
 }
-.share-btn:hover {
-  background: rgba(253,232,204,0.20);
-  border-color: rgba(253,232,204,0.38);
+.share-btn:hover { opacity: 0.85; }
+.share-btn svg { width: 12px; height: 12px; }
+
+/* ── UNIVERSITY RANKING — "Facebook at colleges" energy ──── */
+.uni-rank-section {
+  margin-top: 10px;
+  border: 1.5px solid rgba(44,19,8,0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
 }
-.share-btn svg { width: 13px; height: 13px; opacity: 0.8; }
+/* When college is set */
+.urk-set {
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.urk-rank-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem; color: var(--esp);
+  letter-spacing: -0.04em; line-height: 1;
+  flex-shrink: 0;
+}
+.urk-rank-text { flex: 1; }
+.urk-rank-main { font-size: 13px; font-weight: 700; color: var(--esp); }
+.urk-rank-sub { font-size: 11px; color: var(--oat); margin-top: 2px; }
+.urk-badge {
+  background: var(--esp); color: var(--ln);
+  font-size: 10px; font-weight: 700;
+  padding: 4px 10px; border-radius: 99px;
+  white-space: nowrap;
+}
+/* When college is NOT set — the viral unlock prompt */
+.urk-prompt {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.urk-prompt:hover { background: var(--surf); }
+.urk-prompt-top {
+  padding: 14px 16px 10px;
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.urk-lock {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--ln); display: flex;
+  align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.urk-prompt-text { flex: 1; }
+.urk-prompt-head {
+  font-size: 13px; font-weight: 700; color: var(--esp);
+  margin-bottom: 2px;
+}
+.urk-prompt-sub {
+  font-size: 11px; color: var(--oat); line-height: 1.4;
+}
+/* Mini university logos strip */
+.urk-logos-strip {
+  padding: 0 16px 12px;
+  display: flex; align-items: center; gap: 6px;
+  overflow: hidden;
+}
+.urk-logo-pill {
+  height: 20px; padding: 0 8px;
+  background: var(--surf); border-radius: 99px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 700; color: var(--oat);
+  letter-spacing: 0.04em; text-transform: uppercase;
+  white-space: nowrap; flex-shrink: 0;
+}
+.urk-logos-more {
+  font-size: 10px; color: var(--oat); font-weight: 600;
+  margin-left: 2px; white-space: nowrap;
+}
+.urk-cta-row {
+  border-top: 1px solid rgba(44,19,8,0.06);
+  padding: 10px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.urk-cta-text {
+  font-size: 11px; color: var(--oat);
+}
+.urk-cta-btn {
+  font-size: 11px; font-weight: 700;
+  color: var(--esp); cursor: pointer;
+  display: flex; align-items: center; gap: 4px;
+}
+
+/* ── PRO TIER UPGRADE CARD ───────────────────────────────── */
+.pro-upgrade-card {
+  margin-top: 10px;
+  background: linear-gradient(135deg, var(--esp) 0%, #3d1a0a 100%);
+  border-radius: 16px;
+  padding: 1.2rem 1.4rem;
+  position: relative; overflow: hidden;
+}
+.pro-upgrade-card::before {
+  content: '';
+  position: absolute; right: -20px; top: -20px;
+  width: 100px; height: 100px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,187,126,0.15) 0%, transparent 65%);
+  pointer-events: none;
+}
+.puc-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(232,187,126,0.15);
+  border: 1px solid rgba(232,187,126,0.25);
+  border-radius: 99px; padding: 3px 10px;
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--ln3); margin-bottom: 8px;
+}
+.puc-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.1rem; color: var(--ln);
+  letter-spacing: -0.03em; margin-bottom: 4px;
+}
+.puc-sub {
+  font-size: 11px; color: rgba(253,232,204,0.55);
+  margin-bottom: 12px; line-height: 1.4;
+}
+.puc-features {
+  display: flex; flex-direction: column; gap: 5px;
+  margin-bottom: 14px;
+}
+.puc-feature {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 11.5px; color: rgba(253,232,204,0.80);
+}
+.puc-check {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: rgba(232,187,126,0.18);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: var(--ln3); font-size: 8px; font-weight: 700;
+}
+.puc-cta-row {
+  display: flex; align-items: center; gap: 10px;
+}
+.btn-pro-upgrade {
+  flex: 1; padding: 11px;
+  background: var(--ln3); color: var(--esp);
+  border: none; border-radius: 99px;
+  font-size: 13px; font-weight: 700;
+  cursor: pointer; font-family: 'DM Sans', sans-serif;
+  transition: opacity 0.12s;
+}
+.btn-pro-upgrade:hover { opacity: 0.88; }
+.puc-price {
+  font-size: 11px; color: rgba(253,232,204,0.45);
+  white-space: nowrap;
+}
+
+/* ── UNIVERSITY RANK (legacy — kept for compat) ──────────── */
+.uni-rank-card { display: none; } /* replaced by uni-rank-section */
 
 /* ── UNIVERSITY RANK ─────────────────────────────────────── */
 .uni-rank-card {
@@ -2971,36 +3170,77 @@ body {
         </div>
       </div>
 
-      <!-- ── SHARE CARD ──────────────────────────────────── -->
+      <!-- ── SHARE CARD — cream/viral redesign ──────────────── -->
       <div class="share-card-wrap" id="share-card-wrap" style="display:none;">
+
+        <!-- Share card itself -->
         <div class="share-card" id="share-card">
-          <div class="share-card-score" id="sc-score">8.5</div>
-          <div class="share-card-verdict" id="sc-verdict">Strong answer &middot; Mocha</div>
-          <div class="share-card-bars" id="sc-bars"></div>
-          <div class="share-card-tag" id="sc-track">McKinsey · Behavioral</div>
-          <button class="share-btn" onclick="shareScore()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-            Share your score
-          </button>
-        </div>
-        <!-- University rank / college prompt -->
-        <div id="uni-rank-card" style="display:none;">
-          <!-- When college is set and score is high: show rank -->
-          <div class="college-rank-banner" id="crb-set" style="display:none;">
-            <div class="crb-icon">🏛️</div>
-            <div class="crb-text">
-              <div class="crb-main" id="uni-rank-main">Top 24% at your university this week</div>
-              <div class="crb-sub" id="uni-rank-sub">Based on sessions from students at your school</div>
+          <!-- Top row: logo + track -->
+          <div class="sc-top-row">
+            <div class="sc-logo">
+              <div class="sc-logo-mark">m</div>
+              <span class="sc-logo-name">mocha</span>
             </div>
-            <div class="crb-badge" id="uni-rank-badge">Top 24%</div>
+            <div class="sc-track-badge" id="sc-track">McKinsey · MBB PEI</div>
           </div>
-          <!-- When college is not set: prompt to unlock rankings -->
-          <div class="college-set-prompt" id="crb-prompt" onclick="openCollegeModal()" style="display:none;">
-            <div class="csp-icon">🏛️</div>
-            <div class="csp-text">Sign in with your college to see how you rank against other students</div>
-            <div class="csp-cta">Set college →</div>
+          <!-- Score -->
+          <div class="sc-score-row">
+            <div class="share-card-score" id="sc-score">8.5</div>
+            <div class="sc-denom">/10</div>
+          </div>
+          <div class="share-card-verdict" id="sc-verdict">Strong answer</div>
+          <!-- Dimension bars -->
+          <div class="share-card-bars" id="sc-bars"></div>
+          <!-- Bottom: URL + share button -->
+          <div class="sc-bottom-row">
+            <span class="sc-url">usemocha.app</span>
+            <button class="share-btn" onclick="shareScore()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+              Share
+            </button>
           </div>
         </div>
+
+        <!-- University ranking section -->
+        <div class="uni-rank-section" id="uni-rank-section" style="display:none;">
+          <!-- State A: college set, show rank -->
+          <div class="urk-set" id="urk-set" style="display:none;">
+            <div class="urk-rank-num" id="urk-num">24%</div>
+            <div class="urk-rank-text">
+              <div class="urk-rank-main" id="urk-main">Top 24% at GWU this week</div>
+              <div class="urk-rank-sub" id="urk-sub">Based on sessions from students at your school</div>
+            </div>
+            <div class="urk-badge" id="urk-badge">Top 24%</div>
+          </div>
+          <!-- State B: no college — viral unlock prompt -->
+          <div class="urk-prompt" id="urk-prompt" onclick="openCollegeModal()" style="display:none;">
+            <div class="urk-prompt-top">
+              <div class="urk-lock">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="8" rx="2" stroke="var(--esp)" stroke-width="1.4" fill="none"/><path d="M5 7V5a3 3 0 016 0v2" stroke="var(--esp)" stroke-width="1.4" stroke-linecap="round" fill="none"/></svg>
+              </div>
+              <div class="urk-prompt-text">
+                <div class="urk-prompt-head">See how you rank at your university</div>
+                <div class="urk-prompt-sub">Already used at Harvard, Columbia, GWU + 11 more. Add your school.</div>
+              </div>
+            </div>
+            <div class="urk-logos-strip">
+              <div class="urk-logo-pill">Harvard</div>
+              <div class="urk-logo-pill">Columbia</div>
+              <div class="urk-logo-pill">GWU</div>
+              <div class="urk-logo-pill">NYU</div>
+              <div class="urk-logo-pill">Berkeley</div>
+              <div class="urk-logos-more">+9 more →</div>
+            </div>
+            <div class="urk-cta-row">
+              <span class="urk-cta-text">Free · Takes 10 seconds</span>
+              <span class="urk-cta-btn">
+                Set your university
+                <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+
         <!-- Score progress -->
         <div class="score-progress-card" id="score-progress-card" style="display:none;">
           <div style="flex:1;">
@@ -3011,6 +3251,26 @@ body {
             <path d="M4 24 L10 16 L16 19 L22 10 L28 6" stroke="var(--lt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
+
+        <!-- Pro upgrade card — shown to free users after 3+ sessions -->
+        <div class="pro-upgrade-card" id="pro-upgrade-card" style="display:none;">
+          <div class="puc-badge">✦ Mocha Pro</div>
+          <div class="puc-headline">Get the full picture.</div>
+          <div class="puc-sub">Unlimited sessions, score history, and AI that never hits quota.</div>
+          <div class="puc-features">
+            <div class="puc-feature"><div class="puc-check">✓</div> Unlimited daily sessions</div>
+            <div class="puc-feature"><div class="puc-check">✓</div> Priority AI — no fallback scores</div>
+            <div class="puc-feature"><div class="puc-check">✓</div> Score progression chart</div>
+            <div class="puc-feature"><div class="puc-check">✓</div> University ranking (real data)</div>
+          </div>
+          <div class="puc-cta-row">
+            <button class="btn-pro-upgrade" onclick="openProModal()">Upgrade to Pro</button>
+            <span class="puc-price">$9 / month</span>
+          </div>
+        </div>
+
+        <!-- Legacy uni-rank-card — hidden, replaced above -->
+        <div id="uni-rank-card" style="display:none;"></div>
       </div>
 
 
@@ -4475,37 +4735,81 @@ async function doSignup() {
   }
 }
 
-function _refreshCollegeRankCard() {
-  // Called after feedback renders or college is saved
-  var wrap = document.getElementById('uni-rank-card');
-  if (!wrap) return;
+function _refreshUniversityRankSection(score, trackId) {
+  var section = document.getElementById('uni-rank-section');
+  if (!section) return;
+  section.style.display = 'block';
+
   var college = _getUserCollege();
-  var crbSet = document.getElementById('crb-set');
-  var crbPrompt = document.getElementById('crb-prompt');
-  wrap.style.display = 'block';
+  var urkSet    = document.getElementById('urk-set');
+  var urkPrompt = document.getElementById('urk-prompt');
+
   if (college) {
-    if (crbSet) crbSet.style.display = 'flex';
-    if (crbPrompt) crbPrompt.style.display = 'none';
-    // Update text with college name
-    var scoreEl = document.getElementById('fb-score');
-    var score = scoreEl ? parseFloat(scoreEl.textContent) : 0;
-    var rankObj = _getUniRank(score, appPersona ? appPersona.id : 'consulting');
+    // Show rank
+    if (urkSet) urkSet.style.display = 'flex';
+    if (urkPrompt) urkPrompt.style.display = 'none';
+    var rankObj = _getUniRank(score, trackId || 'consulting');
     var rank = rankObj.percentile;
-    var mainEl = document.getElementById('uni-rank-main');
-    var subEl = document.getElementById('uni-rank-sub');
-    var badgeEl = document.getElementById('uni-rank-badge');
+    var numEl  = document.getElementById('urk-num');
+    var mainEl = document.getElementById('urk-main');
+    var subEl  = document.getElementById('urk-sub');
+    var badgeEl = document.getElementById('urk-badge');
+    if (numEl)  numEl.textContent  = rank + '%';
     if (mainEl) mainEl.textContent = 'Top ' + rank + '% at ' + college + ' this week';
-    if (subEl) subEl.textContent = 'Based on ' + rankObj.sessions + ' sessions from students at your school';
+    if (subEl)  subEl.textContent  = 'Based on ' + rankObj.sessions + ' sessions from students at your school';
     if (badgeEl) badgeEl.textContent = 'Top ' + rank + '%';
-  } else if (!appUser) {
-    // Guest: show the "set college" prompt to drive signups
-    if (crbSet) crbSet.style.display = 'none';
-    if (crbPrompt) crbPrompt.style.display = 'flex';
   } else {
-    // Logged in but no college: show prompt
-    if (crbSet) crbSet.style.display = 'none';
-    if (crbPrompt) crbPrompt.style.display = 'flex';
+    // Show unlock prompt
+    if (urkSet) urkSet.style.display = 'none';
+    if (urkPrompt) urkPrompt.style.display = 'block';
   }
+}
+
+// Legacy wrapper — keeps old call sites working
+function _refreshCollegeRankCard() {
+  var scoreEl = document.getElementById('fb-score');
+  var score = scoreEl ? parseFloat(scoreEl.textContent) : 0;
+  _refreshUniversityRankSection(score, appPersona ? appPersona.id : 'consulting');
+}
+
+function _refreshScoreProgress() {
+  var card = document.getElementById('score-progress-card');
+  if (!card || !appHistory || appHistory.length < 2) return;
+  var recent = appHistory.slice(0, 5);
+  var scores = recent.map(function(s) {
+    return parseFloat((s.notes && s.notes.score) || s.score || 0);
+  }).filter(function(s) { return s > 0; });
+  if (scores.length < 2) return;
+  var latest = scores[0];
+  var prev   = scores.slice(1).reduce(function(a,b){return a+b;},0) / (scores.length-1);
+  var diff   = (latest - prev).toFixed(1);
+  var trendEl = document.getElementById('spc-trend');
+  var subEl   = document.getElementById('spc-sub');
+  if (trendEl) trendEl.textContent = (diff >= 0 ? '↑ +' : '↓ ') + diff + ' points vs recent average';
+  if (subEl)   subEl.textContent   = diff >= 0 ? "You're improving. Keep the streak going." : "Keep practising — you'll get there.";
+  card.style.display = 'flex';
+}
+
+// Pro modal — placeholder for now, shows coming soon
+function openProModal() {
+  var sheet = document.createElement('div');
+  sheet.style.cssText = 'position:fixed;inset:0;z-index:600;background:rgba(10,5,2,0.5);backdrop-filter:blur(12px);display:flex;align-items:flex-end;justify-content:center;padding:0;';
+  sheet.innerHTML = '<div style="background:#fff;border-radius:24px 24px 0 0;padding:2rem 1.5rem 2.5rem;width:100%;max-width:480px;box-shadow:0 -4px 40px rgba(10,5,2,0.18);">' +
+    '<div style="width:36px;height:4px;background:rgba(44,19,8,0.12);border-radius:2px;margin:0 auto 1.5rem;"></div>' +
+    '<div style="font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ln3);background:var(--esp);display:inline-block;padding:3px 10px;border-radius:99px;margin-bottom:10px;">✦ Mocha Pro</div>' +
+    '<div style="font-family:\'DM Serif Display\',serif;font-size:1.6rem;color:var(--esp);letter-spacing:-0.04em;line-height:1.1;margin-bottom:6px;">Unlimited coaching.<br><em>McKinsey standard.</em></div>' +
+    '<div style="font-size:13px;color:var(--oat);margin-bottom:1.5rem;line-height:1.5;">Get AI feedback that never hits quota, your full score history, and see exactly how you rank at your university.</div>' +
+    '<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem;">' +
+    ['Unlimited sessions — no daily limit','Priority AI — never falls back to structural analysis','Score progression chart','Real university rankings (vs. simulated)','Export your feedback as PDF'].map(function(f){
+      return '<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--esp);">' +
+        '<div style="width:18px;height:18px;border-radius:50%;background:rgba(44,19,8,0.08);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--esp);flex-shrink:0;">✓</div>' + f + '</div>';
+    }).join('') +
+    '</div>' +
+    '<button onclick="this.parentNode.parentNode.remove();alert(\'Pro coming soon! You\'ll be first to know — we\'ll email you when it launches.\')" style="width:100%;padding:14px;background:var(--esp);color:var(--ln);border:none;border-radius:99px;font-size:15px;font-weight:700;cursor:pointer;font-family:\'DM Sans\',sans-serif;margin-bottom:8px;">Join the Pro waitlist — $9/mo</button>' +
+    '<div style="text-align:center;font-size:11px;color:var(--oat);">No charge now · We\'ll email you when Pro launches</div>' +
+    '</div>';
+  sheet.addEventListener('click', function(e) { if (e.target === sheet) sheet.remove(); });
+  document.body.appendChild(sheet);
 }
 
 function toggleProfileDropdown() {
@@ -6176,7 +6480,6 @@ function updateShareCard(r) {
   var score = parseFloat(r.overall) || 0;
   var p = appPersona || PERSONAS[0];
 
-  // Map track to firm label shown on share card
   var trackFirmMap = {
     consulting : 'McKinsey · MBB PEI',
     banking    : 'Goldman Sachs · IB',
@@ -6189,61 +6492,46 @@ function updateShareCard(r) {
   };
   var cardTrack = trackFirmMap[p.id] || (p.source + ' · Behavioral');
 
-  // Use interviewer_verdict for the card headline if available — it's the screenshot moment
-  var verdictText = r.interviewer_verdict || r.verdict || 'Strong answer';
-  // Truncate verdict for card if too long
-  if (verdictText.length > 40) verdictText = verdictText.slice(0, 37) + '…';
+  // Verdict — use interviewer_verdict if available, else derive
+  var iv = r.interviewer_verdict || '';
+  var verdictText = iv || (score >= 8 ? 'Strong answer' : score >= 6.5 ? 'On the fence' : 'Needs work');
 
   document.getElementById('sc-score').textContent = score.toFixed(1);
-  document.getElementById('sc-verdict').textContent = verdictText + ' · Mocha';
+  document.getElementById('sc-verdict').textContent = verdictText;
   document.getElementById('sc-track').textContent = cardTrack;
 
-  // Bars
+  // Dimension bars
   var dims = [
     { label: 'STRUCT', val: sc.structure || 0 },
-    { label: 'CLARITY', val: sc.clarity || 0 },
-    { label: 'OWN', val: sc.ownership || 0 },
-    { label: 'IMPACT', val: sc.impact || 0 }
+    { label: 'CLARITY', val: sc.clarity   || 0 },
+    { label: 'OWN',     val: sc.ownership || 0 },
+    { label: 'IMPACT',  val: sc.impact    || 0 },
   ];
-  var bHtml = '';
-  dims.forEach(function(d) {
-    var pct = Math.round((parseFloat(d.val) / 10) * 100);
-    bHtml += '<div class="share-card-bar-row">';
-    bHtml += '<div class="share-card-bar-label">' + d.label + '</div>';
-    bHtml += '<div class="share-card-bar-track"><div class="share-card-bar-fill" style="width:' + pct + '%"></div></div>';
-    bHtml += '<div class="share-card-val">' + d.val + '</div>';
-    bHtml += '</div>';
-  });
+  var bHtml = dims.map(function(d) {
+    var pct = Math.round((d.val / 10) * 100);
+    return '<div class="share-card-bar-row">' +
+      '<span class="share-card-bar-label">' + d.label + '</span>' +
+      '<div class="share-card-bar-track"><div class="share-card-bar-fill" style="width:' + pct + '%"></div></div>' +
+      '<span class="share-card-val">' + d.val.toFixed(1) + '</span>' +
+      '</div>';
+  }).join('');
   document.getElementById('sc-bars').innerHTML = bHtml;
 
-  // University rank — college-aware
-  _refreshCollegeRankCard();
+  // Store share line
+  if (r.share_line) window._shareLine = r.share_line;
 
-  // Score progress (if logged in and has history)
-  if (appUser && appHistory.length >= 2) {
-    var recent = appHistory.slice(0,3).map(function(s){ return s.score; });
-    var avg = recent.reduce(function(a,b){return a+b;},0) / recent.length;
-    var diff = Math.round((score - avg) * 10) / 10;
-    var progEl = document.getElementById('score-progress-card');
-    if (progEl) {
-      progEl.style.display = 'flex';
-      var trendEl = document.getElementById('spc-trend');
-      var subEl = document.getElementById('spc-sub');
-      if (diff > 0) {
-        trendEl.textContent = '\u2191 +' + diff + ' points vs your recent average';
-        trendEl.style.color = 'var(--sage)';
-        subEl.textContent = 'You\'re improving. Keep the streak going.';
-      } else if (diff < 0) {
-        trendEl.textContent = '\u2193 ' + diff + ' points vs your recent average';
-        trendEl.style.color = 'var(--lt)';
-        subEl.textContent = 'Focus on your weakest dimension next session.';
-      }
-    }
+  // University ranking section
+  _refreshUniversityRankSection(score, p.id);
+
+  // Pro upgrade card — show to logged-in users with 3+ sessions
+  var proCard = document.getElementById('pro-upgrade-card');
+  if (proCard) {
+    var sessionCount = appHistory ? appHistory.length : 0;
+    proCard.style.display = (appUser && sessionCount >= 2 && !appUser.pro) ? 'block' : 'none';
   }
 
-  // Show the share card
-  var wrap = document.getElementById('share-card-wrap');
-  if (wrap) wrap.style.display = 'block';
+  // Score progress
+  _refreshScoreProgress();
 }
 
 // Share score function

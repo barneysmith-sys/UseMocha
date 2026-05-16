@@ -571,7 +571,7 @@ export default async function handler(req, res) {
 
   // ── Gemini call — 9s timeout (Vercel Hobby: 10s hard limit) ─────
   const controller = new AbortController();
-  const timeout    = setTimeout(() => controller.abort(), 9000);
+  const timeout    = setTimeout(() => controller.abort(), 25000);
 
   let geminiRes;
   try {
@@ -582,8 +582,8 @@ export default async function handler(req, res) {
       body   : JSON.stringify({
         contents        : [{ parts: [{ text: prompt }] }],
         generationConfig: {
-          temperature    : 0.25,  // tight — consistent scoring
-          maxOutputTokens: 1000,  // enough for all fields, minimal waste
+          temperature    : 0.25,
+          maxOutputTokens: 2000,
           topP           : 0.8,
         },
       }),

@@ -5250,18 +5250,14 @@ var _micFinalTxt = ''; // accumulates confirmed final text across iOS restarts
 var _iosRestartTimer = null; // debounce iOS restarts
 
 function checkMic() {
-  // navigator.permissions.query({name:'microphone'}) is NOT supported on iOS Safari.
-  // Skip it on iOS — go straight to 'unknown' so toggleMic calls startMic directly.
-  if (_isIOS) { micPerm = 'unknown'; updateMicUI(); return; }
-  if (navigator.permissions) {
-    navigator.permissions.query({ name: 'microphone' }).then(function(r) {
-      micPerm = r.state;
-      r.onchange = function() { micPerm = r.state; updateMicUI(); };
-      updateMicUI();
-    }).catch(function() { micPerm = 'unknown'; updateMicUI(); });
-  } else {
-    micPerm = 'unknown'; updateMicUI();
+  // navigator.permissions.query({name:'microphone'}) is unreliable on iOS Safari.
+  // Use getUserMedia with a quick test instead to get the real current state.
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    micPerm = 'unknown'; updateMicUI(); return;
   }
+  // On iOS we can't silently check — just set unknown and let toggleMic handle it
+  // via getUserMedia when the user actually taps Record.
+  micPerm = 'unknown'; updateMicUI();
 }
 
 function updateMicUI() {
@@ -5302,24 +5298,41 @@ function toggleMic() {
     if (bar && txt) {
       bar.style.display = 'flex';
       txt.textContent = _isIOS
-        ? 'Microphone blocked. Go to Settings → Safari → Microphone and allow this site.'
+        ? 'Microphone blocked. Go to iPhone Settings → Safari → Microphone → Allow.'
         : 'Microphone blocked. Click the lock icon in your address bar, allow microphone, then refresh.';
     }
     return;
   }
-  // iOS and unknown: go straight to SpeechRecognition — it handles its own permission prompt
-  if (_isIOS || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+
+  // Always go through getUserMedia first — on iOS this is what triggers
+  // Safari's "Allow Microphone" popup when permission is set to "Ask".
+  // Skipping it means the popup never appears and recognition silently fails.
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    // Very old browser with no getUserMedia — try SpeechRecognition directly
     startMic(); return;
   }
+
   navigator.mediaDevices.getUserMedia({ audio: true })
     .then(function(stream) {
+      // Permission granted — stop the test stream immediately, then start SR
       stream.getTracks().forEach(function(t) { t.stop(); });
       micPerm = 'granted'; updateMicUI(); startMic();
     })
     .catch(function(err) {
       if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
         micPerm = 'denied'; updateMicUI();
-      } else { startMic(); }
+        var bar = document.getElementById('perm-bar');
+        var txt = document.getElementById('perm-txt');
+        if (bar && txt) {
+          bar.style.display = 'flex';
+          txt.textContent = _isIOS
+            ? 'Microphone blocked. Go to iPhone Settings → Safari → Microphone → Allow.'
+            : 'Microphone blocked. Click the lock icon in your address bar, allow microphone, then refresh.';
+        }
+      } else {
+        // Dismissed without choosing — try anyway
+        startMic();
+      }
     });
 }
 

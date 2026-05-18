@@ -5245,20 +5245,22 @@ function onInput() {
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // MICROPHONE
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+var _isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+var _micFinalTxt = ''; // accumulates confirmed final text across iOS restarts
+var _iosRestartTimer = null; // debounce iOS restarts
+
 function checkMic() {
-  // Check current permission state without requesting it
+  // navigator.permissions.query({name:'microphone'}) is NOT supported on iOS Safari.
+  // Skip it on iOS — go straight to 'unknown' so toggleMic calls startMic directly.
+  if (_isIOS) { micPerm = 'unknown'; updateMicUI(); return; }
   if (navigator.permissions) {
     navigator.permissions.query({ name: 'microphone' }).then(function(r) {
-      micPerm = r.state; // 'granted', 'denied', or 'prompt'
+      micPerm = r.state;
       r.onchange = function() { micPerm = r.state; updateMicUI(); };
       updateMicUI();
-    }).catch(function() {
-      micPerm = 'unknown';
-      updateMicUI();
-    });
+    }).catch(function() { micPerm = 'unknown'; updateMicUI(); });
   } else {
-    micPerm = 'unknown';
-    updateMicUI();
+    micPerm = 'unknown'; updateMicUI();
   }
 }
 
@@ -5267,150 +5269,179 @@ function updateMicUI() {
   var btn = document.getElementById('mic-btn');
   var txt = document.getElementById('perm-txt');
   if (!bar || !btn || !txt) return;
-
-  bar.className = 'perm-bar'; // reset classes
-
+  bar.className = 'perm-bar';
   if (micPerm === 'denied') {
     bar.classList.add('denied');
-    txt.textContent = 'Microphone blocked. Open browser settings, allow microphone for this site, then refresh.';
+    txt.textContent = _isIOS
+      ? 'Microphone blocked. Go to Settings → Safari → Microphone and allow this site, then refresh.'
+      : 'Microphone blocked. Click the lock icon in your address bar, allow microphone, then refresh.';
     btn.disabled = true; btn.style.opacity = '0.35'; btn.style.cursor = 'not-allowed';
   } else if (micPerm === 'granted') {
-    // Show subtle confirmation
-    txt.textContent = 'Microphone ready. Click Record to start speaking your answer.';
+    txt.textContent = 'Microphone ready. Tap Record to speak your answer.';
     btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
   } else {
-    // 'prompt' or 'unknown' \u2014 show friendly invitation
-    txt.textContent = 'Click Record and your browser will ask to use your microphone.';
+    txt.textContent = _isIOS
+      ? 'Tap Record — Safari will ask to use your microphone.'
+      : 'Click Record and your browser will ask to use your microphone.';
     btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
   }
 }
 
 function toggleMic() {
   if (isRec) { stopMic(); return; }
-
-  // Check Speech Recognition support
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) {
     var bar = document.getElementById('perm-bar');
     var txt = document.getElementById('perm-txt');
-    if (bar && txt) {
-      bar.style.display='flex';
-      txt.textContent = 'Voice input requires Chrome, Edge, or Safari. Please type your answer.';
-    }
+    if (bar && txt) { bar.style.display = 'flex'; txt.textContent = 'Voice input requires Safari or Chrome. Please type your answer instead.'; }
     return;
   }
-
-  // If already granted, start immediately
-  if (micPerm === 'granted') {
-    startMic();
-    return;
-  }
-
-  // If denied, show helpful message
   if (micPerm === 'denied') {
     var bar = document.getElementById('perm-bar');
     var txt = document.getElementById('perm-txt');
     if (bar && txt) {
-      bar.style.display='flex';
-      txt.textContent = 'Microphone blocked. Click the lock icon in your browser address bar, allow microphone, then refresh.';
+      bar.style.display = 'flex';
+      txt.textContent = _isIOS
+        ? 'Microphone blocked. Go to Settings → Safari → Microphone and allow this site.'
+        : 'Microphone blocked. Click the lock icon in your address bar, allow microphone, then refresh.';
     }
     return;
   }
-
-  // 'prompt' or 'unknown' — trigger the native browser permission dialog
-  // This MUST be called from a user gesture (it is — onclick)
-  // iOS Safari: SpeechRecognition handles its own permission — call startMic directly
-  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  if (isIOS || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    startMic(); // let SpeechRecognition handle the permission dialog natively
-    return;
+  // iOS and unknown: go straight to SpeechRecognition — it handles its own permission prompt
+  if (_isIOS || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    startMic(); return;
   }
-
   navigator.mediaDevices.getUserMedia({ audio: true })
     .then(function(stream) {
-      // Permission granted — stop the test stream and start recognition
       stream.getTracks().forEach(function(t) { t.stop(); });
-      micPerm = 'granted';
-      updateMicUI();
-      startMic();
+      micPerm = 'granted'; updateMicUI(); startMic();
     })
     .catch(function(err) {
       if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-        micPerm = 'denied';
-      }
-      updateMicUI();
-      // If user dismissed without choosing, still try startMic
-      if (err.name !== 'NotAllowedError' && err.name !== 'PermissionDeniedError') {
-        startMic();
-      }
+        micPerm = 'denied'; updateMicUI();
+      } else { startMic(); }
     });
 }
 
-function startMic() {
+function _makeSR() {
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  recognition = new SR();
-  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  // iOS Safari breaks with continuous=true — simulate continuity by restarting on end
-  recognition.continuous = isIOS ? false : true;
-  recognition.interimResults = true;
-  recognition.lang = 'en-US';
+  var r = new SR();
+  // iOS Safari: continuous=true causes immediate silent stop — must be false
+  r.continuous = _isIOS ? false : true;
+  r.interimResults = !_isIOS; // interim results cause flicker on iOS restarts, disable them
+  r.lang = 'en-US';
+  return r;
+}
+
+function _iosRestart() {
+  // Called after iOS recognition ends naturally (end of phrase)
+  // Must wait for the audio session to fully release before starting again
+  // 350ms is the minimum reliable gap on iOS — shorter causes silent failure
+  if (_iosRestartTimer) clearTimeout(_iosRestartTimer);
+  _iosRestartTimer = setTimeout(function() {
+    if (!isRec) return;
+    var ta = document.getElementById('ans-ta');
+    ta.value = _micFinalTxt; onInput();
+    _startOneShotIOS();
+  }, 350);
+}
+
+function _startOneShotIOS() {
+  // Create fresh SR instance — iOS throws if you reuse a stopped one
+  recognition = _makeSR();
   var ta = document.getElementById('ans-ta');
-  var finalTxt = ta.value;
 
   recognition.onresult = function(e) {
-    var interim = '';
     for (var i = e.resultIndex; i < e.results.length; i++) {
-      var t = e.results[i][0].transcript;
-      if (e.results[i].isFinal) {
-        finalTxt += (finalTxt ? '. ' : '') + t.trim();
-      } else {
-        interim = t;
+      var t = e.results[i][0].transcript.trim();
+      if (e.results[i].isFinal && t) {
+        _micFinalTxt += (_micFinalTxt ? ' ' : '') + t;
+        ta.value = _micFinalTxt; onInput();
       }
     }
-    ta.value = finalTxt + (interim ? ' ' + interim : '');
-    onInput();
   };
 
   recognition.onerror = function(e) {
-    if (e.error === 'not-allowed') { micPerm = 'denied'; updateMicUI(); isRec = false; }
-    if (e.error === 'no-speech' && isRec) {
-      // Silently restart on iOS no-speech — user just paused
-      try { recognition.start(); } catch(x) {}
-      return;
-    }
-    if (!isRec) return;
-    stopMic();
+    if (e.error === 'not-allowed') { micPerm = 'denied'; updateMicUI(); isRec = false; _setMicStopped(); return; }
+    if (e.error === 'aborted') return; // we stopped it intentionally
+    // no-speech / audio-capture / network — just restart
+    if (isRec) _iosRestart();
   };
 
   recognition.onend = function() {
     if (!isRec) return;
-    if (isIOS) {
-      // iOS ends recognition after each phrase — restart to simulate continuous
-      // Clean interim from textarea before restarting
-      ta.value = finalTxt;
-      onInput();
-      try { recognition.start(); } catch(x) { stopMic(); }
-    } else {
-      stopMic();
-    }
+    _iosRestart();
   };
 
-  recognition.start();
+  try {
+    recognition.start();
+  } catch(e) {
+    // start() can throw if audio session is still busy — wait longer and retry once
+    setTimeout(function() {
+      if (!isRec) return;
+      try { recognition.start(); } catch(e2) { if (isRec) _iosRestart(); }
+    }, 400);
+  }
+}
+
+function startMic() {
+  var ta = document.getElementById('ans-ta');
+  _micFinalTxt = ta.value;
   isRec = true;
-  document.getElementById('mic-btn').classList.add('rec');
-  document.getElementById('rdot').style.display = 'inline-block';
-  document.getElementById('mic-lbl').textContent = 'Stop';
+  _setMicRecording();
+
+  if (_isIOS) {
+    _startOneShotIOS();
+  } else {
+    // Desktop: single long-running recognition session
+    recognition = _makeSR();
+    var finalTxt = ta.value;
+
+    recognition.onresult = function(e) {
+      var interim = '';
+      for (var i = e.resultIndex; i < e.results.length; i++) {
+        var t = e.results[i][0].transcript;
+        if (e.results[i].isFinal) { finalTxt += (finalTxt ? '. ' : '') + t.trim(); }
+        else { interim = t; }
+      }
+      ta.value = finalTxt + (interim ? ' ' + interim : '');
+      onInput();
+    };
+    recognition.onerror = function(e) {
+      if (e.error === 'not-allowed') { micPerm = 'denied'; updateMicUI(); }
+      if (e.error === 'aborted') return;
+      stopMic();
+    };
+    recognition.onend = function() { if (isRec) stopMic(); };
+    try { recognition.start(); } catch(e) { stopMic(); }
+  }
+}
+
+function _setMicRecording() {
+  var btn = document.getElementById('mic-btn');
+  var rdot = document.getElementById('rdot');
+  var lbl = document.getElementById('mic-lbl');
+  if (btn) btn.classList.add('rec');
+  if (rdot) rdot.style.display = 'inline-block';
+  if (lbl) lbl.textContent = 'Stop';
+}
+
+function _setMicStopped() {
+  var btn = document.getElementById('mic-btn');
+  var rdot = document.getElementById('rdot');
+  var lbl = document.getElementById('mic-lbl');
+  if (btn) btn.classList.remove('rec');
+  if (rdot) rdot.style.display = 'none';
+  if (lbl) lbl.textContent = 'Record';
 }
 
 function stopMic() {
-  isRec = false; // set first so onend doesn't restart
+  isRec = false; // MUST be first — prevents onend from restarting
+  if (_iosRestartTimer) { clearTimeout(_iosRestartTimer); _iosRestartTimer = null; }
   if (recognition) { try { recognition.stop(); } catch(e) {} recognition = null; }
-  document.getElementById('mic-btn').classList.remove('rec');
-  document.getElementById('rdot').style.display = 'none';
-  document.getElementById('mic-lbl').textContent = 'Record';
+  _setMicStopped();
   var ta = document.getElementById('ans-ta');
-  // Strip any interim markers ([ ] brackets) left in text
-  ta.value = ta.value.replace(/\s*\[[^\]]*\]/g, '').trim();
+  ta.value = (_micFinalTxt.trim() || ta.value.replace(/\s*\[[^\]]*\]/g, '')).trim();
   onInput();
 }
 

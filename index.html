@@ -5304,17 +5304,21 @@ function toggleMic() {
     return;
   }
 
-  // Always go through getUserMedia first — on iOS this is what triggers
-  // Safari's "Allow Microphone" popup when permission is set to "Ask".
-  // Skipping it means the popup never appears and recognition silently fails.
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    // Very old browser with no getUserMedia — try SpeechRecognition directly
-    startMic(); return;
+  if (_isIOS) {
+    // iOS CRITICAL: Do NOT call getUserMedia before SpeechRecognition.
+    // Stopping the getUserMedia stream closes the shared audio session and
+    // SR gets silence. SR on iOS opens its own audio session — let it do so.
+    // The permission popup on iOS comes from SR.start() itself when set to Ask.
+    startMic();
+    return;
   }
 
+  // Desktop: use getUserMedia to trigger permission prompt, then start SR
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    startMic(); return;
+  }
   navigator.mediaDevices.getUserMedia({ audio: true })
     .then(function(stream) {
-      // Permission granted — stop the test stream immediately, then start SR
       stream.getTracks().forEach(function(t) { t.stop(); });
       micPerm = 'granted'; updateMicUI(); startMic();
     })
@@ -5325,12 +5329,9 @@ function toggleMic() {
         var txt = document.getElementById('perm-txt');
         if (bar && txt) {
           bar.style.display = 'flex';
-          txt.textContent = _isIOS
-            ? 'Microphone blocked. Go to iPhone Settings → Safari → Microphone → Allow.'
-            : 'Microphone blocked. Click the lock icon in your address bar, allow microphone, then refresh.';
+          txt.textContent = 'Microphone blocked. Click the lock icon in your address bar, allow microphone, then refresh.';
         }
       } else {
-        // Dismissed without choosing — try anyway
         startMic();
       }
     });
@@ -5413,7 +5414,12 @@ function startMic() {
   _setMicRecording();
 
   if (_isIOS) {
-    _startOneShotIOS();
+    // Small delay on iOS — gives the audio system time to settle after
+    // the permission grant before SR tries to open its own audio session
+    setTimeout(function() {
+      if (!isRec) return;
+      _startOneShotIOS();
+    }, 150);
   } else {
     // Desktop: single long-running recognition session
     recognition = _makeSR();

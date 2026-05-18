@@ -3080,7 +3080,7 @@ body {
 
     <div class="perm-bar" id="perm-bar">
       <svg width="13" height="13" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px;"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M7 4.5V7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="9.5" r="0.7" fill="currentColor"/></svg>
-      <span id="perm-txt">Click Record and allow microphone access when your browser asks.</span>
+      <span id="perm-txt">Tap Record and allow microphone access when your browser asks.</span>
     </div>
     <div class="ans-box fadeup d2">
       <div class="ans-tb">
@@ -5349,26 +5349,52 @@ function toggleMic() {
 function startMic() {
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   recognition = new SR();
-  recognition.continuous = true;
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  // iOS Safari breaks with continuous=true — simulate continuity by restarting on end
+  recognition.continuous = isIOS ? false : true;
   recognition.interimResults = true;
   recognition.lang = 'en-US';
   var ta = document.getElementById('ans-ta');
   var finalTxt = ta.value;
+
   recognition.onresult = function(e) {
     var interim = '';
     for (var i = e.resultIndex; i < e.results.length; i++) {
       var t = e.results[i][0].transcript;
-      if (e.results[i].isFinal) finalTxt += (finalTxt ? '. ' : '') + t.trim();
-      else interim = t;
+      if (e.results[i].isFinal) {
+        finalTxt += (finalTxt ? '. ' : '') + t.trim();
+      } else {
+        interim = t;
+      }
     }
-    ta.value = finalTxt + (interim ? ' [' + interim + ']' : '');
+    ta.value = finalTxt + (interim ? ' ' + interim : '');
     onInput();
   };
+
   recognition.onerror = function(e) {
-    if (e.error === 'not-allowed') { micPerm = 'denied'; updateMicUI(); }
+    if (e.error === 'not-allowed') { micPerm = 'denied'; updateMicUI(); isRec = false; }
+    if (e.error === 'no-speech' && isRec) {
+      // Silently restart on iOS no-speech — user just paused
+      try { recognition.start(); } catch(x) {}
+      return;
+    }
+    if (!isRec) return;
     stopMic();
   };
-  recognition.onend = function() { if (isRec) stopMic(); };
+
+  recognition.onend = function() {
+    if (!isRec) return;
+    if (isIOS) {
+      // iOS ends recognition after each phrase — restart to simulate continuous
+      // Clean interim from textarea before restarting
+      ta.value = finalTxt;
+      onInput();
+      try { recognition.start(); } catch(x) { stopMic(); }
+    } else {
+      stopMic();
+    }
+  };
+
   recognition.start();
   isRec = true;
   document.getElementById('mic-btn').classList.add('rec');
@@ -5377,12 +5403,13 @@ function startMic() {
 }
 
 function stopMic() {
-  if (recognition) { try { recognition.stop(); } catch(e) {} }
-  isRec = false;
+  isRec = false; // set first so onend doesn't restart
+  if (recognition) { try { recognition.stop(); } catch(e) {} recognition = null; }
   document.getElementById('mic-btn').classList.remove('rec');
   document.getElementById('rdot').style.display = 'none';
   document.getElementById('mic-lbl').textContent = 'Record';
   var ta = document.getElementById('ans-ta');
+  // Strip any interim markers ([ ] brackets) left in text
   ta.value = ta.value.replace(/\s*\[[^\]]*\]/g, '').trim();
   onInput();
 }

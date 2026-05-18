@@ -50,7 +50,7 @@
 <meta name="twitter:title" content="Mocha — Land your dream internship">
 <meta name="twitter:description" content="Free AI behavioral interview coaching at McKinsey, Goldman, and Google standard. Used at 14+ universities.">
 <meta name="twitter:image" content="https://usemocha.app/og-image.png">
-<meta name="twitter:site" content="@barneycreates">
+<meta name="twitter:site" content="@usemocha">
 <meta name="theme-color" content="#fde8cc">
 <title>Mocha — Land your dream internship.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -674,6 +674,9 @@ body {
 .dw-t-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(44,19,8,0.25); animation: dwDot 1.2s ease-in-out infinite; }
 .dw-t-dot:nth-child(2){animation-delay:0.18s;} .dw-t-dot:nth-child(3){animation-delay:0.36s;}
 @keyframes dwDot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-4px)}}
+@keyframes steamRise{0%{opacity:0;transform:translateY(0) scaleX(1)}40%{opacity:0.7}100%{opacity:0;transform:translateY(-16px) scaleX(0.6)}}
+@keyframes smFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) scale(0.9) translateY(8px)}to{opacity:1;transform:translateX(-50%) scale(1) translateY(0)}}
 .dw-input-bar { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(44,19,8,0.07); padding: 9px 13px; background: #fff; flex-shrink: 0; }
 .dw-input-text { font-size: 11.5px; color: rgba(44,19,8,0.25); flex: 1; overflow: hidden; transition: color 0.14s; }
 .dw-input-text.active { color: var(--esp); }
@@ -1629,7 +1632,7 @@ body {
    FEEDBACK PAGE
    ══════════════════════════════════════════════════════════════════ */
 .fb-pg { max-width: 640px; margin: 0 auto; padding: 2.5rem var(--s6); }
-.spinner-wrap { text-align: center; padding: 5rem 2rem; }
+.spinner-wrap { text-align: center; padding: 5rem 2rem; display:flex; flex-direction:column; align-items:center; justify-content:center; }
 .spin {
   width: 32px; height: 32px; border: 1.5px solid var(--sil);
   border-top-color: var(--esp); border-radius: 50%;
@@ -2252,23 +2255,25 @@ body {
 .share-btn:hover { opacity: 0.85; }
 .share-btn svg { width: 12px; height: 12px; }
 
-/* ── UNIVERSITY RANKING — "Facebook at colleges" energy ──── */
+/* ── UNIVERSITY RANKING — redesigned as premium panel ──── */
 .uni-rank-section {
-  margin-top: 10px;
-  border: 1.5px solid rgba(44,19,8,0.08);
-  border-radius: 16px;
+  margin-top: 12px;
+  border-radius: 18px;
   overflow: hidden;
   background: #fff;
+  border: 1.5px solid rgba(44,19,8,0.09);
+  box-shadow: 0 1px 0 rgba(44,19,8,0.05), 0 4px 20px rgba(44,19,8,0.06);
 }
 /* When college is set */
 .urk-set {
-  padding: 14px 16px;
-  display: flex; align-items: center; gap: 12px;
+  padding: 16px 18px;
+  display: flex; align-items: center; gap: 14px;
+  background: linear-gradient(135deg, #fef7f0 0%, #fde8cc 100%);
 }
 .urk-rank-num {
   font-family: 'DM Serif Display', serif;
-  font-size: 2rem; color: var(--esp);
-  letter-spacing: -0.04em; line-height: 1;
+  font-size: 2.4rem; color: var(--esp);
+  letter-spacing: -0.05em; line-height: 1;
   flex-shrink: 0;
 }
 .urk-rank-text { flex: 1; }
@@ -2277,45 +2282,47 @@ body {
 .urk-badge {
   background: var(--esp); color: var(--ln);
   font-size: 10px; font-weight: 700;
-  padding: 4px 10px; border-radius: 99px;
+  padding: 5px 11px; border-radius: 99px;
   white-space: nowrap;
 }
-/* When college is NOT set — the viral unlock prompt */
+/* When college is NOT set — viral unlock prompt */
 .urk-prompt {
   cursor: pointer;
   transition: background 0.15s;
 }
-.urk-prompt:hover { background: var(--surf); }
+.urk-prompt:hover .urk-prompt-top { background: rgba(44,19,8,0.02); }
 .urk-prompt-top {
-  padding: 14px 16px 10px;
-  display: flex; align-items: flex-start; gap: 10px;
+  padding: 16px 18px 12px;
+  display: flex; align-items: flex-start; gap: 12px;
+  transition: background 0.15s;
 }
 .urk-lock {
-  width: 32px; height: 32px; border-radius: 8px;
-  background: var(--ln); display: flex;
-  align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--ln); border: 1px solid var(--sil);
+  display: flex; align-items: center; justify-content: center;
   flex-shrink: 0; margin-top: 1px;
 }
 .urk-prompt-text { flex: 1; }
 .urk-prompt-head {
-  font-size: 13px; font-weight: 700; color: var(--esp);
-  margin-bottom: 2px;
+  font-size: 13.5px; font-weight: 700; color: var(--esp);
+  margin-bottom: 2px; letter-spacing: -0.01em;
 }
 .urk-prompt-sub {
-  font-size: 11px; color: var(--oat); line-height: 1.4;
+  font-size: 11.5px; color: var(--oat); line-height: 1.4;
 }
 /* Mini university logos strip */
 .urk-logos-strip {
-  padding: 0 16px 12px;
+  padding: 0 18px 12px;
   display: flex; align-items: center; gap: 6px;
   overflow: hidden;
 }
 .urk-logo-pill {
-  height: 20px; padding: 0 8px;
-  background: var(--surf); border-radius: 99px;
+  height: 22px; padding: 0 9px;
+  background: var(--cr); border: 1px solid var(--sil);
+  border-radius: 99px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 9px; font-weight: 700; color: var(--oat);
-  letter-spacing: 0.04em; text-transform: uppercase;
+  font-size: 9px; font-weight: 700; color: var(--med);
+  letter-spacing: 0.03em; text-transform: uppercase;
   white-space: nowrap; flex-shrink: 0;
 }
 .urk-logos-more {
@@ -2323,18 +2330,23 @@ body {
   margin-left: 2px; white-space: nowrap;
 }
 .urk-cta-row {
-  border-top: 1px solid rgba(44,19,8,0.06);
-  padding: 10px 16px;
+  border-top: 1px solid rgba(44,19,8,0.07);
+  padding: 12px 18px;
   display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(135deg, #fef7f0 0%, rgba(253,232,204,0.4) 100%);
 }
 .urk-cta-text {
-  font-size: 11px; color: var(--oat);
+  font-size: 11px; color: var(--oat); font-weight: 500;
 }
 .urk-cta-btn {
-  font-size: 11px; font-weight: 700;
+  font-size: 12px; font-weight: 700;
   color: var(--esp); cursor: pointer;
-  display: flex; align-items: center; gap: 4px;
+  display: flex; align-items: center; gap: 5px;
+  background: var(--esp); color: var(--ln);
+  padding: 6px 14px; border-radius: 99px;
+  transition: opacity 0.12s;
 }
+.urk-cta-btn:hover { opacity: 0.85; }
 
 /* ── PRO TIER UPGRADE CARD ───────────────────────────────── */
 .pro-upgrade-card {
@@ -2645,6 +2657,10 @@ body {
         <button class="pd-action" onclick="goToPractice();closeProfileDropdown();">
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M5.5 5L9.5 7L5.5 9V5Z" fill="currentColor"/></svg>
           Practice now
+        </button>
+        <button class="pd-action" onclick="closeProfileDropdown();openShareModal();">
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 8v5a1 1 0 001 1h8a1 1 0 001-1V8M7 2v8M4 5l3-3 3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Share Mocha
         </button>
         <button class="pd-action danger" onclick="signOut()">
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M5.5 2H3a1 1 0 00-1 1v8a1 1 0 001 1h2.5M9.5 9.5L12 7l-2.5-2.5M12 7H5.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -3020,6 +3036,7 @@ body {
     <div class="land-footer-links">
       <a href="/legal.html">Privacy &amp; Terms</a>
         <a href="https://www.instagram.com/tryymocha/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://x.com/usemocha" target="_blank" rel="noopener">X / Twitter</a>
       <a href="https://www.linkedin.com/company/trymocha/" target="_blank" rel="noopener">LinkedIn</a>
     </div>
     <div class="land-footer-copy">&copy; 2026 Mocha &middot; Manhattan, New York</div>
@@ -3102,37 +3119,27 @@ body {
 <div class="page" id="page-feedback" style="padding-top:52px;">
   <div class="fb-pg">
     <div id="fb-load" class="spinner-wrap fadeup">
-      <!-- Animated coffee cup -->
-      <div style="margin-bottom:1.5rem;">
-        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Cup body -->
-          <path d="M12 24h40l-4 20a4 4 0 01-4 4H20a4 4 0 01-4-4L12 24z" fill="var(--ln)" stroke="var(--esp)" stroke-width="1.5"/>
-          <!-- Cup handle -->
-          <path d="M52 28h4a4 4 0 010 8h-4" stroke="var(--esp)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-          <!-- Saucer -->
-          <ellipse cx="32" cy="49" rx="22" ry="3" fill="var(--sil2)" stroke="var(--esp)" stroke-width="1"/>
-          <!-- Steam lines — animated -->
-          <g class="coffee-steam">
-            <path d="M24 18 Q26 14 24 10" stroke="var(--oat)" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.6">
-              <animate attributeName="opacity" values="0.6;0;0.6" dur="2s" begin="0s" repeatCount="indefinite"/>
-              <animate attributeName="d" values="M24 18 Q26 14 24 10;M24 18 Q22 14 24 10;M24 18 Q26 14 24 10" dur="2s" repeatCount="indefinite"/>
-            </path>
-            <path d="M32 16 Q34 12 32 8" stroke="var(--oat)" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.6">
-              <animate attributeName="opacity" values="0;0.6;0" dur="2s" begin="0.4s" repeatCount="indefinite"/>
-              <animate attributeName="d" values="M32 16 Q34 12 32 8;M32 16 Q30 12 32 8;M32 16 Q34 12 32 8" dur="2s" repeatCount="indefinite"/>
-            </path>
-            <path d="M40 18 Q42 14 40 10" stroke="var(--oat)" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.6">
-              <animate attributeName="opacity" values="0.6;0;0.6" dur="2s" begin="0.8s" repeatCount="indefinite"/>
-              <animate attributeName="d" values="M40 18 Q42 14 40 10;M40 18 Q38 14 40 10;M40 18 Q42 14 40 10" dur="2s" repeatCount="indefinite"/>
-            </path>
-          </g>
-          <!-- Coffee surface inside cup -->
-          <ellipse cx="32" cy="26" rx="16" ry="3" fill="var(--esp)" opacity="0.15"/>
-        </svg>
+      <!-- Animated coffee cup — properly centered -->
+      <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:1.5rem;">
+        <div style="position:relative;width:72px;height:80px;margin:0 auto;">
+          <!-- Steam lines via CSS -->
+          <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);display:flex;gap:6px;justify-content:center;">
+            <div style="width:2px;height:14px;background:var(--oat);border-radius:1px;animation:steamRise 2s ease-in-out infinite;transform-origin:bottom center;"></div>
+            <div style="width:2px;height:18px;background:var(--oat);border-radius:1px;animation:steamRise 2s ease-in-out 0.4s infinite;transform-origin:bottom center;"></div>
+            <div style="width:2px;height:14px;background:var(--oat);border-radius:1px;animation:steamRise 2s ease-in-out 0.8s infinite;transform-origin:bottom center;"></div>
+          </div>
+          <!-- Cup SVG — static, centered -->
+          <svg style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 22h40l-4 18a4 4 0 01-4 4H18a4 4 0 01-4-4L10 22z" fill="var(--ln)" stroke="var(--esp)" stroke-width="1.5"/>
+            <path d="M50 26h4a3.5 3.5 0 010 7h-4" stroke="var(--esp)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <ellipse cx="30" cy="45" rx="20" ry="2.5" fill="var(--sil2)" stroke="var(--esp)" stroke-width="1"/>
+            <ellipse cx="30" cy="24" rx="15" ry="2.5" fill="var(--esp)" opacity="0.12"/>
+          </svg>
+        </div>
       </div>
       <div class="load-t" id="load-msg">Evaluating your answer</div>
       <div class="load-s" id="load-sub">Analysing STAR structure &middot; Scoring clarity</div>
-      <div style="margin-top:2rem;width:100%;max-width:400px;">
+      <div style="margin-top:2rem;width:100%;max-width:400px;margin-left:auto;margin-right:auto;">
         <div style="height:4px;background:var(--sil2);border-radius:4px;overflow:hidden;margin-bottom:10px;">
           <div id="load-bar" style="height:100%;background:linear-gradient(90deg,var(--esp),var(--oat));border-radius:4px;width:0%;transition:width 25s linear;"></div>
         </div>
@@ -3231,7 +3238,7 @@ body {
           <!-- Bottom: URL + share button -->
           <div class="sc-bottom-row">
             <span class="sc-url">usemocha.app</span>
-            <button class="share-btn" onclick="shareScore()">
+            <button class="share-btn" onclick="openShareModal()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
               Share
             </button>
@@ -3271,7 +3278,7 @@ body {
             <div class="urk-cta-row">
               <span class="urk-cta-text">Free · Takes 10 seconds</span>
               <span class="urk-cta-btn">
-                Set your university
+                Sign in with your college
                 <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </span>
             </div>
@@ -3322,7 +3329,10 @@ body {
           Next question
           <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3L12 7L8 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-        <button class="btn-out" style="font-size:12px;padding:9px 18px;" onclick="shareScore()">Share score</button>
+        <button class="btn-cta" style="font-size:13px;padding:10px 22px;background:var(--ln);color:var(--esp);border:1px solid var(--sil);box-shadow:0 1px 0 rgba(44,19,8,0.08),0 2px 8px rgba(44,19,8,0.06);" onclick="openShareModal()">
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13" transform="scale(0.6) translate(1,1)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 8v5a1 1 0 001 1h8a1 1 0 001-1V8M7 2v8M4 5l3-3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Share my score
+        </button>
         <button class="btn-out" style="font-size:12px;padding:9px 18px;" onclick="goDash()">Dashboard</button>
       </div>
     </div>
@@ -4936,11 +4946,17 @@ document.addEventListener('click', function(e) {
 });
 async function signOut() {
   closeProfileDropdown();
-  await _sbSignOut();
+  try { await _sbSignOut(); } catch(e) {}
   appUser = null;
   appHistory = [];
   appPersona = null;
-  _onSupabaseSignOut();
+  _sbSession = null;
+  try { localStorage.removeItem('mocha_sb_session'); } catch(e) {}
+  // Reset nav
+  var navGuest = document.getElementById('nav-guest');
+  var navUser  = document.getElementById('nav-user');
+  if (navGuest) navGuest.style.display = 'flex';
+  if (navUser)  navUser.style.display  = 'none';
   showPage('page-land');
   setTab('');
 }
@@ -5301,16 +5317,18 @@ function toggleMic() {
     return;
   }
 
-  // 'prompt' or 'unknown' \u2014 trigger the native browser permission dialog
-  // This MUST be called from a user gesture (it is \u2014 onclick)
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    startMic(); // fallback \u2014 let SpeechRecognition handle it
+  // 'prompt' or 'unknown' — trigger the native browser permission dialog
+  // This MUST be called from a user gesture (it is — onclick)
+  // iOS Safari: SpeechRecognition handles its own permission — call startMic directly
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  if (isIOS || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    startMic(); // let SpeechRecognition handle the permission dialog natively
     return;
   }
 
   navigator.mediaDevices.getUserMedia({ audio: true })
     .then(function(stream) {
-      // Permission granted \u2014 stop the test stream and start recognition
+      // Permission granted — stop the test stream and start recognition
       stream.getTracks().forEach(function(t) { t.stop(); });
       micPerm = 'granted';
       updateMicUI();
@@ -5853,27 +5871,86 @@ function sendFollowUp() {
   });
 }
 
-function shareScore() {
+function openShareModal() {
   var score = document.getElementById('fb-score') ? document.getElementById('fb-score').textContent : '8.5';
   var p = appPersona || PERSONAS[0];
   var track = p ? p.role : 'Consulting';
-  // Use AI-generated share_line if available, otherwise build a good default
-  var text = window._shareLine
-    || ('I scored ' + score + '/10 on a ' + track + ' interview question with Mocha. Practice at the standard McKinsey, Goldman, and Google actually grade on. https://usemocha.app');
-  if (navigator.share) {
-    navigator.share({ title: 'My Mocha Score', text: text, url: 'https://usemocha.app' }).catch(function(){});
-  } else {
-    var ta = document.createElement('textarea');
-    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-    document.body.appendChild(ta); ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    var toast = document.createElement('div');
-    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#2c1308;color:#fde8cc;padding:10px 20px;border-radius:99px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.2);';
-    toast.textContent = 'Copied to clipboard ✓';
-    document.body.appendChild(toast);
-    setTimeout(function() { if (document.body.contains(toast)) document.body.removeChild(toast); }, 2200);
-  }
+  var verdict = document.getElementById('sc-verdict') ? document.getElementById('sc-verdict').textContent : '';
+
+  var shareOptions = [
+    {
+      emoji: '🔥',
+      label: 'Starting my streak',
+      sub: 'Day 1 energy — share your first session',
+      text: 'Day 1 of practicing with Mocha. Scored ' + score + '/10 on a ' + track + ' interview question. Free AI coaching at McKinsey standard → usemocha.app'
+    },
+    {
+      emoji: '📈',
+      label: score + '/10 — ' + (verdict || 'My score'),
+      sub: 'Share your exact score and track',
+      text: 'Scored ' + score + '/10 on a ' + track + ' behavioral question. Graded at McKinsey, Goldman, and Google standard. Practise free → usemocha.app'
+    },
+    {
+      emoji: '🎯',
+      label: 'Getting better at interviews',
+      sub: 'Invite friends to try Mocha',
+      text: window._shareLine || ('Just used Mocha — free AI interview coaching at McKinsey standard. No booking, no scheduling, instant feedback. Try it → usemocha.app')
+    }
+  ];
+
+  var sheet = document.createElement('div');
+  sheet.id = 'share-modal-overlay';
+  sheet.style.cssText = 'position:fixed;inset:0;z-index:700;background:rgba(10,5,2,0.5);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;align-items:flex-end;justify-content:center;padding:0;animation:smFadeIn 0.18s ease;';
+
+  var optionsHtml = shareOptions.map(function(opt, i) {
+    return '<button onclick="window._doShare(' + i + ')" style="width:100%;display:flex;align-items:center;gap:12px;padding:13px 16px;background:none;border:none;border-bottom:1px solid rgba(44,19,8,0.06);cursor:pointer;font-family:\'DM Sans\',sans-serif;text-align:left;transition:background 0.12s;" onmouseover="this.style.background=\'var(--cr)\'" onmouseout="this.style.background=\'none\'">' +
+      '<div style="width:38px;height:38px;border-radius:10px;background:var(--cr);border:1px solid var(--sil);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">' + opt.emoji + '</div>' +
+      '<div style="flex:1;">' +
+        '<div style="font-size:13px;font-weight:600;color:var(--esp);letter-spacing:-0.01em;">' + opt.label + '</div>' +
+        '<div style="font-size:11px;color:var(--oat);margin-top:1px;">' + opt.sub + '</div>' +
+      '</div>' +
+      '<svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="var(--sil)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+    '</button>';
+  }).join('');
+
+  sheet.innerHTML = '<div style="background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:480px;box-shadow:0 -4px 40px rgba(10,5,2,0.18);animation:sheetUp 0.26s cubic-bezier(0.16,1,0.3,1);">' +
+    '<div style="width:36px;height:4px;background:rgba(44,19,8,0.10);border-radius:2px;margin:12px auto 0;"></div>' +
+    '<div style="padding:14px 16px 8px;border-bottom:1px solid rgba(44,19,8,0.06);">' +
+      '<div style="font-size:9px;font-weight:700;letter-spacing:0.10em;text-transform:uppercase;color:var(--oat);margin-bottom:3px;">Share your score</div>' +
+      '<div style="font-family:\'DM Serif Display\',serif;font-size:1.1rem;color:var(--esp);letter-spacing:-0.02em;">You scored <span style="color:var(--med);">' + score + '/10</span> on ' + track + '</div>' +
+    '</div>' +
+    '<div>' + optionsHtml + '</div>' +
+    '<div style="padding:12px 16px 24px;">' +
+      '<button onclick="document.getElementById(\'share-modal-overlay\').remove()" style="width:100%;padding:11px;background:var(--cr);border:1px solid var(--sil);border-radius:99px;font-size:13px;font-weight:600;color:var(--med);cursor:pointer;font-family:\'DM Sans\',sans-serif;transition:background 0.12s;">Cancel</button>' +
+    '</div>' +
+  '</div>';
+
+  sheet.addEventListener('click', function(e) { if (e.target === sheet) sheet.remove(); });
+  document.body.appendChild(sheet);
+
+  window._doShare = function(idx) {
+    var opt = shareOptions[idx];
+    var text = opt.text;
+    sheet.remove();
+    if (navigator.share) {
+      navigator.share({ title: 'My Mocha Score', text: text, url: 'https://usemocha.app' }).catch(function(){});
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); } catch(e) {}
+      document.body.removeChild(ta);
+      var toast = document.createElement('div');
+      toast.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--esp);color:var(--ln);padding:10px 22px;border-radius:99px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 24px rgba(44,19,8,0.25);white-space:nowrap;animation:toastIn 0.2s cubic-bezier(0.34,1.56,0.64,1);';
+      toast.textContent = 'Copied to clipboard ✓';
+      document.body.appendChild(toast);
+      setTimeout(function() { if (document.body.contains(toast)) document.body.removeChild(toast); }, 2400);
+    }
+  };
+}
+
+function shareScore() {
+  openShareModal();
 }
 
 function escHtml(str) {

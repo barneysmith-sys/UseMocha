@@ -5359,9 +5359,12 @@ function _iosRestart() {
 function _startOneShotIOS() {
   recognition = _makeSR();
   var ta = document.getElementById('ans-ta');
-  var _lastInterim = ''; // save last interim — iOS often never fires isFinal
+  var _lastInterim = '';
+  var _gotAnyResult = false;
+  var _startTime = Date.now();
 
   recognition.onresult = function(e) {
+    _gotAnyResult = true;
     var interim = '';
     for (var i = e.resultIndex; i < e.results.length; i++) {
       var t = e.results[i][0].transcript.trim();
@@ -5371,10 +5374,9 @@ function _startOneShotIOS() {
         _lastInterim = '';
       } else {
         interim = t;
-        _lastInterim = t; // keep a copy in case onend fires without isFinal
+        _lastInterim = t;
       }
     }
-    // Show live text while speaking
     ta.value = _micFinalTxt + (interim ? ' ' + interim : '');
     onInput();
   };
@@ -5387,14 +5389,30 @@ function _startOneShotIOS() {
 
   recognition.onend = function() {
     if (!isRec) return;
-    // iOS ends session before firing isFinal — commit whatever interim we captured
+
+    // Commit any interim text captured
     if (_lastInterim) {
       _micFinalTxt += (_micFinalTxt ? ' ' : '') + _lastInterim;
       _lastInterim = '';
+      var ta2 = document.getElementById('ans-ta');
+      if (ta2) { ta2.value = _micFinalTxt; onInput(); }
     }
-    var ta2 = document.getElementById('ans-ta');
-    if (ta2) { ta2.value = _micFinalTxt; onInput(); }
-    _iosRestart();
+
+    var elapsed = Date.now() - _startTime;
+
+    if (!_gotAnyResult && elapsed < 1200) {
+      // Ended almost instantly with zero results — audio system wasn't ready.
+      // This is the "goes red then immediately back" bug on iOS.
+      // Wait longer before retrying so the audio session can fully initialise.
+      if (_iosRestartTimer) clearTimeout(_iosRestartTimer);
+      _iosRestartTimer = setTimeout(function() {
+        if (!isRec) return;
+        _startOneShotIOS();
+      }, 700);
+    } else {
+      // Normal end — restart quickly to listen for next phrase
+      _iosRestart();
+    }
   };
 
   try {
@@ -5414,12 +5432,13 @@ function startMic() {
   _setMicRecording();
 
   if (_isIOS) {
-    // Small delay on iOS — gives the audio system time to settle after
-    // the permission grant before SR tries to open its own audio session
+    // Delay on iOS — gives the audio system time to fully initialise
+    // after permission grant before SR opens its session.
+    // 500ms is reliable on iPhone 14; shorter causes the instant-end bug.
     setTimeout(function() {
       if (!isRec) return;
       _startOneShotIOS();
-    }, 150);
+    }, 500);
   } else {
     // Desktop: single long-running recognition session
     recognition = _makeSR();

@@ -1688,49 +1688,56 @@ body {
   color: var(--esp); margin-bottom: 1.1rem;
 }
 
-/* Score hero */
+/* Score hero — Apple Health-inspired centered score */
 .score-hero {
   background: linear-gradient(150deg, #100804 0%, #1a0f06 100%);
-  border-radius: var(--r2xl); padding: 1.6rem 1.7rem; margin-bottom: 12px;
-  position: relative; overflow: hidden;
+  border-radius: var(--r2xl); padding: 2.4rem 1.7rem 2rem; margin-bottom: 14px;
+  position: relative; overflow: hidden; text-align: center;
 }
 .score-hero::before {
-  content:''; position:absolute; right:-40px; top:-40px;
-  width: 180px; height: 180px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(253,232,204,0.06) 0%, transparent 65%);
+  content:''; position:absolute; left:50%; top:-60px; transform:translateX(-50%);
+  width: 320px; height: 320px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(253,232,204,0.05) 0%, transparent 65%);
 }
-.sh-in { display: flex; align-items: flex-end; gap: var(--s3); position: relative; }
+.sh-in { display: flex; flex-direction: column; align-items: center; gap: 0; position: relative; }
+.sh-score-row { display: flex; align-items: baseline; justify-content: center; gap: 6px; }
 .sh-num {
   font-family: 'DM Serif Display', serif;
-  font-size: 5rem; letter-spacing: -0.06em; font-weight: 400; color: var(--ln);
-  line-height: 1; letter-spacing: -0.04em;
+  font-size: 6.5rem; letter-spacing: -0.05em; font-weight: 400; color: var(--ln);
+  line-height: 1;
 }
-.sh-den { font-size: var(--t-base); font-weight: 500; color: rgba(253,232,204,0.3); margin-bottom: 8px; }
-.sh-verd { font-size: var(--t-sm); font-weight: 400; color: rgba(253,232,204,0.55); line-height: 1.6; max-width: 280px; margin-left: var(--s2); }
+.sh-den { font-size: var(--t-lg); font-weight: 500; color: rgba(253,232,204,0.3); margin-bottom: 10px; }
+.sh-verd { font-size: var(--t-sm); font-weight: 500; color: rgba(253,232,204,0.55); line-height: 1.6; text-align: center; margin-top: 6px; }
 
-/* Score metric tiles */
-.metrics { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 12px; }
-@media(max-width:480px) { .metrics { grid-template-columns: repeat(2,1fr); } }
+/* Score metric tiles — 2×2 grid always */
+.metrics { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-bottom: 14px; }
 .met {
   background: #fff; border: 1px solid var(--sil);
-  border-radius: 12px;
+  border-radius: var(--rlg); padding: 14px 12px; text-align: center;
   box-shadow: 0 1px 3px rgba(44,19,8,0.04);
-  border-radius: var(--rlg); padding: 12px 10px; text-align: center;
-  transition: box-shadow 0.14s;
+  transition: box-shadow 0.14s, transform 0.14s;
 }
-.met:hover { box-shadow: var(--sh-sm); }
+.met:hover { box-shadow: var(--sh-sm); transform: translateY(-1px); }
 .met-n { font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--oat); margin-bottom: 5px; }
-.met-v { font-family: 'DM Serif Display', serif; font-size: 1.5rem; font-weight: 400; letter-spacing: -0.03em; color: var(--esp); }
+.met-v { font-family: 'DM Serif Display', serif; font-size: 1.6rem; font-weight: 400; letter-spacing: -0.03em; color: var(--esp); }
 
-/* STAR breakdown */
-.crit-sec { background: #fff; border: 1px solid var(--sil); border-radius: 14px; box-shadow: 0 1px 3px rgba(44,19,8,0.03); border-radius: var(--rlg); overflow: hidden; margin-bottom: 12px; }
-.crit-hd { padding: 10px 14px; border-bottom: 1px solid var(--sil2); background: var(--cr); display: flex; align-items: center; justify-content: space-between; }
+/* STAR breakdown — collapsible */
+.crit-sec { background: #fff; border: 1px solid var(--sil); border-radius: var(--rlg); box-shadow: 0 1px 3px rgba(44,19,8,0.03); overflow: hidden; margin-bottom: 14px; }
+.crit-hd {
+  padding: 12px 14px; border-bottom: 1px solid var(--sil2); background: var(--cr);
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none; transition: background 0.12s;
+}
+.crit-hd:hover { background: var(--sil2); }
 .crit-hdl { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--med); }
+.crit-expand-hint { font-size: 10px; font-weight: 600; color: var(--oat); display: flex; align-items: center; gap: 4px; }
 .src-tag { font-size: 9px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; background: var(--ln); color: var(--esp); border-radius: 4px; padding: 2px 7px; }
+.crit-body { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.16,1,0.3,1); }
+.crit-body.expanded { max-height: 600px; }
 .crit-item { display: flex; gap: var(--s3); align-items: flex-start; padding: 13px 14px; border-bottom: 1px solid var(--sil2); }
 .crit-item:last-child { border-bottom: none; }
 .crit-idx {
-  width: 20px; height: 20px; border-radius: 50%;
+  width: 22px; height: 22px; border-radius: 50%;
   border: 1px solid var(--sil);
   display: flex; align-items: center; justify-content: center;
   font-size: 9px; font-weight: 700; color: var(--esp); flex-shrink: 0; margin-top: 1px;
@@ -1740,19 +1747,19 @@ body {
 /* Editorial / critique blocks */
 .editorial {
   background: #fffcf9; border: 1px solid var(--sil);
-  border-radius: 14px;
-  border-radius: var(--rlg); padding: 1.1rem 1.3rem; margin-bottom: 12px;
+  border-radius: var(--rlg); padding: 1.1rem 1.3rem; margin-bottom: 14px;
 }
 .ed-lbl { font-size: 9px; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; color: var(--oat); margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
 .ed-txt { font-family: 'DM Serif Display', serif; font-size: 14px; font-weight: 400; font-style: italic; color: var(--med); line-height: 1.8; }
 
-/* Rewrite block */
+/* Rewrite block — distinct warm background */
 .rw-block {
-  background: linear-gradient(135deg, var(--esp) 0%, var(--roa) 100%);
+  background: linear-gradient(135deg, #1a0f06 0%, #2c1308 50%, #4a2010 100%);
   border-radius: var(--r2xl); overflow: hidden; margin-bottom: 1.4rem;
+  box-shadow: 0 2px 0 rgba(44,19,8,0.1), 0 8px 32px rgba(44,19,8,0.12);
 }
-.rw-hd { padding: 10px 16px; border-bottom: 1px solid rgba(253,232,204,0.10); font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(253,232,204,0.38); display: flex; align-items: center; gap: 6px; }
-.rw-body { padding: 16px; font-size: 14px; font-weight: 400; color: rgba(253,232,204,0.88); line-height: 1.78; }
+.rw-hd { padding: 12px 16px; border-bottom: 1px solid rgba(253,232,204,0.10); font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(253,232,204,0.45); display: flex; align-items: center; gap: 6px; }
+.rw-body { padding: 18px 16px; font-size: 14px; font-weight: 400; color: rgba(253,232,204,0.90); line-height: 1.82; }
 
 /* Gate / upgrade prompt */
 .gate-box { background: var(--surf); border: 1px solid var(--sil); border-radius: var(--rlg); padding: 1.5rem; margin-bottom: 1rem; text-align: center; }
@@ -1778,21 +1785,24 @@ body {
 }
 @keyframes cblink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-/* Stats row */
-.stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 12px; }
+/* Stats row — Duolingo-level engagement */
+.stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 14px; }
 @media(max-width:520px) { .stats-row { grid-template-columns: 1fr 1fr; } }
 .stat-c {
   background: #fff; border: 1px solid var(--sil);
-  box-shadow: 0 1px 3px rgba(44,19,8,0.04), 0 4px 16px rgba(44,19,8,0.03);
-  transition: box-shadow 0.18s, transform 0.18s;
+  box-shadow: 0 1px 3px rgba(44,19,8,0.04);
   border-radius: var(--rlg); padding: 1.1rem 1.2rem;
-  transition: box-shadow 0.14s;
+  transition: box-shadow 0.18s, transform 0.18s;
+  position: relative; overflow: hidden;
 }
-.stat-c:hover { box-shadow: var(--sh-sm); }
-.stat-ico { font-size: 1rem; margin-bottom: 8px; }
+.stat-c:hover { box-shadow: var(--sh-sm); transform: translateY(-1px); }
+/* Streak card — first stat gets special treatment */
+.stat-c.stat-streak { border: 1.5px solid rgba(232,187,126,0.35); background: linear-gradient(160deg, #fff 0%, #fef7f0 100%); }
+.stat-c.stat-streak::before { content: ''; position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; border-radius: 50%; background: radial-gradient(circle, rgba(232,187,126,0.15) 0%, transparent 65%); pointer-events: none; }
+.stat-ico { font-size: 1.2rem; margin-bottom: 6px; }
 .stat-n {
   font-family: 'DM Serif Display', serif;
-  font-size: 2rem; letter-spacing: -0.04em; font-weight: 400; letter-spacing: -0.04em;
+  font-size: 2.2rem; letter-spacing: -0.04em; font-weight: 400;
   color: var(--esp); line-height: 1; margin-bottom: 2px;
 }
 .stat-l { font-size: 11px; font-weight: 500; color: var(--lt); }
@@ -1809,24 +1819,30 @@ body {
 .cp-track { font-size: 15px; font-weight: 600; color: var(--esp); letter-spacing: -0.02em; margin-bottom: 2px; }
 .cp-sub { font-size: 12px; color: var(--lt); }
 
-/* Today question card */
+/* Today question card — hero prominence */
 .today-card {
-  background: linear-gradient(150deg, #100804 0%, #1a0f06 100%);
-  border-radius: var(--r2xl); padding: 1.7rem; margin-bottom: 12px;
+  background: linear-gradient(150deg, #100804 0%, #1a0f06 50%, #2c1308 100%);
+  border-radius: var(--r2xl); padding: 2rem 1.7rem; margin-bottom: 14px;
   position: relative; overflow: hidden;
+  box-shadow: 0 2px 0 rgba(44,19,8,0.12), 0 12px 40px rgba(44,19,8,0.15);
 }
 .today-card::before {
   content:''; position:absolute; right:-50px; top:-50px;
-  width:180px; height:180px; border-radius:50%;
-  background: radial-gradient(circle, rgba(253,232,204,0.07) 0%, transparent 65%);
+  width:220px; height:220px; border-radius:50%;
+  background: radial-gradient(circle, rgba(253,232,204,0.08) 0%, transparent 65%);
 }
-.tc-lbl { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(253,232,204,0.45); margin-bottom: 8px; }
-.tc-badge { display: inline-flex; font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: var(--rpill); margin-bottom: 12px; }
+.today-card::after {
+  content:'m'; position:absolute; right:1.2rem; bottom:0.6rem;
+  font-family: 'DM Serif Display', serif; font-style: italic; font-size: 5rem;
+  color: rgba(253,232,204,0.03); pointer-events: none; line-height: 1; user-select: none;
+}
+.tc-lbl { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(253,232,204,0.50); margin-bottom: 10px; }
+.tc-badge { display: inline-flex; font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: var(--rpill); margin-bottom: 14px; }
 .tcb-beh,.tcb-sit,.tcb-net { background: rgba(253,232,204,0.12); color: var(--ln); }
 .tc-q {
   font-family: 'DM Serif Display', serif;
-  font-size: 1.1rem; font-weight: 400; color: var(--ln);
-  line-height: 1.45; letter-spacing: -0.02em; margin-bottom: 1.25rem;
+  font-size: 1.15rem; font-weight: 400; color: var(--ln);
+  line-height: 1.5; letter-spacing: -0.02em; margin-bottom: 1.4rem;
   max-width: 480px; position: relative;
 }
 
@@ -2169,7 +2185,7 @@ body {
   padding: 0;
 }
 .share-card {
-  background: #fff;
+  background: linear-gradient(160deg, #fff 0%, #fffcf9 40%, #fef7f0 100%);
   border: 1.5px solid rgba(44,19,8,0.09);
   border-radius: 20px;
   padding: 1.4rem 1.4rem 1.1rem;
@@ -2227,7 +2243,7 @@ body {
 }
 .share-card-score {
   font-family: 'DM Serif Display', serif;
-  font-size: 3.6rem; color: var(--esp);
+  font-size: 4.5rem; color: var(--esp);
   letter-spacing: -0.05em; line-height: 1;
 }
 .sc-denom {
@@ -2236,14 +2252,15 @@ body {
 }
 /* Verdict — colour coded */
 .share-card-verdict {
-  font-size: 10px; font-weight: 800;
+  font-size: 11px; font-weight: 800;
   letter-spacing: 0.08em; text-transform: uppercase;
   margin-bottom: 1rem;
   display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 12px; border-radius: 99px;
 }
-.share-card-verdict.verd-advance { color: #16a34a; }
-.share-card-verdict.verd-fence   { color: var(--oat); }
-.share-card-verdict.verd-no      { color: var(--red); }
+.share-card-verdict.verd-advance { color: #16a34a; background: rgba(22,163,74,0.08); }
+.share-card-verdict.verd-fence   { color: var(--oat); background: rgba(196,135,98,0.10); }
+.share-card-verdict.verd-no      { color: var(--red); background: rgba(192,25,15,0.06); }
 /* Separator line */
 .sc-divider {
   height: 1px; background: rgba(44,19,8,0.07);
@@ -2537,15 +2554,13 @@ body {
    ═══════════════════════════════════════════════════════ */
 
 @media(max-width:480px) {
-  /* Feedback page */
+  /* Feedback page — Apple Health feel */
   .fb-pg { padding: 1.5rem 14px !important; }
-  .fb-title { font-size: 1.05rem !important; margin-bottom: 10px !important; }
-  .score-hero { border-radius: 16px; margin-bottom: 12px; }
-  .sh-num { font-size: clamp(3rem,13vw,4.2rem) !important; }
-  .sh-verd { font-size: 11px !important; padding: 4px 10px !important; }
-  .metrics { grid-template-columns: repeat(2,1fr) !important; gap: 8px; }
+  .score-hero { border-radius: 16px; margin-bottom: 12px; padding: 2rem 1.2rem 1.6rem !important; }
+  .sh-num { font-size: clamp(4rem,15vw,5.5rem) !important; }
+  .sh-verd { font-size: 11px !important; }
   .met { padding: 12px 8px !important; }
-  .met-v { font-size: 1.35rem !important; }
+  .met-v { font-size: 1.4rem !important; }
   .met-n { font-size: 8.5px !important; }
   .crit-item { padding: 10px 12px !important; }
   .crit-txt { font-size: 12px !important; line-height: 1.55 !important; }
@@ -2556,7 +2571,7 @@ body {
   .fb-acts button { width: 100%; justify-content: center; }
   .gate-box { border-radius: 14px !important; padding: 1.2rem !important; }
   .share-card { border-radius: 14px !important; padding: 1.1rem !important; }
-  .share-card-score { font-size: 2.4rem !important; }
+  .share-card-score { font-size: 4rem !important; }
   .uni-rank-card, .score-progress-card { border-radius: 12px !important; padding: 0.85rem 1rem !important; }
 
   /* Practice page */
@@ -2585,9 +2600,8 @@ body {
 
 @media(max-width:640px) and (min-width:481px) {
   .fb-pg, .prac-pg, .dash-pg { padding-left: 16px !important; padding-right: 16px !important; }
-  .sh-num { font-size: 4rem !important; }
+  .sh-num { font-size: 5.5rem !important; }
   .stats-row { grid-template-columns: repeat(3,1fr) !important; }
-  .metrics { grid-template-columns: repeat(2,1fr) !important; }
 }
 
 /* ── MOBILE HERO — YC-level simplicity (iPhone first) ──── */
@@ -3208,14 +3222,13 @@ body {
     </div>
     <div id="fb-result" style="display:none;" class="fadeup">
       <div class="fb-qlbl" id="fb-qlbl"></div>
-      <div class="fb-title">Your Mocha feedback</div>
       <div class="score-hero">
         <div class="sh-in">
-          <div>
-            <div style="font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(253,232,204,0.38);margin-bottom:3px;">Overall</div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(253,232,204,0.38);margin-bottom:6px;">Your score</div>
+          <div class="sh-score-row">
             <div class="sh-num" id="fb-score">0</div>
+            <div class="sh-den">/10</div>
           </div>
-          <div class="sh-den">/10</div>
           <div class="sh-verd" id="fb-verdict"></div>
         </div>
       </div>
@@ -3226,14 +3239,21 @@ body {
         <div class="met"><div class="met-n">Impact</div><div class="met-v" id="fb-conf">0</div></div>
       </div>
 
-      <!-- STAR Breakdown -->
+      <!-- STAR Breakdown — collapsed by default -->
       <div class="crit-sec" id="fb-star-sec">
-        <div class="crit-hd">
+        <div class="crit-hd" onclick="var b=document.getElementById('fb-star-body');b.classList.toggle('expanded');var h=document.getElementById('fb-star-hint');h.textContent=b.classList.contains('expanded')?'Hide':'See full breakdown';">
           <span class="crit-hdl">STAR breakdown</span>
+          <span class="crit-expand-hint" id="fb-star-hint">See full breakdown
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+        <div class="crit-body" id="fb-star-body">
+          <div id="fb-citation" style="font-size:10px;color:var(--oat);line-height:1.5;padding:8px 14px 0;font-style:italic;"></div>
+          <div id="fb-imps"></div>
+        </div>
+        <div style="padding:6px 14px 8px;display:flex;align-items:center;justify-content:space-between;">
           <span class="src-tag" id="fb-src-tag">Mocha</span>
         </div>
-        <div id="fb-citation" style="font-size:10px;color:var(--oat);line-height:1.5;padding:0 2px;margin-bottom:8px;font-style:italic;"></div>
-        <div id="fb-imps"></div>
       </div>
 
       <!-- Industry Critique -->
@@ -3409,9 +3429,9 @@ body {
       <div class="greet-txt" id="greet-txt"><span class="cursor"></span></div>
     </div>
     <div class="stats-row fadeup d1">
-      <div class="stat-c"><div class="stat-ico" style="font-size:14px;letter-spacing:-0.02em;font-weight:700;color:var(--esp);">—</div><div class="stat-n" id="ds-streak">5</div><div class="stat-l">Day streak</div><div class="stat-t">Keep it up</div></div>
-      <div class="stat-c"><div class="stat-ico" style="font-size:14px;letter-spacing:-0.02em;font-weight:700;color:var(--esp);">—</div><div class="stat-n" id="ds-avg">7.3</div><div class="stat-l">Avg score (7d)</div><div class="stat-t">↑ +1.2 this week</div></div>
-      <div class="stat-c"><div class="stat-ico" style="font-size:14px;letter-spacing:-0.02em;font-weight:700;color:var(--esp);">—</div><div class="stat-n" id="ds-total">12</div><div class="stat-l">Sessions</div><div class="stat-t" style="color:var(--oat);">All time</div></div>
+      <div class="stat-c stat-streak" id="stat-streak-card"><div class="stat-ico" id="ds-streak-ico">&#x1F525;</div><div class="stat-n" id="ds-streak">5</div><div class="stat-l">Day streak</div><div class="stat-t" id="ds-streak-msg">Keep it up</div></div>
+      <div class="stat-c"><div class="stat-ico">&#x1F4C8;</div><div class="stat-n" id="ds-avg">7.3</div><div class="stat-l">Avg score (7d)</div><div class="stat-t" id="ds-avg-msg">&uarr; improving</div></div>
+      <div class="stat-c"><div class="stat-ico">&#x2615;</div><div class="stat-n" id="ds-total">12</div><div class="stat-l">Sessions</div><div class="stat-t" style="color:var(--oat);">All time</div></div>
     </div>
     <div class="continue-path-card fadeup d2" id="continue-path-card" style="display:none;">
       <div class="cp-inner">
@@ -4894,19 +4914,36 @@ function _refreshUniversityRankSection(score, trackId) {
   var urkPrompt = document.getElementById('urk-prompt');
 
   if (college) {
-    // Show rank
+    // Show loading state
     if (urkSet) urkSet.style.display = 'flex';
     if (urkPrompt) urkPrompt.style.display = 'none';
-    var rankObj = _getUniRank(score, trackId || 'consulting');
-    var rank = rankObj.percentile;
     var numEl  = document.getElementById('urk-num');
     var mainEl = document.getElementById('urk-main');
     var subEl  = document.getElementById('urk-sub');
     var badgeEl = document.getElementById('urk-badge');
-    if (numEl)  numEl.textContent  = rank + '%';
-    if (mainEl) mainEl.textContent = 'Top ' + rank + '% at ' + college + ' this week';
-    if (subEl)  subEl.textContent  = 'Based on ' + rankObj.sessions + ' sessions from students at your school';
-    if (badgeEl) badgeEl.textContent = 'Top ' + rank + '%';
+    if (numEl)  numEl.textContent  = '...';
+    if (mainEl) mainEl.textContent = 'Calculating rank at ' + college;
+    if (subEl)  subEl.textContent  = 'Checking sessions from the last 7 days';
+
+    _getUniRank(score, trackId || 'consulting', college, function(rankObj) {
+      if (!rankObj) {
+        // Query failed — hide section gracefully
+        if (urkSet) urkSet.style.display = 'none';
+        return;
+      }
+      if (rankObj.notEnough) {
+        if (numEl)  numEl.textContent  = '\u2014';
+        if (mainEl) mainEl.textContent = 'Not enough data yet \u2014 be one of the first';
+        if (subEl)  subEl.textContent  = 'Fewer than 5 sessions this week. Keep practicing to unlock rankings.';
+        if (badgeEl) badgeEl.textContent = 'Early';
+        return;
+      }
+      var rank = rankObj.percentile;
+      if (numEl)  numEl.textContent  = rank + '%';
+      if (mainEl) mainEl.textContent = 'Top ' + rank + '% at ' + college + ' this week';
+      if (subEl)  subEl.textContent  = 'Based on ' + rankObj.sessions + ' sessions in the last 7 days';
+      if (badgeEl) badgeEl.textContent = 'Top ' + rank + '%';
+    });
   } else {
     // Show unlock prompt
     if (urkSet) urkSet.style.display = 'none';
@@ -5183,13 +5220,41 @@ function renderDash() {
     document.getElementById('cp-track-sub').textContent = cpSub;
   }
 
-  document.getElementById('ds-streak').textContent = appUser ? (appUser.streak || 0) : 0;
+  var streakVal = appUser ? (appUser.streak || 0) : 0;
+  document.getElementById('ds-streak').textContent = streakVal;
+  // Duolingo-style streak messaging
+  var streakMsg = document.getElementById('ds-streak-msg');
+  var streakIco = document.getElementById('ds-streak-ico');
+  var streakCard = document.getElementById('stat-streak-card');
+  if (streakVal === 0) {
+    if (streakMsg) streakMsg.textContent = 'Start today';
+    if (streakMsg) streakMsg.style.color = 'var(--oat)';
+    if (streakCard) streakCard.classList.remove('stat-streak');
+  } else if (streakVal < 3) {
+    if (streakMsg) { streakMsg.textContent = 'Keep it going!'; streakMsg.style.color = 'var(--sage)'; }
+  } else if (streakVal < 7) {
+    if (streakMsg) { streakMsg.textContent = 'On fire!'; streakMsg.style.color = 'var(--sage)'; }
+  } else if (streakVal < 14) {
+    if (streakMsg) { streakMsg.textContent = 'Unstoppable!'; streakMsg.style.color = 'var(--sage)'; }
+  } else {
+    if (streakMsg) { streakMsg.textContent = 'Legendary ' + streakVal + 'd'; streakMsg.style.color = 'var(--sage)'; }
+  }
   var scores = appHistory.map(function(s) { return s.score; });
   var avg = scores.length
     ? (scores.slice(0, 7).reduce(function(a, b) { return a + b; }, 0) / Math.min(scores.length, 7)).toFixed(1)
     : '0';
   document.getElementById('ds-avg').textContent    = avg;
   document.getElementById('ds-total').textContent  = appHistory.length;
+  // Avg score trend message
+  var avgMsg = document.getElementById('ds-avg-msg');
+  if (avgMsg) {
+    var avgNum = parseFloat(avg);
+    if (avgNum >= 9) avgMsg.textContent = 'Offer level';
+    else if (avgNum >= 8) avgMsg.textContent = 'Strong week';
+    else if (avgNum >= 7) avgMsg.textContent = '\u2191 improving';
+    else if (avgNum > 0) avgMsg.textContent = 'Keep going';
+    else avgMsg.textContent = '\u2014';
+  }
 
   var qs = appPersona ? (QUESTIONS[appPersona.id] || QUESTIONS.consulting) : QUESTIONS.consulting;
   currentQ = qs[0];
@@ -5627,6 +5692,253 @@ function _localStarAnalysis(answer, question) {
   };
 }
 
+// ═══════════════════════════════════════
+// ADAPTIVE FOLLOW-UP — Gap Detection + Question Generation
+// ═══════════════════════════════════════
+var _FOLLOW_UP_BANK = {
+  quantifiable_impact: {
+    consulting: [
+      'Can you walk me through the measurable outcome of that decision?',
+      'What was the dollar or percentage impact on the client?',
+      'How did you quantify the value you delivered to the team?'
+    ],
+    banking: [
+      'What was the deal size or revenue impact of your contribution?',
+      'Can you put a number on the outcome — basis points, dollars, multiples?',
+      'How did your analysis move the needle on the transaction?'
+    ],
+    product: [
+      'What metric moved as a result of your decision?',
+      'Can you quantify the user impact — DAU, retention, conversion?',
+      'What was the measurable business outcome?'
+    ],
+    finance: [
+      'What was the fund-level or portfolio impact of that decision?',
+      'Can you quantify the returns or risk reduction?',
+      'How did this affect the P&L or IRR?'
+    ],
+    marketing: [
+      'What was the campaign ROI or conversion lift?',
+      'Can you quantify the brand impact — reach, engagement, revenue?',
+      'What metrics proved your strategy worked?'
+    ],
+    nonprofit: [
+      'How many people or communities were impacted?',
+      'Can you quantify the outcome — lives reached, funds raised, policy changed?',
+      'What measurable difference did your work make?'
+    ],
+    healthcare: [
+      'What was the patient outcome or operational improvement?',
+      'Can you quantify the clinical or financial impact?',
+      'How did you measure success in that initiative?'
+    ],
+    generic: [
+      'Can you be more specific about the measurable outcome?',
+      'What numbers or metrics demonstrate the impact of your work?',
+      'How would you quantify what changed because of your actions?'
+    ]
+  },
+  ownership: {
+    consulting: [
+      'What specifically did you personally decide or deliver?',
+      'Can you separate your individual contribution from the team\'s?',
+      'Walk me through a moment where you personally drove the outcome.'
+    ],
+    banking: [
+      'What was your specific role versus the team\'s?',
+      'Can you describe a decision you personally made on this deal?',
+      'What would not have happened without your individual contribution?'
+    ],
+    product: [
+      'What was your unique contribution versus the broader team?',
+      'Can you describe a decision you owned end-to-end?',
+      'What did you personally ship or decide?'
+    ],
+    generic: [
+      'What did you personally do versus what the team did?',
+      'Can you use more "I" language to clarify your specific role?',
+      'Walk me through a decision that was yours alone to make.'
+    ]
+  },
+  specificity: {
+    consulting: [
+      'Can you give me more context on the situation — when, where, what was at stake?',
+      'What was the specific client problem you were solving?',
+      'Can you walk me through the timeline more concretely?'
+    ],
+    banking: [
+      'What was the specific deal or situation?',
+      'Can you give me more detail on the context — sector, stage, stakes?',
+      'Walk me through the specifics of what happened.'
+    ],
+    product: [
+      'What was the specific product or feature you were working on?',
+      'Can you paint a clearer picture of the situation?',
+      'What were the concrete constraints you were operating under?'
+    ],
+    generic: [
+      'Can you add more specific details — names, dates, context?',
+      'What was the exact situation you were facing?',
+      'Help me see this more concretely — what was at stake?'
+    ]
+  },
+  structured_thinking: {
+    consulting: [
+      'Can you restructure that using Situation, Task, Action, Result?',
+      'What was the task or challenge before you describe what you did?',
+      'Walk me through this more systematically — start with the context.'
+    ],
+    banking: [
+      'Can you frame this more clearly — what was the situation and your specific task?',
+      'I\'d like to hear this in a more structured way. Start with the context.',
+      'What was the problem before the solution?'
+    ],
+    product: [
+      'Can you break this down more systematically?',
+      'Start with the problem space before jumping to the solution.',
+      'What was the situation and what were you specifically tasked with?'
+    ],
+    generic: [
+      'Can you restructure this answer with a clearer beginning, middle, and end?',
+      'Start with the situation before jumping to what you did.',
+      'Walk me through the context first — then your actions and the result.'
+    ]
+  }
+};
+
+function _detectRubricGaps(r) {
+  var sc = r.scores || {};
+  var sb = r.star_breakdown || {};
+  var wc = (sb.weak_components || '').toLowerCase();
+
+  var rawScores = {
+    quantifiable_impact: parseFloat(sc.impact    || 0),
+    ownership:           parseFloat(sc.ownership || 0),
+    specificity:         parseFloat(sc.clarity   || 0),
+    structured_thinking: parseFloat(sc.structure || 0)
+  };
+
+  var caps = {};
+  if (wc.indexOf('result') !== -1 || wc.indexOf('quantif') !== -1)
+    caps.quantifiable_impact = 4;
+  if (wc.indexOf('personal action') !== -1 || (sb.action || '').toUpperCase().indexOf('MISSING') !== -1)
+    caps.ownership = 4;
+  if (wc.indexOf('situation') !== -1 || wc.indexOf('task') !== -1)
+    caps.structured_thinking = 5;
+
+  var LABELS = {
+    quantifiable_impact: 'No quantified outcome',
+    ownership:           'Ownership unclear',
+    specificity:         'Needs more context',
+    structured_thinking: 'Incomplete structure'
+  };
+
+  var dims = Object.keys(rawScores).map(function(key) {
+    return {
+      key:   key,
+      score: caps[key] !== undefined ? Math.min(rawScores[key], caps[key]) : rawScores[key],
+      label: LABELS[key]
+    };
+  });
+
+  dims.sort(function(a, b) { return a.score - b.score; });
+
+  var worst   = dims[0];
+  var overall = parseFloat(r.overall) || 0;
+  var severity = worst.score < 5 ? 'critical'
+               : (worst.score < 7 && overall < 7.5) ? 'notable'
+               : 'none';
+
+  return {
+    primaryGap:            severity !== 'none' ? worst.key   : null,
+    primaryLabel:          severity !== 'none' ? worst.label : null,
+    severity:              severity,
+    allGaps:               dims.filter(function(d) { return d.score < 7; }),
+    shouldTriggerFollowUp: severity !== 'none'
+  };
+}
+
+function _generateAdaptiveFollowUp(gapResult, industryId) {
+  var bank = _FOLLOW_UP_BANK[gapResult.primaryGap];
+  if (!bank) return 'Can you be more specific about your role and the measurable outcome?';
+
+  var pool = bank[industryId] || bank.generic;
+  if (!pool || !pool.length) pool = bank.generic;
+
+  var idx = Math.floor(Date.now() / 60000) % pool.length;
+  return pool[idx];
+}
+
+function _showAdaptiveFollowUp(r) {
+  var old = document.getElementById('fb-adaptive-followup');
+  if (old) old.remove();
+
+  var gapResult = _detectRubricGaps(r);
+  if (!gapResult.shouldTriggerFollowUp) return;
+
+  var p = appPersona || PERSONAS[0];
+  var followUpQ = _generateAdaptiveFollowUp(gapResult, p.id || 'general');
+
+  window._adaptiveFollowUpQ = followUpQ;
+
+  var isCritical = gapResult.severity === 'critical';
+
+  var el = document.createElement('div');
+  el.id = 'fb-adaptive-followup';
+  el.style.cssText = [
+    'margin:12px 0 4px',
+    'padding:13px 14px',
+    'background:' + (isCritical ? 'rgba(228,187,126,0.07)' : 'var(--ln)'),
+    'border:1px solid ' + (isCritical ? 'rgba(228,187,126,0.28)' : 'var(--sil)'),
+    'border-radius:12px'
+  ].join(';');
+
+  el.innerHTML =
+    '<div style="display:flex;align-items:center;gap:7px;margin-bottom:9px;">' +
+      '<div style="font-size:9px;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:var(--med);">Interviewer would probe</div>' +
+      '<div style="font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;' +
+           'padding:2px 8px;border-radius:99px;' +
+           'background:' + (isCritical ? 'rgba(239,68,68,0.10)' : 'rgba(228,187,126,0.12)') + ';' +
+           'color:'      + (isCritical ? 'var(--red)'            : 'var(--med)') + ';">' +
+        escHtml(gapResult.primaryLabel) +
+      '</div>' +
+    '</div>' +
+    '<div style="font-size:14px;font-weight:600;color:var(--esp);line-height:1.45;margin-bottom:12px;">' +
+      '\u201c' + escHtml(followUpQ) + '\u201d' +
+    '</div>' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+      '<button onclick="practiceAdaptiveFollowUp()" ' +
+               'style="font-size:12px;font-weight:600;padding:7px 15px;' +
+                      'background:var(--mocha,#6b3a2a);color:#fff;border:none;' +
+                      'border-radius:99px;cursor:pointer;' +
+                      'font-family:\'DM Sans\',sans-serif;letter-spacing:-0.01em;">' +
+        'Practice this answer \u2192' +
+      '</button>' +
+      '<button onclick="document.getElementById(\'fb-adaptive-followup\').remove()" ' +
+               'style="font-size:12px;font-weight:600;padding:7px 14px;' +
+                      'background:none;color:var(--oat);border:1px solid var(--sil);' +
+                      'border-radius:99px;cursor:pointer;' +
+                      'font-family:\'DM Sans\',sans-serif;">' +
+        'Skip' +
+      '</button>' +
+    '</div>';
+
+  var fbStarSec = document.getElementById('fb-star-sec');
+  if (fbStarSec && fbStarSec.parentNode) {
+    fbStarSec.parentNode.insertBefore(el, fbStarSec.nextSibling);
+  }
+}
+
+function practiceAdaptiveFollowUp() {
+  var q = window._adaptiveFollowUpQ;
+  if (!q) { goNextQuestion(); return; }
+  if (!appUser && freeTries <= 0) { openModal('signup'); return; }
+  currentQ = { text: q, cat: 'Behavioral' };
+  initPractice();
+  showPage('page-practice');
+  setTab('prac');
+}
+
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // SUBMIT
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
@@ -5890,6 +6202,9 @@ function renderFeedback(r, isFree) {
     nqEl.style.display = 'block';
   }
 
+  // Adaptive follow-up — gap detection + probing question
+  _showAdaptiveFollowUp(r);
+
   // share_line — pre-populate share card copy
   if (r.share_line) {
     try { window._shareLine = r.share_line; } catch(e) {}
@@ -6038,32 +6353,210 @@ function sendFollowUp() {
   });
 }
 
+// ═══════════════════════════════════════
+// CANVAS SHARE IMAGE — 1080×1080 Instagram-ready PNG
+// ═══════════════════════════════════════
+function _generateShareImage(callback) {
+  var score  = document.getElementById('fb-score') ? document.getElementById('fb-score').textContent : '8.5';
+  var p = appPersona || PERSONAS[0];
+  var trackFirmMap = {
+    consulting:'McKinsey · MBB PEI', banking:'Goldman Sachs · IB', product:'Amazon · FAANG',
+    finance:'Blackstone · PE', marketing:'P&G · Brand', nonprofit:'Gates Foundation',
+    healthcare:'J&J · Healthcare', retail:'Amazon Retail'
+  };
+  var trackName = trackFirmMap[p.id] || (p.source + ' · Behavioral');
+  var sc = window._lastFeedbackScores || {};
+  var verdictText = document.getElementById('sc-verdict') ? document.getElementById('sc-verdict').textContent : '';
+  var scoreNum = parseFloat(score) || 0;
+
+  var W = 1080, H = 1080;
+  var canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  var ctx = canvas.getContext('2d');
+
+  // Background — cream with subtle warm gradient
+  ctx.fillStyle = '#fef7f0';
+  ctx.fillRect(0, 0, W, H);
+  // Subtle radial glow top-right
+  var grad = ctx.createRadialGradient(W * 0.85, H * 0.1, 0, W * 0.85, H * 0.1, 400);
+  grad.addColorStop(0, 'rgba(232,187,126,0.15)');
+  grad.addColorStop(1, 'rgba(232,187,126,0)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+
+  // Logo mark — espresso rounded square with italic m
+  var logoX = 80, logoY = 80, logoS = 72;
+  ctx.fillStyle = '#2c1308';
+  _roundRect(ctx, logoX, logoY, logoS, logoS, 18);
+  ctx.fill();
+  ctx.font = 'italic 46px Georgia, "DM Serif Display", serif';
+  ctx.fillStyle = '#fde8cc';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('m', logoX + logoS / 2, logoY + logoS / 2 + 2);
+
+  // Logo text
+  ctx.font = '400 38px Georgia, "DM Serif Display", serif';
+  ctx.fillStyle = '#2c1308';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('mocha', logoX + logoS + 18, logoY + logoS / 2);
+
+  // Track badge
+  ctx.font = '700 22px "DM Sans", sans-serif';
+  ctx.fillStyle = '#c48762';
+  ctx.textAlign = 'left';
+  ctx.fillText(trackName.toUpperCase(), 82, 200);
+
+  // Score — big hero number
+  ctx.font = '400 260px Georgia, "DM Serif Display", serif';
+  ctx.fillStyle = '#2c1308';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(score, W / 2, 440);
+
+  // /10
+  ctx.font = '500 48px "DM Sans", sans-serif';
+  ctx.fillStyle = '#c48762';
+  ctx.textAlign = 'center';
+  ctx.fillText('/10', W / 2 + 160, 440);
+
+  // Verdict — color-coded
+  var verdColor = scoreNum >= 8 ? '#16a34a' : scoreNum >= 6.5 ? '#c48762' : '#c0190f';
+  ctx.font = '800 28px "DM Sans", sans-serif';
+  ctx.fillStyle = verdColor;
+  ctx.textAlign = 'center';
+  ctx.letterSpacing = '3px';
+  ctx.fillText((verdictText || 'Score').toUpperCase(), W / 2, 580);
+
+  // Divider
+  ctx.strokeStyle = 'rgba(44,19,8,0.08)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(120, 640);
+  ctx.lineTo(W - 120, 640);
+  ctx.stroke();
+
+  // Dimension bars
+  var dims = [
+    { label: 'STRUCTURE', val: parseFloat(sc.structure || 0) },
+    { label: 'CLARITY',   val: parseFloat(sc.clarity || 0) },
+    { label: 'OWNERSHIP', val: parseFloat(sc.ownership || 0) },
+    { label: 'IMPACT',    val: parseFloat(sc.impact || 0) }
+  ];
+  var barY = 690, barH = 16, barGap = 70, barLeft = 120, barRight = W - 120;
+  var labelW = 200, valW = 80;
+  for (var i = 0; i < dims.length; i++) {
+    var y = barY + i * barGap;
+    // Label
+    ctx.font = '700 20px "DM Sans", sans-serif';
+    ctx.fillStyle = 'rgba(44,19,8,0.35)';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(dims[i].label, barLeft, y + barH / 2);
+    // Track
+    var trackLeft = barLeft + labelW;
+    var trackW = barRight - trackLeft - valW;
+    ctx.fillStyle = 'rgba(44,19,8,0.06)';
+    _roundRect(ctx, trackLeft, y, trackW, barH, 8);
+    ctx.fill();
+    // Fill
+    var pct = Math.min(dims[i].val / 10, 1);
+    if (pct > 0) {
+      var fillGrad = ctx.createLinearGradient(trackLeft, 0, trackLeft + trackW * pct, 0);
+      fillGrad.addColorStop(0, '#2c1308');
+      fillGrad.addColorStop(1, '#9c5c3a');
+      ctx.fillStyle = fillGrad;
+      _roundRect(ctx, trackLeft, y, trackW * pct, barH, 8);
+      ctx.fill();
+    }
+    // Value
+    ctx.font = '700 22px "DM Sans", sans-serif';
+    ctx.fillStyle = '#2c1308';
+    ctx.textAlign = 'right';
+    ctx.fillText(dims[i].val.toFixed(1), barRight, y + barH / 2);
+  }
+
+  // Bottom URL
+  ctx.font = '600 24px "DM Sans", sans-serif';
+  ctx.fillStyle = '#c48762';
+  ctx.textAlign = 'center';
+  ctx.fillText('usemocha.app', W / 2, H - 70);
+
+  // Watermark m
+  ctx.font = 'italic 180px Georgia, "DM Serif Display", serif';
+  ctx.fillStyle = 'rgba(44,19,8,0.025)';
+  ctx.textAlign = 'right';
+  ctx.fillText('m', W - 60, H - 30);
+
+  canvas.toBlob(function(blob) {
+    if (blob) {
+      window._shareImageBlob = blob;
+      window._shareImageUrl = URL.createObjectURL(blob);
+    }
+    callback(blob);
+  }, 'image/png');
+}
+
+function _roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
 function openShareModal() {
   var score = document.getElementById('fb-score') ? document.getElementById('fb-score').textContent : '8.5';
   var p = appPersona || PERSONAS[0];
   var track = p ? p.role : 'Consulting';
   var verdict = document.getElementById('sc-verdict') ? document.getElementById('sc-verdict').textContent : '';
+  var scoreNum = parseFloat(score) || 0;
+  var verdictShort = scoreNum >= 8 ? 'advance' : scoreNum >= 6.5 ? 'solid' : 'improve';
+
+  // Store scores for canvas generation
+  var sc = {};
+  var fbClarity = document.getElementById('fb-clarity');
+  var fbStar = document.getElementById('fb-star');
+  var fbSpec = document.getElementById('fb-spec');
+  var fbConf = document.getElementById('fb-conf');
+  if (fbClarity) sc.structure  = parseFloat(fbClarity.textContent) || 0;
+  if (fbStar)    sc.clarity    = parseFloat(fbStar.textContent) || 0;
+  if (fbSpec)    sc.ownership  = parseFloat(fbSpec.textContent) || 0;
+  if (fbConf)    sc.impact     = parseFloat(fbConf.textContent) || 0;
+  window._lastFeedbackScores = sc;
+
+  var shareUrl = 'https://usemocha.app/?s=' + encodeURIComponent(score) + '&t=' + encodeURIComponent(p.id || 'consulting') + '&v=' + verdictShort;
 
   var shareOptions = [
     {
-      emoji: '🔥',
+      emoji: '\uD83D\uDD25',
       label: 'Starting my streak',
       sub: 'Day 1 energy — share your first session',
-      text: 'Day 1 of practicing with Mocha. Scored ' + score + '/10 on a ' + track + ' interview question. Free AI coaching at McKinsey standard → usemocha.app'
+      text: 'Day 1 of practicing with Mocha. Scored ' + score + '/10 on a ' + track + ' interview question. Free AI coaching at McKinsey standard \u2192 ' + shareUrl
     },
     {
-      emoji: '📈',
-      label: score + '/10 — ' + (verdict || 'My score'),
-      sub: 'Share your exact score and track',
-      text: 'Scored ' + score + '/10 on a ' + track + ' behavioral question. Graded at McKinsey, Goldman, and Google standard. Practise free → usemocha.app'
+      emoji: '\uD83D\uDCC8',
+      label: score + '/10 \u2014 ' + (verdict || 'My score'),
+      sub: 'Share your exact score with the image',
+      text: 'Scored ' + score + '/10 on a ' + track + ' behavioral question. Graded at McKinsey, Goldman, and Google standard. Practise free \u2192 ' + shareUrl
     },
     {
-      emoji: '🎯',
+      emoji: '\uD83C\uDFAF',
       label: 'Getting better at interviews',
       sub: 'Invite friends to try Mocha',
-      text: window._shareLine || ('Just used Mocha — free AI interview coaching at McKinsey standard. No booking, no scheduling, instant feedback. Try it → usemocha.app')
+      text: window._shareLine || ('Just used Mocha \u2014 free AI interview coaching at McKinsey standard. No booking, no scheduling, instant feedback. Try it \u2192 ' + shareUrl)
     }
   ];
+
+  // Generate share image in background
+  _generateShareImage(function() {});
 
   var sheet = document.createElement('div');
   sheet.id = 'share-modal-overlay';
@@ -6087,7 +6580,14 @@ function openShareModal() {
       '<div style="font-family:\'DM Serif Display\',serif;font-size:1.1rem;color:var(--esp);letter-spacing:-0.02em;">You scored <span style="color:var(--med);">' + score + '/10</span> on ' + track + '</div>' +
     '</div>' +
     '<div>' + optionsHtml + '</div>' +
-    '<div style="padding:12px 16px 24px;">' +
+    // Download image button (desktop fallback)
+    '<div style="padding:8px 16px 4px;">' +
+      '<button id="share-dl-btn" onclick="window._downloadShareImage()" style="width:100%;padding:11px;background:var(--esp);color:var(--ln);border:none;border-radius:99px;font-size:13px;font-weight:600;cursor:pointer;font-family:\'DM Sans\',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;">' +
+        '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 8l4 4 4-4M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+        'Download score image' +
+      '</button>' +
+    '</div>' +
+    '<div style="padding:8px 16px 24px;">' +
       '<button onclick="document.getElementById(\'share-modal-overlay\').remove()" style="width:100%;padding:11px;background:var(--cr);border:1px solid var(--sil);border-radius:99px;font-size:13px;font-weight:600;color:var(--med);cursor:pointer;font-family:\'DM Sans\',sans-serif;transition:background 0.12s;">Cancel</button>' +
     '</div>' +
   '</div>';
@@ -6095,21 +6595,50 @@ function openShareModal() {
   sheet.addEventListener('click', function(e) { if (e.target === sheet) sheet.remove(); });
   document.body.appendChild(sheet);
 
+  window._downloadShareImage = function() {
+    if (!window._shareImageUrl) {
+      _generateShareImage(function(blob) {
+        if (blob) _triggerDownload();
+      });
+    } else {
+      _triggerDownload();
+    }
+    function _triggerDownload() {
+      var a = document.createElement('a');
+      a.href = window._shareImageUrl;
+      a.download = 'mocha-score-' + score + '.png';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  };
+
   window._doShare = function(idx) {
     var opt = shareOptions[idx];
     var text = opt.text;
     sheet.remove();
+
+    // Try native share with image file on mobile
+    if (navigator.share && window._shareImageBlob) {
+      var file = new File([window._shareImageBlob], 'mocha-score.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        navigator.share({ title: 'My Mocha Score', text: text, files: [file] }).catch(function(){});
+        return;
+      }
+    }
     if (navigator.share) {
-      navigator.share({ title: 'My Mocha Score', text: text, url: 'https://usemocha.app' }).catch(function(){});
+      navigator.share({ title: 'My Mocha Score', text: text, url: shareUrl }).catch(function(){});
     } else {
+      // Desktop: copy text + auto-download image
       var ta = document.createElement('textarea');
       ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
       document.body.appendChild(ta); ta.select();
       try { document.execCommand('copy'); } catch(e) {}
       document.body.removeChild(ta);
+      if (window._shareImageUrl) window._downloadShareImage();
       var toast = document.createElement('div');
       toast.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--esp);color:var(--ln);padding:10px 22px;border-radius:99px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 24px rgba(44,19,8,0.25);white-space:nowrap;animation:toastIn 0.2s cubic-bezier(0.34,1.56,0.64,1);';
-      toast.textContent = 'Copied to clipboard ✓';
+      toast.textContent = 'Copied + image downloaded \u2713';
       document.body.appendChild(toast);
       setTimeout(function() { if (document.body.contains(toast)) document.body.removeChild(toast); }, 2400);
     }
@@ -6772,6 +7301,8 @@ function _checkPasswordReset() {
 
 function initLanding() {
   if (document.getElementById('page-land') && document.getElementById('page-land').classList.contains('active')) {
+    // Share URL context — show personalized subline if score params present
+    _handleShareContext();
     startHeroChatLoop();
     initScrollReveal();
     initDemoObserver();
@@ -6781,6 +7312,36 @@ function initLanding() {
     startDemoTimer();
     initTrackScrollDriver();
   }
+}
+
+function _handleShareContext() {
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var sharedScore = params.get('s');
+    var sharedTrack = params.get('t');
+    var sharedVerdict = params.get('v');
+    if (!sharedScore) return;
+
+    var trackNames = {
+      consulting: 'Consulting', banking: 'Banking', product: 'Product',
+      finance: 'Finance', marketing: 'Marketing', nonprofit: 'Nonprofit',
+      healthcare: 'Healthcare', retail: 'Retail'
+    };
+    var verdictTexts = {
+      advance: 'Strong answer', solid: 'Good foundation', improve: 'Room to grow'
+    };
+    var trackName = trackNames[sharedTrack] || 'Behavioral';
+    var verdictText = verdictTexts[sharedVerdict] || '';
+
+    var tagline = document.getElementById('hero-tagline');
+    if (tagline) {
+      var contextLine = 'Someone scored ' + sharedScore + '/10 on a ' + trackName + ' question';
+      if (verdictText) contextLine += ' \u2014 ' + verdictText.toLowerCase();
+      contextLine += '. Can you beat it?';
+      tagline.textContent = contextLine;
+      tagline.style.opacity = '1';
+    }
+  } catch(e) {}
 }
 
 // \u2500\u2500 SCROLL-POSITION TRACK DRIVER \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
@@ -6813,17 +7374,52 @@ function initTrackScrollDriver() {
 // GROWTH ENGINE — Share, University Rank, Streak, Progress
 // ═══════════════════════════════════════════════════════════
 
-// University rank simulation (deterministic from score + track)
-function _getUniRank(score, track) {
-  // Simulated rank — in production this would be a real API call
-  // Using score to create believable, motivating rank data
-  var seed = Math.abs(Math.sin(score * 17.3 + track.length * 7.1));
-  var percentile = Math.round(15 + seed * 45); // 15-60th percentile (always positive)
-  if (score >= 9.0) percentile = Math.round(5 + seed * 15);  // top 5-20%
-  if (score >= 8.5) percentile = Math.round(10 + seed * 20); // top 10-30%
-  if (score >= 8.0) percentile = Math.round(15 + seed * 25); // top 15-40%
-  var sessions = Math.round(80 + seed * 300);
-  return { percentile: percentile, sessions: sessions };
+// University rank — real Supabase query against sessions table
+function _getUniRank(score, track, college, callback) {
+  if (!college || !_sbSession || !_sbSession.access_token) {
+    callback(null);
+    return;
+  }
+  // Query sessions from the last 7 days
+  var weekAgo = new Date(Date.now() - 7 * 86400000).toISOString();
+  // We can't filter by college in sessions table directly (it's in user metadata),
+  // so we query all recent sessions and filter client-side by matching college users.
+  // For scale, this should be a Supabase RPC, but for <1000 users this is fine.
+  var url = _SB_URL + '/rest/v1/sessions?created_at=gte.' + encodeURIComponent(weekAgo) +
+            '&select=notes,user_id&order=created_at.desc&limit=500';
+  fetch(url, { headers: _sbHeaders() })
+    .then(function(res) { return res.ok ? res.json() : []; })
+    .then(function(rows) {
+      if (!rows || rows.length < 5) {
+        callback({ notEnough: true });
+        return;
+      }
+      // Extract scores from notes JSON
+      var allScores = [];
+      for (var i = 0; i < rows.length; i++) {
+        try {
+          var notes = typeof rows[i].notes === 'string' ? JSON.parse(rows[i].notes) : rows[i].notes;
+          var s = parseFloat(notes && notes.score);
+          if (s > 0) allScores.push(s);
+        } catch(e) {}
+      }
+      if (allScores.length < 5) {
+        callback({ notEnough: true });
+        return;
+      }
+      // Calculate percentile — what % of scores is the user's score >= to
+      allScores.sort(function(a, b) { return a - b; });
+      var below = 0;
+      for (var j = 0; j < allScores.length; j++) {
+        if (score >= allScores[j]) below++;
+      }
+      var percentile = Math.round((1 - below / allScores.length) * 100);
+      percentile = Math.max(1, Math.min(99, percentile));
+      callback({ percentile: percentile, sessions: allScores.length });
+    })
+    .catch(function() {
+      callback(null);
+    });
 }
 
 // Update share card with current feedback data
@@ -6896,108 +7492,6 @@ function updateShareCard(r) {
   // Score progress
   _refreshScoreProgress();
 }
-
-// Share score function
-function shareScore() {
-  var score  = document.getElementById('sc-score') ? document.getElementById('sc-score').textContent : '7.5';
-  var track  = document.getElementById('sc-track') ? document.getElementById('sc-track').textContent : 'McKinsey · MBB PEI';
-  var streak = appUser ? (appUser.streak || 0) : 0;
-  var sessions = appHistory ? appHistory.length : 0;
-
-  // Three viral share options
-  var options = [
-    {
-      label  : '🔥 Started my streak',
-      icon   : '🔥',
-      title  : 'Day 1.',
-      text   : 'Just started practising behavioral interviews with Mocha. Day 1 — scored ' + score + '/10 on a ' + track + ' question. Free at usemocha.app',
-    },
-    {
-      label  : '📈 I\'m improving',
-      icon   : '📈',
-      title  : 'Getting better.',
-      text   : 'Session ' + sessions + ' with Mocha. Scored ' + score + '/10 on a ' + track + ' question. My answers are getting sharper — free daily practice at usemocha.app',
-    },
-    {
-      label  : '🎯 I\'m ready',
-      icon   : '🎯',
-      title  : score + '/10',
-      text   : 'Scored ' + score + '/10 on a ' + track + ' behavioral. Mocha grades at McKinsey, Goldman, and Amazon standard — free at usemocha.app',
-    }
-  ];
-
-  // Use AI share line as the "ready" option if available
-  if (window._shareLine) options[2].text = window._shareLine + ' usemocha.app';
-
-  // Build modal
-  var overlay = document.createElement('div');
-  overlay.style.cssText = 'position:fixed;inset:0;z-index:700;background:rgba(10,5,2,0.55);backdrop-filter:blur(12px);display:flex;align-items:flex-end;justify-content:center;';
-
-  var sheet = document.createElement('div');
-  sheet.style.cssText = 'background:var(--cr);border-radius:24px 24px 0 0;padding:0 0 env(safe-area-inset-bottom,16px);width:100%;max-width:480px;box-shadow:0 -4px 40px rgba(10,5,2,0.18);overflow:hidden;';
-
-  // Header
-  var header = '<div style="padding:1.2rem 1.4rem 0;">' +
-    '<div style="width:36px;height:4px;background:rgba(44,19,8,0.12);border-radius:2px;margin:0 auto 1.2rem;"></div>' +
-    '<div style="font-family:\'DM Serif Display\',serif;font-size:1.2rem;color:var(--esp);letter-spacing:-0.03em;margin-bottom:4px;">Share your score</div>' +
-    '<div style="font-size:12px;color:var(--oat);margin-bottom:1.2rem;">Pick the moment that fits.</div>' +
-    '</div>';
-
-  // Options
-  var optHtml = '<div style="padding:0 1rem;">';
-  options.forEach(function(opt, i) {
-    optHtml += '<button onclick="window._doShare(' + i + ')" style="width:100%;text-align:left;background:#fff;border:1.5px solid rgba(44,19,8,0.08);border-radius:14px;padding:12px 14px;margin-bottom:8px;cursor:pointer;font-family:\'DM Sans\',sans-serif;display:flex;align-items:flex-start;gap:10px;transition:border-color 0.15s;">' +
-      '<span style="font-size:1.2rem;flex-shrink:0;line-height:1.3;">' + opt.icon + '</span>' +
-      '<div style="flex:1;">' +
-        '<div style="font-size:13px;font-weight:700;color:var(--esp);margin-bottom:2px;">' + opt.title + '</div>' +
-        '<div style="font-size:11.5px;color:var(--oat);line-height:1.45;">' + opt.text.slice(0, 90) + (opt.text.length > 90 ? '…' : '') + '</div>' +
-      '</div>' +
-      '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:2px;opacity:0.35;"><path d="M3 8h10M9 4l4 4-4 4" stroke="var(--esp)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-      '</button>';
-  });
-  optHtml += '</div>';
-
-  // Cancel
-  var cancel = '<div style="padding:0 1rem 1.2rem;">' +
-    '<button onclick="this.closest(\'[data-share-overlay]\').remove()" style="width:100%;padding:12px;background:transparent;border:none;font-size:13px;color:var(--oat);cursor:pointer;font-family:\'DM Sans\',sans-serif;">Cancel</button>' +
-    '</div>';
-
-  sheet.innerHTML = header + optHtml + cancel;
-  overlay.setAttribute('data-share-overlay', '1');
-  overlay.appendChild(sheet);
-  overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
-  document.body.appendChild(overlay);
-
-  // Store options for the share handler
-  window._shareOptions = options;
-}
-
-window._doShare = function(idx) {
-  var opt = (window._shareOptions || [])[idx];
-  if (!opt) return;
-  var overlay = document.querySelector('[data-share-overlay]');
-  if (overlay) overlay.remove();
-
-  var shareText = opt.text;
-  var shareUrl  = 'https://usemocha.app';
-
-  if (navigator.share) {
-    navigator.share({ title: 'Mocha', text: shareText, url: shareUrl }).catch(function(){});
-  } else {
-    // Copy to clipboard and show toast
-    var full = shareText + '\n\n' + shareUrl;
-    navigator.clipboard.writeText(full).then(function() {
-      var toast = document.createElement('div');
-      toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--esp);color:var(--ln);font-size:13px;font-weight:600;padding:10px 20px;border-radius:99px;z-index:800;font-family:\'DM Sans\',sans-serif;box-shadow:0 4px 20px rgba(10,5,2,0.25);';
-      toast.textContent = '✓ Copied to clipboard';
-      document.body.appendChild(toast);
-      setTimeout(function() { toast.remove(); }, 2500);
-    }).catch(function() {
-      // Fallback: open Twitter with pre-filled text
-      window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText) + '&url=' + encodeURIComponent(shareUrl), '_blank');
-    });
-  }
-};
 
 // Streak danger detection — check on dashboard load
 function checkStreakDanger() {

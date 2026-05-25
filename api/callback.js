@@ -1,14 +1,15 @@
 // /api/callback.js
-// Supabase OAuth sends tokens in the URL hash (#access_token=...).
-// Servers can't read hashes. This page extracts the hash client-side
-// and lets the Supabase JS SDK handle it automatically on /app.
+// Supabase OAuth sends tokens in URL hash (#access_token=...).
+// Servers can't read hashes, so Step 1 serves a page that reads the hash
+// and posts the token back as query params.
+// Step 2 validates the token then redirects to the landing page (/)
+// where the Supabase SDK picks it up, saves to localStorage, and sends to /app.
 
 export default async function handler(req, res) {
-  // If query params arrive (old flow), just redirect to /app with them
-  // so the SDK can pick them up
   const at = req.query.at;
+
+  // ── Step 2: token arrived as query params ──────────────────────────
   if (at) {
-    // Validate and redirect to /app — SDK will pick up from storage
     const SB_URL = 'https://xfwsnshhlfjzflobuoxd.supabase.co';
     const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhmd3Nuc2hobGZqemZsb2J1b3hkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2ODg2NDUsImV4cCI6MjA5NDI2NDY0NX0.gZnNb3EEEy9H3ZZ-B-1lSSSbbldJkIuS0zcFmT6Wjec';
     try {
@@ -17,14 +18,16 @@ export default async function handler(req, res) {
       });
       const user = await r.json();
       if (user && user.id) {
-        return res.redirect(`/app?at=${encodeURIComponent(at)}&rt=${encodeURIComponent(req.query.rt || '')}&uid=${encodeURIComponent(user.id)}`);
+        // Redirect to landing page with token — index.html saves it and goes to /app
+        return res.redirect(
+          `/?at=${encodeURIComponent(at)}&rt=${encodeURIComponent(req.query.rt || '')}`
+        );
       }
     } catch(e) {}
     return res.redirect('/?auth_error=invalid_token');
   }
 
-  // Step 1: Supabase redirected here with #access_token in the hash.
-  // Serve a page that reads the hash and posts back here as query params.
+  // ── Step 1: Supabase sent browser here with #access_token in hash ──
   res.setHeader('Content-Type', 'text/html');
   res.status(200).send(`<!DOCTYPE html>
 <html>

@@ -7618,14 +7618,30 @@ async function _appBoot() {
   var veil = document.getElementById('pl-veil');
   if (veil) { veil.style.opacity='1'; veil.style.pointerEvents='all'; }
 
-  // Safety: if auth takes >10s, go to landing
-  var _btimer = setTimeout(function(){ window.location.href='/'; }, 10000);
-
   var params = new URLSearchParams(window.location.search);
   var at = params.get('at'), rt = params.get('rt') || '';
 
+  // ── FRESH OAUTH: ?at= token arrived from /api/callback ────────
   if (at) {
     history.replaceState(null, '', '/app');
+    try {
+      // Set session in Supabase SDK so it's stored properly
+      var client = _getSupabaseClient();
+      if (client) {
+        var setResult = await client.auth.setSession({
+          access_token: at,
+          refresh_token: rt || at
+        });
+        if (setResult && setResult.data && setResult.data.user) {
+          // SDK handled it — onAuthStateChange will fire and call launchApp
+          // Give it 3s, then fall through to manual
+          await new Promise(function(res) { setTimeout(res, 3000); });
+          if (appUser) return; // SDK handled it
+        }
+      }
+    } catch(e) { console.warn('[app] SDK setSession error:', e); }
+
+    // Manual fallback: fetch user directly
     try {
       var r = await fetch(_SB_URL + '/auth/v1/user', {
         headers: { 'apikey': _SB_KEY, 'Authorization': 'Bearer ' + at }
@@ -7633,7 +7649,8 @@ async function _appBoot() {
       var user = await r.json();
       if (user && user.id) {
         var sess = { access_token: at, refresh_token: rt, user: user };
-        _sbSaveSession(sess); _sbSession = sess;
+        _sbSaveSession(sess);
+        _sbSession = sess;
         appUser = {
           id: user.id,
           name: (user.user_metadata && user.user_metadata.full_name) || user.email || 'User',
@@ -7642,20 +7659,36 @@ async function _appBoot() {
           college: _getUserCollege()
         };
         sv('mocha_user', appUser);
-        clearTimeout(_btimer);
-        try { _checkPasswordReset(); } catch(e) {}
+        try { _checkPasswordReset(); } catch(e2) {}
         launchApp();
         return;
       }
-    } catch(e) { console.warn('[app] OAuth error:', e); }
-    clearTimeout(_btimer);
+    } catch(e) { console.warn('[app] manual token fetch error:', e); }
+
+    // Token invalid — back to landing
     var _rv = document.getElementById('pl-veil');
-    if (_rv) { _rv.classList.add('gone'); }
-    setTimeout(function() { window.location.href = '/'; }, 300);
+    if (_rv) _rv.classList.add('gone');
+    setTimeout(function() { window.location.href = '/'; }, 400);
     return;
   }
 
-  // Try restoring saved session
+  // ── RETURNING USER: try session from localStorage ─────────────
+  // First give Supabase SDK a moment to auto-restore from its own storage
+  var client2 = _getSupabaseClient();
+  if (client2) {
+    try {
+      var sdkSession = await client2.auth.getSession();
+      if (sdkSession && sdkSession.data && sdkSession.data.session && sdkSession.data.session.user) {
+        var s = sdkSession.data.session;
+        _sbSaveSession({ access_token: s.access_token, refresh_token: s.refresh_token, user: s.user });
+        _sbSession = { access_token: s.access_token, refresh_token: s.refresh_token, user: s.user };
+        _sbRestoreUser(s.user);
+        return;
+      }
+    } catch(e) { console.warn('[app] SDK getSession error:', e); }
+  }
+
+  // Manual localStorage fallback
   var saved = _sbLoadSession();
   if (saved && saved.access_token) {
     _sbSession = saved;
@@ -7664,26 +7697,20 @@ async function _appBoot() {
         headers: { 'apikey': _SB_KEY, 'Authorization': 'Bearer ' + saved.access_token }
       });
       var u2 = await r2.json();
-      if (u2 && u2.id) {
-        clearTimeout(_btimer);
-        _sbRestoreUser(u2);
-        return;
-      }
+      if (u2 && u2.id) { _sbRestoreUser(u2); return; }
     } catch(e) {}
-    // Try refresh
     if (saved.refresh_token) {
       try {
         var fresh = await _sbRefresh(saved.refresh_token);
-        if (fresh && fresh.user) {
-          clearTimeout(_btimer);
-          _sbRestoreUser(fresh.user);
-          return;
-        }
+        if (fresh && fresh.user) { _sbRestoreUser(fresh.user); return; }
       } catch(e) {}
     }
   }
-  clearTimeout(_btimer);
-  window.location.href = '/';
+
+  // No valid session — send to landing
+  var _rv2 = document.getElementById('pl-veil');
+  if (_rv2) _rv2.classList.add('gone');
+  setTimeout(function() { window.location.href = '/'; }, 400);
 }
 
 if (document.readyState === 'loading') {

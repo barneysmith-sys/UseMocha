@@ -47,17 +47,8 @@ body{font-family:"DM Sans",system-ui,sans-serif;background:var(--cr);color:var(-
 .hero{position:relative;width:100%;display:block;line-height:0}
 .hero img{width:100%;height:auto;display:block}
 .hero-overlay{position:absolute;inset:0;pointer-events:none}
-.hero-overlay button{position:absolute;background:transparent;border:none;cursor:pointer;pointer-events:all;padding:0;transition:all 0.15s;outline:none;-webkit-tap-highlight-color:transparent}
-.hero-overlay button:hover{background:rgba(255,255,255,0.09);border-radius:8px}
-.hero-overlay button:active{transform:scale(0.97);background:rgba(255,255,255,0.15)}
-/* Start free — dark green pill */
-.ob-start:hover,.ob-navstart:hover,.ob-mob-start:hover{background:rgba(26,46,30,0.12) !important;border-radius:99px !important}
-.ob-start:active,.ob-navstart:active,.ob-mob-start:active{transform:scale(0.96);background:rgba(26,46,30,0.20) !important}
-/* Watch demo — white pill */
-.ob-demo:hover,.ob-mob-demo:hover{background:rgba(255,255,255,0.12) !important;border-radius:99px !important}
-.ob-demo:active,.ob-mob-demo:active{transform:scale(0.96)}
-/* Nav items */
-.ob-product:hover,.ob-pricing:hover,.ob-unis:hover,.ob-resources:hover{background:rgba(255,255,255,0.07) !important;border-radius:4px !important}
+.hero-overlay button{position:absolute;background:transparent;border:none;cursor:pointer;pointer-events:all;padding:0;transition:background 0.15s}
+.hero-overlay button:hover{background:rgba(255,255,255,0.08);border-radius:6px}
 /* NAV buttons · calibrated to 1711×919 px image */
 .ob-logo {left:1.75%;top:0;    width:14.5%;height:7.07%}
 .ob-product {left:31.2%;top:0;    width:5.5%; height:7.07%}
@@ -1716,6 +1707,407 @@ button:focus:not(:focus-visible) { outline: none; }
   .demo-h { font-size:1.6rem !important; }
 }
 
+
+/* ── DESIGN SYSTEM IMPROVEMENTS ── */
+
+/* Better section rhythm */
+.demo-section { padding: 5rem 0 6rem; }
+.demo-header { text-align: center; max-width: 560px; margin: 0 auto 3rem; }
+.demo-h { 
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 400;
+  color: #0f1a14;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+.demo-h em { font-style: italic; color: #0a5c44; }
+.demo-sub {
+  font-size: 15px;
+  color: rgba(15,26,20,.52);
+  line-height: 1.7;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+/* Demo window — tighter, more premium */
+.demo-window {
+  max-width: 860px;
+  margin: 0 auto;
+  box-shadow: 
+    0 0 0 1px rgba(15,26,20,.07),
+    0 4px 6px rgba(15,26,20,.04),
+    0 24px 80px rgba(15,26,20,.14);
+}
+
+/* Stats — more breathing room */
+.stat-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.4rem, 4vw, 3.2rem);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  color: #1a2e1e;
+}
+
+/* Ticker — cleaner */
+.uni-ticker-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(15,26,20,.38);
+  text-align: center;
+  padding: 1.5rem 0 1.1rem;
+}
+
+/* Tracks — card improvements */  
+.tracks-inner { padding: 0 32px; max-width: 1060px; margin: 0 auto; }
+
+/* Score proof numbers — editorial */
+.proof-num-new {
+  font-family: 'DM Serif Display', serif;
+  letter-spacing: -0.05em;
+}
+
+/* Testimonials — card shadow refinement */
+.testi-card-new {
+  box-shadow: 0 1px 3px rgba(15,26,20,.06), 0 8px 24px rgba(15,26,20,.06);
+}
+
+/* Pricing — better hierarchy */
+.price-num {
+  font-family: 'DM Serif Display', serif;
+  letter-spacing: -0.04em;
+}
+
+/* CTA section — stronger */
+.cta-content h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+}
+
+/* Mobile — tighter hero gap */
+
+/* ── DESIGN IMPROVEMENTS ── */
+.demo-h em { font-style: italic; color: #0a5c44; }
+.demo-window {
+  max-width: 860px; margin: 0 auto;
+  box-shadow: 0 0 0 1px rgba(15,26,20,.07), 0 4px 6px rgba(15,26,20,.04), 0 24px 80px rgba(15,26,20,.14);
+}
+.stat-num { font-family: 'DM Serif Display', serif; font-size: clamp(2.4rem,4vw,3.2rem); font-weight:400; letter-spacing:-0.04em; }
+.uni-ticker-label { font-size:9px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:rgba(15,26,20,.38); text-align:center; padding:1.5rem 0 1.1rem; }
+.testi-card-new { box-shadow:0 1px 3px rgba(15,26,20,.06),0 8px 24px rgba(15,26,20,.06); }
+.cta-content h2 { font-family:'DM Serif Display',serif; font-size:clamp(2.2rem,5vw,3.4rem); letter-spacing:-0.04em; line-height:1.08; }
+/* Hero button enhancements */
+.hero-overlay button { position:absolute; background:transparent; border:none; cursor:pointer; pointer-events:all; padding:0; transition:all 0.15s; outline:none; -webkit-tap-highlight-color:transparent; }
+.hero-overlay button:hover { background:rgba(255,255,255,0.09); border-radius:8px; }
+.hero-overlay button:active { transform:scale(0.97); background:rgba(255,255,255,0.15); }
+.ob-start:hover,.ob-navstart:hover,.ob-mob-start:hover { background:rgba(26,46,30,0.12) !important; border-radius:99px !important; }
+.ob-start:active,.ob-navstart:active,.ob-mob-start:active { transform:scale(0.96); background:rgba(26,46,30,0.20) !important; }
+.ob-demo:hover,.ob-mob-demo:hover { background:rgba(255,255,255,0.12) !important; border-radius:99px !important; }
+.ob-demo:active,.ob-mob-demo:active { transform:scale(0.96); }
+.ob-product:hover,.ob-pricing:hover,.ob-unis:hover,.ob-resources:hover { background:rgba(255,255,255,0.07) !important; border-radius:4px !important; }
+
+/* ══════════════════════════════════════════════════════════
+   MOBILE — single definitive block
+   Philosophy: hero stays perfect, everything below is
+   clean, minimal, no horizontal overflow possible.
+   ══════════════════════════════════════════════════════════ */
+
+/* Global guard — applies at ALL sizes */
+html { overflow-x: hidden !important; background: #0a1810; }
+body { overflow-x: hidden !important; max-width: 100vw; }
+
+@media (max-width: 768px) {
+
+  /* ── GLOBAL ── */
+  * { box-sizing: border-box !important; }
+  section, div[id], [class*="-section"],
+  [class*="-inner"], [class*="-wrap"] {
+    max-width: 100vw !important;
+  }
+
+  /* ── TRUST BAR ── */
+  .trust-bar {
+    padding: 8px 14px !important;
+    gap: 6px !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+    overflow: hidden !important;
+  }
+  .trust-bar-sep, .trust-bar-hide-mobile { display: none !important; }
+  .trust-bar-item, .trust-bar-link {
+    font-size: 10px !important;
+    white-space: nowrap !important;
+    flex-shrink: 1 !important;
+  }
+
+  /* ── HERO OVERLAY BUTTONS ── */
+  .ob-mob-logo  { display: block !important; }
+  .ob-mob-menu  { display: block !important; }
+  .ob-mob-start { display: block !important; }
+  .ob-mob-demo  { display: block !important; }
+  .ob-product, .ob-pricing, .ob-unis, .ob-resources,
+  .ob-login, .ob-navstart, .ob-try { display: none !important; }
+
+  /* ── TICKER ── */
+  .uni-ticker-wrap { padding: 0 !important; overflow: hidden !important; }
+  .uni-ticker-label {
+    font-size: 8px !important;
+    letter-spacing: .1em !important;
+    margin-bottom: .75rem !important;
+    padding-top: 1.25rem !important;
+  }
+  .uni-ticker-track { gap: 20px !important; }
+  .uni-logo-item img {
+    height: 18px !important;
+    width: auto !important;
+    max-width: none !important;
+  }
+
+  /* ── STATS ── */
+  .stats-section { padding: 1.25rem 16px !important; overflow: hidden !important; }
+  .stats-grid { grid-template-columns: repeat(3,1fr) !important; gap: 0 !important; }
+  .stat-item:nth-child(n+4) { display: none !important; }
+  .stat-item:nth-child(3) { border-right: none !important; }
+  .stat-num { font-size: 1.7rem !important; }
+  .stat-label { font-size: 7.5px !important; letter-spacing: .06em !important; }
+
+  /* ── LIVE DEMO — simplified, no overflow ── */
+  .demo-section { padding: 2.5rem 0 3rem !important; overflow: hidden !important; }
+  .demo-wrap { overflow: hidden !important; }
+  .demo-inner { padding: 0 16px !important; max-width: 100% !important; }
+  .demo-header { padding: 0 !important; margin-bottom: 1.25rem !important; }
+  .demo-h {
+    font-size: 1.65rem !important;
+    line-height: 1.15 !important;
+    text-align: left !important;
+  }
+  .demo-sub {
+    font-size: 13px !important;
+    text-align: left !important;
+    max-width: 100% !important;
+  }
+  .demo-score-teaser { display: none !important; }
+  .demo-window-wrap { padding: 0 !important; }
+  .demo-window {
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  /* Stack: chat on top, score strip below — never side-by-side */
+  .dw-body {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: unset !important;
+    max-height: unset !important;
+    overflow: hidden !important;
+    width: 100% !important;
+    grid-template-columns: unset !important;
+  }
+  .dw-sidebar { display: none !important; }
+  .dw-main {
+    width: 100% !important;
+    height: 200px !important;
+    min-height: 200px !important;
+    max-height: 200px !important;
+    overflow: hidden !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(15,26,20,.07) !important;
+    flex-shrink: 0 !important;
+  }
+  .dw-feedback {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    padding: 12px 14px !important;
+    gap: 10px !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
+    flex-wrap: nowrap !important;
+  }
+  .dw-score-ring-wrap { flex-shrink: 0 !important; }
+  .dw-score-bars {
+    flex: 1 !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    margin-top: 0 !important;
+  }
+  .dw-score-label { font-size: 8.5px !important; }
+  .dw-score-val { font-size: 10px !important; }
+  /* Hide verbose feedback elements */
+  .dw-tags, .dw-coach-tip, .dw-next-btn,
+  .dw-bean-row, [class*="bean-row"] { display: none !important; }
+  .demo-caption { display: none !important; }
+
+  /* ── PROBLEM / SOLUTION ── */
+  #problem { padding: 2.5rem 16px !important; overflow: hidden !important; }
+  #problem > div > div:first-child > p { display: none !important; }
+  #problem h2 {
+    font-size: 1.6rem !important;
+    line-height: 1.15 !important;
+    margin-bottom: 1.5rem !important;
+  }
+  .ps-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    overflow: hidden !important;
+  }
+  .ps-problem {
+    border-radius: 14px 14px 0 0 !important;
+    padding: 1.25rem !important;
+    border-right: none !important;
+    width: 100% !important;
+  }
+  .ps-solution {
+    border-radius: 0 0 14px 14px !important;
+    padding: 1.25rem !important;
+    width: 100% !important;
+  }
+  .ps-list .ps-item:nth-child(n+3) { display: none !important; }
+  .ps-text { font-size: 13px !important; line-height: 1.55 !important; }
+
+  /* ── TRACKS ── */
+  #tracks { padding: 2.5rem 16px !important; overflow: hidden !important; }
+  .tracks-inner { padding: 0 !important; max-width: 100% !important; }
+  #tracks h2 { font-size: 1.6rem !important; }
+  .tracks-sub-txt { display: none !important; }
+  /* Force all inline grids to single column */
+  #tracks [style*="grid-template-columns"],
+  #tracks [style*="grid-template-columns:1fr 1fr"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+  /* Show only first 2 track cards */
+  #tracks [style*="grid-template-columns"] > div:nth-child(n+3) {
+    display: none !important;
+  }
+  /* Track card sizing */
+  #tracks > div > div > div[style] {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* ── SCORE PROOF ── */
+  .proof-section, [class*="proof"] { padding: 2.5rem 16px !important; overflow: hidden !important; }
+  [style*="grid-template-columns:1fr 1fr 1fr"],
+  [style*="grid-template-columns: 1fr 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  /* ── SHARE + UNI RANKING — hide on mobile ── */
+  .share-preview-wrap, [class*="share-preview"] { display: none !important; }
+
+  /* ── TESTIMONIALS ── */
+  .testi-section { padding: 2.5rem 0 !important; overflow: hidden !important; }
+  .testi-headline {
+    font-size: 1.6rem !important;
+    padding: 0 16px !important;
+    margin-bottom: 1.25rem !important;
+  }
+  .testi-scroll-outer {
+    padding: 4px 16px 16px !important;
+    -webkit-overflow-scrolling: touch !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x mandatory !important;
+  }
+  .testi-card-new {
+    width: 72vw !important;
+    min-width: 210px !important;
+    max-width: 260px !important;
+    padding: 1.25rem !important;
+    scroll-snap-align: start !important;
+    flex-shrink: 0 !important;
+  }
+  .testi-quote-new { font-size: 13px !important; line-height: 1.55 !important; }
+
+  /* ── PRICING ── */
+  .pricing-section { padding: 2.5rem 16px !important; overflow: hidden !important; }
+  .pricing-h { font-size: 1.6rem !important; }
+  .pricing-sub { font-size: 13px !important; margin-bottom: 1.25rem !important; }
+  .pricing-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+  .price-card {
+    padding: 1.5rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+    position: relative !important;
+  }
+  .price-feature { font-size: 13px !important; }
+
+  /* ── FAQ — hide to reduce words ── */
+  .faq-section, [id="faq"] { display: none !important; }
+
+  /* ── CLOSING CTA ── */
+  .final-cta-section { min-height: 320px !important; overflow: hidden !important; }
+  .cta-inner { max-width: 100% !important; padding: 0 16px !important; }
+  .cta-content { padding: 2rem 0 2.5rem !important; }
+  .cta-content h2 {
+    font-size: 1.7rem !important;
+    line-height: 1.15 !important;
+  }
+  .cta-sub { font-size: 13px !important; }
+  .cta-social-links { display: none !important; }
+  .cta-univ-pills, [class*="bean-cta"] { display: none !important; }
+  .cta-btn-row {
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+  .cta-btn-row button, .cta-content button {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  /* ── FOOTER ── */
+  .land-footer-new {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 20px 16px !important;
+    gap: 8px !important;
+  }
+  .land-footer-new > div:nth-child(2) { display: none !important; }
+
+  /* ── MOBILE NAV ── */
+  .mobile-nav-menu {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    left: 0 !important;
+    right: 0 !important;
+    overflow: hidden !important;
+  }
+}
+
+/* ── iPhone SE ── */
+@media (max-width: 390px) {
+  .testi-card-new { width: 82vw !important; }
+  .stat-num { font-size: 1.5rem !important; }
+  .dw-main { height: 180px !important; min-height: 180px !important; max-height: 180px !important; }
+  .demo-h { font-size: 1.45rem !important; }
+  .pricing-h, .cta-content h2, #problem h2 { font-size: 1.4rem !important; }
+}
+
+
 </style>
 </head>
 <body>
@@ -1821,8 +2213,8 @@ button:focus:not(:focus-visible) { outline: none; }
   <div class="demo-wrap">
     <div class="demo-header">
       <div class="demo-tag"><span class="demo-tag-dot"></span>Live product</div>
-      <h2 class="demo-h">See exactly what<br><em>a great answer looks like.</em></h2>
-      <p class="demo-sub">Scored on the four dimensions McKinsey, Goldman, and Google interviewers actually use. Then rewritten at the standard that gets the offer.</p>
+      <h2 class="demo-h">See exactly what<br><em>a 9.1 answer looks like.</em></h2>
+      <p class="demo-sub">Scored on the dimensions McKinsey, Goldman, and Google grade on internally. Then rewritten at offer standard.</p>
       <div style="display:inline-flex;align-items:center;gap:8px;margin-top:1rem;background:#f5ede0;border:1px solid rgba(15,26,20,.08);border-radius:99px;padding:6px 16px;">
         <span style="font-family:'DM Serif Display',serif;font-size:14px;color:rgba(15,26,20,.35);text-decoration:line-through;">6.1</span>
         <svg width="14" height="8" viewBox="0 0 14 8" fill="none"><path d="M1 4h12M9 1l3 3-3 3" stroke="#0a5c44" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>

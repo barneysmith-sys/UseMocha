@@ -3638,6 +3638,9 @@ window.onunhandledrejection = function(e) {
 // ═══════════════════════════════════════════════════════════
 // SUPABASE — Auth + Session Storage
 // ═══════════════════════════════════════════════════════════
+// Capture hash before SDK consumes it
+var _INITIAL_HASH = window.location.hash || "";
+
 var _SB_URL = 'https://xfwsnshhlfjzflobuoxd.supabase.co';
 var _SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhmd3Nuc2hobGZqemZsb2J1b3hkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2ODg2NDUsImV4cCI6MjA5NDI2NDY0NX0.gZnNb3EEEy9H3ZZ-B-1lSSSbbldJkIuS0zcFmT6Wjec';
 var _sbSession = null;        // current session { access_token, user }
@@ -7631,32 +7634,65 @@ async function _appBoot() {
   var veil = document.getElementById('pl-veil');
   if (veil) { veil.style.opacity = '1'; veil.style.pointerEvents = 'all'; }
 
-  // CASE 1: Hash-based OAuth — Supabase SDK handles automatically
-  // /app#access_token=TOKEN -> SDK fires onAuthStateChange(SIGNED_IN)
-  // which calls launchApp() directly. We just wait.
-  if (window.location.hash && window.location.hash.indexOf('access_token=') !== -1) {
-    console.log('[mocha] hash detected, SDK will handle it');
-    // Clean the URL
+  // CASE 1: Hash has access_token — extract it directly, no SDK needed
+  var hash = _INITIAL_HASH;
+  if (hash && hash.indexOf('access_token=') !== -1) {
+    console.log('[mocha] hash found, extracting token');
+    var hashParams = {};
+    hash.replace(/^#/,'').split('&').forEach(function(p) {
+      var kv = p.split('=');
+      if (kv.length >= 2) hashParams[decodeURIComponent(kv[0])] = decodeURIComponent(kv.slice(1).join('='));
+    });
+    var at = hashParams['access_token'];
+    var rt = hashParams['refresh_token'] || '';
     history.replaceState(null, '', '/app');
-    // SDK fires onAuthStateChange within ~500ms
-    // If it doesn't fire in 8s, go home
-    setTimeout(function() {
-      if (!appUser) {
-        console.warn('[mocha] SDK timeout, going home');
-        window.location.replace('/');
-      }
-    }, 8000);
-    return; // SDK handles it via onAuthStateChange
+
+    if (at) {
+      try {
+        var r = await fetch(_SB_URL + '/auth/v1/user', {
+          headers: { 'apikey': _SB_KEY, 'Authorization': 'Bearer ' + at }
+        });
+        console.log('[mocha] token fetch status:', r.status);
+        if (r.ok) {
+          var user = await r.json();
+          if (user && user.id) {
+            console.log('[mocha] got user, launching');
+            var sess = { access_token: at, refresh_token: rt, user: user };
+            _sbSaveSession(sess);
+            _sbSession = sess;
+            appUser = {
+              id: user.id,
+              name: (user.user_metadata && user.user_metadata.full_name) || user.email || 'User',
+              email: user.email || '',
+              avatar: (user.user_metadata && user.user_metadata.avatar_url) || null,
+              college: _getUserCollege()
+            };
+            sv('mocha_user', appUser);
+            try { _checkPasswordReset(); } catch(e) {}
+            appHistory = lv('mocha_hist') || [];
+            _sbLoadHistory(function(rows) {
+              if (rows && rows.length) { appHistory = rows; sv('mocha_hist', appHistory); _recalcStreak(); }
+              launchApp();
+            });
+            return;
+          }
+        }
+      } catch(e) { console.warn('[mocha] hash token fetch failed:', e.message); }
+    }
+    // Token fetch failed - go home
+    var v = document.getElementById('pl-veil');
+    if (v) v.classList.add('gone');
+    setTimeout(function() { window.location.replace('/'); }, 300);
+    return;
   }
 
-  // CASE 2: localStorage session from previous login
+  // CASE 2: localStorage session
   var saved = _sbLoadSession();
   console.log('[mocha] saved session:', saved ? 'found' : 'none');
   if (saved && saved.access_token) {
     _sbSession = saved;
     var u = saved.user;
     if (u && u.id) {
-      console.log('[mocha] launching from localStorage');
       appUser = {
         id: u.id,
         name: (u.user_metadata && u.user_metadata.full_name) || u.email || 'User',
@@ -7673,30 +7709,21 @@ async function _appBoot() {
       });
       return;
     }
-    // Try fetching user with saved token
+    // Fetch user with saved token
     try {
-      var r = await fetch(_SB_URL + '/auth/v1/user', {
+      var r2 = await fetch(_SB_URL + '/auth/v1/user', {
         headers: { 'apikey': _SB_KEY, 'Authorization': 'Bearer ' + saved.access_token }
       });
-      if (r.ok) {
-        var user = await r.json();
-        if (user && user.id) {
-          saved.user = user;
-          _sbSaveSession(saved);
-          _sbRestoreUser(user);
-          return;
-        }
+      if (r2.ok) {
+        var u2 = await r2.json();
+        if (u2 && u2.id) { saved.user = u2; _sbSaveSession(saved); _sbRestoreUser(u2); return; }
       }
     } catch(e) {}
-    // Try refresh
     if (saved.refresh_token) {
       try {
         var fresh = await _sbRefresh(saved.refresh_token);
         if (fresh && fresh.access_token && fresh.user) {
-          _sbSaveSession(fresh);
-          _sbSession = fresh;
-          _sbRestoreUser(fresh.user);
-          return;
+          _sbSaveSession(fresh); _sbSession = fresh; _sbRestoreUser(fresh.user); return;
         }
       } catch(e) {}
     }
@@ -7704,8 +7731,8 @@ async function _appBoot() {
 
   // CASE 3: No session
   console.warn('[mocha] no session, going home');
-  var v = document.getElementById('pl-veil');
-  if (v) v.classList.add('gone');
+  var v2 = document.getElementById('pl-veil');
+  if (v2) v2.classList.add('gone');
   setTimeout(function() { window.location.replace('/'); }, 300);
 }
 

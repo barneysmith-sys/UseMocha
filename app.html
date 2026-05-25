@@ -7631,58 +7631,87 @@ async function _appBoot() {
   var veil = document.getElementById('pl-veil');
   if (veil) { veil.style.opacity = '1'; veil.style.pointerEvents = 'all'; }
 
-  // ── Try localStorage session (saved by index.html after OAuth) ───────
-  var saved = _sbLoadSession();
-  if (saved && saved.access_token) {
-    _sbSession = saved;
-    try {
-      var r = await fetch(_SB_URL + '/auth/v1/user', {
-        headers: { 'apikey': _SB_KEY, 'Authorization': 'Bearer ' + saved.access_token }
-      });
-      if (r.ok) {
-        var user = await r.json();
-        if (user && user.id) {
-          _sbRestoreUser(user);
-          return;
-        }
-      }
-    } catch(e) {}
-    // Try refresh token
-    if (saved.refresh_token) {
-      try {
-        var fresh = await _sbRefresh(saved.refresh_token);
-        if (fresh && fresh.access_token && fresh.user) {
-          _sbSaveSession({ access_token: fresh.access_token, refresh_token: fresh.refresh_token, user: fresh.user });
-          _sbSession = { access_token: fresh.access_token, refresh_token: fresh.refresh_token, user: fresh.user };
-          _sbRestoreUser(fresh.user);
-          return;
-        }
-      } catch(e) {}
-    }
+  function goHome() {
+    console.warn('[mocha] no session, going home');
+    var v = document.getElementById('pl-veil');
+    if (v) v.classList.add('gone');
+    setTimeout(function() { window.location.replace('/'); }, 300);
   }
 
-  // ── No session — also try the Supabase SDK (handles hash-based OAuth) ─
+  // Read saved session
+  var saved = _sbLoadSession();
+  console.log('[mocha] saved session:', saved ? 'found' : 'none');
+
+  if (!saved || !saved.access_token) { goHome(); return; }
+
+  // We have a token — trust it and launch immediately
+  // (index.html already validated it before saving)
+  _sbSession = saved;
+  appUser = null;
+
+  // Try to get user from the saved session
+  var u = saved.user;
+  if (u && u.id) {
+    console.log('[mocha] launching with user:', u.id.slice(0,8));
+    appUser = {
+      id:      u.id,
+      name:    (u.user_metadata && u.user_metadata.full_name) || u.email || 'User',
+      email:   u.email || '',
+      avatar:  (u.user_metadata && u.user_metadata.avatar_url) || null,
+      college: _getUserCollege()
+    };
+    sv('mocha_user', appUser);
+    try { _checkPasswordReset(); } catch(e) {}
+    appHistory = lv('mocha_hist') || [];
+    _sbLoadHistory(function(rows) {
+      if (rows && rows.length) { appHistory = rows; sv('mocha_hist', appHistory); _recalcStreak(); }
+      launchApp();
+    });
+    return;
+  }
+
+  // No user object in session — validate with Supabase
   try {
-    var client = _getSupabaseClient();
-    if (client) {
-      var sdkSess = await client.auth.getSession();
-      if (sdkSess && sdkSess.data && sdkSess.data.session && sdkSess.data.session.user) {
-        var s = sdkSess.data.session;
-        _sbSaveSession({ access_token: s.access_token, refresh_token: s.refresh_token || '', user: s.user });
-        _sbSession = { access_token: s.access_token, refresh_token: s.refresh_token || '', user: s.user };
-        _sbRestoreUser(s.user);
+    var r = await fetch(_SB_URL + '/auth/v1/user', {
+      headers: { 'apikey': _SB_KEY, 'Authorization': 'Bearer ' + saved.access_token }
+    });
+    console.log('[mocha] validation status:', r.status);
+    if (r.ok) {
+      var user = await r.json();
+      if (user && user.id) {
+        appUser = {
+          id:      user.id,
+          name:    (user.user_metadata && user.user_metadata.full_name) || user.email || 'User',
+          email:   user.email || '',
+          avatar:  (user.user_metadata && user.user_metadata.avatar_url) || null,
+          college: _getUserCollege()
+        };
+        sv('mocha_user', appUser);
+        saved.user = user;
+        _sbSaveSession(saved);
+        try { _checkPasswordReset(); } catch(e) {}
+        appHistory = lv('mocha_hist') || [];
+        _sbLoadHistory(function(rows) {
+          if (rows && rows.length) { appHistory = rows; sv('mocha_hist', appHistory); _recalcStreak(); }
+          launchApp();
+        });
         return;
       }
     }
-  } catch(e) { console.warn('[mocha] SDK getSession failed:', e); }
+    // Token expired — try refresh
+    if (saved.refresh_token) {
+      var fresh = await _sbRefresh(saved.refresh_token);
+      if (fresh && fresh.access_token && fresh.user) {
+        _sbSaveSession({ access_token: fresh.access_token, refresh_token: fresh.refresh_token, user: fresh.user });
+        _sbSession = { access_token: fresh.access_token, refresh_token: fresh.refresh_token, user: fresh.user };
+        _sbRestoreUser(fresh.user);
+        return;
+      }
+    }
+  } catch(e) { console.warn('[mocha] validation error:', e); }
 
-  // ── No valid session — back to landing ────────────────────────────────
-  console.warn('[mocha] no session found, redirecting to landing');
-  var v = document.getElementById('pl-veil');
-  if (v) v.classList.add('gone');
-  setTimeout(function() { window.location.replace('/'); }, 350);
+  goHome();
 }
-
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', _appBoot);

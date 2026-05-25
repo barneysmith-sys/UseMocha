@@ -2679,6 +2679,18 @@ body {
   <meta name="apple-mobile-web-app-title" content="Mocha">
   <meta name="application-name" content="Mocha">
   <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Mocha%22%2C%22short_name%22%3A%22Mocha%22%2C%22start_url%22%3A%22%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23fef7f0%22%2C%22theme_color%22%3A%22%232c1308%22%2C%22icons%22%3A%5B%5D%7D">
+<script>
+window.onerror = function(msg, src, line, col, err) {
+  console.error('[mocha-error]', msg, 'at', src+':'+line);
+  // If error happens during boot, stay on page and show error
+  var msg_el = document.getElementById('pl-bean-msg');
+  if (msg_el) { msg_el.textContent = 'JS Error: ' + msg.slice(0,80); msg_el.style.color='red'; }
+  return false;
+};
+window.onunhandledrejection = function(e) {
+  console.error('[mocha-promise]', e.reason);
+};
+</script>
 </head>
 <body>
 
@@ -4779,6 +4791,7 @@ function _getSupabaseClient() {
           user         : session.user
         });
         _sbSession = { access_token: session.access_token, refresh_token: session.refresh_token, user: session.user };
+        if (window._clearHashTimeout) window._clearHashTimeout();
         if (!already) {
           try { closeModal(); } catch(e) {}
           appUser = {
@@ -7615,88 +7628,61 @@ function switchM(type) {
 
 // App boot: validate auth, then show dashboard
 async function _appBoot() {
-  // Show veil immediately
   var veil = document.getElementById('pl-veil');
   if (veil) { veil.style.opacity = '1'; veil.style.pointerEvents = 'all'; }
 
-  function _goHome() {
-    var v = document.getElementById('pl-veil');
-    if (v) v.classList.add('gone');
-    setTimeout(function() { window.location.replace('/'); }, 350);
-  }
-
-  function _launch(userObj, token, refreshTok) {
-    var sess = { access_token: token, refresh_token: refreshTok || '', user: userObj };
-    _sbSaveSession(sess);
-    _sbSession = sess;
-    appUser = {
-      id:      userObj.id,
-      name:    (userObj.user_metadata && userObj.user_metadata.full_name) || userObj.email || 'User',
-      email:   userObj.email || '',
-      avatar:  (userObj.user_metadata && userObj.user_metadata.avatar_url) || null,
-      college: _getUserCollege()
-    };
-    sv('mocha_user', appUser);
-    try { _checkPasswordReset(); } catch(e) {}
-    appHistory = lv('mocha_hist') || [];
-    _sbLoadHistory(function(rows) {
-      if (rows && rows.length) { appHistory = rows; sv('mocha_hist', appHistory); _recalcStreak(); }
-      launchApp();
-    });
-  }
-
-  // ── CASE 1: Fresh OAuth — ?at= token in URL ──────────────────
-  var params = new URLSearchParams(window.location.search);
-  var at = params.get('at'), rt = params.get('rt') || '';
-  if (at) {
-    history.replaceState(null, '', '/app');
-    try {
-      console.log('[mocha] fetching user with token length:', at.length);
-      var r = await fetch(_SB_URL + '/auth/v1/user', {
-        headers: { 'apikey': _SB_KEY, 'Authorization': 'Bearer ' + at }
-      });
-      console.log('[mocha] fetch response status:', r.status);
-      if (!r.ok) {
-        var errBody = await r.text();
-        console.warn('[mocha] fetch failed:', r.status, errBody.slice(0, 200));
-        throw new Error('status ' + r.status);
-      }
-      var user = await r.json();
-      console.log('[mocha] user id:', user && user.id ? user.id.slice(0,8) : 'NONE');
-      if (user && user.id) { _launch(user, at, rt); return; }
-    } catch(e) { console.warn('[mocha] fresh auth failed:', e.message); }
-    _goHome();
-    return;
-  }
-
-  // ── CASE 2: Returning user — try localStorage session ────────
+  // ── Try localStorage session (saved by index.html after OAuth) ───────
   var saved = _sbLoadSession();
   if (saved && saved.access_token) {
+    _sbSession = saved;
     try {
-      var r2 = await fetch(_SB_URL + '/auth/v1/user', {
+      var r = await fetch(_SB_URL + '/auth/v1/user', {
         headers: { 'apikey': _SB_KEY, 'Authorization': 'Bearer ' + saved.access_token }
       });
-      if (r2.ok) {
-        var u2 = await r2.json();
-        if (u2 && u2.id) { _launch(u2, saved.access_token, saved.refresh_token); return; }
+      if (r.ok) {
+        var user = await r.json();
+        if (user && user.id) {
+          _sbRestoreUser(user);
+          return;
+        }
       }
     } catch(e) {}
-
-    // Access token expired — try refresh
+    // Try refresh token
     if (saved.refresh_token) {
       try {
         var fresh = await _sbRefresh(saved.refresh_token);
         if (fresh && fresh.access_token && fresh.user) {
-          _launch(fresh.user, fresh.access_token, fresh.refresh_token || saved.refresh_token);
+          _sbSaveSession({ access_token: fresh.access_token, refresh_token: fresh.refresh_token, user: fresh.user });
+          _sbSession = { access_token: fresh.access_token, refresh_token: fresh.refresh_token, user: fresh.user };
+          _sbRestoreUser(fresh.user);
           return;
         }
-      } catch(e) { console.warn('[mocha] refresh failed:', e); }
+      } catch(e) {}
     }
   }
 
-  // ── CASE 3: No valid session ──────────────────────────────────
-  _goHome();
+  // ── No session — also try the Supabase SDK (handles hash-based OAuth) ─
+  try {
+    var client = _getSupabaseClient();
+    if (client) {
+      var sdkSess = await client.auth.getSession();
+      if (sdkSess && sdkSess.data && sdkSess.data.session && sdkSess.data.session.user) {
+        var s = sdkSess.data.session;
+        _sbSaveSession({ access_token: s.access_token, refresh_token: s.refresh_token || '', user: s.user });
+        _sbSession = { access_token: s.access_token, refresh_token: s.refresh_token || '', user: s.user };
+        _sbRestoreUser(s.user);
+        return;
+      }
+    }
+  } catch(e) { console.warn('[mocha] SDK getSession failed:', e); }
+
+  // ── No valid session — back to landing ────────────────────────────────
+  console.warn('[mocha] no session found, redirecting to landing');
+  var v = document.getElementById('pl-veil');
+  if (v) v.classList.add('gone');
+  setTimeout(function() { window.location.replace('/'); }, 350);
 }
+
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', _appBoot);

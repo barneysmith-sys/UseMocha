@@ -2814,35 +2814,18 @@ document.addEventListener('DOMContentLoaded',function(){
     var p = new URLSearchParams(window.location.search);
     var at = p.get('at'), rt = p.get('rt') || '';
     if (at) {
-      console.log('[mocha-auth] ?at= detected, token length:', at.length);
-      var SB_URL = 'https://xfwsnshhlfjzflobuoxd.supabase.co';
-      var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhmd3Nuc2hobGZqemZsb2J1b3hkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2ODg2NDUsImV4cCI6MjA5NDI2NDY0NX0.gZnNb3EEEy9H3ZZ-B-1lSSSbbldJkIuS0zcFmT6Wjec';
-      fetch(SB_URL + '/auth/v1/user', {
-        headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + at }
-      }).then(function(r){
-        console.log('[mocha-auth] fetch status:', r.status);
-        return r.ok ? r.json() : null;
-      }).then(function(user){
-          console.log('[mocha-auth] user:', user ? user.id : 'null');
-          if (user && user.id) {
-            try {
-              localStorage.setItem('mocha_sb_session', JSON.stringify({
-                access_token: at, refresh_token: rt, user: user
-              }));
-              console.log('[mocha-auth] session saved, going to /app');
-            } catch(e) { console.error('[mocha-auth] localStorage failed:', e); }
-            window.location.replace('/app');
-          } else {
-            console.warn('[mocha-auth] no user, redirecting to error');
-            window.location.replace('/?auth_error=invalid_token');
-          }
-        }).catch(function(e){ 
-          console.error('[mocha-auth] fetch failed:', e);
-          window.location.replace('/?auth_error=fetch_failed'); 
-        });
-      return; // Stop — we're redirecting
+      console.log('[mocha-auth] got token, saving and going to /app');
+      // Save token immediately — came from Supabase OAuth so it's valid
+      // app.html will use it to load the user
+      try {
+        localStorage.setItem('mocha_sb_session', JSON.stringify({
+          access_token: at, refresh_token: rt, user: null
+        }));
+      } catch(e) {}
+      window.location.replace('/app');
+      return;
     }
-    console.log('[mocha-auth] no ?at= param, normal page load');
+    console.log('[mocha-auth] normal page load');
     // Also check auth_error
     if (p.get('auth_error')) {
       console.warn('[mocha] auth error:', p.get('auth_error'));

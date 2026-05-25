@@ -2463,7 +2463,7 @@ button:focus:not(:focus-visible) { outline: none; }
 var _SB_URL='https://xfwsnshhlfjzflobuoxd.supabase.co';
 var _SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhmd3Nuc2hobGZqemZsb2J1b3hkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2ODg2NDUsImV4cCI6MjA5NDI2NDY0NX0.gZnNb3EEEy9H3ZZ-B-1lSSSbbldJkIuS0zcFmT6Wjec';
 function _getSupabaseClient(){if(window._sbClient)return window._sbClient;if(window.supabase&&window.supabase.createClient){window._sbClient=window.supabase.createClient(_SB_URL,_SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});window._sbClient.auth.onAuthStateChange(function(event,session){if((event==='SIGNED_IN'||event==='TOKEN_REFRESHED')&&session&&session.user){try{closeModal();}catch(e){}try{localStorage.setItem('mocha_sb_session',JSON.stringify({access_token:session.access_token,refresh_token:session.refresh_token||'',user:session.user}));}catch(e){}window.location.href='https://usemocha.app/app';}});}return window._sbClient||null;}
-function doGoogleSignIn(){var client=_getSupabaseClient();if(!client){openModal();return;}client.auth.signInWithOAuth({provider:'google',options:{redirectTo:'https://usemocha.app/app'}});}
+function doGoogleSignIn(){var client=_getSupabaseClient();if(!client){openModal();return;}client.auth.signInWithOAuth({provider:'google',options:{redirectTo:'https://usemocha.app/api/callback'}});}
 
 /* ══ DEMO LOOP ══ */
 var _demoStarted=false,_demoTimer=null,_demoSteps=[],_demoIdx=0,_demoTimerSec=227,_demoTimerInt=null;
@@ -2814,18 +2814,22 @@ document.addEventListener('DOMContentLoaded',function(){
     var p = new URLSearchParams(window.location.search);
     var at = p.get('at'), rt = p.get('rt') || '';
     if (at) {
-      console.log('[mocha-auth] got token, saving and going to /app');
-      // Save token immediately — came from Supabase OAuth so it's valid
-      // app.html will use it to load the user
-      try {
-        localStorage.setItem('mocha_sb_session', JSON.stringify({
-          access_token: at, refresh_token: rt, user: null
-        }));
-      } catch(e) {}
-      window.location.replace('/app');
+      // Fetch user then save full session to localStorage
+      var SB = 'https://xfwsnshhlfjzflobuoxd.supabase.co';
+      var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhmd3Nuc2hobGZqemZsb2J1b3hkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2ODg2NDUsImV4cCI6MjA5NDI2NDY0NX0.gZnNb3EEEy9H3ZZ-B-1lSSSbbldJkIuS0zcFmT6Wjec';
+      fetch(SB+'/auth/v1/user',{headers:{'apikey':KEY,'Authorization':'Bearer '+at}})
+        .then(function(r){return r.ok?r.json():Promise.reject(r.status);})
+        .then(function(user){
+          localStorage.setItem('mocha_sb_session',JSON.stringify({access_token:at,refresh_token:rt,user:user}));
+          window.location.replace('/app');
+        })
+        .catch(function(e){
+          // Even if fetch fails, save token so app.html can try
+          try{localStorage.setItem('mocha_sb_session',JSON.stringify({access_token:at,refresh_token:rt,user:null}));}catch(x){}
+          window.location.replace('/app');
+        });
       return;
     }
-    console.log('[mocha-auth] normal page load');
     // Also check auth_error
     if (p.get('auth_error')) {
       console.warn('[mocha] auth error:', p.get('auth_error'));

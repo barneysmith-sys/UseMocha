@@ -141,7 +141,7 @@ body {
 .pl-veil {
   position: fixed; inset: 0; z-index: 9999;
   background: var(--cr); display: flex; align-items: center; justify-content: center;
-  pointer-events: none; transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1) 0.05s;
+  pointer-events: all; opacity: 1; transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1) 0.05s;
 }
 .pl-veil.gone { opacity: 0; }
 .pl-veil-logo { display: flex; align-items: center; gap: 11px; animation: veilIn 0.55s cubic-bezier(0.16,1,0.3,1) both; }
@@ -5082,6 +5082,12 @@ async function signOut() {
 function launchApp() {
   if (!appUser) return;
   if (twTimer) { clearTimeout(twTimer); twTimer = null; }
+  // Dismiss veil — auth confirmed, show dashboard
+  var _veil = document.getElementById('pl-veil');
+  if (_veil) {
+    _veil.classList.add('gone');
+    setTimeout(function() { _veil.style.display = 'none'; }, 700);
+  }
   document.getElementById('nav-guest').style.display = 'none';
   document.getElementById('nav-user').style.display  = 'flex';
 
@@ -6674,17 +6680,7 @@ function escHtml(str) {
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // LANDING PAGE \u2014 Page Load Veil
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-(function() {
-  var veil = document.getElementById('pl-veil');
-  if (!veil) return;
-  // Remove veil after brief pause \u2014 feels like getfolk.app load
-  setTimeout(function() {
-    veil.classList.add('gone');
-    setTimeout(function() {
-      veil.style.display = 'none';
-    }, 750);
-  }, 520);
-})();
+/* veil controlled by _appBoot */
 
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // HERO CHAT LOOP \u2014 pure ES5 step-machine, zero nesting
@@ -7650,7 +7646,9 @@ async function _appBoot() {
       }
     } catch(e) { console.warn('[app] OAuth error:', e); }
     clearTimeout(_btimer);
-    window.location.href = '/';
+    var _rv = document.getElementById('pl-veil');
+    if (_rv) { _rv.classList.add('gone'); }
+    setTimeout(function() { window.location.href = '/'; }, 300);
     return;
   }
 

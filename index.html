@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html style="overflow-x:hidden;" lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline' https://www.googletagmanager.com https://cdn.jsdelivr.net; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://formspree.io https://www.google-analytics.com https://analytics.google.com https://*.supabase.co https://generativelanguage.googleapis.com https://cdn.jsdelivr.net; img-src 'self' data: https:; worker-src blob:;">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Mocha · Interview prep that actually gets you hired</title>
 <meta name="description" content="Free AI behavioral interview coaching at McKinsey, Goldman, and Google standard. One question a day. Real feedback. Used at 14+ universities.">
 <meta property="og:title" content="Mocha · The interview coach that gets you hired">
@@ -1591,122 +1589,338 @@ button:focus:not(:focus-visible) { outline: none; }
    ═══════════════════════════════════════════════════════ */
 
 /* ── 768px and below ── */
-@media(max-width:768px) {
 
-  /* TRUST BAR */
-  .trust-bar { padding:9px 16px !important; gap:8px !important; justify-content:flex-start !important; overflow-x:auto; flex-wrap:nowrap !important; }
-  .trust-bar::-webkit-scrollbar { display:none; }
-  .trust-bar-sep { display:none !important; }
-  .trust-bar-hide-mobile { display:none !important; }
-  .trust-bar-item { font-size:11px !important; white-space:nowrap; }
-  .trust-bar-link { font-size:11px !important; white-space:nowrap; }
-
-  /* HERO OVERLAY — show mobile, hide desktop nav buttons */
-  .ob-mob-logo  { display:block !important; }
-  .ob-mob-menu  { display:block !important; }
-  .ob-mob-start { display:block !important; }
-  .ob-mob-demo  { display:block !important; }
-  .ob-product, .ob-pricing, .ob-unis, .ob-resources,
-  .ob-login, .ob-navstart, .ob-try { display:none !important; }
-
-  /* STATS */
-  .stats-section { padding:1.5rem 1rem !important; }
-  .stats-grid { grid-template-columns:repeat(3,1fr) !important; }
-  .stat-item:nth-child(4), .stat-item:nth-child(5) { display:none !important; }
-  .stat-item:nth-child(3) { border-right:none !important; }
-  .stat-num { font-size:2rem !important; }
-  .stat-label { font-size:8px !important; letter-spacing:.06em !important; }
-
-  /* DEMO WINDOW — chat + score ring side by side, no sidebar */
-  .demo-h { font-size:1.75rem !important; }
-  .demo-sub { font-size:13px !important; }
-  .demo-header { margin-bottom:1.5rem !important; }
-  .dw-body {
-    grid-template-columns:1fr 180px !important;
-    height:340px !important;
-    min-height:340px !important;
-    max-height:340px !important;
-    overflow:hidden !important;
-  }
-  .dw-sidebar  { display:none !important; }
-  .dw-feedback {
-    display:flex !important;
-    flex-direction:column !important;
-    width:180px !important;
-    min-width:180px !important;
-    max-width:180px !important;
-    overflow:hidden !important;
-    padding:12px 10px !important;
-  }
-  .dw-main     { overflow:hidden !important; }
-
-  /* PS SECTION */
-  #problem { padding:3.5rem 1.25rem !important; }
-  #problem h2 { font-size:1.6rem !important; }
-  .ps-grid { grid-template-columns:1fr !important; }
-  .ps-problem { border-radius:16px 16px 0 0 !important; padding:1.5rem !important; }
-  .ps-solution { border-radius:0 0 16px 16px !important; padding:1.5rem !important; }
-
-  /* TRACKS */
-  #tracks { padding:3rem 0 !important; }
-  .tracks-sub-txt { display:none !important; }
-  #tracks [style*="grid-template-columns:1fr 1fr"],
-  #tracks [style*="grid-template-columns:repeat(3"] { grid-template-columns:1fr !important; }
-
-  /* SCORE PROOF */
-  [style*="grid-template-columns:1fr 1fr 1fr"] { grid-template-columns:1fr !important; }
-
-  /* SHARE CARD */
-  .share-preview-wrap { padding:0 16px !important; }
-
-  /* PRICING */
-  .pricing-section { padding:3rem 1rem !important; }
-  .pricing-h { font-size:1.8rem !important; }
-  .pricing-sub { font-size:13px !important; margin-bottom:1.5rem !important; }
-
-  /* TESTIMONIALS */
-  .testi-headline { font-size:1.8rem !important; }
-  .testi-card-new { width:82vw !important; max-width:320px !important; padding:1.5rem !important; }
-  .testi-quote-new { font-size:14px !important; }
-  .testi-scroll-outer { padding:8px 16px 20px !important; -webkit-overflow-scrolling:touch; }
-
-  /* FAQ */
-  #faq-list > div { padding:1rem 0 !important; }
-  .faq-q { font-size:14px !important; }
-
-  /* CTA */
-  .final-cta-section { min-height:440px !important; overflow:visible !important; }
-  .cta-content { padding:2rem 20px 3rem !important; }
-  .cta-content h2 { font-size:2rem !important; }
-  .cta-social-links { display:none !important; }
-  .cta-content [style*="gap:12px"] {
-    flex-direction:column !important;
-    align-items:center !important;
-    gap:10px !important;
-  }
-  .cta-content button { width:100% !important; max-width:300px !important; justify-content:center !important; }
-
-  /* FOOTER */
-  .land-footer-new {
-    flex-direction:column !important;
-    align-items:center !important;
-    text-align:center !important;
-    padding:20px 16px !important;
-    gap:8px !important;
-  }
-  .land-footer-new > div:first-child { justify-content:center !important; }
-  .land-footer-new > div:nth-child(2) { display:none !important; }
-}
 
 /* ── iPhone SE and small screens ── */
-@media(max-width:390px) {
-  .testi-card-new { width:90vw !important; }
-  .stat-num { font-size:1.8rem !important; }
-  .dw-body { grid-template-columns:1fr 160px !important; height:300px !important; min-height:300px !important; max-height:300px !important; }
-  .dw-feedback { display:flex !important; width:160px !important; min-width:160px !important; padding:10px 8px !important; }
-  .demo-h { font-size:1.6rem !important; }
+
+
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE — 768px and below
+   Philosophy: sparse, breathing, editorial. 
+   Show the hero. Show numbers. Show the product. Show price. Done.
+   ═══════════════════════════════════════════════════════ */
+
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
 }
 
+@media (max-width: 768px) {
+
+  /* ── GLOBAL ── */
+  *, *::before, *::after { 
+    max-width: 100% !important; 
+    box-sizing: border-box !important; 
+  }
+  section, [class*="section"], [id] { 
+    overflow-x: hidden !important; 
+  }
+
+  /* ── TRUST BAR ── */
+  .trust-bar { 
+    padding: 8px 16px !important; 
+    overflow: hidden !important;
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+    gap: 0 !important;
+  }
+  .trust-bar-sep, .trust-bar-hide-mobile { display: none !important; }
+  .trust-bar-item, .trust-bar-link { 
+    font-size: 10.5px !important; 
+    white-space: nowrap !important;
+    flex-shrink: 1 !important;
+  }
+
+  /* ── HERO — keep as is, it looks great ── */
+  .ob-mob-logo, .ob-mob-menu, .ob-mob-start, .ob-mob-demo { 
+    display: block !important; 
+  }
+  .ob-product, .ob-pricing, .ob-unis, .ob-resources,
+  .ob-login, .ob-navstart, .ob-try { 
+    display: none !important; 
+  }
+
+  /* ── TICKER — tight and clean ── */
+  .ticker-section { 
+    padding: 1.25rem 0 !important;
+    overflow: hidden !important; 
+  }
+  .ticker-label { 
+    font-size: 8px !important; 
+    letter-spacing: .1em !important;
+    margin-bottom: .75rem !important;
+  }
+  .ticker-track { gap: 24px !important; }
+  .ticker-track img { 
+    height: 18px !important; 
+    width: auto !important;
+    max-width: none !important;
+  }
+
+  /* ── STATS — 3 stats, no clutter ── */
+  .stats-section { 
+    padding: 1.25rem 16px !important;
+    overflow: hidden !important;
+  }
+  .stats-grid { 
+    grid-template-columns: repeat(3, 1fr) !important; 
+    gap: 0 !important;
+  }
+  .stat-item:nth-child(4),
+  .stat-item:nth-child(5) { display: none !important; }
+  .stat-item:nth-child(3) { border-right: none !important; }
+  .stat-num { font-size: 1.75rem !important; }
+  .stat-label { font-size: 7.5px !important; letter-spacing: .06em !important; }
+
+  /* ── LIVE DEMO — chat + score ring only, tight ── */
+  .demo-section { 
+    padding: 2.5rem 0 !important;
+    overflow: hidden !important;
+  }
+  .demo-header { 
+    padding: 0 20px !important;
+    margin-bottom: 1.25rem !important;
+  }
+  .demo-h { 
+    font-size: 1.65rem !important; 
+    line-height: 1.15 !important;
+  }
+  .demo-sub { font-size: 13px !important; }
+  .demo-score-teaser { display: none !important; }
+  .demo-window-wrap { padding: 0 16px !important; }
+  .demo-window { 
+    border-radius: 14px !important; 
+    overflow: hidden !important;
+    width: 100% !important;
+  }
+  .dw-sidebar { display: none !important; }
+  .dw-body { 
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: unset !important;
+    max-height: unset !important;
+  }
+  .dw-main { 
+    height: 200px !important;
+    overflow: hidden !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(15,26,20,.07) !important;
+  }
+  .dw-feedback { 
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 12px 14px !important;
+    width: 100% !important;
+    min-width: unset !important;
+    max-width: 100% !important;
+    height: auto !important;
+    overflow: hidden !important;
+  }
+  .dw-score-ring-wrap { flex-shrink: 0 !important; }
+  .dw-score-bars { flex: 1 !important; overflow: hidden !important; }
+  .dw-tags, .dw-coach-tip, .dw-next-btn, 
+  .dw-bean-row, [class*="bean-row"] { display: none !important; }
+  .demo-caption { display: none !important; }
+
+  /* ── PROBLEM/SOLUTION — cut the words in HALF ── */
+  #problem { 
+    padding: 2.5rem 20px !important;
+    overflow: hidden !important;
+  }
+  #problem > div > div:first-child p { 
+    display: none !important; 
+  }
+  #problem h2 { 
+    font-size: 1.65rem !important; 
+    line-height: 1.15 !important;
+    margin-bottom: 2rem !important;
+  }
+  .ps-grid { 
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    width: 100% !important;
+  }
+  .ps-problem, .ps-solution { 
+    padding: 1.25rem !important;
+    border-right: none !important;
+    width: 100% !important;
+  }
+  .ps-problem { border-radius: 14px 14px 0 0 !important; }
+  .ps-solution { border-radius: 0 0 14px 14px !important; }
+  /* Hide verbose list items — show max 2 per side */
+  .ps-list .ps-item:nth-child(n+3) { display: none !important; }
+  .ps-text { font-size: 13px !important; line-height: 1.55 !important; }
+  .ps-proof { margin-top: 1rem !important; padding-top: 1rem !important; }
+
+  /* ── TRACKS — show just 2 cards, hide the rest ── */
+  #tracks { 
+    padding: 2.5rem 16px !important;
+    overflow: hidden !important;
+  }
+  #tracks h2 { font-size: 1.65rem !important; }
+  /* Hide the sub-header grid, show only heading */
+  #tracks > div > div:first-child { 
+    grid-template-columns: 1fr !important;
+    margin-bottom: 1.5rem !important;
+  }
+  #tracks > div > div:first-child > div:last-child { 
+    display: none !important; 
+  }
+  /* All track grids → single column */
+  #tracks > div > div:not(:first-child) {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+  /* Hide tracks 3 and 4 — keep consulting + banking only */
+  #tracks > div > div:not(:first-child) > div:nth-child(n+3) { 
+    display: none !important; 
+  }
+  /* Track card sizing */
+  #tracks [style*="border-radius:20px"],
+  #tracks [style*="border-radius: 20px"] {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .tracks-sub-txt, .tc-meta-grid, .tc-feedback { display: none !important; }
+  .tc-body { padding: 12px !important; }
+  .tc-q { font-size: 13.5px !important; }
+
+  /* ── SCORE PROOF — single column ── */
+  [class*="proof-section"], [id*="proof"] { 
+    padding: 2.5rem 20px !important;
+    overflow: hidden !important;
+  }
+  [class*="proof-grid"],
+  [style*="grid-template-columns:1fr 1fr 1fr"] { 
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* ── SHARE + UNI RANKING — hide on mobile (too complex) ── */
+  [style*="share-preview"], .share-preview-wrap,
+  [class*="share-preview"] { display: none !important; }
+
+  /* ── TESTIMONIALS — horizontal scroll, 1 visible at a time ── */
+  [class*="testi-section"], .testi-section {
+    padding: 2.5rem 0 !important;
+    overflow: hidden !important;
+  }
+  [class*="testi-headline"], .testi-headline { 
+    font-size: 1.65rem !important;
+    padding: 0 20px !important;
+    margin-bottom: 1.5rem !important;
+  }
+  .testi-scroll-outer { 
+    padding: 4px 20px 16px !important;
+    -webkit-overflow-scrolling: touch !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x mandatory !important;
+  }
+  .testi-card-new { 
+    width: 75vw !important;
+    min-width: 240px !important;
+    max-width: 280px !important;
+    padding: 1.25rem !important;
+    flex-shrink: 0 !important;
+    scroll-snap-align: start !important;
+  }
+  .testi-quote-new { 
+    font-size: 13px !important; 
+    line-height: 1.55 !important;
+  }
+
+  /* ── PRICING — stacked, full width ── */
+  .pricing-section, [class*="pricing-section"] { 
+    padding: 2.5rem 16px !important;
+    overflow: hidden !important;
+  }
+  [class*="pricing-h"], .pricing-h { font-size: 1.65rem !important; }
+  [class*="pricing-sub"], .pricing-sub { 
+    font-size: 13px !important; 
+    margin-bottom: 1.25rem !important; 
+  }
+  [class*="pricing-grid"], .pricing-grid { 
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .price-card { 
+    padding: 1.5rem !important;
+    overflow: visible !important;
+    position: relative !important;
+  }
+  .price-card.pro { overflow: visible !important; }
+  [class*="price-features"] { font-size: 13px !important; }
+
+  /* ── FAQ — hide on mobile, too many words ── */
+  [class*="faq-section"], .faq-section { 
+    display: none !important; 
+  }
+
+  /* ── CTA — simple, atmospheric ── */
+  .final-cta-section { 
+    min-height: 360px !important;
+    overflow: hidden !important;
+  }
+  .cta-content { padding: 2rem 20px 2.5rem !important; }
+  .cta-content h2 { 
+    font-size: 1.75rem !important; 
+    line-height: 1.15 !important;
+  }
+  .cta-sub { font-size: 13px !important; }
+  .cta-social-links { display: none !important; }
+  .cta-univ-pills { display: none !important; }
+  .cta-bean-wrap, [class*="bean-cta"] { display: none !important; }
+  /* Stack buttons */
+  [class*="cta-btn-row"], 
+  .cta-content > div > div[style*="display:flex"][style*="gap"] {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+  .cta-content button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* ── FOOTER — minimal ── */
+  [class*="land-footer"], .land-footer-new {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 20px 16px !important;
+    gap: 8px !important;
+  }
+  [class*="land-footer"] > div:nth-child(2) { display: none !important; }
+
+  /* ── MOBILE NAV ── */
+  .mobile-nav-menu { 
+    width: 100vw !important; 
+    max-width: 100vw !important; 
+    left: 0 !important;
+    right: 0 !important;
+  }
+
+}
+
+/* ── iPhone SE ── */
+@media (max-width: 390px) {
+  .testi-card-new { width: 84vw !important; }
+  .stat-num { font-size: 1.5rem !important; }
+  .demo-h, #problem h2, .pricing-h, .cta-content h2 { 
+    font-size: 1.45rem !important; 
+  }
+}
 </style>
 </head>
 <body>

@@ -1883,6 +1883,22 @@ body {
 
 
 @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+
+/* ── GUARANTEE HERO BUTTON CLICKABILITY ── */
+.ob-start, .ob-demo, .ob-navstart, .ob-login,
+.ob-product, .ob-pricing, .ob-unis, .ob-resources,
+.ob-try, .ob-logo,
+.ob-mob-start, .ob-mob-demo, .ob-mob-logo, .ob-mob-menu {
+  pointer-events: all !important;
+  cursor: pointer !important;
+  -webkit-tap-highlight-color: transparent !important;
+  user-select: none !important;
+}
+/* Ensure hero-overlay itself doesn't block its own children on some browsers */
+.hero-overlay {
+  pointer-events: none !important;
+}
+
 </style>
 </head>
 <body>
@@ -1906,7 +1922,7 @@ body {
     <button class="ob-product"   onclick="document.getElementById('try-now').scrollIntoView({behavior:'smooth'})" title="Product"></button>
     <button class="ob-pricing"   onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})" title="Pricing"></button>
     <button class="ob-unis"      onclick="window.location.href='universities.html'" title="For Universities"></button>
-    <button class="ob-resources" onclick="toggleResourcesMenu()" title="Resources" id="ob-resources-btn"></button>
+    <button class="ob-resources" onclick="openDesktopNav()" title="Menu" id="ob-resources-btn"></button>
     <button class="ob-login"     onclick="openModal()" title="Log in"></button>
     <button class="ob-navstart"  onclick="doGoogleSignIn()" title="Start free"></button>
     <button class="ob-start"     onclick="doGoogleSignIn()" title="Start free"></button>
@@ -2887,6 +2903,52 @@ function escHtmlDemo(s) {
   </div>
 </section>
 
+
+<!-- DESKTOP NAV PANEL (matches mobile style) -->
+<div id="desktop-nav-panel" style="display:none;position:fixed;top:0;left:0;right:0;z-index:10000;background:#faf9f7;border-bottom:1px solid rgba(15,26,20,.08);padding:20px 40px 28px;box-shadow:0 8px 40px rgba(15,26,20,.14);">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:32px;height:32px;background:#0f1a14;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-style:italic;font-size:18px;color:#f5ede0;">m</div>
+        <span style="font-family:'DM Serif Display',serif;font-size:19px;color:#0f1a14;letter-spacing:-.02em;">mocha</span>
+      </div>
+      <button onclick="closeDesktopNav()" style="background:none;border:none;cursor:pointer;padding:8px;color:rgba(15,26,20,.45);border-radius:8px;transition:background .15s;" onmouseover="this.style.background='rgba(15,26,20,.06)'" onmouseout="this.style.background='none'">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px;">
+      <a onclick="closeDesktopNav();document.getElementById('try-now').scrollIntoView({behavior:'smooth'});return false;" href="#" style="display:block;padding:16px;border-radius:12px;background:#f5f3ef;text-decoration:none;transition:background .15s;" onmouseover="this.style.background='#ede9e3'" onmouseout="this.style.background='#f5f3ef'">
+        <div style="font-size:18px;margin-bottom:6px;">✦</div>
+        <div style="font-size:14px;font-weight:700;color:#0f1a14;font-family:'DM Sans',sans-serif;margin-bottom:3px;">Product</div>
+        <div style="font-size:12px;color:rgba(15,26,20,.45);font-family:'DM Sans',sans-serif;line-height:1.4;">Try a free question now</div>
+      </a>
+      <a onclick="closeDesktopNav();document.getElementById('pricing').scrollIntoView({behavior:'smooth'});return false;" href="#" style="display:block;padding:16px;border-radius:12px;background:#f5f3ef;text-decoration:none;transition:background .15s;" onmouseover="this.style.background='#ede9e3'" onmouseout="this.style.background='#f5f3ef'">
+        <div style="font-size:18px;margin-bottom:6px;">$</div>
+        <div style="font-size:14px;font-weight:700;color:#0f1a14;font-family:'DM Sans',sans-serif;margin-bottom:3px;">Pricing</div>
+        <div style="font-size:12px;color:rgba(15,26,20,.45);font-family:'DM Sans',sans-serif;line-height:1.4;">Free forever · Pro $9/mo</div>
+      </a>
+      <a href="universities.html" onclick="closeDesktopNav();" style="display:block;padding:16px;border-radius:12px;background:#f5f3ef;text-decoration:none;transition:background .15s;" onmouseover="this.style.background='#ede9e3'" onmouseout="this.style.background='#f5f3ef'">
+        <div style="font-size:18px;margin-bottom:6px;">🎓</div>
+        <div style="font-size:14px;font-weight:700;color:#0f1a14;font-family:'DM Sans',sans-serif;margin-bottom:3px;">For Universities</div>
+        <div style="font-size:12px;color:rgba(15,26,20,.45);font-family:'DM Sans',sans-serif;line-height:1.4;">Partner with us</div>
+      </a>
+      <a href="resources.html" onclick="closeDesktopNav();" style="display:block;padding:16px;border-radius:12px;background:#f5f3ef;text-decoration:none;transition:background .15s;" onmouseover="this.style.background='#ede9e3'" onmouseout="this.style.background='#f5f3ef'">
+        <div style="font-size:18px;margin-bottom:6px;">📚</div>
+        <div style="font-size:14px;font-weight:700;color:#0f1a14;font-family:'DM Sans',sans-serif;margin-bottom:3px;">Resources</div>
+        <div style="font-size:12px;color:rgba(15,26,20,.45);font-family:'DM Sans',sans-serif;line-height:1.4;">Guides, blog, prep tips</div>
+      </a>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid rgba(15,26,20,.07);">
+      <div style="font-size:12px;color:rgba(15,26,20,.38);font-family:'DM Sans',sans-serif;">Used at 19+ universities · 1,600+ students · Free forever</div>
+      <div style="display:flex;gap:10px;">
+        <button onclick="closeDesktopNav();openModal();" style="padding:9px 20px;background:transparent;color:rgba(15,26,20,.60);border:1.5px solid rgba(15,26,20,.15);border-radius:99px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;" onmouseover="this.style.background='rgba(15,26,20,.05)'" onmouseout="this.style.background='transparent'">Log in</button>
+        <button onclick="closeDesktopNav();doGoogleSignIn();" style="padding:9px 22px;background:#0f1a14;color:#f5ede0;border:none;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:-.01em;transition:background .15s;" onmouseover="this.style.background='#0a5c44'" onmouseout="this.style.background='#0f1a14'">Start free · it's $0</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="desktop-nav-overlay" onclick="closeDesktopNav()" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(15,26,20,.35);backdrop-filter:blur(2px);"></div>
+
 <!-- FOOTER -->
 <footer class="land-footer-new">
   <div style="display:flex;align-items:center;gap:10px;">
@@ -3428,6 +3490,23 @@ function closeMobileNav() {
   document.body.style.overflow='';
 }
 </script>
+
+<script>
+function openDesktopNav() {
+  document.getElementById('desktop-nav-panel').style.display = 'block';
+  document.getElementById('desktop-nav-overlay').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+function closeDesktopNav() {
+  document.getElementById('desktop-nav-panel').style.display = 'none';
+  document.getElementById('desktop-nav-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') { closeDesktopNav(); closeMobileNav(); }
+});
+</script>
+
 </body>
 </html
 /* ── COLOR SYSTEM FIXES ──────────────────────────────────── */

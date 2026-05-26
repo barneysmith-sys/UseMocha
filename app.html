@@ -1789,7 +1789,7 @@ body {
 
 /* Stats row — Duolingo-level engagement */
 .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 14px; }
-@media(max-width:520px) { .stats-row { grid-template-columns: 1fr 1fr; } }
+@media(max-width:520px) { .stats-row { grid-template-columns: 1fr 1fr; } .stat-streak { grid-column: 1 / -1; } }
 .stat-c {
   background: #ffffff;
   border: 1.5px solid rgba(15,26,20,0.08);
@@ -1834,7 +1834,7 @@ body {
 }
 .cp-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .cp-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(77,201,148,.70); margin-bottom: 3px; }
-.cp-track { font-size: 15px; font-weight: 600; color: #fde8cc; letter-spacing: -0.02em; margin-bottom: 2px; }
+.cp-track { font-size: 14px; font-weight: 600; color: #fde8cc; letter-spacing: -0.02em; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 55vw; }
 .cp-sub { font-size: 12px; color: rgba(253,232,204,.60); }
 
 /* Today question card — hero prominence */
@@ -7537,14 +7537,9 @@ var GEMINI_API_KEY = '';
 var HOST_KEY = '';
 
 // Per-user daily limit: 2 free sessions per day
-var USER_DAILY_LIMIT = 2;
+var USER_DAILY_LIMIT = 999; // No limit for launch
 function _getUserUsage() {
-  try {
-    var u = JSON.parse(localStorage.getItem('mocha_usage') || '{}');
-    var today = new Date().toLocaleDateString('en-CA');
-    if (u.date !== today) u = { date: today, count: 0 };
-    return u;
-  } catch(e) { return { date: new Date().toLocaleDateString('en-CA'), count: 0 }; }
+  return { date: new Date().toLocaleDateString('en-CA'), count: 0 }; // No limit for launch
 }
 function _saveUserUsage(u) {
   try { localStorage.setItem('mocha_usage', JSON.stringify(u)); } catch(e) {}

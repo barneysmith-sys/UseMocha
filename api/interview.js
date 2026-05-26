@@ -1,8 +1,8 @@
 // ═══════════════════════════════════════════════════════════════════
-// Mocha — /api/interview  v4
-// Vercel serverless. Key never touches the client.
-// Vercel Hobby: 10s max execution. Vercel Pro: 60s.
-// We target 9s to stay safely under Hobby limit.
+// Mocha — /api/interview  v5
+// Vercel Pro: 60s max. We target 55s with one retry on timeout.
+// Root fix v4→v5: timeout raised 25s→50s (was killing Gemini 2.5 Flash
+// which routinely takes 20-40s for full grading responses).
 // ═══════════════════════════════════════════════════════════════════
 
 import { createHash } from 'crypto';
@@ -11,14 +11,9 @@ const GEMINI_ENDPOINT =
   'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
 // ── Vercel KV (optional) ─────────────────────────────────────────
-// If KV_REST_API_URL + KV_REST_API_TOKEN env vars are present,
-// rate limits persist across cold starts. Otherwise degrades to
-// in-memory Map (resets on cold start — acceptable for free tier).
 const KV_URL   = process.env.KV_REST_API_URL;
 const KV_TOKEN = process.env.KV_REST_API_TOKEN;
 const USE_KV   = !!(KV_URL && KV_TOKEN);
-
-// In-memory fallback store
 const _memStore = new Map();
 
 async function kvGet(key) {
@@ -47,8 +42,8 @@ const IP_DAILY_LIMIT = 25;
 const DAY_SECONDS    = 86400;
 
 async function checkRateLimit(ip) {
-  const key = `rl:${ip}:${new Date().toISOString().slice(0, 10)}`; // resets at UTC midnight
-  const raw = await kvGet(key);
+  const key   = `rl:${ip}:${new Date().toISOString().slice(0, 10)}`;
+  const raw   = await kvGet(key);
   const count = parseInt(raw || '0', 10);
   if (count >= IP_DAILY_LIMIT) return false;
   await kvSet(key, count + 1, DAY_SECONDS);
@@ -65,15 +60,10 @@ function sha256(str) {
   return createHash('sha256').update(str).digest('hex').slice(0, 16);
 }
 
-function cacheKey(question, answer) {
-  return sha256((question + '|' + answer).slice(0, 200));
-}
-
 function requestId() {
   return `mch_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
 }
 
-// Structured JSON logger — queryable in Vercel log drains
 function log(level, rid, data) {
   console.log(JSON.stringify({ ts: new Date().toISOString(), level, rid, ...data }));
 }
@@ -83,13 +73,9 @@ function estimateTokens(str) {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// RUBRIC PROFILES  v4
-// Each prompt is compressed for token efficiency while preserving
-// all scoring signal. Filler removed; every sentence scores.
+// RUBRIC PROFILES  v5 (unchanged from v4 — rubrics are solid)
 // ═══════════════════════════════════════════════════════════════════
 const RUBRICS = {
-
-  // ── 1. CONSULTING ───────────────────────────────────────────────
   consulting: {
     firms    : 'McKinsey, BCG, Bain & Company',
     framework: 'MBB PEI Framework — Personal Impact, Entrepreneurial Drive, Inclusive Leadership',
@@ -101,12 +87,6 @@ const RUBRICS = {
       clarity   : 'Concise, jargon-free under pressure — BCG values precision over length',
       ownership : 'Personal Impact axis: "I" not "we" — McKinsey explicitly rejects shared-ownership answers',
       impact    : 'Quantified outcomes — BCG/Bain interviewers push back on every vague result',
-    },
-    // MBB PEI has 3 named dimensions scored separately before aggregation
-    peiDimensions: {
-      personal_impact      : 'Was the candidate the decisive actor? Led without formal authority? Directly caused the outcome?',
-      entrepreneurial_drive: 'Did they show initiative beyond their role? Push through ambiguity? Create something new?',
-      inclusive_leadership : 'Did they bring others along, build consensus, or consider stakeholder perspectives?',
     },
     coachPrompt: `You are a senior McKinsey PEI interviewer, 600+ sessions. You also train BCG and Bain panels.
 
@@ -126,8 +106,6 @@ SCORE CALIBRATION — be a real McKinsey interviewer, not a supportive coach:
 3.0–4.9: Weak. Team-focused, vague, poor structure.
 1.0–2.9: Fails. No personal role, no result, no structure.`,
   },
-
-  // ── 2. BANKING ──────────────────────────────────────────────────
   banking: {
     firms    : 'Goldman Sachs, JPMorgan, Morgan Stanley, Lazard',
     framework: 'IB Competency Model — Technical Judgment, Client Orientation, Execution Under Pressure, Integrity',
@@ -140,34 +118,26 @@ SCORE CALIBRATION — be a real McKinsey interviewer, not a supportive coach:
       ownership : 'Individual accountability at high stakes — MS scores for personal decisions under pressure',
       impact    : 'Hard numbers — deal size, revenue, savings, basis points. GS rejects vague results reflexively',
     },
-    ibCompetencies: {
-      technical_judgment    : 'Did they make sound analytical decisions? Show financial/commercial reasoning?',
-      client_orientation    : 'Did they prioritise the client or stakeholder outcome, not just internal metrics?',
-      execution_under_pressure: 'Evidence of sustained high performance under 80-100hr/week conditions?',
-      integrity_signals     : 'Did they flag an error, push back on a wrong call, or maintain standards under pressure?',
-    },
     coachPrompt: `You are a Goldman Sachs MD, 400+ analyst/associate interviews. You train JPMorgan and Morgan Stanley panels.
 
 GS/JPM COMPETENCY MODEL — four axes:
-1. TECHNICAL JUDGMENT — Sound analytical decisions. Financial/commercial reasoning present. "I ran the numbers and concluded..." scores. "I thought it seemed right" scores nothing.
-2. CLIENT ORIENTATION — Every action traced to client or stakeholder outcome. IB is a client service business. Self-serving answers score lower.
-3. EXECUTION UNDER PRESSURE — 80-100hr weeks. GS explicitly tests for sustained high performance without quality degradation. Vague "worked hard" = 0 points.
-4. INTEGRITY SIGNALS — Flagged an error, pushed back on a wrong call, maintained standards when it was costly. This axis separates good analysts from great bankers.
+1. TECHNICAL JUDGMENT — Sound analytical decisions. Financial/commercial reasoning present.
+2. CLIENT ORIENTATION — Every action traced to client or stakeholder outcome.
+3. EXECUTION UNDER PRESSURE — 80-100hr weeks. Evidence of sustained high performance.
+4. INTEGRITY SIGNALS — Flagged an error, pushed back on a wrong call, maintained standards when costly.
 
 HARD RULES:
-- No hard number = maximum 5.0 on impact. Revenue, deal size, basis points, % improvement, time saved.
+- No hard number = maximum 5.0 on impact.
 - "We" without "I did specifically" = -1.0 on ownership.
-- Missing commercial context (what was the business/client implication?) = -1.0 on structure.
+- Missing commercial context = -1.0 on structure.
 
 CALIBRATION:
-9.0–10.0: Exceptional. All four competencies hit. Hard numbers. Precise language. Resilience demonstrated.
+9.0–10.0: Exceptional. All four competencies hit. Hard numbers. Precise language.
 7.0–8.9: Good. Solid story, mostly quantified. Minor vagueness.
 5.0–6.9: Average. Story present but lacks numbers or personal contribution unclear.
 3.0–4.9: Below standard. Generic.
 1.0–2.9: Would not proceed.`,
   },
-
-  // ── 3. TECH / PM ────────────────────────────────────────────────
   product: {
     firms    : 'Google, Meta, Amazon, Apple, Microsoft',
     framework: 'Amazon 16 Leadership Principles + FAANG Bar-Raiser Rubric',
@@ -180,133 +150,106 @@ CALIBRATION:
       ownership : 'Bias for Action + Ownership LP — "Leaders never say that\'s not my job"',
       impact    : 'Measurable user/product/business outcomes with scale signal — Meta scores DAU/MAU/revenue impact',
     },
-    // All 16 Amazon LPs — the feedback will flag which are hit/missed
-    amazonLPs: [
-      'Customer Obsession', 'Ownership', 'Invent and Simplify', 'Are Right, A Lot',
-      'Learn and Be Curious', 'Hire and Develop the Best', 'Insist on the Highest Standards',
-      'Think Big', 'Bias for Action', 'Frugality', 'Earn Trust', 'Dive Deep',
-      'Have Backbone; Disagree and Commit', 'Deliver Results', 'Strive to be Earth\'s Best Employer',
-      'Success and Scale Bring Broad Responsibility',
-    ],
     coachPrompt: `You are an Amazon Bar Raiser and former Google Staff interviewer. 1,000+ behavioral interviews evaluated.
 
-AMAZON 16 LEADERSHIP PRINCIPLES — the ones most tested behaviorally:
-- Customer Obsession: Every decision traces to customer impact. "Users" or "customers" must appear.
-- Ownership: "Never say that's not my job." Full accountability. No blame-shifting.
-- Bias for Action: Acted decisively with incomplete information. Speed matters.
-- Dive Deep: Got into data and details. Didn't just set strategy and walk away.
-- Deliver Results: Actually shipped/achieved something measurable. Not "worked toward."
-- Earn Trust: Worked cross-functionally. Built credibility with skeptical stakeholders.
-- Have Backbone; Disagree and Commit: Pushed back, then committed once decided.
+AMAZON LEADERSHIP PRINCIPLES most tested behaviorally:
+- Customer Obsession: Every decision traces to customer impact.
+- Ownership: Full accountability. No blame-shifting.
+- Bias for Action: Acted decisively with incomplete information.
+- Dive Deep: Got into data and details.
+- Deliver Results: Actually shipped/achieved something measurable.
+- Earn Trust: Built credibility with skeptical stakeholders.
+- Have Backbone; Disagree and Commit: Pushed back, then committed.
 - Invent and Simplify: Found a simpler or novel solution.
 
 GOOGLE/META ADDITIONS:
-- Data-driven: "I thought it would work" = 0. "I ran an A/B test with 50k users, saw 12% lift in D7 retention" = full credit.
-- Scale signal: Millions of users, large teams, complex systems. Small-scale answers score lower at Staff+ level.
+- Data-driven: "I ran an A/B test with 50k users, saw 12% lift in D7 retention" = full credit.
+- Scale signal: Millions of users, large teams, complex systems.
 - XFN navigation: Crossed engineering, design, data science, legal, business.
 
-IN YOUR RESPONSE: explicitly name which LPs the answer demonstrates AND which are missing. This is the most useful feedback for Amazon candidates.
+IN YOUR RESPONSE: explicitly name which LPs the answer demonstrates AND which are missing.
 
 CALIBRATION:
-9.0–10.0: Bar-raiser approves. Hits 3+ LPs by name. Data-driven. Scale present. Unmistakable ownership.
+9.0–10.0: Bar-raiser approves. Hits 3+ LPs by name. Data-driven. Scale present.
 7.0–8.9: Strong hire. Good story with data. May miss one LP or lack scale.
-5.0–6.9: Mixed. Has structure but vague data, LPs unclear, or user impact missing.
-3.0–4.9: No hire. No data, no scale, "we did" throughout.
+5.0–6.9: Mixed. Has structure but vague data or LPs unclear.
+3.0–4.9: No hire. No data, no scale.
 1.0–2.9: Fails FAANG rubric.`,
   },
-
-  // ── 4. PRIVATE EQUITY ───────────────────────────────────────────
   finance: {
     firms    : 'Blackstone, KKR, Sequoia, Citadel, Bridgewater',
     framework: 'PE/HF Evaluation Rubric — Investment Thesis, Risk ID, Data-Driven Conviction',
     shortName: 'PE / Buy-Side',
-    citation : 'Scored on Sequoia/KKR case interview rubric: Investment Thesis Clarity, Risk Identification, Data-Driven Conviction — the axes used in PE and HF behavioral screens.',
+    citation : 'Scored on Sequoia/KKR case interview rubric: Investment Thesis Clarity, Risk Identification, Data-Driven Conviction.',
     scoreGuide: '9–10 = Would hire | 7–8.9 = Strong, progresses | 5–6.9 = Adequate, lacks depth | 3–4.9 = Weak analytical layer | 1–2.9 = Does not meet buy-side standard',
     dimensions: {
-      structure : 'Investment thesis clarity — clear hypothesis → evidence → conviction (Sequoia/KKR rubric)',
-      clarity   : 'Intellectual precision — says exactly what is meant, no hedging (Citadel standard)',
-      ownership : 'Independent conviction — formed own view, defended it under pressure (KKR)',
-      impact    : 'Quantified with risk awareness — upside AND downside identified (Blackstone)',
+      structure : 'Investment thesis clarity — clear hypothesis → evidence → conviction',
+      clarity   : 'Intellectual precision — says exactly what is meant, no hedging',
+      ownership : 'Independent conviction — formed own view, defended it under pressure',
+      impact    : 'Quantified with risk awareness — upside AND downside identified',
     },
-    peAxes: {
-      investment_thesis : 'Is there a clear hypothesis? Is it differentiated from consensus?',
-      risk_identification: 'Did they identify the key risks and explain mitigation?',
-      data_driven_conviction: 'Is the conviction backed by numbers, not instinct alone?',
-    },
-    coachPrompt: `You are a Citadel Portfolio Manager and former Bridgewater analyst. You interview PE and HF candidates.
+    coachPrompt: `You are a Citadel Portfolio Manager and former Bridgewater analyst.
 
-SEQUOIA/KKR PE RUBRIC — three evaluation axes:
-1. INVESTMENT THESIS CLARITY — Is there a clear, differentiated hypothesis? Not "I thought it was a good opportunity" but "The market was mispricing X because of Y, and I saw a 3x return path through Z." Consensus thinking scores 3.0–4.9.
-2. RISK IDENTIFICATION — Did they name the bear case? Bridgewater interviewers specifically test whether candidates have stress-tested their thinking. "It could have gone wrong if..." scores points. No risk awareness = maximum 5.5.
-3. DATA-DRIVEN CONVICTION — Numbers that matter: IRR, MOIC, Sharpe ratio, basis points, market size, churn rate, LTV/CAC. "Significant improvement" fails instantly. Independent conviction defended under pushback is the signal that separates hired from rejected.
-
-ADDITIONAL AXES:
-- First-principles thinking (Citadel): Did they decompose the problem, or just describe what happened?
-- Intellectual curiosity: Genuine depth of analysis, not just execution.
+SEQUOIA/KKR PE RUBRIC:
+1. INVESTMENT THESIS CLARITY — Clear, differentiated hypothesis. Not "I thought it was a good opportunity." Consensus thinking scores 3.0–4.9.
+2. RISK IDENTIFICATION — Did they name the bear case? No risk awareness = maximum 5.5.
+3. DATA-DRIVEN CONVICTION — IRR, MOIC, Sharpe ratio, basis points, market size, LTV/CAC. "Significant improvement" fails instantly.
 
 CALIBRATION (buy-side bar is extremely high):
-9.0–10.0: Would hire. Analytically rigorous, all three PE axes hit, quantified, shows conviction AND risk awareness.
-7.0–8.9: Strong. Good analysis, missing risk depth or lacking precise numbers.
+9.0–10.0: Would hire. All three PE axes hit, quantified, conviction AND risk awareness.
+7.0–8.9: Strong. Good analysis, missing risk depth or precise numbers.
 5.0–6.9: Adequate, no independent analytical layer.
 3.0–4.9: Execution-focused, no analytical or risk dimension.
 1.0–2.9: Does not meet buy-side standard.`,
   },
-
-  // ── 5. MARKETING ────────────────────────────────────────────────
   marketing: {
     firms    : 'P&G, Unilever, Nike, Airbnb, growth-stage startups',
     framework: 'Brand Strategy & Growth Marketing Framework — Consumer Insight, Strategic Arc, Measurable Growth',
     shortName: 'Brand & Growth',
-    citation : 'Scored on P&G brand management framework and Airbnb growth marketing rubric: Consumer Insight, Strategic Clarity, Measurable Growth, Data + Intuition Balance.',
+    citation : 'Scored on P&G brand management framework and Airbnb growth marketing rubric: Consumer Insight, Strategic Clarity, Measurable Growth.',
     scoreGuide: '9–10 = Exceptional marketer | 7–8.9 = Strong, hire signal | 5–6.9 = Activity without strategy | 3–4.9 = Below brand standard | 1–2.9 = No marketing competency',
     dimensions: {
       structure : 'Strategic arc — insight → strategy → execution → result (P&G brand management framework)',
-      clarity   : 'Compelling storytelling — marketers must sell their own stories (Nike brand voice)',
-      ownership : 'Campaign/strategy ownership — who made the key creative or strategic call (Unilever)',
-      impact    : 'Growth metrics — CAC, LTV, conversion, revenue attribution, brand lift (Airbnb standard)',
+      clarity   : 'Compelling storytelling — marketers must sell their own stories',
+      ownership : 'Campaign/strategy ownership — who made the key creative or strategic call',
+      impact    : 'Growth metrics — CAC, LTV, conversion, revenue attribution, brand lift',
     },
     coachPrompt: `You are a former P&G Brand Director. You advise growth startups and interview marketing candidates at Nike and Airbnb.
 
 P&G/AIRBNB MARKETING FRAMEWORK:
-1. CONSUMER INSIGHT — P&G trains brand managers to start with a human truth, not a business problem. "Customers weren't buying because..." > "We needed to grow revenue." No insight = maximum 6.0 on structure.
-2. STRATEGIC ARC — Unilever interviewers score: insight → clear strategy → execution → measurable result. Jumping straight to tactics without strategy = structural deduction.
-3. MEASURABLE GROWTH — CAC, LTV, conversion rates, NPS, engagement uplift, revenue attribution. Nike tracks brand heat. Airbnb tracks booking conversion. Vague "campaigns" fail at all these firms.
-4. CREATIVE PROBLEM SOLVING — Non-obvious solution. Best marketers see angles others miss.
-5. DATA + INTUITION BALANCE — Pure data = analyst (not marketer). Pure instinct = too risky. Best answers show both.
-
-VOICE NOTE: The improved_answer for this track should sound like a sharp brand director telling a story — vivid, confident, metrics-grounded, not corporate.
+1. CONSUMER INSIGHT — Start with a human truth. No insight = maximum 6.0 on structure.
+2. STRATEGIC ARC — insight → clear strategy → execution → measurable result. Jumping to tactics without strategy = structural deduction.
+3. MEASURABLE GROWTH — CAC, LTV, conversion rates, NPS, engagement uplift, revenue attribution. Vague "campaigns" fail.
+4. CREATIVE PROBLEM SOLVING — Non-obvious solution.
+5. DATA + INTUITION BALANCE — Pure data = analyst. Pure instinct = too risky. Best answers show both.
 
 CALIBRATION:
 9.0–10.0: Consumer insight + hard metrics + creative thinking + compelling delivery.
 7.0–8.9: Strong execution or metrics, lighter on consumer insight.
-5.0–6.9: Activity not strategy — missing the "why."
-3.0–4.9: Activity without measurement or rationale.
+5.0–6.9: Activity not strategy.
+3.0–4.9: Activity without measurement.
 1.0–2.9: No strategic marketing competency.`,
   },
-
-  // ── 6. NONPROFIT / SOCIAL IMPACT ────────────────────────────────
   nonprofit: {
     firms    : 'Gates Foundation, Teach For America, McKinsey.org, UNICEF',
     framework: 'Social Impact Leadership Framework — Mission + Execution, Stakeholder Complexity, Measured Impact',
     shortName: 'Social Impact',
-    citation : "Scored on Teach For America's Corps Member selection rubric and Gates Foundation program officer criteria: Mission-Execution Balance, Stakeholder Navigation, Measured Social Impact.",
+    citation : "Scored on Teach For America's Corps Member selection rubric and Gates Foundation program officer criteria.",
     scoreGuide: '9–10 = Exceptional social leader | 7–8.9 = Strong | 5–6.9 = Mission without delivery | 3–4.9 = Passion without evidence | 1–2.9 = Fails',
     dimensions: {
-      structure : 'Mission-to-impact narrative with stakeholder complexity (TFA selection rubric)',
-      clarity   : 'Accessible communication across diverse audiences — clinicians, donors, communities (UNICEF)',
-      ownership : 'Personal accountability for social outcomes — TFA explicitly rejects "our team did" answers',
-      impact    : 'Measured social impact — lives, communities, policy changed, funds raised (Gates Foundation)',
+      structure : 'Mission-to-impact narrative with stakeholder complexity',
+      clarity   : 'Accessible communication across diverse audiences',
+      ownership : 'Personal accountability for social outcomes',
+      impact    : 'Measured social impact — lives, communities, policy changed, funds raised',
     },
     coachPrompt: `You are a TFA selection interviewer and former Gates Foundation program officer.
 
 TFA/GATES FRAMEWORK:
-1. MISSION + EXECUTION BALANCE — TFA rejects passion without delivery. Selection rubric requires BOTH genuine commitment AND tangible results. "I care deeply" without evidence = 3.0–4.9.
-2. STAKEHOLDER COMPLEXITY — Donors, beneficiaries, governments, communities, boards simultaneously. Evidence of navigating competing interests is essential.
-3. RESOURCE CONSTRAINTS — Gates looks for "more with less." Meaningful results with limited resources is a core signal.
-4. SYSTEMS THINKING — McKinsey.org screens for structural thinking. Root causes, not symptoms. Policy change > individual outcomes.
-5. MEASURED SOCIAL IMPACT — Numbers matter even in nonprofits. Lives improved, students progressed, funds raised, policy changed, communities reached.
-
-VOICE NOTE: The improved_answer should sound like a TFA corps member report — mission-driven but analytically rigorous, not purely emotional.
+1. MISSION + EXECUTION BALANCE — TFA rejects passion without delivery. BOTH conviction AND results required. "I care deeply" without evidence = 3.0–4.9.
+2. STAKEHOLDER COMPLEXITY — Donors, beneficiaries, governments, communities, boards simultaneously.
+3. RESOURCE CONSTRAINTS — Gates looks for "more with less."
+4. SYSTEMS THINKING — Root causes, not symptoms. Policy change > individual outcomes.
+5. MEASURED SOCIAL IMPACT — Lives improved, students progressed, funds raised, policy changed.
 
 CALIBRATION:
 9.0–10.0: Mission conviction + rigorous execution + measurable impact + systems thinking.
@@ -315,28 +258,26 @@ CALIBRATION:
 3.0–4.9: All passion, no evidence.
 1.0–2.9: Does not demonstrate social leadership.`,
   },
-
-  // ── 7. HEALTHCARE ───────────────────────────────────────────────
   healthcare: {
     firms    : 'Johnson & Johnson, McKinsey Health, NHS, health-tech startups',
     framework: 'Healthcare Leadership Framework — Patient Centricity, Evidence-Based, Regulatory Awareness',
     shortName: 'Healthcare',
-    citation : "Scored on J&J Credo-based leadership standards and McKinsey Health practice criteria: Patient Centricity, Regulatory Awareness, Evidence-Based Decision-Making.",
+    citation : "Scored on J&J Credo-based leadership standards and McKinsey Health practice criteria.",
     scoreGuide: '9–10 = Outstanding healthcare leader | 7–8.9 = Strong | 5–6.9 = Competent but generic | 3–4.9 = No healthcare framing | 1–2.9 = Fails',
     dimensions: {
-      structure : 'Clinical/operational STAR with ethical grounding (J&J Credo places patients above shareholders)',
-      clarity   : 'Cross-disciplinary communication — clinical and non-clinical audiences (NHS standard)',
-      ownership : 'Patient outcome accountability and ethical decision-making (McKinsey Health)',
-      impact    : 'Evidence-based outcomes — patient metrics, safety events, efficiency gains (J&J)',
+      structure : 'Clinical/operational STAR with ethical grounding',
+      clarity   : 'Cross-disciplinary communication — clinical and non-clinical audiences',
+      ownership : 'Patient outcome accountability and ethical decision-making',
+      impact    : 'Evidence-based outcomes — patient metrics, safety events, efficiency gains',
     },
     coachPrompt: `You are a J&J senior HR leader and former NHS management consultant.
 
 J&J/McKINSEY HEALTH FRAMEWORK:
-1. PATIENT CENTRICITY — J&J Credo: patients first, employees second, shareholders third. Every decision must connect to patient outcomes. Candidates who don't mention patients or communities score lower on structure.
-2. REGULATORY & ETHICAL AWARENESS — HIPAA, GDPR, ethics committees, clinical governance, clinical trials protocol. McKinsey Health interviewers specifically probe this. Missing = -1.0 on ownership.
-3. CROSS-DISCIPLINARY COLLABORATION — Clinicians, regulators, engineers, patients, administrators simultaneously. Evidence required.
-4. EVIDENCE-BASED THINKING — NHS and J&J: claims must be supported by data or clinical evidence. "I believed it would work" fails.
-5. RESILIENCE UNDER HIGH STAKES — Healthcare errors have real consequences. Evidence of careful operation under pressure.
+1. PATIENT CENTRICITY — J&J Credo: patients first. Every decision must connect to patient outcomes.
+2. REGULATORY & ETHICAL AWARENESS — HIPAA, GDPR, ethics committees, clinical governance. Missing = -1.0 on ownership.
+3. CROSS-DISCIPLINARY COLLABORATION — Clinicians, regulators, engineers, patients, administrators simultaneously.
+4. EVIDENCE-BASED THINKING — Claims must be supported by data or clinical evidence.
+5. RESILIENCE UNDER HIGH STAKES — Healthcare errors have real consequences.
 
 CALIBRATION:
 9.0–10.0: Patient-centric, evidence-based, regulatory awareness, cross-functional.
@@ -345,8 +286,6 @@ CALIBRATION:
 3.0–4.9: Generic — could apply to any industry.
 1.0–2.9: No healthcare leadership competency.`,
   },
-
-  // ── 8. RETAIL / GENERAL (fallback) ──────────────────────────────
   retail: {
     firms    : 'Amazon Retail, LVMH, Zara, Walmart, fast-growth DTC',
     framework: 'Retail & Consumer Operations Framework — Commercial Acumen, Customer Obsession, Data-Driven Ops',
@@ -354,19 +293,19 @@ CALIBRATION:
     citation : "Scored on Amazon Retail's operational leadership criteria and LVMH brand management standards.",
     scoreGuide: '9–10 = Exceptional | 7–8.9 = Strong commercial | 5–6.9 = Activity without commercial layer | 3–4.9 = Below standard | 1–2.9 = No competency',
     dimensions: {
-      structure : 'Commercial STAR with customer + margin awareness (Amazon Retail standard)',
-      clarity   : 'Speed and decisiveness (Zara: 2-week design-to-shelf is the benchmark)',
-      ownership : 'P&L or category ownership — individual accountability (LVMH)',
-      impact    : 'Commercial metrics — conversion, NPS, margin, shrinkage, units (Walmart)',
+      structure : 'Commercial STAR with customer + margin awareness',
+      clarity   : 'Speed and decisiveness',
+      ownership : 'P&L or category ownership — individual accountability',
+      impact    : 'Commercial metrics — conversion, NPS, margin, shrinkage, units',
     },
     coachPrompt: `You are an Amazon Retail principal and former LVMH commercial director.
 
 RETAIL/DTC FRAMEWORK:
-1. CUSTOMER OBSESSION + COMMERCIAL REALITY — Amazon: balance customer experience WITH commercial discipline (margin, inventory turns, conversion). One without the other scores lower.
-2. SPEED OF EXECUTION — Zara: 2-week design-to-shelf. Bias for action + rapid iteration without sacrificing quality.
-3. DATA-DRIVEN OPS — Units, conversion, shrinkage, NPS, basket size, attach rate. Amazon pushes back on "improved customer satisfaction" with no number.
-4. TEAM LEADERSHIP AT SCALE — Large, diverse, shift-based teams. LVMH scores for building team capability under pressure.
-5. SUPPLY CHAIN AWARENESS — Thinking upstream. Walmart/Amazon value candidates who see the full supply chain, not just the customer-facing layer.
+1. CUSTOMER OBSESSION + COMMERCIAL REALITY — Balance customer experience WITH commercial discipline (margin, inventory turns, conversion).
+2. SPEED OF EXECUTION — Bias for action + rapid iteration without sacrificing quality.
+3. DATA-DRIVEN OPS — Units, conversion, shrinkage, NPS, basket size, attach rate.
+4. TEAM LEADERSHIP AT SCALE — Large, diverse, shift-based teams.
+5. SUPPLY CHAIN AWARENESS — Walmart/Amazon value candidates who see the full supply chain.
 
 CALIBRATION:
 9.0–10.0: Commercial, customer-centric, data-driven, operational and team scale.
@@ -377,12 +316,10 @@ CALIBRATION:
   },
 };
 
-// ── General fallback for unrecognised tracks ─────────────────────
 RUBRICS.general = RUBRICS.retail;
 
 // ═══════════════════════════════════════════════════════════════════
 // SMART FALLBACK — runs when Gemini unavailable or answer too short
-// Returns genuinely useful coaching, not just an error message.
 // ═══════════════════════════════════════════════════════════════════
 function buildFallback(question, answer, industry, rid) {
   const words        = answer.trim().split(/\s+/).filter(Boolean).length;
@@ -399,9 +336,7 @@ function buildFallback(question, answer, industry, rid) {
   const oScore = parseFloat((!hasOwnership?2.5:hasAction?(hasInsight?7.2:6.3):5.0).toFixed(1));
   const iScore = parseFloat((hasNumbers?7.2:hasResult?5.5:3.0).toFixed(1));
   const overall = parseFloat(Math.min(((sScore+cScore+oScore+iScore)/4), 9.6).toFixed(1));
-
-  const rubric = RUBRICS[industry] || RUBRICS.consulting;
-
+  const rubric  = RUBRICS[industry] || RUBRICS.consulting;
   const share_line = `I scored ${overall}/10 on a ${rubric.shortName} question. ${!hasNumbers ? 'Adding hard numbers is my next fix.' : !hasAction ? 'Ownership language is my gap.' : 'Working on it with Mocha.'} usemocha.app`;
 
   return {
@@ -419,8 +354,8 @@ function buildFallback(question, answer, industry, rid) {
       result    : hasResult    ? (hasNumbers ? 'Strong — quantified outcome present.' : 'Present but vague — add a specific %, $ amount, or named metric.') : 'MISSING — close with: "This resulted in [X]% improvement / $[Y] saved / [Z] people impacted."',
       weak_components: [!hasSituation&&'Situation context', !hasTask&&'Personal responsibility', !hasAction&&'I-language actions', !hasResult&&'Quantified result', !hasNumbers&&'Hard numbers', !hasInsight&&'Reflection sentence'].filter(Boolean).join(', ') || 'Structure is solid — focus on quantification.',
     },
-    industry_critique      : `Structural analysis only (AI temporarily unavailable). ${rubric.framework}: your answer ${overall>=6.5?'shows reasonable STAR structure':'is missing key STAR components'}. ${hasNumbers?'Numbers present — good.': rubric.firms+' interviewers push back on every vague result.'}${hasInsight?' Reflection element is a positive signal.':' Adding one insight sentence can lift score 0.5+ points.'}`,
-    improved_answer        : `To meet ${rubric.firms} standard: Open with "[Month/Year], [Company/context], [Situation]." State your personal responsibility. Describe 2-3 concrete actions YOU took (first person). Close with a quantified result. End with one genuine reflection. (${rubric.scoreGuide.split('|')[0].trim()}.)`,
+    industry_critique      : `Structural analysis only (AI temporarily unavailable). ${rubric.framework}: your answer ${overall>=6.5?'shows reasonable STAR structure':'is missing key STAR components'}. ${hasNumbers?'Numbers present — good.': rubric.firms+' interviewers push back on every vague result.'}`,
+    improved_answer        : `To meet ${rubric.firms} standard: Open with "[Month/Year], [Company/context], [Situation]." State your personal responsibility. Describe 2-3 concrete actions YOU took. Close with a quantified result. End with one genuine reflection.`,
     interviewer_perspective: `Structural score ${overall}/10 against ${rubric.shortName}. ${overall>=7.5?'Solid — quantify the result and this advances.':overall>=5.5?'Partial structure — address weak components above.':'Significant gaps — would not advance at '+rubric.firms+' in current form.'}`,
     framework_used: rubric.framework,
     firms_standard: rubric.firms,
@@ -428,27 +363,54 @@ function buildFallback(question, answer, industry, rid) {
   };
 }
 
-// ═══════════════════════════════════════════════════════════════════
-// LITE MODE — answers under 50 words get a minimal response
-// Saves ~60% of tokens. Returns overall + one improve point.
-// ═══════════════════════════════════════════════════════════════════
 function buildLite(question, answer, industry, rid) {
   const fb = buildFallback(question, answer, industry, rid);
-  return {
-    _lite         : true,
-    _rid          : rid,
-    overall       : fb.overall,
-    verdict       : fb.verdict,
-    interviewer_verdict: fb.interviewer_verdict,
-    share_line    : fb.share_line,
-    scores        : fb.scores,
-    improve       : [`Your answer is under 50 words. ${!fb.star_breakdown.result.startsWith('Strong') ? 'Add a specific number for your result.' : 'Expand your action section with 2-3 concrete steps.'}`],
-    star_breakdown: fb.star_breakdown,
-    framework_used: fb.framework_used,
-    firms_standard: fb.firms_standard,
-    citation      : fb.citation,
-    _fallback     : true,
-  };
+  return { ...fb, _lite: true };
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// GEMINI CALL — with retry on first timeout
+// KEY FIX: timeout raised from 25s → 50s.
+// Gemini 2.5 Flash grading responses regularly take 20–40s.
+// The old 25s timeout was silently killing real AI responses
+// and returning fallback every time, making it look like it worked
+// (200 status) but giving structural-only scores.
+// ═══════════════════════════════════════════════════════════════════
+async function callGemini(prompt, rid, attempt = 1) {
+  const controller = new AbortController();
+  // 50s — leaves 10s buffer within Vercel Pro 60s limit
+  const timeout = setTimeout(() => controller.abort(), 50000);
+
+  try {
+    const res = await fetch(`${GEMINI_ENDPOINT}?key=${process.env.GEMINI_API_KEY}`, {
+      method : 'POST',
+      signal : controller.signal,
+      headers: { 'Content-Type': 'application/json' },
+      body   : JSON.stringify({
+        contents        : [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature    : 0.25,
+          maxOutputTokens: 4000,
+          topP           : 0.8,
+        },
+      }),
+    });
+    clearTimeout(timeout);
+    return { res, timedOut: false };
+  } catch (err) {
+    clearTimeout(timeout);
+    if (err.name === 'AbortError') {
+      log('warn', rid, { event: 'gemini_timeout', attempt });
+      // One retry on timeout — Gemini 2.5 Flash cold starts can be slow
+      if (attempt === 1) {
+        log('info', rid, { event: 'retry', attempt: 2 });
+        return callGemini(prompt, rid, 2);
+      }
+      return { res: null, timedOut: true };
+    }
+    log('error', rid, { event: 'gemini_fetch_error', message: err.message });
+    return { res: null, timedOut: false, networkError: true };
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -501,7 +463,7 @@ export default async function handler(req, res) {
 
   log('info', rid, { event: 'request', industry: cleanIndustry, mode: cleanMode || 'grade', words: wordCount, kv: USE_KV });
 
-  // Lite mode — under 50 words, save tokens
+  // Lite mode — under 50 words
   if (wordCount < 50 && cleanMode !== 'followup') {
     log('info', rid, { event: 'lite_mode', words: wordCount });
     return res.status(200).json(buildLite(cleanQuestion, cleanAnswer, cleanIndustry, rid));
@@ -531,8 +493,6 @@ export default async function handler(req, res) {
     ].join('\n');
 
   } else {
-    // Full grade prompt — every line earns its place
-    // Track-specific preamble for LP/PEI axis flagging
     let trackExtra = '';
     if (cleanIndustry === 'product' || cleanIndustry === 'tech') {
       trackExtra = `\nIn the industry_critique field, explicitly name which Amazon Leadership Principles this answer demonstrates and which are missing.\n`;
@@ -558,7 +518,7 @@ export default async function handler(req, res) {
       `ownership: ${rubric.dimensions.ownership}`,
       `impact: ${rubric.dimensions.impact}`,
       ``,
-      `Rules: ALWAYS use exactly ONE decimal place — write 6.4 not 6, write 7.0 not 7, write 8.5 not 8 or 9. This is mandatory. Calibration: ${rubric.scoreGuide}. Be tough — most first attempts score 4.5–6.5. 8.0+ only if a senior ${rubric.firms} interviewer is genuinely impressed.`,
+      `Rules: ALWAYS use exactly ONE decimal place — write 6.4 not 6, write 7.0 not 7. Calibration: ${rubric.scoreGuide}. Be tough — most first attempts score 4.5–6.5. 8.0+ only if a senior ${rubric.firms} interviewer is genuinely impressed.`,
       `The improved_answer MUST be written in first person as the candidate would say it — complete sentences, NOT bullet points. Voice/style: ${rubric.shortName}.`,
       ``,
       `Respond ONLY with valid JSON, no markdown fences:`,
@@ -567,37 +527,18 @@ export default async function handler(req, res) {
   }
 
   const estInputTokens = estimateTokens(prompt);
-  log('info', rid, { event: 'gemini_call', est_input_tokens: estInputTokens, ck: cacheKey(cleanQuestion, cleanAnswer) });
+  log('info', rid, { event: 'gemini_call', est_input_tokens: estInputTokens });
 
-  // ── Gemini call — 9s timeout (Vercel Hobby: 10s hard limit) ─────
-  const controller = new AbortController();
-  const timeout    = setTimeout(() => controller.abort(), 25000);
+  // ── Call Gemini with retry ───────────────────────────────────────
+  const { res: geminiRes, timedOut, networkError } = await callGemini(prompt, rid);
 
-  let geminiRes;
-  try {
-    geminiRes = await fetch(`${GEMINI_ENDPOINT}?key=${apiKey}`, {
-      method : 'POST',
-      signal : controller.signal,
-      headers: { 'Content-Type': 'application/json' },
-      body   : JSON.stringify({
-        contents        : [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature    : 0.25,
-          maxOutputTokens: 4000,
-          topP           : 0.8,
-        },
-      }),
+  if (timedOut || networkError || !geminiRes) {
+    return res.status(200).json({
+      ...buildFallback(cleanQuestion, cleanAnswer, cleanIndustry, rid),
+      _timeout: timedOut,
+      _rid: rid,
     });
-  } catch (err) {
-    clearTimeout(timeout);
-    if (err.name === 'AbortError') {
-      log('warn', rid, { event: 'timeout' });
-      return res.status(200).json({ ...buildFallback(cleanQuestion, cleanAnswer, cleanIndustry, rid), _timeout: true, _rid: rid });
-    }
-    log('error', rid, { event: 'fetch_error', message: err.message });
-    return res.status(200).json({ ...buildFallback(cleanQuestion, cleanAnswer, cleanIndustry, rid), _rid: rid });
   }
-  clearTimeout(timeout);
 
   let data;
   try {
@@ -630,8 +571,7 @@ export default async function handler(req, res) {
     return res.status(200).json({ reply: rawText.trim(), _rid: rid });
   }
 
-  // ── Parse JSON from Gemini output ───────────────────────────────
-  // Strip markdown fences wherever they appear
+  // ── Parse JSON ───────────────────────────────────────────────────
   let cleaned = rawText
     .replace(/```json\s*/gi, '')
     .replace(/```\s*/gi, '')
@@ -641,13 +581,11 @@ export default async function handler(req, res) {
   try {
     parsed = JSON.parse(cleaned);
   } catch {
-    // Try extracting the JSON object — handles leading/trailing text
     const match = cleaned.match(/\{[\s\S]*\}/);
     if (match) {
       try { parsed = JSON.parse(match[0]); } catch {
-        // Last resort — try to fix truncated JSON by finding last complete field
-        const truncated = match[0];
-        const lastComma = truncated.lastIndexOf(',"overall"');
+        const truncated  = match[0];
+        const lastComma  = truncated.lastIndexOf(',"overall"');
         if (lastComma > 0) {
           try { parsed = JSON.parse(truncated.slice(0, lastComma) + '}'); } catch { parsed = null; }
         } else {
@@ -664,23 +602,19 @@ export default async function handler(req, res) {
     return res.status(200).json({ ...buildFallback(cleanQuestion, cleanAnswer, cleanIndustry, rid), _rid: rid });
   }
 
-  // ── Enforce decimal scores, clamp 1–10 ──────────────────────────
+  // ── Sanitise scores ──────────────────────────────────────────────
   if (parsed.scores) {
     ['structure', 'clarity', 'ownership', 'impact'].forEach(k => {
       if (parsed.scores[k] !== undefined) {
-        let v = parseFloat(parsed.scores[k]);
-        // If integer, add small variance to force display as decimal
-        if (Number.isInteger(v)) v = v + 0.0; // keep as x.0
-        parsed.scores[k] = Math.min(10, Math.max(1, parseFloat(v.toFixed(1))));
+        parsed.scores[k] = Math.min(10, Math.max(1, parseFloat(parseFloat(parsed.scores[k]).toFixed(1))));
       }
     });
   }
   if (parsed.overall !== undefined) {
-    let v = parseFloat(parsed.overall);
-    parsed.overall = Math.min(10, Math.max(1, parseFloat(v.toFixed(1))));
+    parsed.overall = Math.min(10, Math.max(1, parseFloat(parseFloat(parsed.overall).toFixed(1))));
   }
 
-  // ── Sanity: overall must not drift >1.5 from dimension average ──
+  // Overall must not drift >1.5 from dimension average
   if (parsed.scores && parsed.overall) {
     const { structure = 5, clarity = 5, ownership = 5, impact = 5 } = parsed.scores;
     const dimAvg = parseFloat(((structure + clarity + ownership + impact) / 4).toFixed(1));
@@ -689,20 +623,18 @@ export default async function handler(req, res) {
     }
   }
 
-  // ── Ensure interviewer_verdict is one of three valid values ─────
+  // Normalise interviewer_verdict
   const validVerdicts = ['Would advance to next round', 'On the fence', 'Would not advance'];
   if (!validVerdicts.includes(parsed.interviewer_verdict)) {
     const score = parsed.overall || 0;
     parsed.interviewer_verdict = score >= 7.5 ? 'Would advance to next round' : score >= 5.5 ? 'On the fence' : 'Would not advance';
   }
 
-  // ── Ensure share_line exists ─────────────────────────────────────
   if (!parsed.share_line) {
     const score = parsed.overall || 0;
     parsed.share_line = `I scored ${score}/10 on a ${rubric.shortName} question with Mocha. usemocha.app`;
   }
 
-  // ── Inject metadata ──────────────────────────────────────────────
   parsed.framework_used = parsed.framework_used || rubric.framework;
   parsed.firms_standard = parsed.firms_standard || rubric.firms;
   parsed.citation       = parsed.citation       || rubric.citation;

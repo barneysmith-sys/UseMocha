@@ -935,10 +935,10 @@ body {
 }
 .nav-right { margin-left: auto; display: flex; align-items: center; gap: var(--s2); }
 .nav-free {
-  font-size: var(--t-xs); font-weight: 600; padding: 4px 12px;
-  border-radius: var(--rpill);
-  background: var(--ln); color: var(--esp); border: 1px solid var(--sil);
-  display: none; letter-spacing: -0.01em;
+  font-size: 11px; font-weight: 700; padding: 5px 13px;
+  border-radius: 99px;
+  background: rgba(255,255,255,0.15); color: #ffffff; border: 1.5px solid rgba(255,255,255,0.30);
+  display: none; letter-spacing: 0.01em; cursor: default;
 }
 .nav-tabs { display: flex; gap: 2px; }
 .ntab {
@@ -3270,7 +3270,7 @@ body {
   transition: all .15s;
 }
 .btn-nav:hover { background: rgba(253,232,204,.20); }
-.nav-free { font-size: 11px; color: rgba(253,232,204,.40); font-weight: 500; }
+/* nav-free override — see base rule */
 
 /* ── DASHBOARD ── */
 .dash-pg { max-width: 860px; margin: 0 auto; padding: 2rem 24px 4rem; }
@@ -4771,7 +4771,7 @@ html, body {
   letter-spacing: .02em !important; white-space: nowrap !important;
   font-family: 'DM Sans', sans-serif !important;
 }
-.nav-free { font-size: 11px !important; color: rgba(253,232,204,.38) !important; font-weight: 500 !important; }
+/* nav-free override — see base rule */
 .btn-nav {
   background: rgba(253,232,204,.12) !important; color: #fde8cc !important;
   border: 1px solid rgba(253,232,204,.18) !important; border-radius: 99px !important;
@@ -7549,20 +7549,28 @@ function _showLimitReached() {
   overlay.id = 'limit-overlay';
   overlay.style.cssText = 'position:fixed;inset:0;z-index:550;background:rgba(10,5,2,0.55);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:1.5rem;';
   var box = document.createElement('div');
-  box.style.cssText = 'background:#fffcf9;border-radius:20px;width:100%;max-width:360px;padding:2.5rem;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,0.2);';
+  box.style.cssText = 'background:#f7f5f1;border-radius:22px;width:100%;max-width:380px;padding:2.5rem 2rem 2rem;text-align:center;box-shadow:0 40px 100px rgba(0,0,0,0.22);border:1px solid rgba(15,26,20,0.06);';
   var heading = document.createElement('div');
-  heading.style.cssText = 'font-size:1.6rem;color:#2c1308;margin-bottom:10px;letter-spacing:-0.03em;font-weight:400;';
-  heading.textContent = "You're on a roll.";
+  heading.style.cssText = 'font-family:"DM Serif Display",serif;font-size:1.6rem;color:#0f1a14;margin-bottom:10px;letter-spacing:-0.03em;font-weight:400;line-height:1.2;';
+  heading.innerHTML = 'Come back tomorrow \u2615';
   var body = document.createElement('div');
-  body.style.cssText = 'font-size:14px;color:#9c5c3a;line-height:1.75;margin-bottom:1.5rem;';
-  body.innerHTML = "You've used your 3 free sessions today.<br>Come back tomorrow to keep going.";
+  body.style.cssText = 'font-size:14px;color:rgba(15,26,20,0.60);line-height:1.7;margin-bottom:1.5rem;';
+  var now = new Date();
+  var midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, 0, 0, 0);
+  var hoursLeft = Math.ceil((midnight - now) / 3600000);
+  var resetStr = hoursLeft <= 1 ? 'in less than an hour' : 'in ' + hoursLeft + ' hours';
+  body.innerHTML = "You\'ve used your free session for today.<br>Your next session resets " + resetStr + ".";
   var note = document.createElement('div');
-  note.style.cssText = 'font-size:11px;color:#c48762;margin-bottom:1.5rem;';
-  note.textContent = 'More usage options coming soon.';
+  note.style.cssText = 'font-size:11px;color:rgba(15,26,20,0.35);margin-bottom:1.5rem;letter-spacing:0.01em;';
+  note.textContent = 'Students who practice daily get offers. See you tomorrow.';
   var btn = document.createElement('button');
-  btn.style.cssText = 'padding:10px 24px;background:#2c1308;color:#fde8cc;border:none;border-radius:99px;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:-0.01em;';
+  btn.style.cssText = 'padding:11px 28px;background:#1a2e1e;color:#fde8cc;border:none;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:-0.01em;font-family:"DM Sans",sans-serif;';
   btn.textContent = 'Got it';
   btn.onclick = function() { overlay.style.display = 'none'; };
+  var icon = document.createElement('div');
+  icon.style.cssText = 'font-size:2.5rem;margin-bottom:12px;';
+  icon.textContent = '\u231b';
+  box.appendChild(icon);
   box.appendChild(heading);
   box.appendChild(body);
   box.appendChild(note);
@@ -7813,7 +7821,7 @@ function goDash() {
 
 function goNextQuestion() {
   // currentQ was already advanced at end of doSubmit — go straight to practice
-  if (!appUser && freeTries <= 0) { openModal('signup'); return; }
+  if (!appUser && freeTries <= 0) { _showLimitReached(); return; }
   if (!appPersona) appPersona = PERSONAS[0];
   // currentQ is already set to next question by doSubmit; initPractice will use it
   initPractice();
@@ -7832,7 +7840,7 @@ function goToPractice() {
 }
 
 function startFree() {
-  if (freeTries <= 0) { openModal('signup'); return; }
+  if (freeTries <= 0) { _showLimitReached(); return; }
   if (!appPersona) appPersona = PERSONAS[0];
   showPage('page-personas');
 }
@@ -9350,7 +9358,37 @@ function doSubmit() {
   document.getElementById('fb-load').style.display = 'block';
   document.getElementById('fb-result').style.display = 'none';
   var lb = document.getElementById('load-bar');
-  if (lb) { lb.style.width = '0%'; setTimeout(function(){ lb.style.width = '85%'; }, 50); }
+  if (lb) {
+    lb.style.transition = 'none';
+    lb.style.width = '0%';
+    setTimeout(function() {
+      lb.style.transition = 'width 50s cubic-bezier(0.1,0.02,0.1,1)';
+      lb.style.width = '88%';
+    }, 80);
+  }
+  // Hard client timeout — if Gemini takes >56s, show retry rather than spinning forever
+  var _hardTimeout = setTimeout(function() {
+    if (_submitting) {
+      _submitting = false;
+      clearInterval(li);
+      var fbLoad = document.getElementById('fb-load');
+      if (fbLoad && fbLoad.style.display !== 'none') {
+        var bsEl = document.getElementById('bean-speech');
+        var loadMsg = document.getElementById('load-msg');
+        var loadSub = document.getElementById('load-sub');
+        if (bsEl) { var tn=bsEl.firstChild; if(tn&&tn.nodeType===3) tn.nodeValue="That took longer than expected. Try again?"; }
+        if (loadMsg) loadMsg.textContent = 'Something went wrong';
+        if (loadSub) loadSub.textContent = 'The AI took too long to respond.';
+        var retryBtn = document.createElement('button');
+        retryBtn.textContent = 'Try again';
+        retryBtn.style.cssText = 'margin-top:1.5rem;padding:10px 24px;background:#1a2e1e;color:#fde8cc;border:none;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;font-family:"DM Sans",sans-serif;';
+        retryBtn.onclick = function() { goToPractice(); };
+        var spinWrap = document.querySelector('.spinner-wrap');
+        if (spinWrap && !spinWrap.querySelector('button')) spinWrap.appendChild(retryBtn);
+        if (lb) { lb.style.transition = 'width 0.3s'; lb.style.width = '100%'; }
+      }
+    }
+  }, 56000);
 
   var msgs = [
     ['Scoring your answer', 'Reading for STAR structure · Clarity · Impact', 'Hi, I\'m Bean! Evaluating your answer against firm-grade standards\u2026'],
@@ -9458,6 +9496,7 @@ function doSubmit() {
 }
 
 function renderFeedback(r, isFree) {
+  if (typeof _hardTimeout !== 'undefined') clearTimeout(_hardTimeout);
   var snapBar = document.getElementById('load-bar');
   if (snapBar) { snapBar.style.transition = 'width 0.4s ease'; snapBar.style.width = '100%'; }
   setTimeout(function() {

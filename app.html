@@ -9352,7 +9352,7 @@ function doSubmit() {
   clearInterval(timerInt);
   if (isRec) stopMic();
   var answer = document.getElementById('ans-ta').value.trim();
-  if (!answer || answer.length < 10) return;
+  if (!answer || answer.length < 10) { console.log('[MOCHA] answer too short'); return; }
 
   // Guard: ensure question is loaded
   if (!currentQ || !currentQ.text) {
@@ -9391,7 +9391,7 @@ function doSubmit() {
   var msgs = [
     ['Scoring your answer', 'Reading for STAR structure · Clarity · Impact', 'Hi, I\'m Bean! Evaluating your answer against firm-grade standards\u2026'],
     ['Scoring structure & clarity', 'Checking ownership signals · Grading impact', 'Looking for I-language and quantified results\u2026'],
-    ['Writing your critique', 'Grading against ' + (p.source || 'firm') + ' standards', 'Comparing to what ' + (p.source || 'top firms') + ' expect to hear\u2026'],
+    ['Writing your critique', 'Grading against firm standards', 'Comparing to what top firms expect to hear…'],
     ['Almost done', 'Crafting your improved version', 'Writing your personalised rewrite at 9.0+ standard\u2026'],
     ['Deep analysis complete', 'Finalising your feedback report', 'Almost there \u2014 packaging your full coaching report\u2026'],
     ['Preparing your results', 'One moment more', 'Bean is putting the finishing touches on your feedback\u2026']
@@ -9430,7 +9430,7 @@ function doSubmit() {
   var industry = industryMap[p.id] || 'general';
 
   // Structured payload \u2014 prompt is built server-side, never in client
-  _callPayload({
+    _callPayload({
     question: currentQ.text.slice(0, 300),
     answer  : answer.slice(0, 900),
     industry: industry,

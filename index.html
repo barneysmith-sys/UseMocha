@@ -2031,6 +2031,28 @@ body { overflow-x: hidden !important; max-width: 100vw !important; }
   .ob-navstart { display:block !important; pointer-events:all !important; }
   .ob-mob-start, .ob-mob-demo, .ob-mob-logo, .ob-mob-menu { display:none !important; }
 }
+
+  .ob-mob-demo  { display:block !important; pointer-events:all !important; }
+  .ob-mob-logo  { display:block !important; pointer-events:all !important; }
+  .ob-mob-menu  { display:block !important; pointer-events:all !important; }
+  /* desktop buttons visible on mobile if needed - handled by definitive block */
+}
+/* ════════════════════════════════════════════
+   HERO BUTTONS — DEFINITIVE FINAL RULES
+   These come last so they win every conflict
+   ════════════════════════════════════════════ */
+
+/* Desktop: show Start free + Watch demo, hide mobile buttons */
+@media(min-width:769px) {
+  .ob-start    { display:block !important; pointer-events:all !important; }
+  .ob-demo     { display:block !important; pointer-events:all !important; }
+  .ob-navstart { display:block !important; pointer-events:all !important; }
+  .ob-mob-start, .ob-mob-demo, .ob-mob-logo, .ob-mob-menu { display:none !important; }
+}
+
+/* Mobile: show mobile buttons, hide desktop CTA buttons */
+@media(max-width:768px) {
+  .ob-mob-start { display:block !important; pointer-events:all !important; }
 </style>
 </head>
 <body>

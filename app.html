@@ -4602,6 +4602,202 @@ window.onunhandledrejection = function(e) {
   console.error('[mocha-promise]', e.reason);
 };
 </script>
+<style>
+/*
+ * MOCHA APP — CRITICAL FIXES
+ * ═══════════════════════════════════════════════════════════
+ * Injected as last <style> block before </head>
+ * ═══════════════════════════════════════════════════════════
+ */
+
+/* ════════════════════════════════════════════════════════
+   FIX 1 — SCROLL BROKEN
+   ════════════════════════════════════════════════════════ */
+html, body {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-x: none !important;
+  overscroll-behavior-y: auto !important;
+}
+.page.active {
+  display: block !important;
+  min-height: 100vh !important;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+}
+.fb-pg, .prac-pg, .dash-pg, .hist-pg, .pg-wrap {
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+}
+@media (max-width: 768px) {
+  * { max-width: none !important; }
+  html, body, .nav {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+  img, video, iframe, canvas, svg, input, textarea, button {
+    max-width: 100% !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════
+   FIX 2 — PROGRESS BAR 25s TRANSITION
+   ════════════════════════════════════════════════════════ */
+#load-bar {
+  transition: width 10s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+  background: linear-gradient(90deg, #0a5c44, #4dc994) !important;
+}
+
+/* ════════════════════════════════════════════════════════
+   FIX 3 — BEAN SIDE BY SIDE WITH CUP
+   ════════════════════════════════════════════════════════ */
+#fb-load > div:first-child {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+  gap: 20px !important;
+  margin-bottom: 2rem !important;
+}
+#fb-load > div:first-child > div:first-child {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+  gap: 20px !important;
+}
+#fb-load img[alt="Bean"] {
+  width: 72px !important;
+  height: auto !important;
+  object-fit: contain !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+}
+#fb-load > div:first-child > div:last-child,
+#fb-load > div:first-child > div:nth-child(2) {
+  margin: 0 !important;
+  flex-shrink: 0 !important;
+  position: relative !important;
+}
+.spinner-wrap > div:first-child {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+  gap: 20px !important;
+}
+.spinner-wrap > div:first-child > div,
+.spinner-wrap > div:first-child > div:first-child {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-end !important;
+  gap: 20px !important;
+}
+
+/* ════════════════════════════════════════════════════════
+   LOADING SCREEN — white + green
+   ════════════════════════════════════════════════════════ */
+.spinner-wrap,
+#fb-load.spinner-wrap {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: calc(100vh - 52px) !important;
+  padding: 2rem 24px !important;
+  background: #f9fbfa !important;
+}
+.load-t {
+  font-family: 'DM Serif Display', serif !important;
+  font-size: 1.35rem !important;
+  font-weight: 400 !important;
+  color: #0f1a14 !important;
+  letter-spacing: -.03em !important;
+  text-align: center !important;
+  margin-bottom: 5px !important;
+  line-height: 1.2 !important;
+}
+.load-s {
+  font-size: 13px !important;
+  color: rgba(15, 26, 20, 0.40) !important;
+  text-align: center !important;
+  font-family: 'DM Sans', sans-serif !important;
+  letter-spacing: -.01em !important;
+}
+#fb-load > div:last-child > div:first-child {
+  background: rgba(15, 26, 20, 0.06) !important;
+  border-radius: 99px !important;
+}
+
+/* ════════════════════════════════════════════════════════
+   DESIGN POLISH — Feedback / Practice / Dashboard pages
+   ════════════════════════════════════════════════════════ */
+#page-feedback,
+#page-practice,
+#page-dashboard {
+  background: #f9fbfa !important;
+}
+#page-feedback .fb-pg {
+  background: transparent !important;
+}
+.score-hero {
+  background: linear-gradient(155deg, #0c1e12 0%, #163020 50%, #0a1a0f 100%) !important;
+  border-radius: 22px !important;
+  box-shadow:
+    0 1px 0 rgba(77,201,148,.12),
+    0 16px 56px rgba(10,26,16,.28),
+    inset 0 1px 0 rgba(255,255,255,.03) !important;
+}
+.met {
+  background: #ffffff !important;
+  border: 1px solid rgba(15,26,20,.06) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 1px 0 rgba(15,26,20,.04), 0 4px 14px rgba(15,26,20,.05) !important;
+  transition: transform .18s cubic-bezier(.16,1,.3,1), box-shadow .18s !important;
+}
+.met:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 1px 0 rgba(15,26,20,.04), 0 10px 28px rgba(15,26,20,.09) !important;
+}
+.met-n { color: #7aaa8a !important; }
+.met-v { color: #0f1a14 !important; }
+.crit-sec, .editorial {
+  background: #ffffff !important;
+  border: 1px solid rgba(15,26,20,.06) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 1px 0 rgba(15,26,20,.04), 0 4px 16px rgba(15,26,20,.05) !important;
+}
+#fb-rewrite {
+  background: linear-gradient(155deg, #0c1e12 0%, #163020 100%) !important;
+  border: 1px solid rgba(77,201,148,.14) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 8px 32px rgba(10,26,16,.18) !important;
+}
+#ans-ta {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(15,26,20,.10) !important;
+  border-radius: 14px !important;
+}
+#ans-ta:focus {
+  border-color: #0a5c44 !important;
+  box-shadow: 0 0 0 3px rgba(10,92,68,.08) !important;
+  outline: none !important;
+}
+#sub-btn {
+  background: #0f1a14 !important;
+  color: #f5ede0 !important;
+  border-radius: 99px !important;
+  font-weight: 700 !important;
+  letter-spacing: -.02em !important;
+  box-shadow: 0 2px 8px rgba(15,26,20,.16) !important;
+  transition: background .15s, transform .1s, box-shadow .15s !important;
+}
+#sub-btn:hover:not(:disabled) {
+  background: #0a5c44 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 16px rgba(10,92,68,.20) !important;
+}
+</style>
 </head>
 <body>
 

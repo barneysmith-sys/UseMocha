@@ -5974,6 +5974,19 @@ body,
 .sc-lnk { font-size: 12px !important; color: #0a5c44 !important; font-weight: 600 !important; cursor: pointer !important; }
 .sc-lnk:hover { text-decoration: underline !important; }
 
+
+/* ── NAV FREE CHIP — final override ── */
+#nav-free.nav-free {
+  background: rgba(255,255,255,0.18) !important;
+  color: #ffffff !important;
+  border: 1.5px solid rgba(255,255,255,0.32) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 5px 13px !important;
+  border-radius: 99px !important;
+  letter-spacing: 0.01em !important;
+  display: none; /* shown by JS when freeTries > 0 */
+}
 </style>
 </head>
 <body>
@@ -7434,8 +7447,9 @@ function _callPayload(payload, onSuccess, onError) {
   }
 
   if (_activeRequest) {
-    onError('A request is already in progress. Please wait.');
-    return;
+    // Reset stuck state and proceed — better than silently failing
+    _activeRequest = false;
+    _lastRequestTime = 0;
   }
   if (now - _lastRequestTime < REQUEST_COOLDOWN_MS) {
     onError('Please wait a moment before submitting again.');
@@ -9337,6 +9351,8 @@ function practiceAdaptiveFollowUp() {
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function doSubmit() {
   if (_submitting) return; // one action = one call
+  // Always reset stuck request state from any prior session
+  _activeRequest = false;
   clearInterval(timerInt);
   if (isRec) stopMic();
   var answer = document.getElementById('ans-ta').value.trim();
@@ -9366,29 +9382,7 @@ function doSubmit() {
       lb.style.width = '88%';
     }, 80);
   }
-  // Hard client timeout — if Gemini takes >56s, show retry rather than spinning forever
-  var _hardTimeout = setTimeout(function() {
-    if (_submitting) {
-      _submitting = false;
-      clearInterval(li);
-      var fbLoad = document.getElementById('fb-load');
-      if (fbLoad && fbLoad.style.display !== 'none') {
-        var bsEl = document.getElementById('bean-speech');
-        var loadMsg = document.getElementById('load-msg');
-        var loadSub = document.getElementById('load-sub');
-        if (bsEl) { var tn=bsEl.firstChild; if(tn&&tn.nodeType===3) tn.nodeValue="That took longer than expected. Try again?"; }
-        if (loadMsg) loadMsg.textContent = 'Something went wrong';
-        if (loadSub) loadSub.textContent = 'The AI took too long to respond.';
-        var retryBtn = document.createElement('button');
-        retryBtn.textContent = 'Try again';
-        retryBtn.style.cssText = 'margin-top:1.5rem;padding:10px 24px;background:#1a2e1e;color:#fde8cc;border:none;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;font-family:"DM Sans",sans-serif;';
-        retryBtn.onclick = function() { goToPractice(); };
-        var spinWrap = document.querySelector('.spinner-wrap');
-        if (spinWrap && !spinWrap.querySelector('button')) spinWrap.appendChild(retryBtn);
-        if (lb) { lb.style.transition = 'width 0.3s'; lb.style.width = '100%'; }
-      }
-    }
-  }, 56000);
+  // AbortController handles timeout at 55s — onError handler renders local fallback
 
   var msgs = [
     ['Scoring your answer', 'Reading for STAR structure · Clarity · Impact', 'Hi, I\'m Bean! Evaluating your answer against firm-grade standards\u2026'],
@@ -9496,20 +9490,16 @@ function doSubmit() {
 }
 
 function renderFeedback(r, isFree) {
-  if (typeof _hardTimeout !== 'undefined') clearTimeout(_hardTimeout);
   var snapBar = document.getElementById('load-bar');
-  if (snapBar) { snapBar.style.transition = 'width 0.4s ease'; snapBar.style.width = '100%'; }
-  setTimeout(function() {
+  if (snapBar) { try { snapBar.style.transition = 'width 0.3s ease'; snapBar.style.width = '100%'; } catch(e){} }
   document.getElementById('fb-load').style.display   = 'none';
   document.getElementById('fb-result').style.display = 'block';
   document.getElementById('fb-result').style.animation = 'fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both';
-  // Force scroll to absolute top of page — feedback starts here
   window.scrollTo(0, 0);
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
   var fbPage = document.getElementById('page-feedback');
   if (fbPage) fbPage.scrollTop = 0;
-  }, 400);
   document.getElementById('fb-qlbl').textContent    = currentQ ? currentQ.text : '';
   // Animate score counting up
   (function() {

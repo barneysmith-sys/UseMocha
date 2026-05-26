@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════
-// Mocha — /api/interview  v6
+// Mocha — /api/interview  v7
 // Vercel Pro: 60s max. We target 55s with one retry on timeout.
 // Root fix v4→v5: timeout raised 25s→50s (was killing Gemini 2.5 Flash
 // which routinely takes 20-40s for full grading responses).
@@ -7,8 +7,13 @@
 
 import { createHash } from 'crypto';
 
-const GEMINI_ENDPOINT =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent';
+// Endpoint auto-detects: direct Google API or Vercel AI Gateway
+// Set GEMINI_GATEWAY_URL in Vercel env vars to use AI Gateway
+// e.g. https://gateway.ai.vercel.app/v1/TEAM/PROJECT/google-ai-studio/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent
+const GEMINI_MODEL    = 'gemini-2.5-flash-preview-05-20';
+const GEMINI_ENDPOINT = process.env.GEMINI_GATEWAY_URL ||
+  `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+const USE_GATEWAY     = !!process.env.GEMINI_GATEWAY_URL;
 
 // ── Vercel KV (optional) ─────────────────────────────────────────
 const KV_URL   = process.env.KV_REST_API_URL;
@@ -382,10 +387,17 @@ async function callGemini(prompt, rid, attempt = 1) {
   const timeout = setTimeout(() => controller.abort(), 50000);
 
   try {
-    const res = await fetch(`${GEMINI_ENDPOINT}?key=${process.env.GEMINI_API_KEY}`, {
+    // Auth: gateway uses Bearer header, direct API uses ?key= query param
+    const apiKey = process.env.GEMINI_API_KEY;
+    const url     = USE_GATEWAY ? GEMINI_ENDPOINT : `${GEMINI_ENDPOINT}?key=${apiKey}`;
+    const headers = USE_GATEWAY
+      ? { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` }
+      : { 'Content-Type': 'application/json' };
+
+    const res = await fetch(url, {
       method : 'POST',
       signal : controller.signal,
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body   : JSON.stringify({
         contents        : [{ parts: [{ text: prompt }] }],
         generationConfig: {
@@ -393,7 +405,6 @@ async function callGemini(prompt, rid, attempt = 1) {
           maxOutputTokens: 4000,
           topP           : 0.8,
         },
-        // Disable thinking mode — halves latency for structured grading
         thinkingConfig: { thinkingBudget: 0 },
       }),
     });
@@ -463,7 +474,7 @@ export default async function handler(req, res) {
 
   const wordCount = cleanAnswer.trim().split(/\s+/).filter(Boolean).length;
 
-  log('info', rid, { event: 'request', industry: cleanIndustry, mode: cleanMode || 'grade', words: wordCount, kv: USE_KV });
+  log('info', rid, { event: 'request', industry: cleanIndustry, mode: cleanMode || 'grade', words: wordCount, kv: USE_KV, gateway: USE_GATEWAY });
 
   // Lite mode — under 50 words
   if (wordCount < 50 && cleanMode !== 'followup') {
@@ -553,7 +564,7 @@ export default async function handler(req, res) {
   if (data.error) {
     const code = data.error.code || 0;
     const msg  = data.error.message || '';
-    log('warn', rid, { event: 'gemini_error', code, msg: msg.slice(0, 120) });
+    log('warn', rid, { event: 'gemini_error', code, msg: msg.slice(0, 200), use_gateway: USE_GATEWAY, endpoint: GEMINI_ENDPOINT.slice(0,80) });
     const isQuota = code === 429 || msg.includes('quota') || msg.includes('RESOURCE_EXHAUSTED');
     return res.status(200).json({
       ...buildFallback(cleanQuestion, cleanAnswer, cleanIndustry, rid),

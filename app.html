@@ -5991,205 +5991,256 @@ body,
 
 /* ════════════════════════════════════════
    FEEDBACK — FINAL 10/10
+   Mocha palette: #0a5c44 dark green / #fde8cc cream / #fff white
    ════════════════════════════════════════ */
 
-#page-feedback { background: #f5f3ef; }
-.fb-pg { max-width: 580px; margin: 0 auto; padding: 0 16px 4rem; }
+/* ── Page ── */
+#page-feedback { background: #f6f4f0; }
+.fb-pg { max-width: 600px; margin: 0 auto; padding: 0 0 5rem; }
 
-/* Question */
-.r-qlbl {
-  font-size: 10px; font-weight: 700; letter-spacing: .10em; text-transform: uppercase;
-  color: rgba(15,26,20,.32); padding-top: 10px; margin-bottom: 12px;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+/* ── Question crumb ── */
+.fb-q {
+  font-size: 10px; font-weight: 700; letter-spacing: .10em;
+  text-transform: uppercase; color: rgba(10,92,68,.45);
+  padding: 14px 20px 10px; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
 }
 
-/* ── HERO ─────────────────────────────── */
-.r-hero {
-  background: #0f1a14; border-radius: 22px; overflow: hidden;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 0 rgba(0,0,0,.15), 0 16px 40px rgba(15,26,20,.18);
-  animation: rReveal .45s cubic-bezier(.16,1,.3,1) both;
+/* ══ SCORE HERO ═══════════════════════════════════════════════════ */
+.fb-hero {
+  background: #0a5c44;
+  position: relative; overflow: hidden;
 }
-@keyframes rReveal {
-  from { opacity: 0; transform: translateY(14px) scale(.99); }
+/* Subtle pattern */
+.fb-hero::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 120% 80% at 80% -20%, rgba(255,255,255,.06) 0%, transparent 60%);
+}
+
+.fb-hero-score {
+  position: relative; z-index: 1;
+  padding: 1.75rem 1.75rem 1.1rem;
+  display: flex; flex-direction: column; gap: 0;
+}
+.fb-score-eye {
+  font-size: 9px; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: rgba(253,232,204,.45);
+  margin-bottom: 6px;
+}
+.fb-score-display {
+  display: flex; align-items: baseline; gap: 2px;
+  animation: fbIn .55s cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes fbIn {
+  from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: none; }
 }
-.r-hero-top {
-  display: flex; align-items: flex-start; justify-content: space-between;
-  padding: 1.4rem 1.5rem 1.1rem;
+.fb-score-n {
+  font-family: 'DM Serif Display', serif;
+  font-size: 5.5rem; font-weight: 400;
+  color: #fde8cc; letter-spacing: -.06em; line-height: 1;
 }
-.r-eyebrow {
-  font-size: 9px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase;
-  color: rgba(253,232,204,.28); margin-bottom: 4px;
+.fb-score-d {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.8rem; font-weight: 400;
+  color: rgba(253,232,204,.35); letter-spacing: -.03em; margin-bottom: 2px;
 }
-.r-score-row { display: flex; align-items: baseline; gap: 3px; }
-.r-score-num {
-  font-family: 'DM Serif Display', serif; font-size: 4.75rem;
-  font-weight: 400; color: #fde8cc; letter-spacing: -.05em; line-height: 1;
-}
-.r-score-denom { font-size: 1.25rem; color: rgba(253,232,204,.28); font-weight: 400; }
-.r-verdict-txt {
-  font-size: 9px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
-  color: #4dc994; margin-top: 7px;
-}
-.r-hero-right { text-align: right; padding-top: 2px; min-width: 0; }
-.r-track-lbl {
-  font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
-  color: rgba(253,232,204,.22); line-height: 1.5; margin-bottom: 8px;
-  max-width: 140px; word-break: break-word;
-}
-.r-iv-pill {
-  display: inline-block; font-size: 9px; font-weight: 800;
-  letter-spacing: .05em; text-transform: uppercase;
-  padding: 4px 10px; border-radius: 99px; line-height: 1.4;
+.fb-score-label {
+  font-size: 9px; font-weight: 800; letter-spacing: .16em;
+  text-transform: uppercase; color: rgba(253,232,204,.70);
+  margin-top: 8px;
 }
 
-/* Score bars */
-.r-bars {
-  padding: .9rem 1.5rem 1.2rem;
-  border-top: 1px solid rgba(255,255,255,.06);
-  display: flex; flex-direction: column; gap: 8px;
+.fb-hero-meta {
+  position: absolute; top: 1.75rem; right: 1.75rem;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 7px;
+  z-index: 1;
 }
-.r-bar-row { display: flex; align-items: center; gap: 10px; }
-.r-bar-lbl {
-  font-size: 10px; font-weight: 600; color: rgba(253,232,204,.38);
-  width: 64px; flex-shrink: 0; letter-spacing: .01em;
+.fb-track-name {
+  font-size: 9px; font-weight: 700; letter-spacing: .07em;
+  text-transform: uppercase; color: rgba(253,232,204,.28);
+  max-width: 140px; text-align: right; line-height: 1.5;
 }
-.r-bar-track {
-  flex: 1; height: 2px; background: rgba(255,255,255,.07);
+.fb-iv-tag {
+  display: inline-block; font-size: 9px; font-weight: 800;
+  letter-spacing: .06em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 99px;
+}
+.fb-trend-tag {
+  font-size: 10px; font-weight: 600;
+  color: rgba(253,232,204,.50);
+}
+
+/* ── Dimension bars ── */
+.fb-bars {
+  position: relative; z-index: 1;
+  padding: 1rem 1.75rem 1.5rem;
+  border-top: 1px solid rgba(253,232,204,.10);
+  display: flex; flex-direction: column; gap: 9px;
+  animation: fbIn .45s .12s cubic-bezier(.16,1,.3,1) both;
+}
+.fb-bar-r { display: flex; align-items: center; gap: 11px; }
+.fb-bar-l {
+  font-size: 11px; font-weight: 600; color: rgba(253,232,204,.45);
+  width: 68px; flex-shrink: 0;
+}
+.fb-bar-t {
+  flex: 1; height: 2px; background: rgba(253,232,204,.12);
   border-radius: 99px; overflow: hidden;
 }
-.r-bar-fill {
+.fb-bar-f {
   height: 100%; width: 0; border-radius: 99px;
-  background: linear-gradient(90deg, #0a5c44 0%, #4dc994 100%);
-  transition: width 1s cubic-bezier(.16,1,.3,1);
+  background: #fde8cc;
+  transition: width 1.1s cubic-bezier(.16,1,.3,1);
 }
-.r-bar-val {
-  font-size: 11px; font-weight: 700; color: rgba(253,232,204,.65);
-  width: 28px; text-align: right; flex-shrink: 0; font-variant-numeric: tabular-nums;
-}
-
-/* ── VERDICT BANNER ───────────────────── */
-.r-banner {
-  border-radius: 14px; font-size: 13px; font-weight: 700;
-  padding: 12px 16px; margin-bottom: 10px; letter-spacing: .01em;
-  animation: rReveal .35s .08s cubic-bezier(.16,1,.3,1) both;
+.fb-bar-v {
+  font-size: 12px; font-weight: 700; color: rgba(253,232,204,.70);
+  width: 30px; text-align: right; flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
 }
 
-/* ── CARDS ────────────────────────────── */
-.r-card {
-  background: #fff; border: 1px solid rgba(15,26,20,.07);
-  border-radius: 18px; padding: 1rem 1.2rem; margin-bottom: 10px;
-  animation: rReveal .4s .12s cubic-bezier(.16,1,.3,1) both;
+/* ══ BODY ══════════════════════════════════════════════════════════ */
+.fb-body {
+  background: #fff;
+  border-radius: 0 0 22px 22px;
+  overflow: hidden;
+  box-shadow: 0 2px 0 rgba(10,92,68,.08), 0 8px 32px rgba(10,92,68,.08);
+  animation: fbIn .4s .2s cubic-bezier(.16,1,.3,1) both;
 }
-.r-card-eyebrow {
-  display: flex; align-items: center; gap: 5px;
-  font-size: 9px; font-weight: 800; letter-spacing: .10em; text-transform: uppercase;
-  color: rgba(15,26,20,.32); margin-bottom: 9px;
+
+/* Decision strip */
+.fb-decision {
+  font-size: 13px; font-weight: 700; padding: 12px 1.6rem;
+  border-bottom: 1px solid rgba(10,92,68,.08);
+  letter-spacing: .01em;
 }
-.r-card-body {
-  font-size: 14px; line-height: 1.72; color: rgba(15,26,20,.70);
+
+/* Block */
+.fb-block {
+  padding: 1.2rem 1.6rem;
+  border-bottom: 1px solid rgba(10,92,68,.07);
 }
-.r-interv-body {
-  font-size: 12.5px; line-height: 1.65; color: rgba(15,26,20,.48);
+.fb-block:last-child { border-bottom: none; }
+.fb-block-label {
+  font-size: 9px; font-weight: 800; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(10,92,68,.40);
+  margin-bottom: 9px; display: flex; align-items: center;
+  justify-content: space-between; gap: 6px;
+}
+
+/* Fix block */
+.fb-fix-block { background: #f9fdf9; border-left: 3px solid #0a5c44; padding-left: 1.3rem; }
+.fb-label-fix { color: #0a5c44; }
+.fb-fix-text { font-size: 15px; line-height: 1.65; color: #0a5c44; font-weight: 600; }
+
+/* Critique */
+.fb-critique-text { font-size: 14px; line-height: 1.75; color: rgba(10,30,20,.70); }
+.fb-interv-text {
+  font-size: 13px; line-height: 1.65; color: rgba(10,30,20,.42);
   font-style: italic; margin-top: 10px; padding-top: 10px;
-  border-top: 1px solid rgba(15,26,20,.06);
+  border-top: 1px solid rgba(10,92,68,.07);
 }
 
-/* Fix card */
-.r-fix-card { border-left: 3px solid #0a5c44; background: #fafdf9; }
-.r-fix-body { font-size: 14px; line-height: 1.68; color: #0f1a14; font-weight: 500; }
-
-/* ── STAR CARD ────────────────────────── */
-.r-star-card {
-  background: #fff; border: 1px solid rgba(15,26,20,.07);
-  border-radius: 18px; overflow: hidden; margin-bottom: 10px;
-  animation: rReveal .4s .16s cubic-bezier(.16,1,.3,1) both;
+/* STAR */
+.fb-star-block { padding: 0; }
+.fb-star-toggle {
+  padding: 1.1rem 1.6rem; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 9px; font-weight: 800; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(10,92,68,.40);
+  margin-bottom: 0;
 }
-.r-star-toggle {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: .9rem 1.2rem; cursor: pointer;
-  border-bottom: 1px solid rgba(15,26,20,.06);
-}
-.r-star-toggle:hover { background: rgba(15,26,20,.018); }
-.r-chevron { color: rgba(15,26,20,.35); transition: transform .2s; flex-shrink: 0; }
-.r-star-card.r-open .r-chevron { transform: rotate(180deg); }
-.r-star-body { display: none; }
-.r-star-card.r-open .r-star-body { display: block; }
-.r-citation {
-  font-size: 11px; color: #6aaa7a; padding: 8px 16px 0; font-style: italic; line-height: 1.5;
+.fb-star-toggle:hover { background: rgba(10,92,68,.03); }
+.fb-chevron { color: rgba(10,92,68,.35); transition: transform .2s; flex-shrink: 0; }
+.fb-star-block.fb-open .fb-chevron { transform: rotate(180deg); }
+.fb-star-inner { display: none; border-top: 1px solid rgba(10,92,68,.08); }
+.fb-star-block.fb-open .fb-star-inner { display: block; }
+.fb-citation {
+  font-size: 11px; color: #0a5c44; opacity: .65;
+  padding: 10px 1.6rem 4px; font-style: italic; line-height: 1.5;
 }
 .crit-item {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 10px 16px; border-bottom: 1px solid rgba(15,26,20,.045);
+  display: flex; align-items: flex-start; gap: 11px;
+  padding: 11px 1.6rem; border-bottom: 1px solid rgba(10,92,68,.06);
 }
 .crit-item:last-of-type { border-bottom: none; }
 .crit-idx {
-  width: 22px; height: 22px; border-radius: 7px; flex-shrink: 0;
+  width: 24px; height: 24px; border-radius: 8px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
   font-size: 10px; font-weight: 800; margin-top: 1px;
 }
-.crit-txt { font-size: 12.5px; color: rgba(15,26,20,.68); line-height: 1.58; }
-.crit-txt b { color: #0f1a14; font-weight: 700; }
-.r-src-row { padding: 7px 16px 9px; }
-.r-src-tag {
+.crit-txt { font-size: 13px; color: rgba(10,30,20,.68); line-height: 1.60; }
+.crit-txt b { color: #0a1e14; font-weight: 700; }
+.fb-src-row { padding: 8px 1.6rem 10px; }
+#fb-src-tag, .src-tag {
   font-size: 9px; font-weight: 700; letter-spacing: .08em;
-  text-transform: uppercase; color: rgba(15,26,20,.22);
+  text-transform: uppercase; color: rgba(10,92,68,.30);
 }
-/* legacy src-tag used by JS */
-.src-tag { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: rgba(15,26,20,.22); }
 
-/* ── REWRITE CARD ─────────────────────── */
-.r-rw-card {
-  background: #0f1a14; border-radius: 22px; overflow: hidden;
-  margin-bottom: 14px;
-  box-shadow: 0 2px 0 rgba(0,0,0,.12), 0 8px 32px rgba(15,26,20,.18);
-  animation: rReveal .4s .20s cubic-bezier(.16,1,.3,1) both;
+/* ── Rewrite ── */
+.fb-rw-block {
+  background: #0a5c44;
+  border-radius: 0 0 22px 22px;
+  overflow: hidden;
+  animation: fbIn .4s .25s cubic-bezier(.16,1,.3,1) both;
 }
-.r-rw-top {
-  padding: 1rem 1.4rem .8rem;
-  border-bottom: 1px solid rgba(255,255,255,.06);
+.fb-rw-hd {
+  padding: 1rem 1.6rem .8rem;
+  border-bottom: 1px solid rgba(253,232,204,.10);
 }
-.r-rw-badge {
-  font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
-  color: #4dc994; margin-bottom: 3px;
+.fb-rw-badge {
+  font-size: 9px; font-weight: 800; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(253,232,204,.70);
+  margin-bottom: 3px;
 }
-.r-rw-sub { font-size: 11px; color: rgba(253,232,204,.30); }
-.r-rw-body {
-  padding: 1.1rem 1.4rem; font-size: 13.5px; line-height: 1.82;
+.fb-rw-sub { font-size: 11px; color: rgba(253,232,204,.38); }
+.fb-rw-text {
+  padding: 1.2rem 1.6rem 1.5rem;
+  font-size: 14px; line-height: 1.82;
   color: rgba(253,232,204,.90); white-space: pre-wrap;
 }
 
 /* Next question */
 #fb-next-question {
-  background: #f0f7f4 !important; border: 1px solid rgba(10,92,68,.12) !important;
-  border-radius: 14px !important; padding: 12px 16px !important;
-  font-size: 13px !important; line-height: 1.55 !important;
-  color: rgba(15,26,20,.68) !important; margin-bottom: 10px !important;
-  cursor: pointer !important;
+  background: rgba(10,92,68,.05) !important;
+  border-top: 1px solid rgba(10,92,68,.10) !important;
+  border-radius: 0 0 18px 18px !important;
+  padding: 14px 1.6rem !important; font-size: 13px !important;
+  line-height: 1.55 !important; color: rgba(10,30,20,.68) !important;
+  cursor: pointer !important; margin-bottom: 0 !important;
+  display: none;
 }
 
-/* Hide old elements that conflict */
-.score-hero { display: none !important; }
-.metrics { display: none !important; }
-.met { display: none !important; }
-.editorial { display: none !important; }
-.rw-block { display: none !important; }
-.crit-sec { display: none !important; }
-.fb-card { display: none !important; }
-.fb-rw-card { display: none !important; }
-.fb-star-card { display: none !important; }
-.fb-key-card { display: none !important; }
-/* but keep #fb-star-sec (our new star card) */
+/* ── Suppress old CSS classes ── */
+.score-hero,.metrics,.met,.editorial,.rw-block,.crit-sec,
+.r-hero,.r-report,.r-section,.r-fix-section,.r-critique-section,
+.r-star-section,.r-rw-section,.r-dims,.r-hero-main,.r-hero-center,
+.r-hero-meta,.r-big-score,.r-bars,.r-dim-row,.r-fix-text,
+.r-critique-text,.r-rw-card,.r-star-card,.r-fix-card,.r-card,
+.r-banner,.r-rw-header,.r-rw-text,.r-rw-top,.r-rw-body,
+.sh-top,.sh-in,.sh-bars,.r-hero-top,.r-hero-left,.r-hero-right,
+.fb-card,.fb-rw-card,.fb-star-card,.fb-key-card { display: none !important; }
+
 #fb-star-sec { display: block !important; }
 #fb-interviewer-verdict { display: none; }
 
-/* Mobile */
-@media (max-width: 480px) {
-  .r-score-num { font-size: 4rem; }
-  .r-hero-top { padding: 1.2rem 1.2rem .9rem; }
-  .r-bars { padding: .8rem 1.2rem 1rem; }
-  .fb-pg { padding: 0 12px 4rem; }
+/* ── Mobile ── */
+@media (max-width: 520px) {
+  .fb-score-n { font-size: 4.5rem; }
+  .fb-score-d { font-size: 1.5rem; }
+  .fb-hero-score { padding: 1.5rem 1.25rem 1rem; }
+  .fb-bars { padding: .9rem 1.25rem 1.3rem; }
+  .fb-block { padding: 1.1rem 1.25rem; }
+  .fb-fix-block { padding-left: 1rem; }
+  .crit-item { padding: 10px 1.25rem; }
+  .fb-citation { padding: 10px 1.25rem 4px; }
+  .fb-rw-hd { padding: .9rem 1.25rem .7rem; }
+  .fb-rw-text { padding: 1rem 1.25rem 1.3rem; }
+  .fb-star-toggle { padding: 1rem 1.25rem; }
+  .fb-src-row { padding: 8px 1.25rem; }
+  .fb-q { padding: 12px 14px 8px; }
+  .fb-hero-meta { top: 1.5rem; right: 1.25rem; }
 }
 </style>
 </head>
@@ -6781,81 +6832,75 @@ body,
     </div>    </div>
     <div id="fb-result" style="display:none;">
 
-  <!-- QUESTION -->
-  <div class="r-qlbl" id="fb-qlbl"></div>
+  <!-- Question -->
+  <div class="fb-q" id="fb-qlbl"></div>
 
-  <!-- SCORE HERO -->
-  <div class="r-hero" id="r-hero">
-    <div class="r-hero-top">
-      <div class="r-hero-left">
-        <div class="r-eyebrow">Your score</div>
-        <div class="r-score-row">
-          <span class="r-score-num" id="fb-score">—</span>
-          <span class="r-score-denom">/10</span>
-        </div>
-        <div class="r-verdict-txt" id="fb-verdict"></div>
+  <!-- ═══ SCORE CARD ════════════════════════════════════════════ -->
+  <div class="fb-hero">
+    <div class="fb-hero-score">
+      <div class="fb-score-eye">Your score</div>
+      <div class="fb-score-display">
+        <span class="fb-score-n" id="fb-score">—</span><span class="fb-score-d">/10</span>
       </div>
-      <div class="r-hero-right">
-        <div class="r-track-lbl" id="fb-src-tag-hero"></div>
-        <div class="r-iv-pill" id="fb-interviewer-verdict-pill" style="display:none;"></div>
-      </div>
+      <div class="fb-score-label" id="fb-verdict"></div>
     </div>
-    <div class="r-bars">
-      <div class="r-bar-row"><span class="r-bar-lbl">Structure</span><div class="r-bar-track"><div class="r-bar-fill" id="sh-bar-s"></div></div><span class="r-bar-val" id="fb-clarity">—</span></div>
-      <div class="r-bar-row"><span class="r-bar-lbl">Clarity</span><div class="r-bar-track"><div class="r-bar-fill" id="sh-bar-c"></div></div><span class="r-bar-val" id="fb-star">—</span></div>
-      <div class="r-bar-row"><span class="r-bar-lbl">Ownership</span><div class="r-bar-track"><div class="r-bar-fill" id="sh-bar-o"></div></div><span class="r-bar-val" id="fb-spec">—</span></div>
-      <div class="r-bar-row"><span class="r-bar-lbl">Impact</span><div class="r-bar-track"><div class="r-bar-fill" id="sh-bar-i"></div></div><span class="r-bar-val" id="fb-conf">—</span></div>
+    <div class="fb-hero-meta">
+      <div class="fb-track-name" id="fb-src-tag-hero"></div>
+      <div class="fb-iv-tag" id="fb-interviewer-verdict-pill" style="display:none;"></div>
+      <div class="fb-trend-tag" id="fb-score-trend" style="display:none;"></div>
+    </div>
+    <div class="fb-bars">
+      <div class="fb-bar-r"><span class="fb-bar-l">Structure</span><div class="fb-bar-t"><div class="fb-bar-f" id="sh-bar-s"></div></div><span class="fb-bar-v" id="fb-clarity">—</span></div>
+      <div class="fb-bar-r"><span class="fb-bar-l">Clarity</span><div class="fb-bar-t"><div class="fb-bar-f" id="sh-bar-c"></div></div><span class="fb-bar-v" id="fb-star">—</span></div>
+      <div class="fb-bar-r"><span class="fb-bar-l">Ownership</span><div class="fb-bar-t"><div class="fb-bar-f" id="sh-bar-o"></div></div><span class="fb-bar-v" id="fb-spec">—</span></div>
+      <div class="fb-bar-r"><span class="fb-bar-l">Impact</span><div class="fb-bar-t"><div class="fb-bar-f" id="sh-bar-i"></div></div><span class="fb-bar-v" id="fb-conf">—</span></div>
     </div>
   </div>
 
-  <!-- VERDICT BANNER -->
-  <div class="r-banner" id="fb-interviewer-verdict" style="display:none;"></div>
+  <!-- ═══ BODY ══════════════════════════════════════════════════ -->
+  <div class="fb-body">
 
-  <!-- KEY FIX -->
-  <div class="r-card r-fix-card">
-    <div class="r-card-eyebrow">
-      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v8M1 5h8" stroke="#0a5c44" stroke-width="1.4" stroke-linecap="round"/></svg>
-      Single biggest improvement
+    <!-- Decision strip -->
+    <div class="fb-decision" id="fb-interviewer-verdict" style="display:none;"></div>
+
+    <!-- 1. Key fix -->
+    <div class="fb-block fb-fix-block">
+      <div class="fb-block-label fb-label-fix">Single biggest improvement</div>
+      <div class="fb-fix-text" id="fb-verdict-full"></div>
     </div>
-    <div class="r-fix-body" id="fb-verdict-full"></div>
-  </div>
 
-  <!-- CRITIQUE -->
-  <div class="r-card">
-    <div class="r-card-eyebrow">
-      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="1" y="1" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.1" fill="none"/><line x1="2.5" y1="3.5" x2="7.5" y2="3.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><line x1="2.5" y1="5.5" x2="6" y2="5.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
-      <span id="fb-critique-label">Interviewer critique</span>
+    <!-- 2. Critique -->
+    <div class="fb-block">
+      <div class="fb-block-label"><span id="fb-critique-label">Interviewer critique</span></div>
+      <div class="fb-critique-text" id="fb-editorial"></div>
+      <div class="fb-interv-text" id="fb-interv"></div>
     </div>
-    <div class="r-card-body" id="fb-editorial"></div>
-    <div class="r-interv-body" id="fb-interv"></div>
-  </div>
 
-  <!-- STAR BREAKDOWN -->
-  <div class="r-card r-star-card" id="fb-star-sec">
-    <div class="r-star-toggle" onclick="this.closest('.r-star-card').classList.toggle('r-open')">
-      <span class="r-card-eyebrow" style="margin:0;">
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><line x1="1" y1="2.5" x2="9" y2="2.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><line x1="1" y1="5" x2="7" y2="5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><line x1="1" y1="7.5" x2="5" y2="7.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>
+    <!-- 3. STAR -->
+    <div class="fb-block fb-star-block" id="fb-star-sec">
+      <div class="fb-block-label fb-star-toggle" onclick="this.closest('.fb-star-block').classList.toggle('fb-open')">
         STAR breakdown
-      </span>
-      <svg class="r-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="fb-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 4L6 7.5L9.5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="fb-star-inner" id="fb-star-body">
+        <div class="fb-citation" id="fb-citation"></div>
+        <div id="fb-imps"></div>
+        <div class="fb-src-row"><span id="fb-src-tag"></span></div>
+      </div>
     </div>
-    <div class="r-star-body" id="fb-star-body">
-      <div class="r-citation" id="fb-citation"></div>
-      <div id="fb-imps"></div>
-      <div class="r-src-row"><span class="r-src-tag" id="fb-src-tag">Mocha</span></div>
-    </div>
-  </div>
 
-  <!-- REWRITE -->
-  <div class="r-rw-card">
-    <div class="r-rw-top">
-      <div class="r-rw-badge">Rewritten at offer standard</div>
-      <div class="r-rw-sub" id="fb-perspective-label">How the best candidates answer this</div>
+    <!-- 4. Rewrite -->
+    <div class="fb-rw-block">
+      <div class="fb-rw-hd">
+        <div class="fb-rw-badge">Rewritten at offer standard</div>
+        <div class="fb-rw-sub" id="fb-perspective-label">How the best candidates answer this exact question</div>
+      </div>
+      <div class="fb-rw-text" id="fb-rewrite"></div>
     </div>
-    <div class="r-rw-body" id="fb-rewrite"></div>
-  </div>
 
-  <!-- NEXT QUESTION -->
+  </div><!-- /fb-body -->
+
+  <!-- Next question -->
   <div id="fb-next-question" style="display:none;"></div>
 
 <!-- FOLLOW-UP CHAT -->
@@ -9660,344 +9705,313 @@ function doSubmit() {
       document.getElementById('fb-load').innerHTML = '<div style="color:#c0190f;font-size:13.5px;margin-bottom:14px;font-weight:500;">Couldn\'t parse feedback. Please try again.</div><button class="btn-out" onclick="goToPractice()" style="font-size:13px;padding:10px 20px;">Back to practice</button>';
       return;
     }
-    markFreeCallUsed();
     renderFeedback(r, isFree);
-    if (appUser) {
-      var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      var d = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: tz });
-      var newEntry = { q: currentQ.text, cat: currentQ.cat, score: r.overall, date: d, persona: p.role };
-      appHistory.unshift(newEntry);
-      if (appHistory.length > 100) appHistory = appHistory.slice(0, 100);
-      // Save to Supabase if logged in, localStorage as fallback
-      if (appUser && appUser.id) {
-        _sbSaveSession(newEntry);
-      }
-      sv('mocha_hist', appHistory);
-      var todayStr = new Date().toLocaleDateString('en-CA');
-      if (appUser.lastPracticed !== todayStr) {
-        var yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-        var yStr = yesterday.toLocaleDateString('en-CA');
-        appUser.streak = !appUser.lastPracticed ? 1 : appUser.lastPracticed === yStr ? (appUser.streak || 0) + 1 : 1;
-        appUser.lastPracticed = todayStr;
-      }
-      sv('mocha_user', appUser);
-      document.getElementById('streak-chip').textContent = appUser.streak + '-day streak';
-    }
-    var qs = QUESTIONS[p.id] || QUESTIONS.consulting;
-    var idx = -1;
-    for (var i = 0; i < qs.length; i++) { if (qs[i].text === currentQ.text) { idx = i; break; } }
-    currentQ = qs[(idx + 1) % qs.length];
   }, function(errMsg) {
     clearInterval(li);
     _submitting = false;
-    // Graceful fallback: run local STAR analysis so user always gets value
     var localResult = _localStarAnalysis(answer, currentQ ? currentQ.text : '');
     if (localResult) {
       renderFeedback(localResult, isFree);
-      // Show a subtle banner that full AI is temporarily unavailable
-      var fbResult = document.getElementById('fb-result');
-      if (fbResult) {
-        var banner = document.createElement('div');
-        banner.style.cssText = 'background:#fef7f0;border:1px solid rgba(15,26,20,.09);border-radius:12px;padding:11px 15px;font-size:12.5px;color:#0a5c44;margin-bottom:16px;display:flex;align-items:center;gap:9px;';
-        banner.innerHTML = '<svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M7 4.5V7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="9.5" r="0.7" fill="currentColor"/></svg><span style="flex:1;">Scored using STAR structural analysis. <b style="color:#0f1a14">For full AI feedback, try again in a moment.</b></span><button onclick="goToPractice()" style="font-size:10px;font-weight:700;color:#0a5c44;background:none;border:1px solid rgba(10,92,68,.20);border-radius:99px;padding:3px 10px;cursor:pointer;white-space:nowrap;font-family:inherit;">Try again</button>';
-        fbResult.insertBefore(banner, fbResult.firstChild);
-      }
     } else {
-      // Last resort: show error with retry
-      var subBtnEl = document.getElementById('sub-btn');
-      if (subBtnEl) { subBtnEl.disabled = false; subBtnEl.style.opacity = '1'; }
-      document.getElementById('fb-load').innerHTML = '<div style="color:#c0190f;font-size:13.5px;margin-bottom:14px;font-weight:500;">' + escHtml(errMsg) + '</div><button class="btn-cta" onclick="goToPractice()" style="font-size:13px;padding:10px 20px;">Try again</button>';
+      document.getElementById('fb-load').innerHTML = '<div style="color:#c0190f;font-size:13.5px;margin-bottom:14px;font-weight:500;">' + escHtml(errMsg || 'Something went wrong. Please try again.') + '</div><button class="btn-cta" onclick="goToPractice()" style="font-size:13px;padding:10px 20px;">Try again</button>';
     }
   });
 }
 
 function renderFeedback(r, isFree) {
+  // ── Snap load bar to 100% then hide ─────────────────────────────
   var snapBar = document.getElementById('load-bar');
-  if (snapBar) { try { snapBar.style.transition = 'width 0.3s ease'; snapBar.style.width = '100%'; } catch(e){} }
-  document.getElementById('fb-load').style.display   = 'none';
-  document.getElementById('fb-result').style.display = 'block';
-  document.getElementById('fb-result').style.animation = 'fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both';
-  // Scroll to top - try all methods
+  if (snapBar) { snapBar.style.transition = 'width 0.3s ease'; snapBar.style.width = '100%'; }
+  document.getElementById('fb-load').style.display = 'none';
+  var fbResult = document.getElementById('fb-result');
+  fbResult.style.display = 'block';
+
+  // ── Scroll to top immediately ────────────────────────────────────
   window.scrollTo({ top: 0, behavior: 'instant' });
-  document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
-  var fbPage = document.getElementById('page-feedback');
-  if (fbPage) { fbPage.scrollTop = 0; fbPage.scrollIntoView({ block: 'start', behavior: 'instant' }); }
-  var appWrap = document.querySelector('.app-wrap') || document.querySelector('#app-root') || document.querySelector('main');
-  if (appWrap) appWrap.scrollTop = 0;
-  document.getElementById('fb-qlbl').textContent    = currentQ ? currentQ.text : '';
-  // Animate score counting up
-  (function() {
-    var target = parseFloat(r.overall) || 0;
-    var el = document.getElementById('fb-score');
-    if (!el) return;
-    var start = 0; var dur = 900; var startT = null;
-    var ringEl = document.getElementById('sh-ring-path');
-    function step(ts) {
-      if (!startT) startT = ts;
-      var p = Math.min((ts - startT) / dur, 1);
-      var ease = 1 - Math.pow(1 - p, 3);
-      var val = (start + (target - start) * ease);
-      el.textContent = val.toFixed(1);
-      if (ringEl) {
-        var pct = (val / 10);
-        ringEl.style.strokeDashoffset = 339.3 * (1 - pct);
-        ringEl.style.stroke = val >= 8.5 ? '#4dc994' : val >= 7 ? '#f59e0b' : '#ef4444';
-      }
-      if (p < 1) requestAnimationFrame(step);
-      else { el.textContent = target; }
-    }
-    requestAnimationFrame(step);
-  })();
-  var rawVerdict = r.verdict || '';
-  // Hero shows short verdict label (score status)
-  var scoreVal = parseFloat(r.overall) || 0;
-  var shortVerdict = scoreVal >= 8.5 ? 'Strong answer' : scoreVal >= 7 ? 'Solid — one fix needed' : scoreVal >= 5.5 ? 'Developing — needs work' : 'Needs significant work';
-  document.getElementById('fb-verdict').textContent = shortVerdict;
-  // Mocha Coach scores: structure, clarity, ownership, impact
-  var sc = r.scores || {};
-  var sScoreV = parseFloat(sc.structure || r.clarity || 0);
-  var cScoreV = parseFloat(sc.clarity   || r.star    || 0);
-  var oScoreV = parseFloat(sc.ownership || r.specificity || 0);
-  var iScoreV = parseFloat(sc.impact    || r.confidence  || 0);
-  document.getElementById('fb-clarity').textContent = sScoreV.toFixed(1);
-  document.getElementById('fb-star').textContent    = cScoreV.toFixed(1);
-  document.getElementById('fb-spec').textContent    = oScoreV.toFixed(1);
-  document.getElementById('fb-conf').textContent    = iScoreV.toFixed(1);
-  // Animate new sh-bar-* elements
-  var barIds = ['sh-bar-s','sh-bar-c','sh-bar-o','sh-bar-i'];
-  var barVals = [sScoreV, cScoreV, oScoreV, iScoreV];
-  barIds.forEach(function(bid, bi) {
-    var el = document.getElementById(bid);
-    if (el) setTimeout(function(e,v){ e.style.width = Math.round(v*10)+'%'; }(el, barVals[bi]), 300 + bi*100);
+  document.body.scrollTop = 0;
+  requestAnimationFrame(function() {
+    window.scrollTo(0, 0);
+    var pg = document.getElementById('page-feedback');
+    if (pg) pg.scrollTop = 0;
   });
-  // Populate key improvement
-  var keyEl = document.getElementById('fb-verdict-full');
-  if (keyEl) {
-    var fullV = r.verdict || r.key_improvement || r.improvement || '';
-    // If verdict is one sentence, use industry_critique first sentence as supplement
-    if (fullV && fullV.length < 60 && r.industry_critique) {
-      var firstSentence = r.industry_critique.split('.')[0];
-      if (firstSentence && firstSentence.length > 30) fullV = fullV + ' ' + firstSentence + '.';
+
+  // ── Question label ───────────────────────────────────────────────
+  var qlbl = document.getElementById('fb-qlbl');
+  if (qlbl) qlbl.textContent = currentQ ? currentQ.text : '';
+
+  // ── Score (counts up) ────────────────────────────────────────────
+  var target = parseFloat(r.overall) || 0;
+  var scoreEl = document.getElementById('fb-score');
+  if (scoreEl) {
+    var start = 0, dur = 1000, startT = null;
+    function countUp(ts) {
+      if (!startT) startT = ts;
+      var prog = Math.min((ts - startT) / dur, 1);
+      var ease = 1 - Math.pow(1 - prog, 3);
+      var val = start + (target - start) * ease;
+      scoreEl.textContent = val.toFixed(1);
+      if (prog < 1) requestAnimationFrame(countUp);
+      else scoreEl.textContent = parseFloat(target).toFixed(1);
     }
-    keyEl.textContent = fullV;
+    requestAnimationFrame(countUp);
   }
+
+  // ── Verdict label (short, in hero) ───────────────────────────────
+  var verdictEl = document.getElementById('fb-verdict');
+  if (verdictEl) {
+    var shortV = target >= 8.5 ? 'Strong answer' :
+                 target >= 7.0 ? 'Solid — one fix needed' :
+                 target >= 5.5 ? 'Developing — needs work' : 'Needs significant work';
+    verdictEl.textContent = shortV;
+  }
+
+  // ── Dimension scores + animated bars ────────────────────────────
+  var sc = r.scores || {};
+  var dims = [
+    { elVal: 'fb-clarity', elBar: 'sh-bar-s', v: parseFloat(sc.structure || 0) },
+    { elVal: 'fb-star',    elBar: 'sh-bar-c', v: parseFloat(sc.clarity   || 0) },
+    { elVal: 'fb-spec',    elBar: 'sh-bar-o', v: parseFloat(sc.ownership || 0) },
+    { elVal: 'fb-conf',    elBar: 'sh-bar-i', v: parseFloat(sc.impact    || 0) }
+  ];
+  dims.forEach(function(d, i) {
+    var ve = document.getElementById(d.elVal);
+    var be = document.getElementById(d.elBar);
+    if (ve) ve.textContent = parseFloat(d.v).toFixed(1);
+    if (be) setTimeout(function(el, val) {
+      el.style.width = Math.round(val * 10) + '%';
+      // Color the bar: green if >= 7, amber if >= 5.5, red otherwise
+      el.style.background = '#fde8cc';
+    }, 350 + i * 120, be, d.v);
+  });
+
+  // ── Track label ──────────────────────────────────────────────────
   var p = appPersona || PERSONAS[0];
   var industryLabels = {
-    consulting : 'Consulting · MBB PEI',
-    banking    : 'Banking · Goldman/JPM',
-    product    : 'Tech · Amazon LPs',
-    finance    : 'Private Equity',
-    marketing  : 'Marketing · P&G/Airbnb',
-    nonprofit  : 'Social Impact · TFA/Gates',
-    healthcare : 'Healthcare · J&J/NHS',
-    retail     : 'Retail · Amazon/LVMH',
-    general    : 'Behavioral'
+    consulting:'Consulting · MBB PEI', banking:'Banking · Goldman/JPM',
+    product:'Tech · Amazon LPs', finance:'Private Equity',
+    marketing:'Marketing · P&G/Airbnb', nonprofit:'Social Impact · TFA/Gates',
+    healthcare:'Healthcare · J&J/NHS', retail:'Retail · Amazon/LVMH'
   };
-  document.getElementById('fb-src-tag').textContent = industryLabels[p.id] || p.source || 'Behavioral';
+  var trackLbl = industryLabels[p.id] || p.source || 'Behavioral';
   var heroTag = document.getElementById('fb-src-tag-hero');
-  if (heroTag) heroTag.textContent = industryLabels[p.id] || p.source || 'Behavioral';
-  // Show verdict pill in hero
-  var heroPill = document.getElementById('fb-interviewer-verdict-pill');
-  if (heroPill && r.interviewer_verdict) {
-    var iv2 = r.interviewer_verdict;
-    heroPill.style.display = 'inline-block';
-    if (iv2.indexOf('advance') > -1 && iv2.indexOf('not') === -1) {
-      heroPill.style.cssText += ';background:rgba(77,201,148,.18);color:#4dc994;border:1px solid rgba(77,201,148,.25);';
-      heroPill.textContent = '✓ Would advance';
-    } else if (iv2.indexOf('fence') > -1) {
-      heroPill.style.cssText += ';background:rgba(245,158,11,.15);color:#f59e0b;border:1px solid rgba(245,158,11,.20);';
-      heroPill.textContent = '~ On the fence';
+  if (heroTag) heroTag.textContent = trackLbl;
+  var srcTag = document.getElementById('fb-src-tag');
+  if (srcTag) srcTag.textContent = trackLbl;
+
+  // ── Interviewer verdict pill (in hero) ───────────────────────────
+  var pill = document.getElementById('fb-interviewer-verdict-pill');
+  if (pill && r.interviewer_verdict) {
+    var iv = r.interviewer_verdict;
+    pill.style.display = 'inline-block';
+    if (iv.indexOf('advance') > -1 && iv.indexOf('not') === -1) {
+      pill.style.cssText = 'display:inline-block;font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:4px 11px;border-radius:99px;background:rgba(77,201,148,.15);color:#4dc994;border:1px solid rgba(77,201,148,.22);';
+      pill.textContent = '✓ Would advance';
+    } else if (iv.indexOf('fence') > -1) {
+      pill.style.cssText = 'display:inline-block;font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:4px 11px;border-radius:99px;background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.20);';
+      pill.textContent = '~ On the fence';
     } else {
-      heroPill.style.cssText += ';background:rgba(239,68,68,.12);color:#ef4444;border:1px solid rgba(239,68,68,.18);';
-      heroPill.textContent = '✕ Would not advance';
+      pill.style.cssText = 'display:inline-block;font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:4px 11px;border-radius:99px;background:rgba(239,68,68,.10);color:#ef4444;border:1px solid rgba(239,68,68,.16);';
+      pill.textContent = '✕ Would not advance';
     }
   }
-  // Open STAR breakdown by default
-  var starCard = document.getElementById('fb-star-sec');
-  if (starCard) starCard.classList.add('r-open');
 
-  // Show citation beneath the STAR header
-  var citationEl = document.getElementById('fb-citation');
-  if (citationEl) citationEl.textContent = r.citation || '';
-
-  // STAR breakdown cards
-  var sb = r.star_breakdown || {};
-  var starItems = [
-    { label: 'S', key: 'Situation', val: sb.situation },
-    { label: 'T', key: 'Task',      val: sb.task },
-    { label: 'A', key: 'Action',    val: sb.action },
-    { label: 'R', key: 'Result',    val: sb.result }
-  ];
-  var iHtml = '';
-  for (var i = 0; i < starItems.length; i++) {
-    var item = starItems[i];
-    var missing = !item.val || item.val.toUpperCase() === 'MISSING';
-    iHtml += '<div class="crit-item">';
-    iHtml += '<div class="crit-idx" style="background:' + (missing ? 'rgba(192,25,15,.08)' : '#fef7f0') + ';color:' + (missing ? '#c0190f' : '#0a5c44') + ';">' + item.label + '</div>';
-    iHtml += '<div class="crit-txt"><b>' + item.key + ':</b> ' + (missing ? '<span style="color:#c0190f;font-weight:700;">Missing</span>' : escHtml(item.val)) + '</div>';
-    iHtml += '</div>';
+  // ── Decision banner (below hero) ─────────────────────────────────
+  var banner = document.getElementById('fb-interviewer-verdict');
+  if (banner && r.interviewer_verdict) {
+    var iv2 = r.interviewer_verdict;
+    banner.style.display = 'block';
+    if (iv2.indexOf('advance') > -1 && iv2.indexOf('not') === -1) {
+      banner.style.cssText = 'display:block;font-size:13px;font-weight:700;padding:12px 1.6rem;background:rgba(10,92,68,.06);color:#0a5c44;border-bottom:1px solid rgba(10,92,68,.08);';
+      var firmName = {'consulting':'A McKinsey interviewer','banking':'A Goldman Sachs MD','product':'An Amazon bar-raiser','finance':'A Blackstone interviewer','marketing':'A P&G brand director','nonprofit':'A TFA selector','healthcare':'A J&J interviewer','retail':'An Amazon Retail principal'}[p.id] || 'This interviewer';
+      banner.textContent = '✓ ' + firmName + ' would advance this to the next round.';
+    } else if (iv2.indexOf('fence') > -1) {
+      banner.style.cssText = 'display:block;font-size:13px;font-weight:700;padding:12px 1.6rem;background:rgba(245,158,11,.07);color:#92400e;border-bottom:1px solid rgba(245,158,11,.10);';
+      banner.textContent = '~ On the fence — one key fix away from advancing.';
+    } else {
+      banner.style.cssText = 'display:block;font-size:13px;font-weight:700;padding:12px 1.6rem;background:rgba(239,68,68,.06);color:#991b1b;border-bottom:1px solid rgba(239,68,68,.08);';
+      banner.textContent = '✕ Would not advance — see key improvements below.';
+    }
   }
-  if (sb.weak_components) {
-    iHtml += '<div style="padding:8px 14px 12px;font-size:12px;color:#c0190f;font-weight:500;">⚠ Weak areas: ' + escHtml(sb.weak_components) + '</div>';
-  }
-  document.getElementById('fb-imps').innerHTML = iHtml;
 
-  document.getElementById('fb-editorial').textContent   = r.industry_critique || r.editorial || '';
-  var intervEl = document.getElementById('fb-interv');
-  if (intervEl) intervEl.textContent = r.interviewer_perspective || '';
-  document.getElementById('fb-rewrite').textContent = r.improved_answer || '';
-
-  // Dynamic section labels — make it clear whose voice this is
+  // ── Critique labels ──────────────────────────────────────────────
   var critiqueLabels = {
-    consulting : 'McKinsey interviewer critique',
-    banking    : 'Goldman Sachs interviewer critique',
-    product    : 'Amazon bar-raiser critique',
-    finance    : 'Blackstone/KKR interviewer critique',
-    marketing  : 'P&G brand director critique',
-    nonprofit  : 'TFA/Gates Foundation critique',
-    healthcare : 'J&J/McKinsey Health critique',
-    retail     : 'Amazon Retail critique'
-  };
-  var perspLabels = {
-    consulting : 'Would a McKinsey interviewer advance you?',
-    banking    : 'Would a Goldman Sachs MD advance you?',
-    product    : 'Would an Amazon bar-raiser advance you?',
-    finance    : 'Would a Blackstone interviewer advance you?',
-    marketing  : 'Would a P&G brand director advance you?',
-    nonprofit  : 'Would a TFA selector advance you?',
-    healthcare : 'Would a J&J interviewer advance you?',
-    retail     : 'Would an Amazon Retail principal advance you?'
+    consulting:'McKinsey interviewer critique', banking:'Goldman Sachs interviewer critique',
+    product:'Amazon bar-raiser critique', finance:'Blackstone/KKR interviewer critique',
+    marketing:'P&G brand director critique', nonprofit:'TFA/Gates Foundation critique',
+    healthcare:'J&J/McKinsey Health critique', retail:'Amazon Retail critique'
   };
   var clEl = document.getElementById('fb-critique-label');
+  if (clEl) clEl.textContent = critiqueLabels[p.id] || 'Interviewer critique';
+
+  var perspLabels = {
+    consulting:'How a McKinsey interviewer would read this answer',
+    banking:'How a Goldman Sachs MD would read this answer',
+    product:'How an Amazon bar-raiser would read this answer',
+    finance:'How a Blackstone interviewer would read this answer',
+    marketing:'How a P&G brand director would read this answer',
+    nonprofit:'How a TFA selector would read this answer',
+    healthcare:'How a J&J interviewer would read this answer',
+    retail:'How an Amazon Retail principal would read this answer'
+  };
   var plEl = document.getElementById('fb-perspective-label');
-  if (clEl) clEl.textContent = critiqueLabels[p.id] || 'Industry critique';
-  if (plEl) plEl.textContent = perspLabels[p.id] || 'Interviewer perspective';
+  if (plEl) plEl.textContent = perspLabels[p.id] || 'How the best candidates answer this exact question';
 
-  // ── v4 new fields ─────────────────────────────────────────────
-  // interviewer_verdict — the screenshot moment
-  var verdictBanner = document.getElementById('fb-interviewer-verdict');
-  if (!verdictBanner) {
-    verdictBanner = document.createElement('div');
-    verdictBanner.id = 'fb-interviewer-verdict';
-    verdictBanner.style.cssText = 'margin:12px 0 0;padding:10px 16px;border-radius:12px;font-size:12.5px;font-weight:700;letter-spacing:0.01em;text-align:center;';
-    var intervSection = document.getElementById('fb-interv');
-    if (intervSection && intervSection.parentNode) {
-      intervSection.parentNode.insertBefore(verdictBanner, intervSection.nextSibling);
+  // ── Single biggest improvement ──────────────────────────────────
+  var fixEl = document.getElementById('fb-verdict-full');
+  if (fixEl) {
+    var fixText = r.verdict || r.key_improvement || r.improvement || '';
+    // If too short, enrich with first sentence of critique
+    if (fixText.length < 80 && r.industry_critique) {
+      var firstSent = (r.industry_critique.match(/^[^.!?]+[.!?]/) || [''])[0];
+      if (firstSent.length > 30) fixText = fixText + (fixText ? ' ' : '') + firstSent;
     }
+    fixEl.textContent = fixText;
   }
-  var iv = r.interviewer_verdict || '';
-  if (iv) {
-    verdictBanner.style.display = 'block';
-    if (iv === 'Would advance to next round') {
-      verdictBanner.style.background = 'rgba(74,222,128,0.12)';
-      verdictBanner.style.color = '#166534';
-      verdictBanner.style.border = '1px solid rgba(74,222,128,0.3)';
-    } else if (iv === 'On the fence') {
-      verdictBanner.style.background = 'rgba(228,187,126,0.15)';
-      verdictBanner.style.color = '#0f1a14';
-      verdictBanner.style.border = '1px solid var(--sil)';
+
+  // ── Industry critique + interviewer perspective ──────────────────
+  var editEl = document.getElementById('fb-editorial');
+  if (editEl) editEl.textContent = r.industry_critique || '';
+  var intervEl = document.getElementById('fb-interv');
+  if (intervEl) {
+    var interpText = r.interviewer_perspective || '';
+    if (interpText) {
+      intervEl.textContent = interpText;
+      intervEl.style.display = 'block';
     } else {
-      verdictBanner.style.background = 'rgba(239,68,68,0.08)';
-      verdictBanner.style.color = '#991b1b';
-      verdictBanner.style.border = '1px solid rgba(239,68,68,0.2)';
+      intervEl.style.display = 'none';
     }
-    var icon = iv === 'Would advance to next round' ? '✓ ' : iv === 'On the fence' ? '~ ' : '✕ ';
-    verdictBanner.textContent = icon + iv;
-  } else {
-    verdictBanner.style.display = 'none';
   }
 
-  // next_question — seeds the follow-up chat and shows a prompt
+  // ── STAR breakdown ────────────────────────────────────────────────
+  var citEl = document.getElementById('fb-citation');
+  if (citEl) citEl.textContent = r.citation || '';
+
+  var sb = r.star_breakdown || {};
+  var starItems = [
+    { label:'S', key:'Situation', val: sb.situation },
+    { label:'T', key:'Task',      val: sb.task },
+    { label:'A', key:'Action',    val: sb.action },
+    { label:'R', key:'Result',    val: sb.result }
+  ];
+  var impsHtml = '';
+  starItems.forEach(function(item) {
+    var missing = !item.val || item.val.toUpperCase() === 'MISSING' || item.val.trim() === '';
+    var bgCol = missing ? 'rgba(192,25,15,.08)' : 'rgba(10,92,68,.08)';
+    var fgCol = missing ? '#c0190f' : '#0a5c44';
+    impsHtml += '<div class="crit-item">';
+    impsHtml += '<div class="crit-idx" style="background:' + bgCol + ';color:' + fgCol + ';">' + item.label + '</div>';
+    impsHtml += '<div class="crit-txt"><b>' + item.key + ':</b> ';
+    if (missing) {
+      impsHtml += '<span style="color:#c0190f;font-weight:700;">Missing</span> — add this component to lift your structure score.';
+    } else {
+      impsHtml += escHtml(item.val);
+    }
+    impsHtml += '</div></div>';
+  });
+  if (sb.weak_components) {
+    impsHtml += '<div style="padding:8px 1.6rem 10px;font-size:12px;color:#92400e;font-weight:600;background:rgba(245,158,11,.04);">⚠ Weakest components: ' + escHtml(sb.weak_components) + '</div>';
+  }
+  var impsEl = document.getElementById('fb-imps');
+  if (impsEl) impsEl.innerHTML = impsHtml;
+
+  // Open STAR by default
+  var starSec = document.getElementById('fb-star-sec');
+  if (starSec) starSec.classList.add('fb-open');
+
+  // ── Rewrite ───────────────────────────────────────────────────────
+  var rwEl = document.getElementById('fb-rewrite');
+  if (rwEl) rwEl.textContent = r.improved_answer || '';
+
+  // ── Score trend ───────────────────────────────────────────────────
+  if (appUser && appHistory.length > 0) {
+    var lastScore = appHistory[0].score;
+    var diff = Math.round((target - lastScore) * 10) / 10;
+    var trendEl = document.getElementById('fb-score-trend');
+    if (trendEl) {
+      trendEl.style.display = 'block';
+      if (diff > 0) { trendEl.style.color = '#4dc994'; trendEl.textContent = '↑ +' + diff + ' from last session'; }
+      else if (diff < 0) { trendEl.style.color = 'rgba(253,232,204,.40)'; trendEl.textContent = '↓ ' + diff + ' from last session'; }
+      else { trendEl.style.color = 'rgba(253,232,204,.30)'; trendEl.textContent = 'Same as last session'; }
+    }
+  }
+
+  // ── Next question ─────────────────────────────────────────────────
   if (r.next_question) {
     window._fcContext = window._fcContext || {};
     window._fcContext.nextQuestion = r.next_question;
     var nqEl = document.getElementById('fb-next-question');
-    if (!nqEl) {
-      nqEl = document.createElement('div');
-      nqEl.id = 'fb-next-question';
-      nqEl.style.cssText = 'margin-top:14px;padding:11px 15px;background:#fef7f0;border:1px solid rgba(15,26,20,.09);border-radius:12px;font-size:12.5px;color:#7aaa8a;cursor:pointer;';
-      var fcEl = document.getElementById('followup-chat');
-      if (fcEl && fcEl.parentNode) fcEl.parentNode.insertBefore(nqEl, fcEl);
+    if (nqEl) {
+      nqEl.innerHTML = '<span style="font-weight:700;color:#0f1a14;">Interviewer follow-up:</span> ' + escHtml(r.next_question) + '<span style="color:#4dc994;font-size:11px;font-weight:700;margin-left:8px;">Practice this →</span>';
+      nqEl.style.display = 'block'; nqEl.style.cssText += ';display:block!important;';
+      nqEl.onclick = function() { var inp = document.getElementById('fc-input'); if (inp) { inp.value = r.next_question; inp.focus(); } };
     }
-    nqEl.innerHTML = '<span style="font-weight:700;color:#0f1a14;">Interviewer would ask next:</span> ' + escHtml(r.next_question) + ' <span style="color:#4dc994;font-size:11px;font-weight:700;margin-left:6px;">Practice this →</span>';
-    nqEl.onclick = function() {
-      var inp = document.getElementById('fc-input');
-      if (inp) { inp.value = r.next_question; inp.focus(); }
-    };
-    nqEl.style.display = 'block';
   }
 
-  // Adaptive follow-up — gap detection + probing question
+  // ── Adaptive follow-up ────────────────────────────────────────────
   _showAdaptiveFollowUp(r);
 
-  // share_line — pre-populate share card copy
-  if (r.share_line) {
-    try { window._shareLine = r.share_line; } catch(e) {}
-  }
+  // ── Share line ────────────────────────────────────────────────────
+  if (r.share_line) { try { window._shareLine = r.share_line; } catch(e) {} }
 
-  // Show score trend if user has history
-  if (appUser && appHistory.length > 0) {
-    var lastScore = appHistory[0].score;
-    var diff = Math.round((r.overall - lastScore) * 10) / 10;
-    var trendEl = document.getElementById('fb-score-trend');
-    if (!trendEl) {
-      trendEl = document.createElement('div');
-      trendEl.id = 'fb-score-trend';
-      trendEl.style.cssText = 'font-size:11px;font-weight:600;margin-top:4px;letter-spacing:0.02em;';
-      var shIn = document.querySelector('.r-hero-left');
-      if (shIn) shIn.appendChild(trendEl);
-    }
-    if (diff > 0) {
-      trendEl.style.color = '#4dc994';
-      trendEl.textContent = '\u2191 +' + diff + ' from last session';
-    } else if (diff < 0) {
-      trendEl.style.color = 'rgba(253,232,204,.50)';
-      trendEl.textContent = '\u2193 ' + diff + ' from last session';
-    } else {
-      trendEl.style.color = 'rgba(253,232,204,.38)';
-      trendEl.textContent = 'Same as last session';
-    }
-  }
-
-  // Update share card with feedback data
+  // ── Save + share card ─────────────────────────────────────────────
   updateShareCard(r);
   _saveSessionDate();
-  // Final scroll to top after all DOM is rendered
+  markFreeCallUsed();
+  if (appUser) {
+    var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    var d = new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', timeZone:tz });
+    var newEntry = { q: currentQ ? currentQ.text : '', cat: currentQ ? currentQ.cat : 'Behavioral', score: target, date: d, persona: p.role };
+    appHistory.unshift(newEntry);
+    if (appHistory.length > 100) appHistory = appHistory.slice(0, 100);
+    if (appUser.id) _sbSaveSession(newEntry);
+    sv('mocha_hist', appHistory);
+    // Streak update
+    var todayStr = new Date().toLocaleDateString('en-CA');
+    if (appUser.lastPracticed !== todayStr) {
+      var yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+      var yStr = yesterday.toLocaleDateString('en-CA');
+      appUser.streak = (!appUser.lastPracticed || appUser.lastPracticed === yStr) ? (appUser.streak || 0) + 1 : 1;
+      appUser.lastPracticed = todayStr;
+      sv('mocha_user', appUser);
+    }
+  }
+
+  // ── Gate / follow-up chat ─────────────────────────────────────────
+  if (isFree && freeTries <= 0) {
+    var gate = document.getElementById('fb-gate');
+    var acts = document.getElementById('fb-acts');
+    var fc = document.getElementById('followup-chat');
+    if (gate) gate.style.display = 'block';
+    if (acts) acts.style.display = 'none';
+    if (fc) fc.style.display = 'none';
+  } else {
+    var gate2 = document.getElementById('fb-gate');
+    var acts2 = document.getElementById('fb-acts');
+    if (gate2) gate2.style.display = 'none';
+    if (acts2) acts2.style.display = 'flex';
+    var fc2 = document.getElementById('followup-chat');
+    if (fc2) {
+      fc2.style.display = 'block';
+      document.getElementById('fc-msgs').innerHTML = '';
+      document.getElementById('fc-input').value = '';
+      _fcCount = 0;
+      var fcBtn = document.getElementById('fc-send');
+      if (fcBtn) fcBtn.disabled = false;
+      window._fcContext = { question: currentQ ? currentQ.text : '' };
+    }
+  }
+
+  // ── Final scroll ──────────────────────────────────────────────────
   requestAnimationFrame(function() {
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
     var res = document.getElementById('fb-result');
     if (res) res.scrollIntoView({ block: 'start', behavior: 'instant' });
   });
-
-  if (isFree && freeTries <= 0) {
-    document.getElementById('fb-gate').style.display = 'block';
-    document.getElementById('fb-acts').style.display = 'none';
-    document.getElementById('followup-chat').style.display = 'none';
-  } else {
-    document.getElementById('fb-gate').style.display = 'none';
-    document.getElementById('fb-acts').style.display = 'flex';
-    var fc = document.getElementById('followup-chat');
-    if (fc) {
-      fc.style.display = 'block';
-      document.getElementById('fc-msgs').innerHTML = '';
-      document.getElementById('fc-input').value = '';
-      _fcCount = 0; // reset follow-up counter for new session
-      var fcSendBtn = document.getElementById('fc-send');
-      if (fcSendBtn) fcSendBtn.disabled = false;
-      window._fcContext = {
-        question: currentQ ? currentQ.text : ''
-        // intentionally omit full answer + feedback JSON \u2014 reduces prompt size
-      };
-    }
-  }
 }
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// HISTORY
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+
 function renderHist() {
   var scores = appHistory.slice(0, 7).reverse();
   var bHtml = '';

@@ -1761,12 +1761,7 @@ body {
    ══════════════════════════════════════════════ */
 @media(max-width:768px) {
   /* ── SHOW MOBILE OVERLAY BUTTONS ── */
-  .ob-mob-logo  { display:block !important; }
-  .ob-mob-menu  { display:block !important; }
-  .ob-mob-start { display:block !important; }
-  .ob-mob-demo  { display:block !important; }
   /* ── HIDE DESKTOP OVERLAY BUTTONS ── */
-  .ob-product,.ob-pricing,.ob-unis,.ob-resources,.ob-login,.ob-navstart,.ob-try { display:none !important; }
 
 
   /* TRUST BAR */
@@ -1779,7 +1774,6 @@ body {
   .hero picture { display:block; line-height:0; }
   .hero img { width:100% !important; height:auto !important; display:block !important; }
   
-  .ob-product,.ob-pricing,.ob-unis,.ob-resources,.ob-login,.ob-navstart,.ob-try { display:none !important; }
 
   /* TICKER */
   .uni-ticker-wrap { padding:0 !important; overflow:hidden !important; }
@@ -2026,15 +2020,8 @@ body { overflow-x: hidden !important; max-width: 100vw !important; }
 
 /* ── DESKTOP: ensure hero CTA buttons are visible and clickable ── */
 @media(min-width:769px) {
-  .ob-start { display:block !important; pointer-events:all !important; }
-  .ob-demo  { display:block !important; pointer-events:all !important; }
-  .ob-navstart { display:block !important; pointer-events:all !important; }
-  .ob-mob-start, .ob-mob-demo, .ob-mob-logo, .ob-mob-menu { display:none !important; }
 }
 
-  .ob-mob-demo  { display:block !important; pointer-events:all !important; }
-  .ob-mob-logo  { display:block !important; pointer-events:all !important; }
-  .ob-mob-menu  { display:block !important; pointer-events:all !important; }
   /* desktop buttons visible on mobile if needed - handled by definitive block */
 }
 /* ════════════════════════════════════════════
@@ -2044,15 +2031,25 @@ body { overflow-x: hidden !important; max-width: 100vw !important; }
 
 /* Desktop: show Start free + Watch demo, hide mobile buttons */
 @media(min-width:769px) {
-  .ob-start    { display:block !important; pointer-events:all !important; }
-  .ob-demo     { display:block !important; pointer-events:all !important; }
-  .ob-navstart { display:block !important; pointer-events:all !important; }
-  .ob-mob-start, .ob-mob-demo, .ob-mob-logo, .ob-mob-menu { display:none !important; }
 }
 
 /* Mobile: show mobile buttons, hide desktop CTA buttons */
 @media(max-width:768px) {
-  .ob-mob-start { display:block !important; pointer-events:all !important; }
+
+/* ── HERO BUTTON VISIBILITY ─────────────────── */
+@media(min-width:769px){
+  .ob-start{display:block!important;pointer-events:all!important;}
+  .ob-demo{display:block!important;pointer-events:all!important;}
+  .ob-navstart{display:block!important;pointer-events:all!important;}
+  .ob-mob-start,.ob-mob-demo,.ob-mob-logo,.ob-mob-menu{display:none!important;}
+}
+@media(max-width:768px){
+  .ob-mob-start{display:block!important;pointer-events:all!important;}
+  .ob-mob-demo{display:block!important;pointer-events:all!important;}
+  .ob-mob-logo{display:block!important;pointer-events:all!important;}
+  .ob-mob-menu{display:block!important;pointer-events:all!important;}
+  .ob-start,.ob-demo,.ob-navstart,.ob-login,.ob-product,.ob-pricing,.ob-unis,.ob-resources,.ob-try{display:none!important;}
+}
 </style>
 </head>
 <body>
@@ -2076,7 +2073,7 @@ body { overflow-x: hidden !important; max-width: 100vw !important; }
     <button class="ob-product"   onclick="document.getElementById('try-now').scrollIntoView({behavior:'smooth'})" title="Product"></button>
     <button class="ob-pricing"   onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})" title="Pricing"></button>
     <button class="ob-unis"      onclick="window.location.href='universities.html'" title="For Universities"></button>
-    <button class="ob-resources" onclick="openDesktopNav()" title="Menu" id="ob-resources-btn"></button>
+    <button class="ob-resources" onclick="toggleResourcesMenu()" title="Resources" id="ob-resources-btn"></button>
     <button class="ob-login"     onclick="openModal()" title="Log in"></button>
     <button class="ob-navstart"  onclick="doGoogleSignIn()" title="Start free"></button>
     <button class="ob-start"     onclick="doGoogleSignIn()" title="Start free"></button>

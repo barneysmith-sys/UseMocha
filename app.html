@@ -7412,7 +7412,7 @@ var appUser = null;
 var appHistory = [];
 var appPersona = null;
 var currentQ = null;
-var freeTries = 1;
+var freeTries = 999;
 var timerInt = null;
 var timeLeft = 120;
 var recognition = null;
@@ -9353,6 +9353,14 @@ function doSubmit() {
   if (isRec) stopMic();
   var answer = document.getElementById('ans-ta').value.trim();
   if (!answer || answer.length < 10) return;
+
+  // Guard: ensure question is loaded
+  if (!currentQ || !currentQ.text) {
+    if (!appPersona) appPersona = PERSONAS[0];
+    initPractice();
+    setTimeout(doSubmit, 200);
+    return;
+  }
 
   // Check daily usage limit
   var usage = _getUserUsage();

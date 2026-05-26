@@ -1258,7 +1258,13 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 .final-cta-section > .cta-overlay {
   position: absolute !important;
   inset: 0 !important;
-  background: linear-gradient(to bottom, transparent 0%, transparent 40%, rgba(242,236,227,.60) 65%, rgba(242,236,227,.94) 82%, rgba(242,236,227,.98) 100%) !important;
+  background: linear-gradient(to bottom,
+    rgba(10,24,16,.40) 0%,
+    rgba(10,24,16,.55) 35%,
+    rgba(10,24,16,.80) 65%,
+    rgba(10,24,16,.95) 85%,
+    rgba(10,24,16,.98) 100%
+  ) !important;
   z-index: 1 !important;
   pointer-events: none !important;
 }
@@ -1897,6 +1903,54 @@ body {
 /* Ensure hero-overlay itself doesn't block its own children on some browsers */
 .hero-overlay {
   pointer-events: none !important;
+}
+
+
+/* ── CTA SECTION — all text cream on dark ── */
+.final-cta-section .cta-content * {
+  color: rgba(245,237,224,.90) !important;
+}
+.final-cta-section [style*="color:rgba(15,26,20"] {
+  color: rgba(245,237,224,.65) !important;
+}
+.final-cta-section [style*="color:#0f1a14"],
+.final-cta-section [style*="color:#0a5c44"],
+.final-cta-section [style*="color:rgba(15,26,20"] {
+  color: rgba(245,237,224,.85) !important;
+}
+/* em/italic green stays mint */
+.final-cta-section em { color: #4dc994 !important; }
+/* Social link dots */
+.final-cta-section [style*="background:rgba(15,26,20,.20)"] {
+  background: rgba(245,237,224,.30) !important;
+}
+/* Button stays dark with cream text */
+.final-cta-section button[style*="background:#0f1a14"],
+.final-cta-section button[style*="background:#1a2e1e"] {
+  background: #fde8cc !important;
+  color: #1a2e1e !important;
+}
+/* Create account button on dark */
+.final-cta-section button[style*="rgba(15,26,20,.06)"] {
+  background: rgba(245,237,224,.12) !important;
+  color: rgba(245,237,224,.90) !important;
+  border-color: rgba(245,237,224,.25) !important;
+}
+/* Mobile CTA padding */
+@media(max-width:768px) {
+  .cta-content {
+    padding: 2rem 16px 2.5rem !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+  }
+  .cta-content h2 { font-size: 1.65rem !important; }
+  .cta-btn-row, .cta-content [style*="display:flex"] {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+  .final-cta-section button { width: 100% !important; }
 }
 
 </style>

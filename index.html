@@ -110,7 +110,7 @@ body{font-family:"DM Sans",system-ui,sans-serif;background:var(--cr);color:var(-
 .dw-dot{width:9px;height:9px;border-radius:50%}
 .dw-dot-r{background:#EE6B5E}.dw-dot-y{background:#F5C843}.dw-dot-g{background:#58C142}
 .dw-url{flex:1;background:rgba(15,26,20,.05);border-radius:5px;padding:4px 11px;font-size:10.5px;color:rgba(15,26,20,.30);text-align:center;font-family:monospace;max-width:260px;margin:0 auto}
-.dw-body{display:grid;grid-template-columns:160px 1fr 240px;height:420px;min-height:420px;max-height:420px;overflow:hidden}
+.dw-body{display:grid;grid-template-columns:140px 1fr 180px;height:420px;min-height:420px;max-height:420px;overflow:hidden}
 
 .dw-sidebar{border-right:1px solid rgba(15,26,20,.07);padding:15px 12px;background:#fafcfb;display:flex;flex-direction:column;gap:3px}
 
@@ -131,8 +131,8 @@ body{font-family:"DM Sans",system-ui,sans-serif;background:var(--cr);color:var(-
 .dw-q-company{display:inline-flex;align-items:center;gap:4px;background:var(--ln);border:1px solid var(--sil);padding:2px 9px;border-radius:99px;font-size:10.5px;font-weight:600;color:var(--esp)}
 .dw-q-company-dot{width:11px;height:11px;border-radius:3px;background:var(--esp);display:flex;align-items:center;justify-content:center;font-size:6.5px;color:var(--ln);font-weight:800;font-family:monospace}
 .dw-round-pill{background:rgba(15,26,20,.06);color:var(--med);padding:2px 8px;border-radius:99px;font-size:9.5px;font-weight:600}
-.dw-timer{display:flex;align-items:center;gap:4px;font-size:15px;font-weight:700;font-family:"DM Serif Display",serif;color:var(--esp);letter-spacing:-.04em}
-.dw-timer-live{width:6px;height:6px;border-radius:50%;background:#34C759;animation:livepulse 2.5s ease-in-out infinite}
+.dw-timer{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;font-family:"DM Sans",sans-serif;color:rgba(15,26,20,.40);letter-spacing:0;background:rgba(15,26,20,.05);border-radius:99px;padding:3px 9px}
+.dw-timer-live{width:5px;height:5px;border-radius:50%;background:#34C759;flex-shrink:0}
 .dw-chat-panel{flex:1;display:flex;flex-direction:column;background:#fff;overflow:hidden}
 .dw-messages{flex:1;overflow-y:auto;padding:13px 15px 8px;display:flex;flex-direction:column;gap:9px;scroll-behavior:smooth;scrollbar-width:none}
 .dw-messages::-webkit-scrollbar{display:none}
@@ -155,34 +155,30 @@ body{font-family:"DM Sans",system-ui,sans-serif;background:var(--cr);color:var(-
 .dw-input-send{width:26px;height:26px;border-radius:50%;background:var(--esp);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 @keyframes dwSendFlash{0%{transform:scale(1)}50%{transform:scale(1.3);background:var(--med)}100%{transform:scale(1)}}
 .dw-input-send.flash{animation:dwSendFlash .36s cubic-bezier(.34,1.56,.64,1)}
-.dw-feedback{border-left:1px solid rgba(245,237,224,.12);background:#0a1810;padding:15px 13px;overflow-y:auto;opacity:0;transform:translateX(10px);transition:opacity .46s ease .15s,transform .46s cubic-bezier(.16,1,.3,1) .15s}
+.dw-feedback{border-left:1px solid rgba(245,237,224,.12);background:#0a1810;padding:11px 11px;overflow-y:auto;opacity:0;transform:translateX(10px);transition:opacity .46s ease .15s,transform .46s cubic-bezier(.16,1,.3,1) .15s}
 .dw-feedback.revealed{opacity:1!important;transform:none!important}
 
-.dw-fb-header{display:flex;align-items:center;gap:7px;margin-bottom:13px}
-.dw-fb-avatar{width:27px;height:27px;border-radius:7px;background:rgba(245,237,224,.12);display:flex;align-items:center;justify-content:center;font-family:"DM Serif Display",serif;font-size:13px;color:#f5ede0;font-style:italic}
-.dw-fb-title{font-size:11.5px;font-weight:700;color:var(--ln)}
-.dw-fb-sub{font-size:9.5px;color:rgba(245,237,224,.42);margin-top:1px}
-.dw-score-ring-wrap{display:flex;justify-content:center;margin-bottom:13px}
-.dw-score-ring{position:relative;width:66px;height:66px}
-.dw-score-ring svg{width:66px;height:66px;transform:rotate(-90deg)}
-.dw-ring-track{fill:none;stroke:rgba(245,237,224,.15);stroke-width:5}
-.dw-ring-fill{fill:none;stroke:#0a5c44;stroke-width:5;stroke-dasharray:195;stroke-dashoffset:195;transition:stroke-dashoffset 1.4s cubic-bezier(.16,1,.3,1) .5s;stroke-linecap:round}
-.dw-score-ring.anim .dw-ring-fill{stroke-dashoffset:30}
-.dw-score-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.dw-score-num{font-family:"DM Serif Display",serif;font-size:16px;color:#b8ddd4;letter-spacing:-.04em;line-height:1}
-.dw-score-unit{font-size:7.5px;font-weight:700;color:var(--oat);letter-spacing:.05em;text-transform:uppercase}
-.dw-fb-section{margin-bottom:8px}
-.dw-fb-section-title{font-size:8px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:rgba(10,92,68,.50);margin-bottom:6px}
-.dw-tag{display:inline-flex;font-size:9.5px;font-weight:500;padding:2px 8px;border-radius:99px;margin:1px}
+.dw-fb-header{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.dw-fb-avatar{width:22px;height:22px;border-radius:5px;background:rgba(245,237,224,.12);display:flex;align-items:center;justify-content:center;font-family:"DM Serif Display",serif;font-size:11px;color:#f5ede0;font-style:italic}
+.dw-fb-title{font-size:10px;font-weight:700;color:var(--ln)}
+.dw-fb-sub{font-size:8px;color:rgba(245,237,224,.42);margin-top:0}
+.dw-score-ring-wrap{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid rgba(245,237,224,.07)}
+.dw-score-big{display:flex;align-items:baseline;gap:1px}
+.dw-score-num{font-family:"DM Serif Display",serif;font-size:22px;color:#f5ede0;letter-spacing:-.04em;line-height:1}
+.dw-score-unit{font-size:11px;font-weight:500;color:rgba(245,237,224,.30);letter-spacing:0}
+.dw-score-verdict{font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#4dc994;background:rgba(77,201,148,.10);padding:3px 7px;border-radius:99px}
+.dw-fb-section{margin-bottom:5px}
+.dw-fb-section-title{font-size:7px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(245,237,224,.35);margin-bottom:3px}
+.dw-tag{display:inline-flex;font-size:8.5px;font-weight:500;padding:1px 6px;border-radius:99px;margin:1px}
 .dw-tag-good{background:rgba(52,199,89,.13);color:#34C759;font-weight:600}
 .dw-tag-imp{background:rgba(10,92,68,.10);color:#0a5c44;font-weight:600}
-.dw-fb-tip{font-size:10.5px;line-height:1.6;color:rgba(224,235,230,.70);background:rgba(10,92,68,.08);border-radius:7px;padding:7px 9px;margin:8px 0 9px;border:1px solid rgba(10,92,68,.12)}
+.dw-fb-tip{font-size:9.5px;line-height:1.5;color:rgba(224,235,230,.70);background:rgba(10,92,68,.08);border-radius:6px;padding:5px 8px;margin:5px 0 7px;border:1px solid rgba(10,92,68,.12)}
 /* Bean in feedback panel */
-.dw-bean-row{display:flex;align-items:center;gap:7px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(245,237,224,.08)}
-.dw-bean-img{width:28px;height:28px;object-fit:contain;flex-shrink:0}
+.dw-bean-row{display:flex;align-items:center;gap:6px;margin-bottom:7px;padding-bottom:7px;border-bottom:1px solid rgba(245,237,224,.08)}
+.dw-bean-img{width:22px;height:22px;object-fit:contain;flex-shrink:0}
 .dw-bean-label{font-size:9px;color:rgba(245,237,224,.40);font-family:"DM Sans",sans-serif;line-height:1.4}
 .dw-bean-name{font-size:10.5px;font-weight:700;color:rgba(245,237,224,.75);font-family:"DM Serif Display",serif}
-.dw-next-btn{display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;color:#1c1410;background:#b8ddd4;border:none;border-radius:99px;padding:7px 12px;cursor:pointer;font-family:"DM Sans",sans-serif;width:100%;justify-content:center;transition:opacity .12s}
+.dw-next-btn{display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;color:#0f1a14;background:#fde8cc;border:none;border-radius:99px;padding:7px 12px;cursor:pointer;font-family:"DM Sans",sans-serif;width:100%;justify-content:center;transition:opacity .12s;margin-top:10px}
 .dw-next-btn:hover{opacity:.85}
 
 /* ══ UNIVERSITIES ══ */
@@ -538,9 +534,9 @@ footer{background:var(--esp);border-top:1px solid rgba(255,255,255,.07);padding:
 .score-inner{max-width:980px;margin:0 auto}
 
 /* ══ SCORE BARS (feedback panel) ══ */
-.dw-score-bars{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
-.dw-score-bar-row{display:flex;align-items:center;gap:6px}
-.dw-score-bar-lbl{font-size:7.5px;font-weight:600;color:rgba(245,237,224,.26);width:52px;flex-shrink:0;font-family:"DM Sans",sans-serif;text-transform:uppercase;letter-spacing:.06em}
+.dw-score-bars{display:flex;flex-direction:column;gap:5px;margin-bottom:8px}
+.dw-score-bar-row{display:flex;align-items:center;gap:5px}
+.dw-score-bar-lbl{font-size:7px;font-weight:600;color:rgba(245,237,224,.26);width:46px;flex-shrink:0;font-family:"DM Sans",sans-serif;text-transform:uppercase;letter-spacing:.05em}
 .dw-score-bar-track{flex:1;height:2px;background:rgba(77,201,148,.08);border-radius:2px;overflow:hidden}
 .dw-score-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,rgba(10,92,68,.80),#4dc994);width:0;transition:width 1.1s cubic-bezier(.16,1,.3,1) .9s}
 .dw-feedback.revealed .dw-score-bar-fill{width:var(--bw,80%)}
@@ -2334,6 +2330,58 @@ body { overflow-y: auto !important; height: auto !important; }
     -webkit-overflow-scrolling: touch !important;
   }
 }
+
+/* ═══ DEMO WINDOW: Force 3-column grid at desktop/tablet ═══ */
+@media (min-width: 700px) {
+  .dw-body {
+    display: grid !important;
+    grid-template-columns: 140px 1fr 180px !important;
+    height: 440px !important;
+    min-height: 440px !important;
+    max-height: 440px !important;
+    overflow: hidden !important;
+  }
+  .dw-sidebar {
+    display: flex !important;
+  }
+  .dw-main {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 440px !important;
+    min-height: 440px !important;
+    max-height: 440px !important;
+    width: auto !important;
+    border-right: none !important;
+    border-bottom: none !important;
+  }
+  .dw-feedback {
+    display: block !important;
+    height: 440px !important;
+    min-height: 440px !important;
+    max-height: 440px !important;
+    width: 180px !important;
+    min-width: 180px !important;
+    overflow-y: auto !important;
+  }
+}
+
+/* Compact feedback panel - hide non-essential elements */
+.dw-bean-bottom { display: none !important; }
+.dw-next-btn { display: none !important; }
+.dw-fb-tip { 
+  font-size: 8.5px !important; 
+  line-height: 1.4 !important;
+  padding: 4px 7px !important;
+  margin: 4px 0 5px !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+.dw-score-bars { gap: 4px !important; margin-bottom: 6px !important; }
+.dw-fb-section { margin-bottom: 4px !important; }
+.dw-fb-header { margin-bottom: 6px !important; }
+.dw-score-ring-wrap { margin-bottom: 6px !important; padding-bottom: 6px !important; }
 </style>
 </head>
 <body>
@@ -2482,65 +2530,61 @@ body { overflow-y: auto !important; height: auto !important; }
     <p style="text-align:center;font-size:11.5px;color:rgba(15,26,20,.32);margin-top:8px;font-family:'DM Sans',sans-serif;">Free · No account needed · Scored in ~15 seconds</p>
 
     <!-- Result (hidden until scored) -->
-    <div id="demo-free-result" style="display:none;margin-top:1.5rem;">
-      
-      <!-- Score hero -->
-      <div style="background:linear-gradient(145deg,#0e1c11 0%,#1a2e1e 100%);border-radius:16px;padding:2rem 1.75rem;margin-bottom:12px;text-align:center;position:relative;overflow:hidden;">
-        <div style="position:absolute;left:50%;top:-60px;transform:translateX(-50%);width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(77,201,148,.12) 0%,transparent 70%);pointer-events:none;"></div>
-        <div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(253,232,204,.38);margin-bottom:8px;font-family:'DM Sans',sans-serif;">Your score</div>
-        <div style="display:flex;align-items:baseline;justify-content:center;gap:4px;margin-bottom:6px;">
-          <span id="dfr-score" style="font-family:'DM Serif Display',serif;font-size:5.5rem;font-weight:400;color:#fde8cc;letter-spacing:-.05em;line-height:1;">—</span>
-          <span style="font-size:1.5rem;color:rgba(253,232,204,.30);">/10</span>
+    <div id="demo-free-result" style="display:none;margin-top:2rem;">
+  <div style="background:#0d1f12;border-radius:20px;overflow:hidden;border:1px solid rgba(77,201,148,.12);box-shadow:0 24px 64px rgba(0,0,0,.18);">
+    
+    <!-- Score header -->
+    <div style="padding:1.75rem 2rem 1.5rem;border-bottom:1px solid rgba(77,201,148,.08);">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,237,224,.30);margin-bottom:4px;font-family:'DM Sans',sans-serif;">Your score</div>
+          <div style="display:flex;align-items:baseline;gap:4px;">
+            <span id="dfr-score" style="font-family:'DM Serif Display',serif;font-size:3.2rem;color:#fde8cc;letter-spacing:-.05em;line-height:1;">0.0</span>
+            <span style="font-family:'DM Serif Display',serif;font-size:1.4rem;color:rgba(253,232,204,.35);line-height:1;">/10</span>
+          </div>
+          <div id="dfr-verdict" style="font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-top:4px;color:#4dc994;font-family:'DM Sans',sans-serif;">—</div>
         </div>
-        <div id="dfr-verdict" style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#4dc994;"></div>
-        <div id="dfr-iv-badge" style="display:none;margin-top:8px;padding:6px 14px;border-radius:99px;font-size:12px;font-weight:700;letter-spacing:.01em;border:1px solid transparent;font-family:'DM Sans',sans-serif;"></div>
-      </div>
-
-      <!-- 4 dimension tiles -->
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;" id="dfr-metrics">
-        <div style="background:#fff;border:1px solid rgba(15,26,20,.07);border-radius:12px;padding:12px 8px;text-align:center;box-shadow:0 1px 4px rgba(15,26,20,.05);">
-          <div style="font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(15,26,20,.35);margin-bottom:5px;font-family:'DM Sans',sans-serif;">Structure</div>
-          <div id="dfr-structure" style="font-family:'DM Serif Display',serif;font-size:1.6rem;font-weight:400;color:#0f1a14;letter-spacing:-.03em;">—</div>
-        </div>
-        <div style="background:#fff;border:1px solid rgba(15,26,20,.07);border-radius:12px;padding:12px 8px;text-align:center;box-shadow:0 1px 4px rgba(15,26,20,.05);">
-          <div style="font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(15,26,20,.35);margin-bottom:5px;font-family:'DM Sans',sans-serif;">Clarity</div>
-          <div id="dfr-clarity" style="font-family:'DM Serif Display',serif;font-size:1.6rem;font-weight:400;color:#0f1a14;letter-spacing:-.03em;">—</div>
-        </div>
-        <div style="background:#fff;border:1px solid rgba(15,26,20,.07);border-radius:12px;padding:12px 8px;text-align:center;box-shadow:0 1px 4px rgba(15,26,20,.05);">
-          <div style="font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(15,26,20,.35);margin-bottom:5px;font-family:'DM Sans',sans-serif;">Ownership</div>
-          <div id="dfr-ownership" style="font-family:'DM Serif Display',serif;font-size:1.6rem;font-weight:400;color:#0f1a14;letter-spacing:-.03em;">—</div>
-        </div>
-        <div style="background:#fff;border:1px solid rgba(15,26,20,.07);border-radius:12px;padding:12px 8px;text-align:center;box-shadow:0 1px 4px rgba(15,26,20,.05);">
-          <div style="font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(15,26,20,.35);margin-bottom:5px;font-family:'DM Sans',sans-serif;">Impact</div>
-          <div id="dfr-impact" style="font-family:'DM Serif Display',serif;font-size:1.6rem;font-weight:400;color:#0f1a14;letter-spacing:-.03em;">—</div>
-        </div>
-      </div>
-
-      <!-- Key feedback -->
-      <div style="background:#fafaf8;border:1px solid rgba(15,26,20,.07);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1rem;">
-        <div style="font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(15,26,20,.35);margin-bottom:8px;font-family:'DM Sans',sans-serif;">What to improve</div>
-        <p id="dfr-feedback" style="font-size:14px;color:rgba(15,26,20,.75);line-height:1.7;font-family:'DM Sans',sans-serif;margin:0;"></p>
-      </div>
-      <!-- Next interviewer question -->
-      <div id="dfr-next-q" style="display:none;margin-top:10px;padding:12px 16px;background:#f5f3ef;border-radius:12px;font-size:13px;color:rgba(15,26,20,.65);line-height:1.5;font-family:'DM Sans',sans-serif;font-style:italic;border:1px solid rgba(15,26,20,.07);"></div>
-
-      <!-- Rewritten answer -->
-      <div style="background:linear-gradient(145deg,#0e1c11,#1a2e1e);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;">
-        <div style="font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:#4dc994;margin-bottom:8px;font-family:'DM Sans',sans-serif;">Rewritten at offer standard</div>
-        <p id="dfr-rewrite" style="font-size:14px;color:rgba(253,232,204,.82);line-height:1.75;font-family:'DM Sans',sans-serif;margin:0;"></p>
-      </div>
-
-      <!-- CTA to sign up -->
-      <div style="text-align:center;background:#f5f3ef;border-radius:14px;padding:1.75rem;border:1px solid rgba(15,26,20,.07);">
-        <p style="font-family:'DM Serif Display',serif;font-size:1.25rem;color:#0f1a14;letter-spacing:-.02em;margin-bottom:.5rem;">Want daily practice at this standard?</p>
-        <p style="font-size:13px;color:rgba(15,26,20,.52);margin-bottom:1.25rem;font-family:'DM Sans',sans-serif;">Track your progress. Build a streak. Get the offer.</p>
-        <button onclick="doGoogleSignIn()" style="padding:13px 32px;background:#1a2e1e;color:#fde8cc;border:none;border-radius:99px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:-.01em;transition:background .15s;display:inline-flex;align-items:center;gap:8px;" onmouseover="this.style.background='#0a5c44'" onmouseout="this.style.background='#1a2e1e'">
-          Start free — it's $0
-          <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3L12 7L8 11" stroke="#fde8cc" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <p style="font-size:11px;color:rgba(15,26,20,.30);margin-top:8px;font-family:'DM Sans',sans-serif;">No credit card · Free forever · 1,600+ students</p>
+        <div id="dfr-iv-badge" style="display:none;font-size:11px;font-weight:700;padding:6px 14px;border-radius:99px;border:1px solid;font-family:'DM Sans',sans-serif;white-space:nowrap;"></div>
       </div>
     </div>
+
+    <!-- 4 score bars -->
+    <div style="padding:1.25rem 2rem;border-bottom:1px solid rgba(77,201,148,.08);">
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(245,237,224,.28);width:60px;font-family:'DM Sans',sans-serif;">Structure</span><div style="flex:1;height:4px;background:rgba(77,201,148,.08);border-radius:2px;overflow:hidden;"><div id="dfr-bar-s" style="height:100%;width:0%;background:linear-gradient(90deg,#0a5c44,#4dc994);border-radius:2px;transition:width 0.8s cubic-bezier(0.34,1.26,0.64,1) .3s;"></div></div><span id="dfr-structure" style="font-size:11px;font-weight:700;color:#4dc994;font-family:'DM Sans',sans-serif;width:28px;text-align:right;">—</span></div>
+        <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(245,237,224,.28);width:60px;font-family:'DM Sans',sans-serif;">Clarity</span><div style="flex:1;height:4px;background:rgba(77,201,148,.08);border-radius:2px;overflow:hidden;"><div id="dfr-bar-c" style="height:100%;width:0%;background:linear-gradient(90deg,#0a5c44,#4dc994);border-radius:2px;transition:width 0.8s cubic-bezier(0.34,1.26,0.64,1) .45s;"></div></div><span id="dfr-clarity" style="font-size:11px;font-weight:700;color:#4dc994;font-family:'DM Sans',sans-serif;width:28px;text-align:right;">—</span></div>
+        <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(245,237,224,.28);width:60px;font-family:'DM Sans',sans-serif;">Ownership</span><div style="flex:1;height:4px;background:rgba(77,201,148,.08);border-radius:2px;overflow:hidden;"><div id="dfr-bar-o" style="height:100%;width:0%;background:linear-gradient(90deg,rgba(220,38,38,.6),rgba(245,158,11,.8));border-radius:2px;transition:width 0.8s cubic-bezier(0.34,1.26,0.64,1) .6s;"></div></div><span id="dfr-ownership" style="font-size:11px;font-weight:700;color:rgba(245,158,11,.80);font-family:'DM Sans',sans-serif;width:28px;text-align:right;">—</span></div>
+        <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(245,237,224,.28);width:60px;font-family:'DM Sans',sans-serif;">Impact</span><div style="flex:1;height:4px;background:rgba(77,201,148,.08);border-radius:2px;overflow:hidden;"><div id="dfr-bar-i" style="height:100%;width:0%;background:linear-gradient(90deg,#0a5c44,#4dc994);border-radius:2px;transition:width 0.8s cubic-bezier(0.34,1.26,0.64,1) .75s;"></div></div><span id="dfr-impact" style="font-size:11px;font-weight:700;color:#4dc994;font-family:'DM Sans',sans-serif;width:28px;text-align:right;">—</span></div>
+      </div>
+    </div>
+
+    <!-- Industry critique -->
+    <div id="dfr-critique-wrap" style="display:none;padding:1.25rem 2rem;border-bottom:1px solid rgba(77,201,148,.08);">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(245,237,224,.28);margin-bottom:6px;font-family:'DM Sans',sans-serif;">Industry critique</div>
+      <p id="dfr-critique" style="font-size:13px;color:rgba(245,237,224,.65);line-height:1.7;font-family:'DM Sans',sans-serif;margin:0;"></p>
+    </div>
+
+    <!-- STAR breakdown -->
+    <div id="dfr-star-breakdown" style="display:none;padding:1rem 2rem;border-bottom:1px solid rgba(77,201,148,.08);"></div>
+
+    <!-- Coaching verdict -->
+    <div style="padding:1.25rem 2rem;border-bottom:1px solid rgba(77,201,148,.08);">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(245,237,224,.28);margin-bottom:6px;font-family:'DM Sans',sans-serif;">Key improvement</div>
+      <p id="dfr-feedback" style="font-size:13px;color:rgba(245,237,224,.70);line-height:1.7;font-family:'DM Sans',sans-serif;margin:0;"></p>
+      <div id="dfr-next-q" style="display:none;margin-top:10px;font-size:12px;color:rgba(77,201,148,.55);font-style:italic;font-family:'DM Sans',sans-serif;"></div>
+    </div>
+
+    <!-- Rewrite teaser -->
+    <div id="dfr-rewrite" style="padding:1.25rem 2rem;border-bottom:1px solid rgba(77,201,148,.08);"></div>
+
+    <!-- CTA -->
+    <div style="padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div style="font-size:12px;color:rgba(245,237,224,.35);font-family:'DM Sans',sans-serif;">Sign in to track progress &middot; unlock all 8 tracks</div>
+      <button onclick="doGoogleSignIn()" style="background:#fde8cc;color:#1a2e1e;border:none;border-radius:99px;padding:10px 22px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;">Start for free &rarr;</button>
+    </div>
+
+  </div>
+</div>
 
   </div>
 </section>
@@ -2625,109 +2669,140 @@ function submitDemoFree() {
 }
 
 function showDemoFreeResult(data) {
-  // Map API fields correctly (same format as app.html renderFeedback)
   var sc = data.scores || {};
-  var score = parseFloat(data.overall || data.score || data.total_score || 0);
-  var structure = parseFloat(sc.structure || data.structure || 0).toFixed(1);
-  var clarity   = parseFloat(sc.clarity   || data.clarity   || 0).toFixed(1);
-  var ownership = parseFloat(sc.ownership || data.ownership || 0).toFixed(1);
-  var impact    = parseFloat(sc.impact    || data.impact    || 0).toFixed(1);
+  var score = parseFloat(data.overall || data.score || 0);
+  var scoreNum = isNaN(score) ? 0 : score;
+  var structure = parseFloat(sc.structure || 0).toFixed(1);
+  var clarity   = parseFloat(sc.clarity   || 0).toFixed(1);
+  var ownership = parseFloat(sc.ownership || 0).toFixed(1);
+  var impact    = parseFloat(sc.impact    || 0).toFixed(1);
 
-  // Improvement text - try multiple field names
-  var feedback = data.improvement || data.key_improvement || data.coaching_tip || data.feedback || '';
-  if (!feedback && data.star_breakdown) {
-    // Build from star breakdown weaknesses
-    var sb = data.star_breakdown || {};
-    var parts = [];
-    if (sb.result && sb.result.length > 20) parts.push(sb.result);
-    else if (sb.action && sb.action.length > 20) parts.push(sb.action);
-    feedback = parts[0] || '';
-  }
-  if (!feedback) feedback = 'Focus on quantifying your impact with specific numbers. Lead with the outcome, then explain how you drove it.';
-
-  // Rewritten answer - show first 2 sentences then gate
-  var fullRewrite = data.rewritten_answer || data.model_answer || data.star_rewrite || '';
-  var teaserRewrite = '';
-  if (fullRewrite && fullRewrite.length > 40) {
-    // Get first ~180 chars ending at a sentence boundary
-    var cutoff = Math.min(fullRewrite.length, 200);
-    var dotPos = fullRewrite.indexOf('. ', 80);
-    if (dotPos > 0 && dotPos < 250) cutoff = dotPos + 1;
-    teaserRewrite = fullRewrite.slice(0, cutoff).trim();
-  }
-
-  // Animate score number
+  // Animate score
   var scoreEl = document.getElementById('dfr-score');
   if (scoreEl) {
-    var start = 0, dur = 900, startT = null;
+    var start = 0, dur = 1100, startT = null;
     function stepScore(ts) {
       if (!startT) startT = ts;
       var p = Math.min((ts - startT) / dur, 1);
       var ease = 1 - Math.pow(1 - p, 3);
-      var val = (start + (score - start) * ease);
-      scoreEl.textContent = val.toFixed(1);
+      scoreEl.textContent = (start + (scoreNum - start) * ease).toFixed(1);
       if (p < 1) requestAnimationFrame(stepScore);
-      else scoreEl.textContent = score.toFixed(1);
+      else scoreEl.textContent = scoreNum.toFixed(1);
     }
     requestAnimationFrame(stepScore);
   }
 
-  var scoreNum = parseFloat(score);
+  // Verdict
   var verdict = scoreNum >= 9 ? 'OFFER STANDARD' : scoreNum >= 7.5 ? 'STRONG ANSWER' : scoreNum >= 6 ? 'NEEDS SHARPENING' : 'WORK TO DO';
-  document.getElementById('dfr-verdict').textContent = verdict;
-  // Show interviewer verdict badge
-  var ivBadge = document.getElementById('dfr-iv-badge');
-  if (ivBadge) {
-    var iv = data.interviewer_verdict || (scoreNum >= 7.5 ? 'Would advance to next round' : scoreNum >= 5.5 ? 'On the fence' : 'Would not advance');
-    ivBadge.textContent = '✓ ' + iv;
-    ivBadge.style.display = 'block';
-    if (iv === 'Would advance to next round') {
-      ivBadge.style.background = 'rgba(77,201,148,.12)';
-      ivBadge.style.color = '#0a5c44';
-      ivBadge.style.borderColor = 'rgba(77,201,148,.25)';
-    } else if (iv === 'On the fence') {
-      ivBadge.style.background = 'rgba(245,158,11,.10)';
-      ivBadge.style.color = '#92400e';
-      ivBadge.style.borderColor = 'rgba(245,158,11,.20)';
-    } else {
-      ivBadge.style.background = 'rgba(239,68,68,.10)';
-      ivBadge.style.color = '#991b1b';
-      ivBadge.style.borderColor = 'rgba(239,68,68,.20)';
-    }
-  }
-  // Show next question prompt
-  var nqEl = document.getElementById('dfr-next-q');
-  if (nqEl && data.next_question) {
-    nqEl.textContent = '↳ Interviewer follow-up: "' + data.next_question + '"';
-    nqEl.style.display = 'block';
-  }
+  var vEl = document.getElementById('dfr-verdict');
+  if (vEl) { vEl.textContent = verdict; vEl.style.color = scoreNum >= 7.5 ? '#4dc994' : scoreNum >= 6 ? '#f59e0b' : '#ef4444'; }
+
+  // Scores
   document.getElementById('dfr-structure').textContent = structure;
   document.getElementById('dfr-clarity').textContent = clarity;
   document.getElementById('dfr-ownership').textContent = ownership;
   document.getElementById('dfr-impact').textContent = impact;
-  document.getElementById('dfr-feedback').textContent = feedback;
 
-  // Rewrite: show teaser + gate
-  var rewriteEl = document.getElementById('dfr-rewrite');
-  var rewriteContainer = rewriteEl ? rewriteEl.closest('div') : null;
-  if (rewriteEl) {
-    if (teaserRewrite) {
-      rewriteEl.innerHTML = escHtmlDemo(teaserRewrite) +
-        '<span style="opacity:.5">...</span>' +
-        '<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(245,237,224,.15);">' +
-        '<span style="font-size:11.5px;color:rgba(245,237,224,.55);font-style:italic;">Sign in to see the full rewrite at offer standard</span>' +
-        '</div>';
+  // Animate bars
+  setTimeout(function() {
+    ['dfr-bar-s','dfr-bar-c','dfr-bar-o','dfr-bar-i'].forEach(function(id, idx) {
+      var vals = [parseFloat(structure), parseFloat(clarity), parseFloat(ownership), parseFloat(impact)];
+      var el = document.getElementById(id);
+      if (el) el.style.width = (vals[idx] * 10) + '%';
+    });
+  }, 200);
+
+  // Interviewer verdict badge
+  var ivBadge = document.getElementById('dfr-iv-badge');
+  if (ivBadge) {
+    var iv = data.interviewer_verdict || (scoreNum >= 7.5 ? 'Would advance to next round' : scoreNum >= 5.5 ? 'On the fence' : 'Would not advance');
+    ivBadge.textContent = '\u2713 ' + iv;
+    ivBadge.style.display = 'inline-block';
+    if (iv.indexOf('advance') > -1 && iv.indexOf('not') === -1) {
+      ivBadge.style.background = 'rgba(77,201,148,.12)'; ivBadge.style.color = '#0a5c44'; ivBadge.style.borderColor = 'rgba(77,201,148,.25)';
+    } else if (iv.indexOf('fence') > -1) {
+      ivBadge.style.background = 'rgba(245,158,11,.10)'; ivBadge.style.color = '#92400e'; ivBadge.style.borderColor = 'rgba(245,158,11,.20)';
     } else {
-      rewriteEl.textContent = 'Sign in to see the full rewrite at offer standard.';
+      ivBadge.style.background = 'rgba(239,68,68,.10)'; ivBadge.style.color = '#991b1b'; ivBadge.style.borderColor = 'rgba(239,68,68,.20)';
+    }
+  }
+
+  // Industry critique
+  var critiqueEl = document.getElementById('dfr-critique');
+  if (critiqueEl && data.industry_critique) {
+    critiqueEl.textContent = data.industry_critique;
+    var critiqueWrap = document.getElementById('dfr-critique-wrap');
+    if (critiqueWrap) critiqueWrap.style.display = 'block';
+  }
+
+  // STAR weaknesses
+  var sb = data.star_breakdown || {};
+  var starEl = document.getElementById('dfr-star-breakdown');
+  if (starEl && sb.weak_components) {
+    var weakLabel = document.createElement('span');
+    weakLabel.style.cssText = 'font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(245,237,224,.35);display:block;margin-bottom:6px;';
+    weakLabel.textContent = 'Weakest components';
+    var weakVal = document.createElement('span');
+    weakVal.style.cssText = 'font-size:12.5px;color:rgba(245,237,224,.65);';
+    weakVal.textContent = sb.weak_components;
+    starEl.innerHTML = '';
+    starEl.appendChild(weakLabel);
+    starEl.appendChild(weakVal);
+    starEl.style.display = 'block';
+  }
+
+  // Coaching tip
+  var feedbackEl = document.getElementById('dfr-feedback');
+  if (feedbackEl) {
+    var tip = data.verdict || data.improvement || data.feedback || '';
+    if (!tip && sb.result) tip = sb.result;
+    if (!tip) tip = 'Quantify your impact with a specific number. Every top-quartile answer at this standard closes with a hard metric.';
+    feedbackEl.textContent = tip;
+  }
+
+  // Next question
+  var nqEl = document.getElementById('dfr-next-q');
+  if (nqEl && data.next_question) {
+    nqEl.textContent = '\u21b3 Likely follow-up: "' + data.next_question + '"';
+    nqEl.style.display = 'block';
+  }
+
+  // Rewrite teaser
+  var fullRewrite = data.improved_answer || data.rewritten_answer || '';
+  var rewriteEl = document.getElementById('dfr-rewrite');
+  if (rewriteEl) {
+    rewriteEl.innerHTML = '';
+    if (fullRewrite && fullRewrite.length > 40) {
+      var cutoff = Math.min(fullRewrite.length, 220);
+      var dotPos = fullRewrite.indexOf('. ', 90);
+      if (dotPos > 0 && dotPos < 280) cutoff = dotPos + 1;
+      var teaser = fullRewrite.slice(0, cutoff).trim();
+      var rwLabel = document.createElement('div');
+      rwLabel.style.cssText = 'font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(77,201,148,.45);margin-bottom:8px;';
+      rwLabel.textContent = 'Rewritten at offer standard';
+      var rwText = document.createElement('p');
+      rwText.style.cssText = 'font-size:13px;color:rgba(245,237,224,.70);line-height:1.7;margin-bottom:10px;';
+      rwText.textContent = teaser + '\u2026';
+      var rwGate = document.createElement('div');
+      rwGate.style.cssText = 'padding-top:10px;border-top:1px solid rgba(77,201,148,.10);font-size:11.5px;color:rgba(77,201,148,.50);font-style:italic;';
+      rwGate.textContent = 'Sign in to read the full rewrite \u2192';
+      rewriteEl.appendChild(rwLabel);
+      rewriteEl.appendChild(rwText);
+      rewriteEl.appendChild(rwGate);
+    } else {
+      var rwFallback = document.createElement('p');
+      rwFallback.style.cssText = 'font-size:13px;color:rgba(245,237,224,.45);font-style:italic;';
+      rwFallback.textContent = 'Sign in to see your answer rewritten at offer standard.';
+      rewriteEl.appendChild(rwFallback);
     }
   }
 
   var result = document.getElementById('demo-free-result');
-  result.style.display = 'block';
-  result.style.animation = 'fadeIn .4s ease both';
-  setTimeout(function() {
-    result.scrollIntoView({behavior:'smooth', block:'start'});
-  }, 100);
+  if (result) {
+    result.style.display = 'block';
+    result.style.animation = 'fadeIn .4s ease both';
+    setTimeout(function() { result.scrollIntoView({behavior:'smooth', block:'start'}); }, 150);
+  }
 }
 
 function escHtmlDemo(s) {
@@ -2760,8 +2835,8 @@ function escHtmlDemo(s) {
         </div>
         <div style="font-size:9px;font-weight:600;color:rgba(15,26,20,.28);font-family:'DM Sans',sans-serif;margin-left:auto;padding-right:4px;">McKinsey &middot; Behavioral</div>
       </div>
-      <div class="dw-body">
-        <div class="dw-sidebar">
+      <div class="dw-body" style="display:grid!important;grid-template-columns:140px 1fr 180px!important;height:440px!important;min-height:440px!important;max-height:440px!important;overflow:hidden!important;">
+        <div class="dw-sidebar" style="display:flex!important;flex-direction:column!important;flex-shrink:0!important;">
           <div class="dw-sb-label">Tracks</div>
           <div class="dw-sb-item dw-active"><div class="dw-sb-icon" style="font-size:8px;font-weight:800;font-family:'DM Sans',sans-serif;color:var(--ln);">MC</div>Consulting</div>
           <div class="dw-sb-item"><div class="dw-sb-icon" style="font-size:8px;font-weight:800;font-family:'DM Sans',sans-serif;">IB</div>Banking</div>
@@ -2776,7 +2851,7 @@ function escHtmlDemo(s) {
             <div class="dw-prog-track"><div class="dw-prog-fill" style="--tw:42%;"></div></div>
           </div>
         </div>
-        <div class="dw-main" id="dw-main-panel" style="position:relative;">
+        <div class="dw-main" id="dw-main-panel" style="position:relative;display:flex!important;flex-direction:column!important;overflow:hidden!important;height:440px!important;min-height:440px!important;max-height:440px!important;width:auto!important;border-right:none!important;border-bottom:none!important;">
           
           <div class="dw-question-header">
             <div style="display:flex;align-items:center;justify-content:space-between;">
@@ -2795,13 +2870,14 @@ function escHtmlDemo(s) {
             </div>
           </div>
         </div>
-        <div class="dw-feedback" id="dw-feedback-panel">
+        <div class="dw-feedback" id="dw-feedback-panel" style="display:block!important;width:180px!important;min-width:180px!important;max-width:180px!important;height:440px!important;min-height:440px!important;max-height:440px!important;overflow-y:auto!important;flex-direction:unset!important;align-items:unset!important;flex-wrap:unset!important;">
           <div class="dw-fb-header"><div class="dw-fb-avatar">m</div><div><div class="dw-fb-title">Mocha Coach</div><div class="dw-fb-sub">Live feedback</div></div></div>
           <div class="dw-score-ring-wrap">
-            <div class="dw-score-ring" id="demo-score-ring">
-              <svg viewBox="0 0 72 72"><circle class="dw-ring-track" cx="36" cy="36" r="31"/><circle class="dw-ring-fill" cx="36" cy="36" r="31"/></svg>
-              <div class="dw-score-label"><div class="dw-score-num">8.5</div><div class="dw-score-unit">Score</div></div>
+            <div>
+              <div style="font-size:8px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(245,237,224,.30);margin-bottom:2px;">Score</div>
+              <div class="dw-score-big"><span class="dw-score-num" id="demo-score-ring">8.5</span><span class="dw-score-unit">/10</span></div>
             </div>
+            <div class="dw-score-verdict">Strong Answer</div>
           </div>
           <div class="dw-score-bars">
             <div class="dw-score-bar-row"><div class="dw-score-bar-lbl">Structure</div><div class="dw-score-bar-track"><div class="dw-score-bar-fill" style="--bw:91%"></div></div><div class="dw-score-bar-val">9.1</div></div>

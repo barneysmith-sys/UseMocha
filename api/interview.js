@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════
-// Mocha — /api/interview  v5
+// Mocha — /api/interview  v6
 // Vercel Pro: 60s max. We target 55s with one retry on timeout.
 // Root fix v4→v5: timeout raised 25s→50s (was killing Gemini 2.5 Flash
 // which routinely takes 20-40s for full grading responses).
@@ -8,7 +8,7 @@
 import { createHash } from 'crypto';
 
 const GEMINI_ENDPOINT =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent';
 
 // ── Vercel KV (optional) ─────────────────────────────────────────
 const KV_URL   = process.env.KV_REST_API_URL;
@@ -343,7 +343,7 @@ function buildFallback(question, answer, industry, rid) {
     _fallback     : true,
     _rid          : rid,
     overall,
-    verdict       : `Structural analysis only. ${overall}/10 against ${rubric.shortName}. ${hasNumbers ? 'Numbers present — good foundation.' : 'Add one hard number to significantly lift this score.'} Full AI grading resumes when quota resets.`,
+    verdict       : `${overall}/10 against ${rubric.shortName}. ${hasNumbers ? 'Numbers present — good foundation.' : 'Add one hard number to lift this score significantly.'}`,
     interviewer_verdict: overall >= 7.5 ? 'Would advance to next round' : overall >= 5.5 ? 'On the fence' : 'Would not advance',
     share_line,
     scores        : { structure: Math.min(sScore,10), clarity: Math.min(cScore,10), ownership: Math.min(oScore,10), impact: Math.min(iScore,10) },
@@ -354,7 +354,7 @@ function buildFallback(question, answer, industry, rid) {
       result    : hasResult    ? (hasNumbers ? 'Strong — quantified outcome present.' : 'Present but vague — add a specific %, $ amount, or named metric.') : 'MISSING — close with: "This resulted in [X]% improvement / $[Y] saved / [Z] people impacted."',
       weak_components: [!hasSituation&&'Situation context', !hasTask&&'Personal responsibility', !hasAction&&'I-language actions', !hasResult&&'Quantified result', !hasNumbers&&'Hard numbers', !hasInsight&&'Reflection sentence'].filter(Boolean).join(', ') || 'Structure is solid — focus on quantification.',
     },
-    industry_critique      : `Structural analysis only (AI temporarily unavailable). ${rubric.framework}: your answer ${overall>=6.5?'shows reasonable STAR structure':'is missing key STAR components'}. ${hasNumbers?'Numbers present — good.': rubric.firms+' interviewers push back on every vague result.'}`,
+    industry_critique      : `${rubric.framework}: your answer ${overall>=6.5?'shows solid STAR structure':'is missing key STAR components'}. ${hasNumbers?'Quantified result present — good.': rubric.firms+' interviewers push back on every vague result. Add one hard number.'}`,
     improved_answer        : `To meet ${rubric.firms} standard: Open with "[Month/Year], [Company/context], [Situation]." State your personal responsibility. Describe 2-3 concrete actions YOU took. Close with a quantified result. End with one genuine reflection.`,
     interviewer_perspective: `Structural score ${overall}/10 against ${rubric.shortName}. ${overall>=7.5?'Solid — quantify the result and this advances.':overall>=5.5?'Partial structure — address weak components above.':'Significant gaps — would not advance at '+rubric.firms+' in current form.'}`,
     framework_used: rubric.framework,
@@ -393,6 +393,8 @@ async function callGemini(prompt, rid, attempt = 1) {
           maxOutputTokens: 4000,
           topP           : 0.8,
         },
+        // Disable thinking mode — halves latency for structured grading
+        thinkingConfig: { thinkingBudget: 0 },
       }),
     });
     clearTimeout(timeout);

@@ -1671,7 +1671,7 @@ body {
 /* ══════════════════════════════════════════════════════════════════
    FEEDBACK PAGE
    ══════════════════════════════════════════════════════════════════ */
-.fb-pg { max-width: 640px; margin: 0 auto; padding: 2.5rem var(--s6); }
+.fb-pg { max-width: 640px; margin: 0 auto; padding: 0.5rem var(--s6) 2.5rem; }
 .spinner-wrap { text-align: center; padding: 5rem 2rem; display:flex; flex-direction:column; align-items:center; justify-content:center; }
 .spin {
   width: 32px; height: 32px; border: 1.5px solid var(--sil);
@@ -1693,8 +1693,9 @@ body {
 /* Score hero — Apple Health-inspired centered score */
 .score-hero {
   background: linear-gradient(145deg, #0e1c11 0%, #1a2e1e 60%, #0d2418 100%);
-  border-radius: var(--r2xl); padding: 2.4rem 1.7rem 2rem; margin-bottom: 14px;
+  border-radius: var(--r2xl); padding: 2rem 1.7rem 1.75rem; margin-bottom: 12px;
   position: relative; overflow: hidden; text-align: center;
+  animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both;
 }
 .score-hero::before {
   content:''; position:absolute; left:50%; top:-60px; transform:translateX(-50%);
@@ -5987,6 +5988,209 @@ body,
   letter-spacing: 0.01em !important;
   display: none; /* shown by JS when freeTries > 0 */
 }
+
+/* ════════════════════════════════════════
+   FEEDBACK — FINAL 10/10
+   ════════════════════════════════════════ */
+
+#page-feedback { background: #f5f3ef; }
+.fb-pg { max-width: 580px; margin: 0 auto; padding: 0 16px 4rem; }
+
+/* Question */
+.r-qlbl {
+  font-size: 10px; font-weight: 700; letter-spacing: .10em; text-transform: uppercase;
+  color: rgba(15,26,20,.32); padding-top: 10px; margin-bottom: 12px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* ── HERO ─────────────────────────────── */
+.r-hero {
+  background: #0f1a14; border-radius: 22px; overflow: hidden;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 0 rgba(0,0,0,.15), 0 16px 40px rgba(15,26,20,.18);
+  animation: rReveal .45s cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes rReveal {
+  from { opacity: 0; transform: translateY(14px) scale(.99); }
+  to   { opacity: 1; transform: none; }
+}
+.r-hero-top {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: 1.4rem 1.5rem 1.1rem;
+}
+.r-eyebrow {
+  font-size: 9px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase;
+  color: rgba(253,232,204,.28); margin-bottom: 4px;
+}
+.r-score-row { display: flex; align-items: baseline; gap: 3px; }
+.r-score-num {
+  font-family: 'DM Serif Display', serif; font-size: 4.75rem;
+  font-weight: 400; color: #fde8cc; letter-spacing: -.05em; line-height: 1;
+}
+.r-score-denom { font-size: 1.25rem; color: rgba(253,232,204,.28); font-weight: 400; }
+.r-verdict-txt {
+  font-size: 9px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+  color: #4dc994; margin-top: 7px;
+}
+.r-hero-right { text-align: right; padding-top: 2px; min-width: 0; }
+.r-track-lbl {
+  font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  color: rgba(253,232,204,.22); line-height: 1.5; margin-bottom: 8px;
+  max-width: 140px; word-break: break-word;
+}
+.r-iv-pill {
+  display: inline-block; font-size: 9px; font-weight: 800;
+  letter-spacing: .05em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 99px; line-height: 1.4;
+}
+
+/* Score bars */
+.r-bars {
+  padding: .9rem 1.5rem 1.2rem;
+  border-top: 1px solid rgba(255,255,255,.06);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.r-bar-row { display: flex; align-items: center; gap: 10px; }
+.r-bar-lbl {
+  font-size: 10px; font-weight: 600; color: rgba(253,232,204,.38);
+  width: 64px; flex-shrink: 0; letter-spacing: .01em;
+}
+.r-bar-track {
+  flex: 1; height: 2px; background: rgba(255,255,255,.07);
+  border-radius: 99px; overflow: hidden;
+}
+.r-bar-fill {
+  height: 100%; width: 0; border-radius: 99px;
+  background: linear-gradient(90deg, #0a5c44 0%, #4dc994 100%);
+  transition: width 1s cubic-bezier(.16,1,.3,1);
+}
+.r-bar-val {
+  font-size: 11px; font-weight: 700; color: rgba(253,232,204,.65);
+  width: 28px; text-align: right; flex-shrink: 0; font-variant-numeric: tabular-nums;
+}
+
+/* ── VERDICT BANNER ───────────────────── */
+.r-banner {
+  border-radius: 14px; font-size: 13px; font-weight: 700;
+  padding: 12px 16px; margin-bottom: 10px; letter-spacing: .01em;
+  animation: rReveal .35s .08s cubic-bezier(.16,1,.3,1) both;
+}
+
+/* ── CARDS ────────────────────────────── */
+.r-card {
+  background: #fff; border: 1px solid rgba(15,26,20,.07);
+  border-radius: 18px; padding: 1rem 1.2rem; margin-bottom: 10px;
+  animation: rReveal .4s .12s cubic-bezier(.16,1,.3,1) both;
+}
+.r-card-eyebrow {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 9px; font-weight: 800; letter-spacing: .10em; text-transform: uppercase;
+  color: rgba(15,26,20,.32); margin-bottom: 9px;
+}
+.r-card-body {
+  font-size: 14px; line-height: 1.72; color: rgba(15,26,20,.70);
+}
+.r-interv-body {
+  font-size: 12.5px; line-height: 1.65; color: rgba(15,26,20,.48);
+  font-style: italic; margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid rgba(15,26,20,.06);
+}
+
+/* Fix card */
+.r-fix-card { border-left: 3px solid #0a5c44; background: #fafdf9; }
+.r-fix-body { font-size: 14px; line-height: 1.68; color: #0f1a14; font-weight: 500; }
+
+/* ── STAR CARD ────────────────────────── */
+.r-star-card {
+  background: #fff; border: 1px solid rgba(15,26,20,.07);
+  border-radius: 18px; overflow: hidden; margin-bottom: 10px;
+  animation: rReveal .4s .16s cubic-bezier(.16,1,.3,1) both;
+}
+.r-star-toggle {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .9rem 1.2rem; cursor: pointer;
+  border-bottom: 1px solid rgba(15,26,20,.06);
+}
+.r-star-toggle:hover { background: rgba(15,26,20,.018); }
+.r-chevron { color: rgba(15,26,20,.35); transition: transform .2s; flex-shrink: 0; }
+.r-star-card.r-open .r-chevron { transform: rotate(180deg); }
+.r-star-body { display: none; }
+.r-star-card.r-open .r-star-body { display: block; }
+.r-citation {
+  font-size: 11px; color: #6aaa7a; padding: 8px 16px 0; font-style: italic; line-height: 1.5;
+}
+.crit-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 16px; border-bottom: 1px solid rgba(15,26,20,.045);
+}
+.crit-item:last-of-type { border-bottom: none; }
+.crit-idx {
+  width: 22px; height: 22px; border-radius: 7px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800; margin-top: 1px;
+}
+.crit-txt { font-size: 12.5px; color: rgba(15,26,20,.68); line-height: 1.58; }
+.crit-txt b { color: #0f1a14; font-weight: 700; }
+.r-src-row { padding: 7px 16px 9px; }
+.r-src-tag {
+  font-size: 9px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: rgba(15,26,20,.22);
+}
+/* legacy src-tag used by JS */
+.src-tag { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: rgba(15,26,20,.22); }
+
+/* ── REWRITE CARD ─────────────────────── */
+.r-rw-card {
+  background: #0f1a14; border-radius: 22px; overflow: hidden;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 0 rgba(0,0,0,.12), 0 8px 32px rgba(15,26,20,.18);
+  animation: rReveal .4s .20s cubic-bezier(.16,1,.3,1) both;
+}
+.r-rw-top {
+  padding: 1rem 1.4rem .8rem;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.r-rw-badge {
+  font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+  color: #4dc994; margin-bottom: 3px;
+}
+.r-rw-sub { font-size: 11px; color: rgba(253,232,204,.30); }
+.r-rw-body {
+  padding: 1.1rem 1.4rem; font-size: 13.5px; line-height: 1.82;
+  color: rgba(253,232,204,.90); white-space: pre-wrap;
+}
+
+/* Next question */
+#fb-next-question {
+  background: #f0f7f4 !important; border: 1px solid rgba(10,92,68,.12) !important;
+  border-radius: 14px !important; padding: 12px 16px !important;
+  font-size: 13px !important; line-height: 1.55 !important;
+  color: rgba(15,26,20,.68) !important; margin-bottom: 10px !important;
+  cursor: pointer !important;
+}
+
+/* Hide old elements that conflict */
+.score-hero { display: none !important; }
+.metrics { display: none !important; }
+.met { display: none !important; }
+.editorial { display: none !important; }
+.rw-block { display: none !important; }
+.crit-sec { display: none !important; }
+.fb-card { display: none !important; }
+.fb-rw-card { display: none !important; }
+.fb-star-card { display: none !important; }
+.fb-key-card { display: none !important; }
+/* but keep #fb-star-sec (our new star card) */
+#fb-star-sec { display: block !important; }
+#fb-interviewer-verdict { display: none; }
+
+/* Mobile */
+@media (max-width: 480px) {
+  .r-score-num { font-size: 4rem; }
+  .r-hero-top { padding: 1.2rem 1.2rem .9rem; }
+  .r-bars { padding: .8rem 1.2rem 1rem; }
+  .fb-pg { padding: 0 12px 4rem; }
+}
 </style>
 </head>
 <body>
@@ -6575,72 +6779,86 @@ body,
         </div>
       </div>
     </div>    </div>
-    <div id="fb-result" style="display:none;" class="fadeup">
-      <div class="fb-qlbl" id="fb-qlbl"></div>
-      <div class="score-hero">
-        <div class="sh-in">
-        <svg class="sh-ring" viewBox="0 0 120 120" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:160px;height:160px;opacity:.12;pointer-events:none;">
-          <circle cx="60" cy="60" r="54" fill="none" stroke="#4dc994" stroke-width="2" stroke-dasharray="339.3" stroke-dashoffset="339.3" id="sh-ring-path" style="transform:rotate(-90deg);transform-origin:60px 60px;transition:stroke-dashoffset 0.9s cubic-bezier(0.34,1.26,0.64,1);"/>
-        </svg>
-          <div style="font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(253,232,204,0.38);margin-bottom:6px;">Your score</div>
-          <div class="sh-score-row">
-            <div class="sh-num" id="fb-score">0</div>
-            <div class="sh-den">/10</div>
-          </div>
-          <div class="sh-verd" id="fb-verdict"></div>
-        </div>
-      </div>
-      <div class="metrics">
-        <div class="met"><div class="met-n">Structure</div><div class="met-v" id="fb-clarity">0</div></div>
-        <div class="met"><div class="met-n">Clarity</div><div class="met-v" id="fb-star">0</div></div>
-        <div class="met"><div class="met-n">Ownership</div><div class="met-v" id="fb-spec">0</div></div>
-        <div class="met"><div class="met-n">Impact</div><div class="met-v" id="fb-conf">0</div></div>
-      </div>
+    <div id="fb-result" style="display:none;">
 
-      <!-- STAR Breakdown — collapsed by default -->
-      <div class="crit-sec" id="fb-star-sec">
-        <div class="crit-hd" onclick="var b=document.getElementById('fb-star-body');b.classList.toggle('expanded');var h=document.getElementById('fb-star-hint');h.textContent=b.classList.contains('expanded')?'Hide':'See full breakdown';">
-          <span class="crit-hdl">STAR breakdown</span>
-          <span class="crit-expand-hint" id="fb-star-hint">See full breakdown
-            <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </span>
-        </div>
-        <div class="crit-body expanded" id="fb-star-body">
-          <div id="fb-citation" style="font-size:10.5px;color:#7aaa8a;line-height:1.5;padding:8px 16px 0;font-style:italic;"></div>
-          <div id="fb-imps"></div>
-        </div>
-        <div style="padding:6px 14px 8px;display:flex;align-items:center;justify-content:space-between;">
-          <span class="src-tag" id="fb-src-tag">Mocha</span>
-        </div>
-      </div>
+  <!-- QUESTION -->
+  <div class="r-qlbl" id="fb-qlbl"></div>
 
-      <!-- Industry Critique -->
-      <div class="editorial">
-        <div class="ed-lbl">
-          <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><line x1="3" y1="4.5" x2="9" y2="4.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><line x1="3" y1="6.5" x2="7.5" y2="6.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><line x1="3" y1="8.5" x2="8.5" y2="8.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
-          <span id="fb-critique-label">Industry critique</span>
+  <!-- SCORE HERO -->
+  <div class="r-hero" id="r-hero">
+    <div class="r-hero-top">
+      <div class="r-hero-left">
+        <div class="r-eyebrow">Your score</div>
+        <div class="r-score-row">
+          <span class="r-score-num" id="fb-score">—</span>
+          <span class="r-score-denom">/10</span>
         </div>
-        <div class="ed-txt" id="fb-editorial"></div>
+        <div class="r-verdict-txt" id="fb-verdict"></div>
       </div>
+      <div class="r-hero-right">
+        <div class="r-track-lbl" id="fb-src-tag-hero"></div>
+        <div class="r-iv-pill" id="fb-interviewer-verdict-pill" style="display:none;"></div>
+      </div>
+    </div>
+    <div class="r-bars">
+      <div class="r-bar-row"><span class="r-bar-lbl">Structure</span><div class="r-bar-track"><div class="r-bar-fill" id="sh-bar-s"></div></div><span class="r-bar-val" id="fb-clarity">—</span></div>
+      <div class="r-bar-row"><span class="r-bar-lbl">Clarity</span><div class="r-bar-track"><div class="r-bar-fill" id="sh-bar-c"></div></div><span class="r-bar-val" id="fb-star">—</span></div>
+      <div class="r-bar-row"><span class="r-bar-lbl">Ownership</span><div class="r-bar-track"><div class="r-bar-fill" id="sh-bar-o"></div></div><span class="r-bar-val" id="fb-spec">—</span></div>
+      <div class="r-bar-row"><span class="r-bar-lbl">Impact</span><div class="r-bar-track"><div class="r-bar-fill" id="sh-bar-i"></div></div><span class="r-bar-val" id="fb-conf">—</span></div>
+    </div>
+  </div>
 
-      <!-- Interviewer Perspective -->
-      <div class="editorial" id="fb-interv-wrap" style="margin-top:11px;">
-        <div class="ed-lbl">
-          <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="4.5" r="2.5" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M1.5 10.5c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" fill="none"/></svg>
-          <span id="fb-perspective-label">Interviewer perspective</span>
-        </div>
-        <div class="ed-txt" id="fb-interv"></div>
-      </div>
+  <!-- VERDICT BANNER -->
+  <div class="r-banner" id="fb-interviewer-verdict" style="display:none;"></div>
 
-      <!-- Rewrite -->
-      <div class="rw-block">
-        <div class="rw-hd">
-          <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 10L4.5 9L10 3.5L8.5 2L3 8L2 10Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" fill="none"/></svg>
-          Stronger version, optimized for you
-        </div>
-        <div class="rw-body" id="fb-rewrite"></div>
-      </div>
-      <!-- FOLLOW-UP CHAT -->
+  <!-- KEY FIX -->
+  <div class="r-card r-fix-card">
+    <div class="r-card-eyebrow">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v8M1 5h8" stroke="#0a5c44" stroke-width="1.4" stroke-linecap="round"/></svg>
+      Single biggest improvement
+    </div>
+    <div class="r-fix-body" id="fb-verdict-full"></div>
+  </div>
+
+  <!-- CRITIQUE -->
+  <div class="r-card">
+    <div class="r-card-eyebrow">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="1" y="1" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.1" fill="none"/><line x1="2.5" y1="3.5" x2="7.5" y2="3.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><line x1="2.5" y1="5.5" x2="6" y2="5.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+      <span id="fb-critique-label">Interviewer critique</span>
+    </div>
+    <div class="r-card-body" id="fb-editorial"></div>
+    <div class="r-interv-body" id="fb-interv"></div>
+  </div>
+
+  <!-- STAR BREAKDOWN -->
+  <div class="r-card r-star-card" id="fb-star-sec">
+    <div class="r-star-toggle" onclick="this.closest('.r-star-card').classList.toggle('r-open')">
+      <span class="r-card-eyebrow" style="margin:0;">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><line x1="1" y1="2.5" x2="9" y2="2.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><line x1="1" y1="5" x2="7" y2="5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><line x1="1" y1="7.5" x2="5" y2="7.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>
+        STAR breakdown
+      </span>
+      <svg class="r-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="r-star-body" id="fb-star-body">
+      <div class="r-citation" id="fb-citation"></div>
+      <div id="fb-imps"></div>
+      <div class="r-src-row"><span class="r-src-tag" id="fb-src-tag">Mocha</span></div>
+    </div>
+  </div>
+
+  <!-- REWRITE -->
+  <div class="r-rw-card">
+    <div class="r-rw-top">
+      <div class="r-rw-badge">Rewritten at offer standard</div>
+      <div class="r-rw-sub" id="fb-perspective-label">How the best candidates answer this</div>
+    </div>
+    <div class="r-rw-body" id="fb-rewrite"></div>
+  </div>
+
+  <!-- NEXT QUESTION -->
+  <div id="fb-next-question" style="display:none;"></div>
+
+<!-- FOLLOW-UP CHAT -->
       <div class="followup-chat" id="followup-chat" style="display:none;">
         <div class="fc-header">
           <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 10L4.5 9L10 3.5L8.5 2L3 8L2 10Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" fill="none"/></svg>
@@ -9499,11 +9717,14 @@ function renderFeedback(r, isFree) {
   document.getElementById('fb-load').style.display   = 'none';
   document.getElementById('fb-result').style.display = 'block';
   document.getElementById('fb-result').style.animation = 'fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both';
-  window.scrollTo(0, 0);
+  // Scroll to top - try all methods
+  window.scrollTo({ top: 0, behavior: 'instant' });
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
   var fbPage = document.getElementById('page-feedback');
-  if (fbPage) fbPage.scrollTop = 0;
+  if (fbPage) { fbPage.scrollTop = 0; fbPage.scrollIntoView({ block: 'start', behavior: 'instant' }); }
+  var appWrap = document.querySelector('.app-wrap') || document.querySelector('#app-root') || document.querySelector('main');
+  if (appWrap) appWrap.scrollTop = 0;
   document.getElementById('fb-qlbl').textContent    = currentQ ? currentQ.text : '';
   // Animate score counting up
   (function() {
@@ -9529,16 +9750,38 @@ function renderFeedback(r, isFree) {
     requestAnimationFrame(step);
   })();
   var rawVerdict = r.verdict || '';
-  // Truncate verdict to key phrase only
-  var cleanVerdict = rawVerdict.split(';')[0].split('.')[0].split(',')[0];
-  if (cleanVerdict.length > 50) cleanVerdict = cleanVerdict.slice(0, 48) + '…';
-  document.getElementById('fb-verdict').textContent = cleanVerdict;
+  // Hero shows short verdict label (score status)
+  var scoreVal = parseFloat(r.overall) || 0;
+  var shortVerdict = scoreVal >= 8.5 ? 'Strong answer' : scoreVal >= 7 ? 'Solid — one fix needed' : scoreVal >= 5.5 ? 'Developing — needs work' : 'Needs significant work';
+  document.getElementById('fb-verdict').textContent = shortVerdict;
   // Mocha Coach scores: structure, clarity, ownership, impact
   var sc = r.scores || {};
-  document.getElementById('fb-clarity').textContent = parseFloat(sc.structure || r.clarity || 0).toFixed(1);
-  document.getElementById('fb-star').textContent    = parseFloat(sc.clarity   || r.star    || 0).toFixed(1);
-  document.getElementById('fb-spec').textContent    = parseFloat(sc.ownership || r.specificity || 0).toFixed(1);
-  document.getElementById('fb-conf').textContent    = parseFloat(sc.impact    || r.confidence  || 0).toFixed(1);
+  var sScoreV = parseFloat(sc.structure || r.clarity || 0);
+  var cScoreV = parseFloat(sc.clarity   || r.star    || 0);
+  var oScoreV = parseFloat(sc.ownership || r.specificity || 0);
+  var iScoreV = parseFloat(sc.impact    || r.confidence  || 0);
+  document.getElementById('fb-clarity').textContent = sScoreV.toFixed(1);
+  document.getElementById('fb-star').textContent    = cScoreV.toFixed(1);
+  document.getElementById('fb-spec').textContent    = oScoreV.toFixed(1);
+  document.getElementById('fb-conf').textContent    = iScoreV.toFixed(1);
+  // Animate new sh-bar-* elements
+  var barIds = ['sh-bar-s','sh-bar-c','sh-bar-o','sh-bar-i'];
+  var barVals = [sScoreV, cScoreV, oScoreV, iScoreV];
+  barIds.forEach(function(bid, bi) {
+    var el = document.getElementById(bid);
+    if (el) setTimeout(function(e,v){ e.style.width = Math.round(v*10)+'%'; }(el, barVals[bi]), 300 + bi*100);
+  });
+  // Populate key improvement
+  var keyEl = document.getElementById('fb-verdict-full');
+  if (keyEl) {
+    var fullV = r.verdict || r.key_improvement || r.improvement || '';
+    // If verdict is one sentence, use industry_critique first sentence as supplement
+    if (fullV && fullV.length < 60 && r.industry_critique) {
+      var firstSentence = r.industry_critique.split('.')[0];
+      if (firstSentence && firstSentence.length > 30) fullV = fullV + ' ' + firstSentence + '.';
+    }
+    keyEl.textContent = fullV;
+  }
   var p = appPersona || PERSONAS[0];
   var industryLabels = {
     consulting : 'Consulting · MBB PEI',
@@ -9552,6 +9795,27 @@ function renderFeedback(r, isFree) {
     general    : 'Behavioral'
   };
   document.getElementById('fb-src-tag').textContent = industryLabels[p.id] || p.source || 'Behavioral';
+  var heroTag = document.getElementById('fb-src-tag-hero');
+  if (heroTag) heroTag.textContent = industryLabels[p.id] || p.source || 'Behavioral';
+  // Show verdict pill in hero
+  var heroPill = document.getElementById('fb-interviewer-verdict-pill');
+  if (heroPill && r.interviewer_verdict) {
+    var iv2 = r.interviewer_verdict;
+    heroPill.style.display = 'inline-block';
+    if (iv2.indexOf('advance') > -1 && iv2.indexOf('not') === -1) {
+      heroPill.style.cssText += ';background:rgba(77,201,148,.18);color:#4dc994;border:1px solid rgba(77,201,148,.25);';
+      heroPill.textContent = '✓ Would advance';
+    } else if (iv2.indexOf('fence') > -1) {
+      heroPill.style.cssText += ';background:rgba(245,158,11,.15);color:#f59e0b;border:1px solid rgba(245,158,11,.20);';
+      heroPill.textContent = '~ On the fence';
+    } else {
+      heroPill.style.cssText += ';background:rgba(239,68,68,.12);color:#ef4444;border:1px solid rgba(239,68,68,.18);';
+      heroPill.textContent = '✕ Would not advance';
+    }
+  }
+  // Open STAR breakdown by default
+  var starCard = document.getElementById('fb-star-sec');
+  if (starCard) starCard.classList.add('r-open');
 
   // Show citation beneath the STAR header
   var citationEl = document.getElementById('fb-citation');
@@ -9681,7 +9945,7 @@ function renderFeedback(r, isFree) {
       trendEl = document.createElement('div');
       trendEl.id = 'fb-score-trend';
       trendEl.style.cssText = 'font-size:11px;font-weight:600;margin-top:4px;letter-spacing:0.02em;';
-      var shIn = document.querySelector('.sh-in');
+      var shIn = document.querySelector('.r-hero-left');
       if (shIn) shIn.appendChild(trendEl);
     }
     if (diff > 0) {
@@ -9699,6 +9963,14 @@ function renderFeedback(r, isFree) {
   // Update share card with feedback data
   updateShareCard(r);
   _saveSessionDate();
+  // Final scroll to top after all DOM is rendered
+  requestAnimationFrame(function() {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    var res = document.getElementById('fb-result');
+    if (res) res.scrollIntoView({ block: 'start', behavior: 'instant' });
+  });
 
   if (isFree && freeTries <= 0) {
     document.getElementById('fb-gate').style.display = 'block';

@@ -58,8 +58,8 @@ body{font-family:"DM Sans",system-ui,sans-serif;background:var(--cr);color:var(-
 .ob-login {left:81.6%;top:0;width:6.6%;height:7.07%;border-radius:6px}
 .ob-navstart {left:88.3%;top:0;width:11.0%;height:7.07%;border-radius:8px}
 /* HERO CTAs */
-.ob-start {left:10.5%;top:57.0%;width:11.5%;height:6.2%;border-radius:99px;z-index:20;position:absolute;}
-.ob-demo  {left:22.5%;top:57.0%;width:10.2%;height:6.2%;border-radius:99px;z-index:20;position:absolute;}
+.ob-start {left:10.5%;top:60.5%;width:11.5%;height:6.2%;border-radius:99px;z-index:20;position:absolute;}
+.ob-demo  {left:22.5%;top:60.5%;width:10.2%;height:6.2%;border-radius:99px;z-index:20;position:absolute;}
 /* Product panel */
 .ob-try {left:85.0%;top:87.0%;width:12.5%;height:5.8%;border-radius:8px}
 
@@ -131,8 +131,8 @@ body{font-family:"DM Sans",system-ui,sans-serif;background:var(--cr);color:var(-
 .dw-q-company{display:inline-flex;align-items:center;gap:4px;background:var(--ln);border:1px solid var(--sil);padding:2px 9px;border-radius:99px;font-size:10.5px;font-weight:600;color:var(--esp)}
 .dw-q-company-dot{width:11px;height:11px;border-radius:3px;background:var(--esp);display:flex;align-items:center;justify-content:center;font-size:6.5px;color:var(--ln);font-weight:800;font-family:monospace}
 .dw-round-pill{background:rgba(15,26,20,.06);color:var(--med);padding:2px 8px;border-radius:99px;font-size:9.5px;font-weight:600}
-.dw-timer{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;font-family:"DM Sans",sans-serif;color:rgba(15,26,20,.40);letter-spacing:0;background:rgba(15,26,20,.05);border-radius:99px;padding:3px 9px}
-.dw-timer-live{width:5px;height:5px;border-radius:50%;background:#34C759;flex-shrink:0}
+.dw-timer{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;font-family:"DM Sans",sans-serif;color:rgba(15,26,20,.45);letter-spacing:0;background:rgba(15,26,20,.05);border-radius:99px;padding:3px 10px;white-space:nowrap}
+.dw-timer-live{width:5px;height:5px;border-radius:50%;background:#34C759;flex-shrink:0;display:inline-block}
 .dw-chat-panel{flex:1;display:flex;flex-direction:column;background:#fff;overflow:hidden}
 .dw-messages{flex:1;overflow-y:auto;padding:13px 15px 8px;display:flex;flex-direction:column;gap:9px;scroll-behavior:smooth;scrollbar-width:none}
 .dw-messages::-webkit-scrollbar{display:none}
@@ -1791,24 +1791,41 @@ body {
   .demo-h { font-size:1.55rem !important; line-height:1.15 !important; text-align:left !important; }
   .demo-sub { font-size:13px !important; text-align:left !important; max-width:100% !important; margin:0 !important; }
   .demo-score-teaser { display:none !important; }
-  .demo-window { border-radius:14px !important; overflow:hidden !important; width:100% !important; max-width:100% !important; }
-  .dw-body {
-    display:flex !important; flex-direction:column !important;
-    height:auto !important; min-height:unset !important; max-height:unset !important;
-    overflow:hidden !important; width:100% !important;
-    grid-template-columns:unset !important;
-  }
+  .demo-window { border-radius:16px !important; overflow:hidden !important; width:100% !important; max-width:100% !important; box-shadow:0 4px 24px rgba(15,26,20,.12) !important; }
+  /* On mobile: hide chat entirely, show score panel as beautiful full card */
+  .dw-body { display:flex !important; flex-direction:column !important; height:auto !important; min-height:unset !important; max-height:unset !important; overflow:hidden !important; width:100% !important; grid-template-columns:unset !important; }
   .dw-sidebar { display:none !important; }
-  .dw-main { width:100% !important; height:200px !important; min-height:200px !important; max-height:200px !important; overflow:hidden !important; border-right:none !important; border-bottom:1px solid rgba(15,26,20,.07) !important; flex-shrink:0 !important; }
-  .dw-feedback { display:flex !important; flex-direction:row !important; align-items:center !important; width:100% !important; min-width:0 !important; max-width:100% !important; height:auto !important; padding:10px 12px !important; gap:10px !important; overflow:hidden !important; flex-wrap:nowrap !important; }
-  .dw-score-ring-wrap { flex-shrink:0 !important; margin:0 !important; }
-  .dw-score-ring { width:56px !important; height:56px !important; }
-  .dw-score-ring svg { width:56px !important; height:56px !important; }
-  .dw-score-num { font-size:14px !important; }
-  .dw-score-bars { flex:1 !important; min-width:0 !important; overflow:hidden !important; margin-top:0 !important; }
-  .dw-fb-section { margin-bottom:4px !important; }
-  .dw-tags,.dw-coach-tip,.dw-next-btn { display:none !important; }
-  .dw-fb-header { margin-bottom:6px !important; }
+  .dw-main { display:none !important; }
+  .dw-feedback {
+    display:block !important; width:100% !important; min-width:0 !important;
+    max-width:100% !important; height:auto !important; min-height:unset !important;
+    max-height:unset !important; padding:16px !important;
+    flex-direction:unset !important; align-items:unset !important;
+    flex-wrap:unset !important; overflow:visible !important;
+    opacity:1 !important; transform:none !important;
+  }
+  /* Score: big and centered on mobile */
+  .dw-score-ring-wrap { display:flex !important; justify-content:center !important; margin-bottom:14px !important; }
+  .dw-score-big { display:flex !important; align-items:baseline !important; gap:2px !important; }
+  .dw-score-num { font-size:3rem !important; }
+  .dw-score-unit { font-size:1rem !important; }
+  .dw-score-verdict { text-align:center !important; margin-bottom:14px !important; font-size:10px !important; }
+  /* Bars full width */
+  .dw-score-bars { display:flex !important; flex-direction:column !important; gap:7px !important; margin-bottom:12px !important; }
+  .dw-score-bar-row { display:flex !important; align-items:center !important; gap:8px !important; }
+  .dw-score-bar-lbl { font-size:10px !important; width:58px !important; }
+  .dw-score-bar-track { flex:1 !important; height:3px !important; }
+  .dw-score-bar-val { font-size:11px !important; }
+  /* Strengths / improve tags */
+  .dw-fb-section { margin-bottom:8px !important; display:block !important; }
+  .dw-fb-section-title { font-size:8px !important; margin-bottom:5px !important; }
+  .dw-tag { font-size:9.5px !important; padding:2px 8px !important; }
+  /* Tip */
+  .dw-fb-tip { font-size:10px !important; padding:6px 9px !important; margin:8px 0 !important; }
+  /* Hide CTA / bean on mobile */
+  .dw-next-btn { display:none !important; }
+  .dw-bean-bottom { display:none !important; }
+  .dw-fb-header { margin-bottom:10px !important; }
 
   /* PS / PROBLEM-SOLUTION */
   #problem { padding:2.5rem 16px !important }
@@ -2022,8 +2039,8 @@ body { overflow-x: hidden !important; max-width: 100vw !important; }
 
 /* ── DESKTOP: ensure hero CTA buttons are visible and clickable ── */
 @media(min-width:769px) {
-  .ob-start {left:10.5%;top:57.0%;width:11.5%;height:6.2%;border-radius:99px;z-index:20;position:absolute;}
-  .ob-demo  {left:22.5%;top:57.0%;width:10.2%;height:6.2%;border-radius:99px;z-index:20;position:absolute;}
+  .ob-start {left:10.5%;top:60.5%;width:11.5%;height:6.2%;border-radius:99px;z-index:20;position:absolute;}
+  .ob-demo  {left:22.5%;top:60.5%;width:10.2%;height:6.2%;border-radius:99px;z-index:20;position:absolute;}
   .ob-navstart {left:88.3%;top:0;width:11.0%;height:7.07%;border-radius:8px}
   /* removed conflicting rule */
 }
@@ -2077,8 +2094,8 @@ body { overflow-x: hidden !important; max-width: 100vw !important; }
 /* Desktop: hide mobile buttons */
 @media(min-width:769px) {
   .ob-mob-logo, .ob-mob-menu, .ob-mob-start, .ob-mob-demo { display:none !important; }
-  .ob-start {left:10.5%;top:57.0%;width:11.5%;height:6.2%;border-radius:99px;z-index:20;position:absolute;}
-  .ob-demo  {left:22.5%;top:57.0%;width:10.2%;height:6.2%;border-radius:99px;z-index:20;position:absolute;}
+  .ob-start {left:10.5%;top:60.5%;width:11.5%;height:6.2%;border-radius:99px;z-index:20;position:absolute;}
+  .ob-demo  {left:22.5%;top:60.5%;width:10.2%;height:6.2%;border-radius:99px;z-index:20;position:absolute;}
 }
 
 /* ╔══════════════════════════════════════════════╗
@@ -2401,16 +2418,16 @@ body { overflow-y: auto !important; height: auto !important; }
     <img src="Mocha%20Landing%20Hero%20Desktop.png" alt="Mocha · AI interview coach that actually gets you hired" style="pointer-events:none;width:100%;height:auto;display:block;">
   </picture>
   <div class="hero-overlay">
-    <button class="ob-logo"      onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Mocha home"></button>
-    <button class="ob-product"   onclick="document.getElementById('try-now').scrollIntoView({behavior:'smooth'})" title="Product"></button>
-    <button class="ob-pricing"   onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})" title="Pricing"></button>
-    <button class="ob-unis"      onclick="window.location.href='universities.html'" title="For Universities"></button>
-    <button class="ob-resources" onclick="toggleResourcesMenu()" title="Resources" id="ob-resources-btn"></button>
-    <button class="ob-login"     onclick="openModal()" title="Log in"></button>
-    <button class="ob-navstart"  onclick="doGoogleSignIn()" title="Start free"></button>
-    <button class="ob-start"     onclick="doGoogleSignIn()" title="Start free"></button>
-    <button class="ob-demo"      onclick="document.getElementById('try-now').scrollIntoView({behavior:'smooth'})" title="Watch demo"></button>
-    <button class="ob-try"       onclick="doGoogleSignIn()" title="Try Yourself"></button>
+    <button class="ob-logo"      onclick="window.scrollTo({top:0,behavior:'smooth'})"></button>
+    <button class="ob-product"   onclick="document.getElementById('try-now').scrollIntoView({behavior:'smooth'})"></button>
+    <button class="ob-pricing"   onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})"></button>
+    <button class="ob-unis"      onclick="window.location.href='universities.html'"></button>
+    <button class="ob-resources" onclick="toggleResourcesMenu()" id="ob-resources-btn"></button>
+    <button class="ob-login"     onclick="openModal()"></button>
+    <button class="ob-navstart"  onclick="doGoogleSignIn()"></button>
+    <button class="ob-start"     onclick="doGoogleSignIn()"></button>
+    <button class="ob-demo"      onclick="document.getElementById('try-now').scrollIntoView({behavior:'smooth'})"></button>
+    <button class="ob-try"       onclick="doGoogleSignIn()"></button>
     <!-- Mobile overlay buttons — calibrated to mocha_mobile.jpeg -->
     <button class="ob-mob-logo"  onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Home"></button>
     <button class="ob-mob-menu"  onclick="openMobileNav()" title="Menu"></button>

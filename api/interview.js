@@ -405,7 +405,7 @@ async function callGemini(prompt, rid, attempt = 1) {
           maxOutputTokens: 4000,
           topP           : 0.8,
         },
-        thinkingConfig: { thinkingBudget: 0 },
+        // thinkingConfig removed — not supported by gemini-2.5-flash-preview-05-20
       }),
     });
     clearTimeout(timeout);

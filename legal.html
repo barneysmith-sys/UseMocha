@@ -3,106 +3,373 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Terms &amp; Privacy — Mocha</title>
+<title>Terms & Privacy — Mocha</title>
+<meta name="description" content="Mocha's Terms of Service and Privacy Policy. Short, honest, and human.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-SPLL85SBFX"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-SPLL85SBFX');</script>
 <style>
+/* ═══════════════════════════════════════════
+   MOCHA — Design System (Rebrand)
+   ═══════════════════════════════════════════ */
 :root {
-  --cr:#fef7f0;--ln:#fde8cc;--ln2:#f5d4a8;--ln3:#e8bb7e;
-  --esp:#2c1308;--med:#6b3520;--lt:#9c5c3a;--oat:#c48762;
-  --sil:#e8d5c0;--sil2:#f2e4d4;
+  --esp:  #0f1a14;
+  --esp2: #070f0a;
+  --med:  #0a5c44;
+  --lt:   #0d7a5c;
+  --ln:   #f5ede0;
+  --ln2:  #eddece;
+  --cr:   #ffffff;
+  --oat:  #7a8f85;
+  --sil:  #e0ebe6;
+  --sil2: #eef5f2;
+  --surf: #fafcfb;
+  --g-bg: #f0f7f4;
 }
-*{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--cr);color:var(--esp);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased;}
-.nav{position:sticky;top:0;z-index:50;height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 1.75rem;background:rgba(254,247,240,0.94);backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);border-bottom:1px solid var(--sil);}
-.nav-logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
-.nav-m{width:28px;height:28px;border-radius:7px;background:var(--ln);border:1px solid var(--sil);display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:18px;color:var(--esp);font-style:italic;box-shadow:0 1px 3px rgba(44,19,8,0.10);}
-.nav-name{font-family:'DM Serif Display',serif;font-size:15px;color:var(--esp);letter-spacing:-0.02em;}
-.nav-back{font-size:12px;font-weight:500;color:var(--oat);text-decoration:none;display:flex;align-items:center;gap:4px;transition:color 0.15s;}
-.nav-back:hover{color:var(--med);}
-.hero{max-width:660px;margin:0 auto;padding:3.5rem 1.75rem 2.5rem;border-bottom:1px solid var(--sil);}
-.hero-tag{display:inline-flex;align-items:center;gap:6px;background:var(--ln);border:1px solid var(--sil);border-radius:99px;padding:3px 12px;font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--lt);margin-bottom:1.35rem;}
-.hero-dot{width:6px;height:6px;border-radius:50%;background:#34C759;box-shadow:0 0 0 2.5px rgba(52,199,89,0.20);animation:pulse 2.5s ease-in-out infinite;}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 2.5px rgba(52,199,89,0.20);}50%{box-shadow:0 0 0 5px rgba(52,199,89,0.08);}}
-h1{font-family:'DM Serif Display',serif;font-size:clamp(1.9rem,5vw,2.6rem);font-weight:400;letter-spacing:-0.03em;line-height:1.12;color:var(--esp);margin-bottom:0.8rem;}
-.hero-sub{font-size:15px;color:var(--lt);line-height:1.7;max-width:500px;}
-.hero-meta{display:flex;flex-wrap:wrap;gap:1.5rem;margin-top:1.75rem;}
-.hm{font-size:11.5px;font-weight:500;color:var(--oat);display:flex;align-items:center;gap:5px;}
-.wrap{max-width:660px;margin:0 auto;padding:2.5rem 1.75rem 5rem;}
-.section-label{font-size:8.5px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--oat);margin:2.25rem 0 0.75rem;}
-.section-label:first-child{margin-top:0;}
-.card{background:#ffffff;border:1px solid var(--sil);border-radius:16px;padding:1.5rem 1.6rem;margin-bottom:0.75rem;box-shadow:0 1px 3px rgba(44,19,8,0.04),0 4px 16px rgba(44,19,8,0.03);transition:box-shadow 0.18s;}
-.card:hover{box-shadow:0 1px 3px rgba(44,19,8,0.05),0 6px 24px rgba(44,19,8,0.06);}
-.card-label{font-size:10px;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:var(--oat);margin-bottom:0.65rem;}
-.card p{font-size:14px;color:var(--esp);line-height:1.72;margin-bottom:0.6rem;opacity:0.88;}
-.card p:last-child{margin-bottom:0;}
-.card ul{list-style:none;padding:0;margin:0.5rem 0 0;}
-.card li{font-size:14px;color:var(--esp);opacity:0.88;padding:0.4rem 0 0.4rem 1.15rem;position:relative;line-height:1.65;border-bottom:1px solid var(--sil2);}
-.card li:last-child{border-bottom:none;padding-bottom:0;}
-.card li::before{content:'';position:absolute;left:0;top:0.78em;width:4px;height:4px;border-radius:50%;background:var(--ln3);}
-.card li strong{color:var(--esp);opacity:1;font-weight:600;}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;}
-@media(max-width:520px){.grid-2{grid-template-columns:1fr;}}
-.pill-row{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1rem;}
-.pill{display:inline-flex;align-items:center;gap:5px;background:var(--ln);border:1px solid var(--sil);border-radius:99px;padding:4px 12px;font-size:11.5px;font-weight:600;color:var(--med);}
-.pill svg{width:10px;height:10px;opacity:0.6;}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; scroll-behavior: smooth; }
+body { font-family: 'DM Sans', system-ui, sans-serif; background: var(--cr); color: var(--esp); font-size: 15px; line-height: 1.6; overflow-x: hidden; }
 
-/* Ambassador card */
-.amb-card{
-  background:var(--esp);
-  border-radius:20px;
-  padding:2rem 2rem 2rem;
-  margin-bottom:0.75rem;
-  position:relative;overflow:hidden;
+/* ── NAV ── */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  height: 54px; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 1.75rem;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--sil);
 }
-.amb-card::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(232,187,126,0.12) 0%,transparent 65%);pointer-events:none;}
-.amb-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(232,187,126,0.15);border:1px solid rgba(232,187,126,0.25);border-radius:99px;padding:3px 10px;font-size:9px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--ln3);margin-bottom:10px;}
-.amb-h{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--ln);letter-spacing:-0.03em;line-height:1.2;margin-bottom:6px;}
-.amb-sub{font-size:13px;color:rgba(253,232,204,0.60);line-height:1.55;margin-bottom:1.25rem;}
-.amb-perks{display:flex;flex-direction:column;gap:6px;margin-bottom:1.4rem;}
-.amb-perk{display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(253,232,204,0.80);}
-.amb-check{width:16px;height:16px;border-radius:50%;background:rgba(232,187,126,0.18);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:var(--ln3);flex-shrink:0;}
-.amb-cta{display:inline-flex;align-items:center;gap:8px;background:var(--ln3);color:var(--esp);border:none;border-radius:99px;padding:11px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;transition:opacity 0.15s;}
-.amb-cta:hover{opacity:0.88;color:var(--esp);}
+.nav-logo { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+.nav-m {
+  width: 28px; height: 28px; border-radius: 7px;
+  background: var(--esp); display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--ln); font-style: italic;
+  box-shadow: 0 1px 4px rgba(15,26,20,0.18);
+}
+.nav-name { font-family: 'DM Serif Display', serif; font-size: 15px; color: var(--esp); letter-spacing: -0.02em; }
+.nav-back {
+  font-size: 12px; font-weight: 600; color: var(--oat);
+  text-decoration: none; display: flex; align-items: center; gap: 4px;
+  transition: color 0.15s;
+}
+.nav-back:hover { color: var(--esp); }
 
-/* Contact card */
-.contact-card{background:#ffffff;border:1px solid var(--sil);border-radius:18px;padding:2rem;margin-top:0.75rem;text-align:center;position:relative;overflow:hidden;box-shadow:0 1px 3px rgba(44,19,8,0.04),0 4px 16px rgba(44,19,8,0.03);}
-.contact-card::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(232,187,126,0.08) 0%,transparent 65%);pointer-events:none;}
-.contact-card-h{font-family:'DM Serif Display',serif;font-size:1.35rem;font-weight:400;color:var(--esp);letter-spacing:-0.02em;margin-bottom:0.5rem;}
-.contact-card-sub{font-size:13.5px;color:var(--lt);line-height:1.65;margin-bottom:1.5rem;max-width:420px;margin-left:auto;margin-right:auto;}
-.contact-links{display:flex;flex-wrap:wrap;gap:0.6rem;justify-content:center;}
-.contact-link{display:inline-flex;align-items:center;gap:6px;background:var(--cr);border:1px solid var(--sil);border-radius:99px;padding:7px 15px;font-size:12.5px;font-weight:600;color:var(--esp);text-decoration:none;transition:all 0.15s;}
-.contact-link:hover{background:var(--ln);border-color:var(--ln2);color:var(--esp);}
-.contact-link svg{width:13px;height:13px;opacity:0.7;}
+/* ── HERO ── */
+.hero {
+  max-width: 680px; margin: 0 auto;
+  padding: 4rem 2rem 2.5rem;
+  border-bottom: 1px solid var(--sil);
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--g-bg); border: 1px solid var(--sil);
+  border-radius: 99px; padding: 3px 12px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--med); margin-bottom: 1.4rem;
+}
+.hero-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #34C759;
+  box-shadow: 0 0 0 2.5px rgba(52,199,89,0.20);
+  animation: pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 2.5px rgba(52,199,89,0.20); }
+  50%       { box-shadow: 0 0 0 5px rgba(52,199,89,0.07); }
+}
+h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  font-weight: 400; letter-spacing: -0.04em;
+  line-height: 1.08; color: var(--esp); margin-bottom: 0.85rem;
+}
+h1 em { font-style: italic; color: var(--med); }
+.hero-sub { font-size: 15px; color: var(--oat); line-height: 1.72; max-width: 480px; }
+.hero-meta { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1.75rem; }
+.hm {
+  font-size: 11.5px; font-weight: 500; color: var(--oat);
+  display: flex; align-items: center; gap: 5px;
+}
 
-/* Footer */
-.footer{border-top:1px solid var(--sil);padding:2.5rem 1.75rem;max-width:660px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:0.65rem;text-align:center;}
-.f-logo{display:flex;align-items:center;gap:9px;}
-.f-mark{width:30px;height:30px;border-radius:8px;background:var(--ln);border:1px solid var(--sil);display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:20px;color:var(--esp);font-style:italic;box-shadow:0 1px 4px rgba(44,19,8,0.08);}
-.f-name{font-family:'DM Serif Display',serif;font-size:15px;color:var(--esp);letter-spacing:-0.02em;}
-.f-by{font-size:12.5px;color:var(--med);}
-.f-loc{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--oat);}
-.f-copy{font-size:11px;color:var(--oat);opacity:0.55;}
-a{color:var(--esp);font-weight:600;text-decoration:underline;text-underline-offset:2px;}
+/* ── QUICK NAV ── */
+.quick-nav {
+  max-width: 680px; margin: 0 auto;
+  padding: 1.5rem 2rem;
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  border-bottom: 1px solid var(--sil);
+}
+.qn-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--surf); border: 1px solid var(--sil);
+  border-radius: 99px; padding: 5px 12px;
+  font-size: 11.5px; font-weight: 600; color: var(--med);
+  text-decoration: none; transition: all 0.15s;
+}
+.qn-chip:hover { background: var(--g-bg); border-color: rgba(10,92,68,0.25); color: var(--esp); }
+
+/* ── LAYOUT ── */
+.wrap { max-width: 680px; margin: 0 auto; padding: 2rem 2rem 6rem; }
+
+/* ── SECTION LABELS ── */
+.section-label {
+  font-size: 8.5px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--oat);
+  margin: 2.5rem 0 0.75rem;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-label::before {
+  content: ''; display: block; width: 20px; height: 1px;
+  background: rgba(15,26,20,0.16);
+}
+.section-label:first-child { margin-top: 0; }
+
+/* ── CARDS ── */
+.card {
+  background: var(--cr);
+  border: 1px solid var(--sil);
+  border-radius: 16px;
+  padding: 1.5rem 1.65rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 1px 0 rgba(15,26,20,0.04), 0 4px 16px rgba(15,26,20,0.04);
+  transition: box-shadow 0.18s;
+}
+.card:hover { box-shadow: 0 1px 0 rgba(15,26,20,0.05), 0 6px 24px rgba(15,26,20,0.08); }
+.card-label {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.10em;
+  text-transform: uppercase; color: var(--oat); margin-bottom: 0.7rem;
+}
+.card p { font-size: 14px; color: var(--esp); line-height: 1.74; margin-bottom: 0.6rem; opacity: 0.86; }
+.card p:last-child { margin-bottom: 0; }
+.card a { color: var(--med); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.card a:hover { color: var(--esp); }
+.card ul { list-style: none; padding: 0; margin: 0.5rem 0 0; }
+.card li {
+  font-size: 13.5px; color: var(--esp); opacity: 0.85;
+  padding: 0.42rem 0 0.42rem 1.2rem;
+  position: relative; line-height: 1.65;
+  border-bottom: 1px solid var(--sil2);
+}
+.card li:last-child { border-bottom: none; padding-bottom: 0; }
+.card li::before {
+  content: ''; position: absolute; left: 0; top: 0.8em;
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--med); opacity: 0.5;
+}
+.card li strong { color: var(--esp); opacity: 1; font-weight: 600; }
+
+/* ── GRID ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem; }
+@media (max-width: 540px) { .grid-2 { grid-template-columns: 1fr; } }
+
+/* ── NOTICE CARD (highlighted) ── */
+.notice-card {
+  background: var(--g-bg);
+  border: 1px solid rgba(10,92,68,0.18);
+  border-radius: 16px;
+  padding: 1.4rem 1.65rem;
+  margin-bottom: 0.75rem;
+}
+.notice-card .card-label { color: var(--med); }
+.notice-card p { font-size: 13.5px; color: var(--esp); opacity: 0.82; line-height: 1.72; margin-bottom: 0.5rem; }
+.notice-card p:last-child { margin-bottom: 0; }
+.notice-card ul { list-style: none; padding: 0; margin: 0.5rem 0 0; }
+.notice-card li {
+  font-size: 13.5px; color: var(--esp); opacity: 0.82;
+  padding: 0.4rem 0 0.4rem 1.2rem;
+  position: relative; line-height: 1.65;
+  border-bottom: 1px solid rgba(10,92,68,0.10);
+}
+.notice-card li:last-child { border-bottom: none; padding-bottom: 0; }
+.notice-card li::before {
+  content: ''; position: absolute; left: 0; top: 0.8em;
+  width: 4px; height: 4px; border-radius: 50%; background: var(--med); opacity: 0.6;
+}
+.notice-card li strong { color: var(--esp); opacity: 1; font-weight: 600; }
+
+/* ── PRICING CARD ── */
+.pricing-card {
+  background: var(--esp);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 0.75rem;
+  position: relative; overflow: hidden;
+}
+.pricing-card::before {
+  content: ''; position: absolute; top: -60px; right: -60px;
+  width: 220px; height: 220px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(13,122,92,0.18) 0%, transparent 65%);
+  pointer-events: none;
+}
+.pricing-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(245,237,224,0.10); border: 1px solid rgba(245,237,224,0.16);
+  border-radius: 99px; padding: 3px 11px;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.07em;
+  text-transform: uppercase; color: rgba(245,237,224,0.60);
+  margin-bottom: 12px;
+}
+.pricing-h {
+  font-family: 'DM Serif Display', serif; font-size: 1.45rem;
+  color: var(--ln); letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 6px;
+}
+.pricing-h em { font-style: italic; color: #8dd5c1; }
+.pricing-sub { font-size: 13px; color: rgba(245,237,224,0.50); line-height: 1.58; margin-bottom: 1.4rem; }
+.pricing-tiers { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.5rem; }
+@media (max-width: 480px) { .pricing-tiers { grid-template-columns: 1fr; } }
+.tier {
+  background: rgba(245,237,224,0.06); border: 1px solid rgba(245,237,224,0.10);
+  border-radius: 12px; padding: 1rem 1.1rem;
+}
+.tier.tier-pro { border-color: rgba(141,213,193,0.25); background: rgba(13,122,92,0.14); }
+.tier-name {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.09em;
+  text-transform: uppercase; color: rgba(245,237,224,0.45); margin-bottom: 6px;
+}
+.tier.tier-pro .tier-name { color: #8dd5c1; }
+.tier-price {
+  font-family: 'DM Serif Display', serif; font-size: 1.6rem;
+  color: var(--ln); letter-spacing: -0.04em; line-height: 1;
+}
+.tier-period { font-size: 11px; color: rgba(245,237,224,0.38); margin-top: 2px; }
+.tier-features { list-style: none; padding: 0; margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
+.tier-features li {
+  font-size: 11.5px; color: rgba(245,237,224,0.62);
+  display: flex; align-items: flex-start; gap: 6px; line-height: 1.45;
+}
+.tier-features li .check { color: #8dd5c1; font-size: 10px; flex-shrink: 0; margin-top: 1px; }
+.tier.tier-pro .tier-features li { color: rgba(245,237,224,0.80); }
+.pricing-note { font-size: 11.5px; color: rgba(245,237,224,0.35); line-height: 1.55; }
+.pricing-note a { color: rgba(141,213,193,0.70); }
+
+/* ── AMBASSADOR CARD ── */
+.amb-card {
+  background: var(--esp2);
+  border: 1px solid rgba(245,237,224,0.06);
+  border-radius: 20px; padding: 2rem;
+  margin-bottom: 0.75rem; position: relative; overflow: hidden;
+}
+.amb-card::before {
+  content: ''; position: absolute; top: -40px; right: -40px;
+  width: 180px; height: 180px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(10,92,68,0.18) 0%, transparent 65%);
+  pointer-events: none;
+}
+.amb-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(10,92,68,0.20); border: 1px solid rgba(10,92,68,0.30);
+  border-radius: 99px; padding: 3px 11px;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.07em;
+  text-transform: uppercase; color: #8dd5c1; margin-bottom: 10px;
+}
+.amb-h {
+  font-family: 'DM Serif Display', serif; font-size: 1.3rem;
+  color: var(--ln); letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 6px;
+}
+.amb-h em { font-style: italic; color: #8dd5c1; }
+.amb-sub { font-size: 13px; color: rgba(245,237,224,0.48); line-height: 1.58; margin-bottom: 1.3rem; }
+.amb-perks { display: flex; flex-direction: column; gap: 7px; margin-bottom: 1.4rem; }
+.amb-perk { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: rgba(245,237,224,0.70); }
+.amb-check {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: rgba(10,92,68,0.25); border: 1px solid rgba(10,92,68,0.35);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 8px; font-weight: 700; color: #8dd5c1; flex-shrink: 0;
+}
+.amb-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--med); color: var(--ln);
+  border: none; border-radius: 99px; padding: 11px 20px;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; text-decoration: none;
+  transition: opacity 0.15s, transform 0.15s;
+}
+.amb-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+/* ── CONTACT CARD ── */
+.contact-card {
+  background: var(--cr); border: 1px solid var(--sil);
+  border-radius: 18px; padding: 2rem 2rem;
+  text-align: center; position: relative; overflow: hidden;
+  box-shadow: 0 1px 0 rgba(15,26,20,0.04), 0 6px 24px rgba(15,26,20,0.05);
+}
+.contact-card::before {
+  content: ''; position: absolute; top: -50px; right: -50px;
+  width: 180px; height: 180px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(10,92,68,0.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+.contact-h {
+  font-family: 'DM Serif Display', serif; font-size: 1.4rem; font-weight: 400;
+  color: var(--esp); letter-spacing: -0.03em; margin-bottom: 0.5rem;
+}
+.contact-h em { font-style: italic; color: var(--med); }
+.contact-sub { font-size: 13.5px; color: var(--oat); line-height: 1.65; margin-bottom: 1.5rem; max-width: 380px; margin-left: auto; margin-right: auto; }
+.contact-links { display: flex; flex-wrap: wrap; gap: 0.55rem; justify-content: center; }
+.contact-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--surf); border: 1px solid var(--sil);
+  border-radius: 99px; padding: 8px 15px;
+  font-size: 12.5px; font-weight: 600; color: var(--esp);
+  text-decoration: none; transition: all 0.15s;
+}
+.contact-link:hover { background: var(--g-bg); border-color: rgba(10,92,68,0.22); }
+.contact-link svg { width: 13px; height: 13px; opacity: 0.6; }
+
+/* ── PILL ROW ── */
+.pill-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+.pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--g-bg); border: 1px solid rgba(10,92,68,0.16);
+  border-radius: 99px; padding: 4px 12px;
+  font-size: 11.5px; font-weight: 600; color: var(--med);
+}
+
+/* ── FOOTER ── */
+.footer {
+  border-top: 1px solid var(--sil);
+  padding: 3rem 2rem;
+  max-width: 680px; margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0.65rem; text-align: center;
+}
+.f-logo { display: flex; align-items: center; gap: 9px; }
+.f-mark {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--esp); display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--ln);
+  font-style: italic; box-shadow: 0 1px 4px rgba(15,26,20,0.18);
+}
+.f-name { font-family: 'DM Serif Display', serif; font-size: 15px; color: var(--esp); letter-spacing: -0.02em; }
+.f-by { font-size: 12.5px; color: var(--oat); }
+.f-loc { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--oat); opacity: 0.7; }
+.f-copy { font-size: 11px; color: var(--oat); opacity: 0.45; }
+
+/* ── SCROLL REVEAL ── */
+.sr { opacity: 0; transform: translateY(18px); transition: opacity 0.55s cubic-bezier(.16,1,.3,1), transform 0.55s cubic-bezier(.16,1,.3,1); transition-delay: var(--d, 0s); }
+.sr.on { opacity: 1; transform: none; }
+.sr-d1 { --d: .05s; } .sr-d2 { --d: .10s; } .sr-d3 { --d: .16s; }
 </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav class="nav">
-  <a class="nav-logo" href="/"><div class="nav-m">m</div><span class="nav-name">mocha</span></a>
+  <a class="nav-logo" href="/">
+    <div class="nav-m">m</div>
+    <span class="nav-name">mocha</span>
+  </a>
   <a class="nav-back" href="/">
     <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12L6 8l4-4"/></svg>
-    Back
+    Back to home
   </a>
 </nav>
 
-<div class="hero">
-  <div class="hero-tag"><span class="hero-dot"></span>Beta &middot; May 2026</div>
-  <h1>Terms &amp; Privacy</h1>
-  <p class="hero-sub">Short, honest, and human. We only collect what we need and will never sell your data.</p>
+<!-- HERO -->
+<div class="hero sr">
+  <div class="hero-tag"><span class="hero-dot"></span>Effective May 2026</div>
+  <h1>Terms &amp; <em>Privacy</em></h1>
+  <p class="hero-sub">Plain English. No lawyers needed. We only collect what we need, we're transparent about how we use it, and we'll never sell your data.</p>
   <div class="hero-meta">
     <span class="hm">
       <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l1.5 1.5"/></svg>
@@ -110,117 +377,244 @@ a{color:var(--esp);font-weight:600;text-decoration:underline;text-underline-offs
     </span>
     <span class="hm">
       <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="6" r="3"/><path d="M2.5 13.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/></svg>
-      Built by Barney J Smith
-    </span>
-    <span class="hm">
-      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 2l1.8 3.7L14 6.3l-3 2.9.7 4.1L8 11.3l-3.7 1.9.7-4.1L2 6.3l4.2-.6L8 2z"/></svg>
-      Free forever
+      Barney J Smith, Manhattan NY
     </span>
   </div>
 </div>
 
+<!-- QUICK NAV -->
+<div class="quick-nav sr sr-d1">
+  <a class="qn-chip" href="#about">About Mocha</a>
+  <a class="qn-chip" href="#pricing-terms">Plans &amp; Billing</a>
+  <a class="qn-chip" href="#your-data">Your Data</a>
+  <a class="qn-chip" href="#cookies">Cookies</a>
+  <a class="qn-chip" href="#rights">Your Rights</a>
+  <a class="qn-chip" href="#contact">Contact</a>
+</div>
+
+<!-- MAIN -->
 <div class="wrap">
 
-  <div class="section-label">About Mocha</div>
+  <!-- ─── ABOUT ─── -->
+  <div id="about" class="section-label sr">About Mocha</div>
 
-  <div class="card">
+  <div class="card sr sr-d1">
     <div class="card-label">What Mocha is</div>
-    <p>Mocha is an AI behavioral interview coach. You answer practice questions and receive scored feedback calibrated against real-world evaluation frameworks used at top consulting, finance, and tech firms.</p>
-    <p>Mocha is not affiliated with or endorsed by any firm referenced in the feedback. Those names describe publicly known hiring standards only.</p>
+    <p>Mocha is an AI-powered interview preparation platform. You answer practice questions — behavioral, competency, and situational — and receive scored, structured feedback calibrated against the hiring standards used at top consulting, finance, and technology firms.</p>
+    <p>Mocha is an independent product. We are not affiliated with, endorsed by, or partnered with any firm referenced in our feedback content. Company names are used solely to describe publicly known hiring benchmarks.</p>
   </div>
 
-  <div class="grid-2">
+  <div class="grid-2 sr sr-d2">
     <div class="card">
       <div class="card-label">Beta disclaimer</div>
-      <p>Mocha is a work in progress. Things may break or change. Feedback is AI-generated coaching guidance, not a formal assessment. Don&rsquo;t treat a Mocha score as an official evaluation.</p>
+      <p>Mocha is actively being developed. Features may change, things may break, and AI feedback is coaching guidance only — not a formal assessment or guarantee of any hiring outcome.</p>
     </div>
     <div class="card">
       <div class="card-label">Liability</div>
-      <p>Mocha is provided as-is. We&rsquo;re not responsible for interview outcomes or hiring decisions. Use the feedback as coaching input alongside your own judgment.</p>
+      <p>Mocha is provided as-is, without warranties of any kind. We are not responsible for interview outcomes, job offers, or hiring decisions. Use feedback as one input among many.</p>
     </div>
   </div>
 
-  <div class="section-label">Using Mocha</div>
+  <!-- ─── PLANS & BILLING ─── -->
+  <div id="pricing-terms" class="section-label sr">Plans &amp; Billing</div>
 
-  <div class="card">
-    <div class="card-label">Your agreement</div>
-    <p>By using Mocha you agree to:</p>
+  <div class="pricing-card sr sr-d1">
+    <div class="pricing-badge">✦ Subscription plans</div>
+    <div class="pricing-h">Simple, <em>honest</em> pricing.</div>
+    <div class="pricing-sub">One free tier. One paid tier. No dark patterns, no hidden fees.</div>
+    <div class="pricing-tiers">
+      <div class="tier">
+        <div class="tier-name">Free</div>
+        <div class="tier-price">$0</div>
+        <div class="tier-period">forever</div>
+        <ul class="tier-features">
+          <li><span class="check">✓</span>Limited practice sessions per month</li>
+          <li><span class="check">✓</span>Core feedback &amp; scoring</li>
+          <li><span class="check">✓</span>Access to question library</li>
+        </ul>
+      </div>
+      <div class="tier tier-pro">
+        <div class="tier-name">Pro</div>
+        <div class="tier-price">$9</div>
+        <div class="tier-period">per month</div>
+        <ul class="tier-features">
+          <li><span class="check">✓</span>Unlimited practice sessions</li>
+          <li><span class="check">✓</span>Advanced scoring &amp; STAR breakdown</li>
+          <li><span class="check">✓</span>Personalised answer rewrites</li>
+          <li><span class="check">✓</span>Priority access to new features</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pricing-note">Payments are processed securely by Stripe. By subscribing you authorise recurring monthly charges of $9 USD. Cancel any time — no fees, no penalties. Cancellation takes effect at the end of your current billing period; we do not offer prorated refunds for partial months unless required by applicable law.</div>
+  </div>
+
+  <div class="card sr sr-d2">
+    <div class="card-label">Billing terms</div>
     <ul>
-      <li>Use it for your own interview prep only</li>
-      <li>Not abuse, overload, or attempt to manipulate the platform</li>
-      <li>Not share your account credentials with others</li>
-      <li>Be at least 16 years old</li>
+      <li><strong>Payment processor:</strong> All transactions are handled by Stripe, Inc. Mocha does not store your card details.</li>
+      <li><strong>Renewal:</strong> Your Pro subscription renews automatically on the same day each month until you cancel.</li>
+      <li><strong>Cancellation:</strong> Cancel any time from your account settings. Access continues until the end of the billing period you have already paid for.</li>
+      <li><strong>Refunds:</strong> We do not issue prorated refunds for partial months. If you believe you have been charged in error, contact us within 14 days at <a href="mailto:help@usemocha.app">help@usemocha.app</a> and we will review promptly.</li>
+      <li><strong>Failed payments:</strong> If a payment fails, we will retry up to three times before suspending Pro access. You will be notified by email at each stage.</li>
+      <li><strong>Price changes:</strong> We will give at least 30 days' notice via email before any pricing changes take effect.</li>
+    </ul>
+  </div>
+
+  <div class="grid-2 sr sr-d3">
+    <div class="card">
+      <div class="card-label">Free plan limits</div>
+      <p>The Free plan may include monthly session quotas, question limits, or feature restrictions. Current limits are shown in-app and may change as the product evolves. We will communicate meaningful changes via in-app notice.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Stripe &amp; security</div>
+      <p>Stripe is PCI-DSS Level 1 certified. Your card number never touches Mocha's servers. You can view and update your billing information directly via the link in your account settings.</p>
+    </div>
+  </div>
+
+  <!-- ─── USING MOCHA ─── -->
+  <div class="section-label sr">Using Mocha</div>
+
+  <div class="card sr sr-d1">
+    <div class="card-label">Your agreement</div>
+    <p>By creating an account or using Mocha, you agree to these terms. If you do not agree, please do not use the platform.</p>
+    <ul>
+      <li>Use Mocha for your own personal interview preparation only</li>
+      <li>Do not share your account credentials or sessions with others</li>
+      <li>Do not attempt to scrape, reverse-engineer, or overload the platform</li>
+      <li>Do not submit content that is unlawful, harmful, or infringes third-party rights</li>
+      <li>You must be at least 16 years old to create an account</li>
     </ul>
     <div class="pill-row">
-      <span class="pill">
-        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M7 1.5L8.8 5.2L13 5.8L10 8.7L10.7 12.9L7 11L3.3 12.9L4 8.7L1 5.8L5.2 5.2Z"/></svg>
-        Free forever
-      </span>
-      <span class="pill">
-        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="2" y="3" width="10" height="8" rx="1.5"/><path d="M5 3V2.5a.5.5 0 011 0V3M8 3V2.5a.5.5 0 011 0V3"/></svg>
-        Free to start
-      </span>
-      <span class="pill">
-        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12c0-2.8 2.2-4.5 5-4.5s5 1.7 5 4.5"/></svg>
-        16+ only
-      </span>
+      <span class="pill">Free to start</span>
+      <span class="pill">$9/mo Pro</span>
+      <span class="pill">16+ only</span>
+      <span class="pill">No ads</span>
     </div>
   </div>
 
-  <div class="section-label">Your Data</div>
+  <div class="notice-card sr sr-d2">
+    <div class="card-label">AI-generated content</div>
+    <p>All feedback, scores, and suggested answer rewrites are generated by artificial intelligence. They are coaching guidance, not professional career advice, legal advice, or a guarantee of any outcome. AI can make mistakes — always apply your own judgment.</p>
+    <p>Mocha's feedback reflects publicly documented hiring frameworks. We make no claim that using Mocha will result in an interview, offer, or job.</p>
+  </div>
 
-  <div class="card">
+  <!-- ─── YOUR DATA ─── -->
+  <div id="your-data" class="section-label sr">Your Data</div>
+
+  <div class="card sr sr-d1">
     <div class="card-label">What we collect</div>
-    <p>We collect as little as possible.</p>
+    <p>We are transparent about every piece of data we collect and why.</p>
     <ul>
-      <li><strong>Name &amp; email</strong> — to identify your account and send occasional product updates. You can opt out any time.</li>
-      <li><strong>Interview answers</strong> — processed in real time to generate your feedback. Not stored after your session ends.</li>
-      <li><strong>Usage analytics</strong> — anonymised behaviour data via Google Analytics. No name, no email.</li>
-      <li><strong>Local data</strong> — your history, streak, and settings live in your browser only and never leave your device.</li>
+      <li><strong>Name &amp; email address</strong> — required to create and identify your account. Used to send transactional emails (account confirmation, password reset, billing receipts) and, if you opt in, product updates.</li>
+      <li><strong>Interview answers</strong> — the text you submit in practice sessions is sent to our AI model to generate feedback. We retain this data to improve scoring accuracy and personalise your experience over time.</li>
+      <li><strong>Session &amp; performance history</strong> — your completed sessions, scores, and streaks are stored on our servers to power your progress dashboard and to improve the product.</li>
+      <li><strong>Usage analytics</strong> — page views, feature interactions, and general usage patterns collected via Google Analytics. Analytics data is pseudonymised and does not include your name or email address directly.</li>
+      <li><strong>Payment data</strong> — if you subscribe to Pro, Stripe collects your payment details. We receive and store only a tokenised reference, your subscription status, and billing history. We never see your full card number.</li>
+      <li><strong>Device &amp; browser data</strong> — IP address, browser type, operating system, and approximate location (country/region level) collected automatically when you use the platform. Used for security, fraud prevention, and aggregate analytics.</li>
     </ul>
   </div>
 
-  <div class="grid-2">
+  <div class="card sr sr-d2">
+    <div class="card-label">How we use your data</div>
+    <ul>
+      <li><strong>To provide the service</strong> — generating AI feedback, saving your history, processing payments, and sending transactional emails.</li>
+      <li><strong>To improve Mocha</strong> — analysing usage patterns and reviewing anonymised interview responses to improve scoring quality. We do not use your data to train third-party AI models without your explicit consent.</li>
+      <li><strong>To keep you informed</strong> — product updates, new features, and beta announcements if you have opted in. You can unsubscribe from marketing emails at any time via the link in any email we send.</li>
+      <li><strong>For security &amp; fraud prevention</strong> — detecting abuse, protecting accounts, and complying with legal obligations.</li>
+    </ul>
+    <p style="margin-top:0.75rem;"><strong>We never sell your data. We do not use your data for behavioural advertising or share it with advertisers. No exceptions.</strong></p>
+  </div>
+
+  <div class="grid-2 sr sr-d3">
     <div class="card">
-      <div class="card-label">How we use your data</div>
-      <p>Your name and email create your account and let us send product updates.</p>
-      <p>We never sell your data. No advertisers. No profiling. No exceptions.</p>
-    </div>
-    <div class="card">
-      <div class="card-label">Your rights</div>
-      <p>Email us any time to:</p>
+      <div class="card-label">Data sharing</div>
+      <p>We share data only with the sub-processors needed to operate the service:</p>
       <ul>
-        <li>Delete your account and all data</li>
-        <li>See everything we hold about you</li>
-        <li>Unsubscribe from product emails</li>
+        <li><strong>Stripe</strong> — payment processing</li>
+        <li><strong>Google Analytics</strong> — usage analytics</li>
+        <li><strong>Anthropic / OpenAI</strong> — AI feedback generation</li>
+        <li><strong>Hosting provider</strong> — infrastructure</li>
       </ul>
-    </div>
-  </div>
-
-  <div class="grid-2">
-    <div class="card">
-      <div class="card-label">Analytics</div>
-      <p>We use Google Analytics to understand how people use Mocha. It doesn&rsquo;t collect your name or email. You can opt out via the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">GA opt-out add-on</a>.</p>
+      <p style="margin-top:0.6rem; font-size:13px; opacity:0.75;">We do not sell data to third parties, data brokers, or advertising networks.</p>
     </div>
     <div class="card">
-      <div class="card-label">Security</div>
-      <p>All credentials are stored server-side and never exposed in frontend code. We&rsquo;ll notify you promptly if anything goes wrong.</p>
+      <div class="card-label">Data retention</div>
+      <p>We retain your account data for as long as your account is active. If you delete your account, we will erase your personal data within 30 days, except where retention is required by law (e.g. billing records for tax compliance, typically 7 years).</p>
+      <p>Anonymised, aggregated analytics data may be retained indefinitely.</p>
     </div>
   </div>
 
-  <div class="section-label">Changes</div>
+  <!-- ─── COOKIES ─── -->
+  <div id="cookies" class="section-label sr">Cookies &amp; Tracking</div>
 
-  <div class="card">
-    <div class="card-label">Changes &amp; availability</div>
-    <p>This is beta. We may update these terms, change features, or pause the service. We&rsquo;ll update the date above when anything important changes. Continued use means you accept the updated terms.</p>
+  <div class="card sr sr-d1">
+    <div class="card-label">Cookies we use</div>
+    <ul>
+      <li><strong>Essential cookies</strong> — required for authentication (keeping you logged in) and security. Cannot be disabled without breaking core functionality.</li>
+      <li><strong>Analytics cookies</strong> — Google Analytics sets cookies to measure usage patterns in aggregate. These are pseudonymised. You can opt out via the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics opt-out add-on</a>.</li>
+      <li><strong>Payment cookies</strong> — Stripe may set cookies necessary for secure payment processing.</li>
+    </ul>
+    <p>We do not use advertising cookies, retargeting pixels, or third-party tracking for marketing purposes.</p>
   </div>
 
-  <div class="section-label">Become a Campus Ambassador</div>
+  <!-- ─── RIGHTS ─── -->
+  <div id="rights" class="section-label sr">Your Rights</div>
 
-  <div class="amb-card">
-    <div class="amb-badge">✦ Campus Ambassador</div>
-    <div class="amb-h">Bring Mocha to your university.<br><em>Get Pro free.</em></div>
-    <div class="amb-sub">We&rsquo;re looking for one student per campus to help grow Mocha at their school. Share it with your career center, your group chats, your friends preparing for recruiting season.</div>
+  <div class="card sr sr-d1">
+    <div class="card-label">What you can always do</div>
+    <p>Regardless of where you are in the world, you have the following rights. Email us at <a href="mailto:help@usemocha.app">help@usemocha.app</a> to exercise any of them — we will respond within 30 days.</p>
+    <ul>
+      <li><strong>Access</strong> — request a copy of all data we hold about you</li>
+      <li><strong>Correction</strong> — ask us to correct inaccurate personal data</li>
+      <li><strong>Deletion</strong> — request deletion of your account and personal data</li>
+      <li><strong>Portability</strong> — receive your data in a machine-readable format (CSV or JSON)</li>
+      <li><strong>Opt out of marketing</strong> — unsubscribe from non-essential emails at any time</li>
+      <li><strong>Restrict processing</strong> — ask us to stop using your data in certain ways while a dispute is resolved</li>
+    </ul>
+  </div>
+
+  <div class="grid-2 sr sr-d2">
+    <div class="card">
+      <div class="card-label">GDPR (EU/UK)</div>
+      <p>If you are in the EU or UK, you have additional rights under GDPR/UK GDPR, including the right to object to processing and to lodge a complaint with your local supervisory authority. Our lawful basis for processing is primarily contract performance (to provide the service) and legitimate interests (security, fraud prevention, analytics).</p>
+    </div>
+    <div class="card">
+      <div class="card-label">CCPA (California)</div>
+      <p>If you are a California resident, you have the right to know what personal information we collect and how it is used, to request deletion, and to opt out of the sale of personal information. We do not sell personal information. To exercise your rights, contact us at <a href="mailto:help@usemocha.app">help@usemocha.app</a>.</p>
+    </div>
+  </div>
+
+  <div class="card sr sr-d3">
+    <div class="card-label">Security</div>
+    <p>All data in transit is encrypted via TLS. Credentials are hashed server-side and never stored in plaintext. Payment data is handled entirely by Stripe and never passes through Mocha's servers. We conduct security reviews as the product evolves and will notify affected users promptly in the event of a data breach, as required by applicable law.</p>
+  </div>
+
+  <!-- ─── CHANGES ─── -->
+  <div class="section-label sr">Changes &amp; Termination</div>
+
+  <div class="grid-2 sr sr-d1">
+    <div class="card">
+      <div class="card-label">Changes to these terms</div>
+      <p>We may update these terms as Mocha evolves. For material changes, we will notify you by email at least 14 days before the changes take effect. The date at the top of this page always reflects the latest version. Continued use after the effective date constitutes acceptance.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Account termination</div>
+      <p>You may delete your account at any time from settings. We reserve the right to suspend or terminate accounts that violate these terms, with reasonable notice where possible. If we shut down Mocha, we will give at least 30 days' notice and ensure you can export your data.</p>
+    </div>
+  </div>
+
+  <div class="notice-card sr sr-d2">
+    <div class="card-label">Governing law</div>
+    <p>These terms are governed by the laws of the State of New York, USA. Any disputes will be resolved in the courts of New York County. If any provision of these terms is found unenforceable, the remaining provisions remain in full effect.</p>
+  </div>
+
+  <!-- ─── AMBASSADOR ─── -->
+  <div class="section-label sr">Campus Ambassador</div>
+
+  <div class="amb-card sr sr-d1">
+    <div class="amb-badge">✦ Campus Ambassador Program</div>
+    <div class="amb-h">Bring Mocha to your campus.<br><em>Get Pro free.</em></div>
+    <div class="amb-sub">We're looking for one student per campus to help spread Mocha during recruiting season. Share it with your career center, group chats, and friends preparing for interviews.</div>
     <div class="amb-perks">
       <div class="amb-perk"><div class="amb-check">✓</div>Mocha Pro free — unlimited sessions, no quota</div>
       <div class="amb-perk"><div class="amb-check">✓</div>Your university featured on the homepage</div>
@@ -233,11 +627,12 @@ a{color:var(--esp);font-weight:600;text-decoration:underline;text-underline-offs
     </a>
   </div>
 
-  <div class="section-label">Say Hello</div>
+  <!-- ─── CONTACT ─── -->
+  <div id="contact" class="section-label sr">Say Hello</div>
 
-  <div class="contact-card">
-    <div class="contact-card-h">We&rsquo;d love to hear from you.</div>
-    <div class="contact-card-sub">Questions, feedback, data requests, or just want to say hi — reach out directly. Mocha is built by one person and we read everything.</div>
+  <div class="contact-card sr sr-d1">
+    <div class="contact-h">We'd love to <em>hear from you.</em></div>
+    <div class="contact-sub">Questions, feedback, data requests, or just want to say hi — reach out directly. Mocha is built by one person and we read everything.</div>
     <div class="contact-links">
       <a class="contact-link" href="mailto:help@usemocha.app">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 8l10 6 10-6"/></svg>
@@ -256,8 +651,12 @@ a{color:var(--esp);font-weight:600;text-decoration:underline;text-underline-offs
 
 </div>
 
+<!-- FOOTER -->
 <footer class="footer">
-  <div class="f-logo"><div class="f-mark">m</div><span class="f-name">mocha</span></div>
+  <div class="f-logo">
+    <div class="f-mark">m</div>
+    <span class="f-name">mocha</span>
+  </div>
   <div class="f-by">Built by Barney J Smith</div>
   <div class="f-loc">
     <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2C5.8 2 4 3.8 4 6c0 3.3 4 8 4 8s4-4.7 4-8c0-2.2-1.8-4-4-4z"/><circle cx="8" cy="6" r="1.2" fill="currentColor" stroke="none"/></svg>
@@ -265,6 +664,19 @@ a{color:var(--esp);font-weight:600;text-decoration:underline;text-underline-offs
   </div>
   <div class="f-copy">&copy; 2026 Mocha &middot; Built for the students who want it most.</div>
 </footer>
+
+<script>
+// Scroll reveal
+const sr = document.querySelectorAll('.sr');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); obs.unobserve(e.target); } });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+sr.forEach(el => obs.observe(el));
+// Hero reveals immediately
+document.querySelectorAll('.hero.sr, .quick-nav.sr').forEach(el => {
+  setTimeout(() => el.classList.add('on'), 80);
+});
+</script>
 
 </body>
 </html>

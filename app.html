@@ -4604,7 +4604,7 @@ window.onunhandledrejection = function(e) {
 </script>
 <style>
 /* ═══════════════════════════════════════════════════════════
-   MOCHA — CRITICAL FIXES (last style block wins)
+   MOCHA — CRITICAL FIXES (last style block, wins all specificity wars)
    ═══════════════════════════════════════════════════════════ */
 
 /* FIX 1 — SCROLL */
@@ -4628,8 +4628,17 @@ html, body { overflow-x:hidden!important; overflow-y:auto!important; overscroll-
 .spinner-wrap > div:first-child { display:flex!important; flex-direction:row!important; align-items:flex-end!important; justify-content:center!important; gap:20px!important; }
 .spinner-wrap > div:first-child > div, .spinner-wrap > div:first-child > div:first-child { display:flex!important; flex-direction:row!important; align-items:flex-end!important; gap:20px!important; }
 
-/* LOADING SCREEN */
-.spinner-wrap, #fb-load.spinner-wrap { display:flex!important; flex-direction:column!important; align-items:center!important; justify-content:center!important; min-height:calc(100vh - 52px)!important; padding:2rem 24px!important; background:#f9fbfa!important; }
+/* FIX 4 — LOADING CENTERED IN VIEWPORT, RESULT STARTS AT TOP */
+/* Loading: vertically centered so it sits exactly where result will appear */
+.spinner-wrap, #fb-load.spinner-wrap {
+  display:flex!important; flex-direction:column!important; align-items:center!important;
+  justify-content:center!important; min-height:calc(100vh - 52px)!important;
+  padding:2rem 24px!important; background:#f9fbfa!important;
+}
+/* Result: no top padding offset — scrollTo(0) lands right on the score hero */
+#page-feedback { padding-top:52px!important; }
+#fb-result { padding-top:0!important; }
+
 .load-t { font-family:'DM Serif Display',serif!important; font-size:1.35rem!important; font-weight:400!important; color:#0f1a14!important; letter-spacing:-.03em!important; text-align:center!important; margin-bottom:5px!important; line-height:1.2!important; }
 .load-s { font-size:13px!important; color:rgba(15,26,20,0.40)!important; text-align:center!important; font-family:'DM Sans',sans-serif!important; letter-spacing:-.01em!important; }
 #fb-load > div:last-child > div:first-child { background:rgba(15,26,20,0.06)!important; border-radius:99px!important; }
@@ -8077,6 +8086,7 @@ function renderFeedback(r, isFree) {
   document.getElementById('fb-load').style.display   = 'none';
   document.getElementById('fb-result').style.display = 'block';
   document.getElementById('fb-result').style.animation = 'fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both';
+  window.scrollTo({ top: 0, behavior: 'instant' });
   document.getElementById('fb-qlbl').textContent    = currentQ ? currentQ.text : '';
   // Animate score counting up
   (function() {

@@ -9346,9 +9346,9 @@ function practiceAdaptiveFollowUp() {
 // SUBMIT
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function doSubmit() {
-  if (_submitting) return; // one action = one call
-  // Always reset stuck request state from any prior session
+  // Reset any stuck state from prior session
   _activeRequest = false;
+  _submitting = false;
   clearInterval(timerInt);
   if (isRec) stopMic();
   var answer = document.getElementById('ans-ta').value.trim();

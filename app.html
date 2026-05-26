@@ -7479,7 +7479,8 @@ function _callPayload(payload, onSuccess, onError) {
     clearTimeout(timeoutId);
     if (res.status === 429) {
       _activeRequest = false;
-      onError('Mocha is busy right now. Please wait 30 seconds and try again.');
+      _submitting = false;
+      _showLimitReached();
       return null;
     }
     return res.json();
@@ -7535,8 +7536,8 @@ var MOCHA_DEV_KEY = '';
 var GEMINI_API_KEY = '';
 var HOST_KEY = '';
 
-// Per-user daily limit: 3 free sessions
-var USER_DAILY_LIMIT = 3;
+// Per-user daily limit: 2 free sessions per day
+var USER_DAILY_LIMIT = 2;
 function _getUserUsage() {
   try {
     var u = JSON.parse(localStorage.getItem('mocha_usage') || '{}');

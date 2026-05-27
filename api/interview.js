@@ -8,7 +8,7 @@
 import { createHash } from 'crypto';
 
 const GEMINI_ENDPOINT =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent';
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
 // ── Vercel KV (optional) ─────────────────────────────────────────
 const KV_URL   = process.env.KV_REST_API_URL;
@@ -393,7 +393,7 @@ async function callGemini(prompt, rid, attempt = 1) {
           maxOutputTokens: 8000,
           topP           : 0.8,
         },
-        // thinkingConfig removed — not supported by gemini-1.5-flash
+        // thinkingConfig removed — not supported by gemini-2.5-flash
       }),
     });
     clearTimeout(timeout);
@@ -665,7 +665,7 @@ export default async function handler(req, res) {
 
     const rwController = new AbortController();
     const rwTimeout = setTimeout(() => rwController.abort(), 15000);
-    const rwEndpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=' + process.env.GEMINI_API_KEY;
+    const rwEndpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + process.env.GEMINI_API_KEY;
     const rwRes = await fetch(rwEndpoint,
       { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: rwBody, signal: rwController.signal }
     );

@@ -1762,6 +1762,13 @@ body {
    MOBILE — single block, zero overflow
    ══════════════════════════════════════════════ */
 @media(max-width:768px) {
+  /* Mobile demo: hide sidebar + feedback, chat fills full width */
+  #dw-feedback-panel { display:none !important; }
+  .dw-sidebar { display:none !important; }
+  .dw-body { grid-template-columns: 1fr !important; grid-template-rows: 1fr !important; }
+  #dw-main-panel { width:100% !important; min-width:0 !important; border-right:none !important; }
+  /* Fix timer wrapping */
+  .dw-timer { white-space:nowrap !important; }
   /* ── SHOW MOBILE OVERLAY BUTTONS ── */
   
   
@@ -4144,49 +4151,23 @@ document.addEventListener('keydown', function(e) {
 </script>
 
 
-// Mobile demo: scale down to fit, hide clipped chat
-(function() {
-  function fixMobileDemo() {
-    var isMobile = window.innerWidth < 768;
-    var demoWin = document.querySelector('.demo-window');
-    var body = document.getElementById('dw-body-el');
-    var main = document.getElementById('dw-main-panel');
-    var sidebar = document.querySelector('.dw-sidebar');
-    var feedback = document.getElementById('dw-feedback-panel');
-    if (!demoWin || !body) return;
-
-    if (isMobile) {
-      // Hide sidebar and chat, show only feedback panel small on right
-      body.setAttribute('style',
-        'display:flex!important;flex-direction:row!important;' +
-        'height:auto!important;min-height:unset!important;max-height:unset!important;' +
-        'overflow:hidden!important;width:100%!important;');
-      if (sidebar) sidebar.setAttribute('style', 'display:none!important;');
-      if (main)    main.setAttribute('style', 'display:none!important;');
-      if (feedback) feedback.setAttribute('style',
-        'display:block!important;width:100%!important;max-width:100%!important;' +
-        'min-width:0!important;height:auto!important;min-height:unset!important;' +
-        'max-height:unset!important;overflow:visible!important;' +
-        'padding:14px!important;box-sizing:border-box!important;');
-    } else {
-      // Restore desktop inline styles
-      body.setAttribute('style',
-        'display:grid!important;grid-template-columns:140px 1fr 180px!important;' +
-        'height:440px!important;min-height:440px!important;max-height:440px!important;' +
-        'overflow:hidden!important;');
-      if (sidebar) sidebar.removeAttribute('style');
-      if (main)    main.removeAttribute('style');
-      if (feedback) feedback.setAttribute('style',
-        'display:block!important;width:180px!important;min-width:180px!important;' +
-        'max-width:180px!important;height:440px!important;min-height:440px!important;' +
-        'max-height:440px!important;overflow-y:auto!important;');
-    }
+// Mobile demo: hide sidebar+feedback via JS (inline styles need setAttribute)
+(function(){
+  function fixDemo(){
+    if(window.innerWidth>=768)return;
+    var sb=document.querySelector('.dw-sidebar');
+    var fb=document.getElementById('dw-feedback-panel');
+    var body=document.getElementById('dw-body-el');
+    var main=document.getElementById('dw-main-panel');
+    if(sb)sb.setAttribute('style','display:none!important;');
+    if(fb)fb.setAttribute('style','display:none!important;');
+    if(body)body.setAttribute('style','display:grid!important;grid-template-columns:1fr!important;height:440px!important;min-height:440px!important;max-height:440px!important;overflow:hidden!important;');
+    if(main)main.setAttribute('style','display:flex!important;flex-direction:column!important;width:100%!important;height:440px!important;min-height:440px!important;max-height:440px!important;overflow:hidden!important;border-right:none!important;');
   }
-  fixMobileDemo();
-  document.addEventListener('DOMContentLoaded', fixMobileDemo);
-  window.addEventListener('load', fixMobileDemo);
-  window.addEventListener('resize', fixMobileDemo);
-  [100, 300, 600, 1200, 2000].forEach(function(t) { setTimeout(fixMobileDemo, t); });
+  fixDemo();
+  document.addEventListener('DOMContentLoaded',fixDemo);
+  window.addEventListener('load',fixDemo);
+  [200,600,1500].forEach(function(t){setTimeout(fixDemo,t);});
 })();
 
 </body>

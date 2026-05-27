@@ -6550,16 +6550,26 @@ body,
 }
 
 /* Rewrite */
+.fb-rw-cue {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 1.4rem; background: #f8f8f5;
+}
+.fb-rw-cue-line { flex: 1; height: 1px; background: rgba(10,92,68,.12); }
+.fb-rw-cue-txt  {
+  font-size: 10px; font-weight: 700; color: rgba(10,92,68,.40);
+  letter-spacing: .06em; text-transform: uppercase; white-space: nowrap;
+}
 .fb-rw-section { background: #0a5c44; border-radius: 0 0 20px 20px; overflow: hidden; }
 .fb-rw-label   { padding: 1.1rem 1.4rem .85rem; border-bottom: 1px solid rgba(253,232,204,.08); }
 .fb-rw-badge   {
   display: block; font-size: 9px; font-weight: 800; letter-spacing: .13em;
-  text-transform: uppercase; color: rgba(253,232,204,.55); margin-bottom: 3px;
+  text-transform: uppercase; color: rgba(253,232,204,.70); margin-bottom: 3px;
 }
 .fb-rw-sub  { font-size: 11px; color: rgba(253,232,204,.28); }
 .fb-rw-body {
-  padding: 1.2rem 1.4rem 1.5rem; font-size: 14px; line-height: 1.84;
-  color: rgba(253,232,204,.92); white-space: pre-wrap;
+  padding: 1.3rem 1.4rem 1.6rem; font-size: 14.5px; line-height: 1.86;
+  color: rgba(253,232,204,.95); white-space: pre-wrap;
+  letter-spacing: .01em;
 }
 
 /* Next question */
@@ -7577,6 +7587,13 @@ body,
     </div>
 
     <!-- Rewrite -->
+    <!-- Rewrite divider cue -->
+    <div class="fb-rw-cue">
+      <div class="fb-rw-cue-line"></div>
+      <div class="fb-rw-cue-txt">↓ Full rewrite below</div>
+      <div class="fb-rw-cue-line"></div>
+    </div>
+
     <div class="fb-rw-section">
       <div class="fb-rw-label">
         <span class="fb-rw-badge">Rewritten at offer standard</span>

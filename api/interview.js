@@ -8,7 +8,7 @@
 import { createHash } from 'crypto';
 
 const GEMINI_ENDPOINT =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent';
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
 // ── Vercel KV (optional) ─────────────────────────────────────────
 const KV_URL   = process.env.KV_REST_API_URL;
@@ -393,7 +393,7 @@ async function callGemini(prompt, rid, attempt = 1) {
           maxOutputTokens: 8000,
           topP           : 0.8,
         },
-        // thinkingConfig removed — not supported by gemini-2.5-flash-preview-05-20
+        // thinkingConfig removed — not supported by gemini-2.0-flash
       }),
     });
     clearTimeout(timeout);

@@ -55,11 +55,11 @@ body{font-family:"DM Sans",system-ui,sans-serif;background:var(--cr);color:var(-
 .ob-pricing {left:37.2%;top:0;    width:5.0%; height:7.07%}
 .ob-unis {left:42.8%;top:0;    width:10.2%;height:7.07%}
 .ob-resources {left:53.5%;top:0;    width:8.0%; height:7.07%}
-.ob-login {left:81.6%;top:0;width:6.6%;height:7.07%;border-radius:6px}
-.ob-navstart {left:88.3%;top:0;width:11.0%;height:7.07%;border-radius:8px}
+.ob-login {left:81.0%;top:0;width:6.4%;height:7.07%;border-radius:6px}
+.ob-navstart {left:87.5%;top:0;width:12.0%;height:7.07%;border-radius:8px}
 /* HERO CTAs */
-.ob-start {left:10.5%;top:60.5%;width:11.5%;height:6.2%;border-radius:99px;z-index:20;position:absolute;}
-.ob-demo  {left:22.5%;top:60.5%;width:10.2%;height:6.2%;border-radius:99px;z-index:20;position:absolute;}
+.ob-start {left:4.5%;top:65.2%;width:10.8%;height:6.7%;border-radius:99px;z-index:20;position:absolute;pointer-events:all;cursor:pointer;}
+.ob-demo  {left:15.3%;top:65.2%;width:10.5%;height:6.7%;border-radius:99px;z-index:20;position:absolute;pointer-events:all;cursor:pointer;}
 /* Product panel */
 .ob-try {left:85.0%;top:87.0%;width:12.5%;height:5.8%;border-radius:8px}
 
@@ -1791,41 +1791,46 @@ body {
   .demo-h { font-size:1.55rem !important; line-height:1.15 !important; text-align:left !important; }
   .demo-sub { font-size:13px !important; text-align:left !important; max-width:100% !important; margin:0 !important; }
   .demo-score-teaser { display:none !important; }
-  .demo-window { border-radius:16px !important; overflow:hidden !important; width:100% !important; max-width:100% !important; box-shadow:0 4px 24px rgba(15,26,20,.12) !important; }
-  /* On mobile: hide chat entirely, show score panel as beautiful full card */
+  .demo-window { border-radius:16px !important; overflow:hidden !important; width:100% !important; max-width:100% !important; box-shadow:0 4px 32px rgba(15,26,20,.14) !important; }
   .dw-body { display:flex !important; flex-direction:column !important; height:auto !important; min-height:unset !important; max-height:unset !important; overflow:hidden !important; width:100% !important; grid-template-columns:unset !important; }
+  /* On mobile: hide chat + sidebar, show ONLY the score panel */
   .dw-sidebar { display:none !important; }
   .dw-main { display:none !important; }
-  .dw-feedback {
+  #dw-feedback-panel {
     display:block !important; width:100% !important; min-width:0 !important;
     max-width:100% !important; height:auto !important; min-height:unset !important;
-    max-height:unset !important; padding:16px !important;
+    max-height:unset !important; padding:20px 20px 16px !important;
     flex-direction:unset !important; align-items:unset !important;
     flex-wrap:unset !important; overflow:visible !important;
     opacity:1 !important; transform:none !important;
   }
-  /* Score: big and centered on mobile */
-  .dw-score-ring-wrap { display:flex !important; justify-content:center !important; margin-bottom:14px !important; }
-  .dw-score-big { display:flex !important; align-items:baseline !important; gap:2px !important; }
-  .dw-score-num { font-size:3rem !important; }
-  .dw-score-unit { font-size:1rem !important; }
-  .dw-score-verdict { text-align:center !important; margin-bottom:14px !important; font-size:10px !important; }
-  /* Bars full width */
-  .dw-score-bars { display:flex !important; flex-direction:column !important; gap:7px !important; margin-bottom:12px !important; }
-  .dw-score-bar-row { display:flex !important; align-items:center !important; gap:8px !important; }
-  .dw-score-bar-lbl { font-size:10px !important; width:58px !important; }
-  .dw-score-bar-track { flex:1 !important; height:3px !important; }
-  .dw-score-bar-val { font-size:11px !important; }
-  /* Strengths / improve tags */
-  .dw-fb-section { margin-bottom:8px !important; display:block !important; }
-  .dw-fb-section-title { font-size:8px !important; margin-bottom:5px !important; }
-  .dw-tag { font-size:9.5px !important; padding:2px 8px !important; }
+  /* Header */
+  .dw-fb-header { display:flex !important; align-items:center !important; gap:8px !important; margin-bottom:14px !important; }
+  .dw-fb-avatar { width:28px !important; height:28px !important; font-size:12px !important; }
+  .dw-fb-title { font-size:13px !important; }
+  .dw-fb-sub { font-size:10px !important; }
+  /* Score display: big and prominent */
+  .dw-score-ring-wrap { display:flex !important; flex-direction:column !important; align-items:center !important; justify-content:center !important; margin-bottom:16px !important; }
+  .dw-score-big { display:flex !important; align-items:baseline !important; gap:3px !important; justify-content:center !important; }
+  .dw-score-num { font-size:4.5rem !important; color:#fde8cc !important; }
+  .dw-score-unit { font-size:1.6rem !important; color:rgba(253,232,204,.35) !important; }
+  .dw-score-verdict { text-align:center !important; margin-top:6px !important; font-size:9px !important; letter-spacing:.14em !important; }
+  /* Score bars full width */
+  .dw-score-bars { display:flex !important; flex-direction:column !important; gap:8px !important; margin-bottom:14px !important; width:100% !important; }
+  .dw-score-bar-row { display:flex !important; align-items:center !important; gap:10px !important; width:100% !important; }
+  .dw-score-bar-lbl { font-size:11px !important; width:64px !important; flex-shrink:0 !important; }
+  .dw-score-bar-track { flex:1 !important; height:2px !important; }
+  .dw-score-bar-val { font-size:11px !important; width:28px !important; text-align:right !important; }
+  /* Tags */
+  .dw-fb-section { margin-bottom:10px !important; display:block !important; }
+  .dw-fb-section-title { font-size:8px !important; margin-bottom:5px !important; display:block !important; }
+  .dw-tag { font-size:10px !important; padding:3px 9px !important; }
   /* Tip */
-  .dw-fb-tip { font-size:10px !important; padding:6px 9px !important; margin:8px 0 !important; }
-  /* Hide CTA / bean on mobile */
-  .dw-next-btn { display:none !important; }
+  .dw-fb-tip { font-size:11px !important; padding:8px 12px !important; margin:10px 0 !important; line-height:1.55 !important; }
+  /* CTA button */
+  .dw-next-btn { display:block !important; width:100% !important; margin-top:12px !important; padding:12px !important; font-size:13px !important; text-align:center !important; }
   .dw-bean-bottom { display:none !important; }
-  .dw-fb-header { margin-bottom:10px !important; }
+
 
   /* PS / PROBLEM-SOLUTION */
   #problem { padding:2.5rem 16px !important }
@@ -2039,9 +2044,9 @@ body { overflow-x: hidden !important; max-width: 100vw !important; }
 
 /* ── DESKTOP: ensure hero CTA buttons are visible and clickable ── */
 @media(min-width:769px) {
-  .ob-start {left:10.5%;top:60.5%;width:11.5%;height:6.2%;border-radius:99px;z-index:20;position:absolute;}
-  .ob-demo  {left:22.5%;top:60.5%;width:10.2%;height:6.2%;border-radius:99px;z-index:20;position:absolute;}
-  .ob-navstart {left:88.3%;top:0;width:11.0%;height:7.07%;border-radius:8px}
+  .ob-start {left:4.5%;top:65.2%;width:10.8%;height:6.7%;border-radius:99px;z-index:20;position:absolute;pointer-events:all;cursor:pointer;}
+  .ob-demo  {left:15.3%;top:65.2%;width:10.5%;height:6.7%;border-radius:99px;z-index:20;position:absolute;pointer-events:all;cursor:pointer;}
+  .ob-navstart {left:87.5%;top:0;width:12.0%;height:7.07%;border-radius:8px}
   /* removed conflicting rule */
 }
 
@@ -2094,8 +2099,8 @@ body { overflow-x: hidden !important; max-width: 100vw !important; }
 /* Desktop: hide mobile buttons */
 @media(min-width:769px) {
   .ob-mob-logo, .ob-mob-menu, .ob-mob-start, .ob-mob-demo { display:none !important; }
-  .ob-start {left:10.5%;top:60.5%;width:11.5%;height:6.2%;border-radius:99px;z-index:20;position:absolute;}
-  .ob-demo  {left:22.5%;top:60.5%;width:10.2%;height:6.2%;border-radius:99px;z-index:20;position:absolute;}
+  .ob-start {left:4.5%;top:65.2%;width:10.8%;height:6.7%;border-radius:99px;z-index:20;position:absolute;pointer-events:all;cursor:pointer;}
+  .ob-demo  {left:15.3%;top:65.2%;width:10.5%;height:6.7%;border-radius:99px;z-index:20;position:absolute;pointer-events:all;cursor:pointer;}
 }
 
 /* ╔══════════════════════════════════════════════╗

@@ -5998,6 +5998,306 @@ body,
 }
 
 /* ════════════════════════════════════════
+   APP LAYOUT — 3-COLUMN PRACTICE VIEW
+   Matches the landing reference exactly
+════════════════════════════════════════ */
+
+#page-practice { background: #f5f3ef; padding-top: 54px; }
+
+/* ── 3-column grid ── */
+.app-layout {
+  display: grid;
+  grid-template-columns: 180px 1fr 200px;
+  height: calc(100vh - 54px);
+  overflow: hidden;
+  border-top: 1px solid rgba(10,92,68,.07);
+}
+
+/* ── SIDEBAR ─────────────────────────── */
+.app-sidebar {
+  background: #fff;
+  border-right: 1px solid rgba(10,92,68,.08);
+  padding: 16px 0;
+  overflow-y: auto;
+  display: flex; flex-direction: column; gap: 0;
+}
+.app-sb-section { padding: 0 14px 12px; }
+.app-sb-label {
+  font-size: 8px; font-weight: 800; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(10,92,68,.35);
+  margin-bottom: 8px; padding: 0 2px;
+}
+.app-sb-divider { height: 1px; background: rgba(10,92,68,.07); margin: 4px 14px 12px; }
+.app-tracks { display: flex; flex-direction: column; gap: 2px; }
+
+/* Track item */
+.app-track-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 10px; border-radius: 10px; cursor: pointer;
+  transition: background .12s;
+  font-size: 12px; font-weight: 500; color: rgba(10,20,15,.65);
+}
+.app-track-item:hover { background: rgba(10,92,68,.06); }
+.app-track-item.active {
+  background: #0a5c44; color: #fff; font-weight: 700;
+}
+.app-track-badge {
+  width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 8px; font-weight: 800; letter-spacing: .02em;
+  background: rgba(10,92,68,.10); color: #0a5c44;
+}
+.app-track-item.active .app-track-badge {
+  background: rgba(255,255,255,.15); color: #fff;
+}
+
+/* Progress bars */
+.app-progress-list { display: flex; flex-direction: column; gap: 0; }
+.app-prog-row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 4px;
+}
+.app-prog-name { font-size: 11px; color: rgba(10,20,15,.50); font-weight: 500; }
+.app-prog-pct  { font-size: 11px; color: rgba(10,20,15,.40); font-weight: 600; }
+.app-prog-track {
+  height: 3px; background: rgba(10,92,68,.08); border-radius: 99px;
+  overflow: hidden; margin-bottom: 2px;
+}
+.app-prog-fill {
+  height: 100%; border-radius: 99px;
+  background: linear-gradient(90deg, #0a5c44, #4dc994);
+  transition: width .8s cubic-bezier(.16,1,.3,1);
+}
+
+/* ── MAIN AREA ────────────────────────── */
+.app-main {
+  display: flex; flex-direction: column;
+  border-right: 1px solid rgba(10,92,68,.07);
+  overflow: hidden;
+  background: #fff;
+}
+
+/* Top bar */
+.app-main-top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px; border-bottom: 1px solid rgba(10,92,68,.07);
+  flex-shrink: 0;
+}
+.app-main-meta { display: flex; align-items: center; gap: 8px; }
+.app-firm-pill {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(10,92,68,.06); border-radius: 99px;
+  padding: 4px 10px 4px 6px;
+}
+.app-firm-dot {
+  width: 20px; height: 20px; border-radius: 6px;
+  background: #0a5c44; color: #fde8cc;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 800;
+}
+.app-firm-pill span { font-size: 11px; font-weight: 700; color: #0a5c44; }
+.app-round-pill {
+  font-size: 10px; font-weight: 600; color: rgba(10,20,15,.45);
+  background: rgba(10,20,15,.05); border-radius: 99px;
+  padding: 4px 10px;
+}
+.app-timer-pill {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 700; color: rgba(10,20,15,.55);
+}
+.app-timer-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #4dc994; animation: timerPulse 2s ease-in-out infinite;
+}
+@keyframes timerPulse {
+  0%,100% { opacity: 1; } 50% { opacity: .4; }
+}
+
+/* Messages */
+.app-messages {
+  flex: 1; overflow-y: auto; padding: 16px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.app-msg { display: flex; flex-direction: column; gap: 6px; }
+.app-msg-coach {}
+.app-msg-user { align-items: flex-end; }
+.app-coach-label {
+  font-size: 8px; font-weight: 800; letter-spacing: .12em;
+  color: rgba(10,92,68,.40); margin-bottom: 4px;
+}
+.app-msg-label-user {
+  font-size: 11px; color: rgba(10,20,15,.40);
+  margin-bottom: 3px; font-weight: 600;
+}
+.app-msg-bubble {
+  background: #f5f3ef; border-radius: 14px 14px 14px 4px;
+  padding: 12px 14px; font-size: 13.5px; line-height: 1.65;
+  color: rgba(10,20,15,.75); max-width: 100%;
+  font-family: 'DM Serif Display', serif;
+}
+.app-bubble-user {
+  background: #fde8cc; border-radius: 14px 14px 4px 14px;
+  padding: 10px 14px; font-size: 13px; line-height: 1.60;
+  color: rgba(10,20,15,.75); max-width: 90%;
+}
+
+/* Input area */
+.app-input-area {
+  border-top: 1px solid rgba(10,92,68,.07);
+  flex-shrink: 0;
+}
+.app-input-meta {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 14px 0;
+}
+.app-your-answer {
+  font-size: 8px; font-weight: 800; letter-spacing: .10em;
+  text-transform: uppercase; color: rgba(10,92,68,.38);
+}
+.app-ta {
+  width: 100%; min-height: 80px; max-height: 140px;
+  padding: 10px 14px; border: none; resize: none; outline: none;
+  font-family: 'DM Sans', sans-serif; font-size: 13px;
+  line-height: 1.60; color: rgba(10,20,15,.80);
+  background: transparent;
+}
+.app-submit-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 14px 12px; border-top: 1px solid rgba(10,92,68,.06);
+}
+
+/* ── FEEDBACK PANEL ───────────────────── */
+.app-fb-panel {
+  background: #0a1810;
+  display: flex; flex-direction: column; gap: 0;
+  overflow-y: auto; padding: 16px;
+}
+
+/* FB Header */
+.app-fb-hd { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.app-fb-brand { display: flex; align-items: center; gap: 8px; }
+.app-fb-avatar {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: rgba(245,237,224,.10);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Serif Display', serif; font-size: 13px;
+  color: #f5ede0; font-style: italic;
+}
+.app-fb-title { font-size: 12px; font-weight: 700; color: #f5ede0; line-height: 1.2; }
+.app-fb-sub   { font-size: 9px; color: rgba(245,237,224,.35); margin-top: 1px; }
+
+/* Waiting state */
+.app-fb-waiting {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 10px; flex: 1;
+  padding: 20px 0;
+}
+.app-fb-wait-txt {
+  font-size: 11px; color: rgba(245,237,224,.30); line-height: 1.6;
+  text-align: center; font-style: italic;
+}
+
+/* Score ring */
+.app-fb-score-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0 0 14px;
+  border-bottom: 1px solid rgba(245,237,224,.07);
+  margin-bottom: 12px;
+}
+.app-fb-ring-container {
+  position: relative; width: 88px; height: 88px; margin-bottom: 10px;
+}
+.app-fb-ring-svg {
+  width: 88px; height: 88px; transform: rotate(-90deg);
+  filter: drop-shadow(0 0 8px rgba(77,201,148,.20));
+}
+.app-fb-ring-bg   { fill:none; stroke:rgba(77,201,148,.12); stroke-width:6; }
+.app-fb-ring-fill {
+  fill:none; stroke:#4dc994; stroke-width:6; stroke-linecap:round;
+  stroke-dasharray:251.2; stroke-dashoffset:251.2;
+  transition: stroke-dashoffset 1.3s cubic-bezier(.16,1,.3,1) .2s, stroke .3s;
+}
+.app-fb-ring-inner {
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+}
+.app-fb-score-n {
+  font-family:'DM Serif Display',serif; font-size:2rem; font-weight:400;
+  color:#f5ede0; letter-spacing:-.04em; line-height:1;
+}
+.app-fb-verdict {
+  font-size:8.5px; font-weight:800; letter-spacing:.10em; text-transform:uppercase;
+  color:#4dc994; background:rgba(77,201,148,.12);
+  padding:4px 12px; border-radius:99px; display:inline-block;
+}
+
+/* FB bars */
+.app-fb-bars {
+  display:flex; flex-direction:column; gap:6px;
+  margin-bottom:12px; padding-bottom:12px;
+  border-bottom:1px solid rgba(245,237,224,.07);
+}
+.app-fb-bar-r { display:flex; align-items:center; gap:6px; }
+.app-fb-bar-l {
+  font-size:7.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+  color:rgba(245,237,224,.26); width:52px; flex-shrink:0;
+}
+.app-fb-bar-t { flex:1; height:2px; background:rgba(77,201,148,.09); border-radius:99px; overflow:hidden; }
+.app-fb-bar-f {
+  height:100%; width:0; border-radius:99px;
+  background:linear-gradient(90deg,rgba(10,92,68,.90),#4dc994);
+  transition:width 1s cubic-bezier(.16,1,.3,1);
+}
+.app-fb-bar-v { font-size:9.5px; font-weight:700; color:#4dc994; width:24px; text-align:right; flex-shrink:0; }
+
+/* Tags */
+.app-fb-tags-wrap { margin-bottom:10px; }
+.app-fb-tags-label {
+  font-size:7.5px; font-weight:800; letter-spacing:.11em; text-transform:uppercase;
+  color:rgba(245,237,224,.30); margin-bottom:5px;
+}
+.app-fb-tags-row { display:flex; flex-wrap:wrap; gap:3px; }
+.app-fb-tag {
+  display:inline-flex; font-size:9.5px; font-weight:600;
+  padding:3px 9px; border-radius:99px;
+}
+.app-fb-tag-good { background:rgba(52,199,89,.12); color:#4dc994; }
+.app-fb-tag-imp  { background:rgba(10,92,68,.18); color:rgba(77,201,148,.60); }
+
+/* FB tip */
+.app-fb-tip {
+  font-size:10.5px; line-height:1.55; color:rgba(224,235,230,.62);
+  background:rgba(10,92,68,.12); border-radius:8px;
+  padding:9px 11px; margin-bottom:12px;
+  border:1px solid rgba(10,92,68,.22);
+}
+
+/* CTA */
+.app-fb-cta {
+  display:flex; align-items:center; justify-content:center;
+  width:100%; padding:10px; border-radius:10px;
+  background:rgba(253,232,204,.90); color:#0a1810;
+  border:none; font-size:12px; font-weight:700;
+  cursor:pointer; font-family:'DM Sans',sans-serif;
+  margin-top:auto; transition:opacity .12s;
+}
+.app-fb-cta:hover { opacity:.88; }
+.app-fb-cta:disabled { background:rgba(245,237,224,.15); color:rgba(245,237,224,.30); cursor:default; }
+
+/* ── Mobile: stack vertically ─────────── */
+@media (max-width: 768px) {
+  .app-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    height: auto; overflow: visible;
+  }
+  .app-sidebar  { display: none; }
+  .app-main     { height: calc(100vh - 54px); border-right: none; }
+  .app-fb-panel { display: none; }
+}
+
+
+/* ════════════════════════════════════════
    FEEDBACK + DASHBOARD — 10/10 FINAL
    ════════════════════════════════════════ */
 
@@ -6796,79 +7096,196 @@ body,
 </div>
 
 <!-- PRACTICE -->
-<div class="page" id="page-practice" style="padding-top:54px;">
-  <div class="prac-pg">
-    <div class="fadeup">
-      <div class="q-top">
-        <span class="q-pill qp-beh" id="prac-pill">Behavioral</span>
-        <span class="q-tmr" id="prac-timer">2:00</span>
-      </div>
-      <div class="q-txt" id="prac-q">Loading question</div>
-    </div>
-    <div class="ctx-bar fadeup d1" id="ctx-bar">
-      <div class="ctx-em" id="ctx-em">🧑‍💼</div>
-      <div>
-        <div class="ctx-name" id="ctx-name">Management Consulting</div>
-        <div class="ctx-src" id="ctx-src">McKinsey &amp; Co</div>
-        <div class="ctx-tip" id="ctx-tip">Structure everything. Lead with the answer. Quantify your impact.</div>
-      </div>
-    </div>
+<div class="page" id="page-practice">
+  <div class="app-layout">
 
-    <div class="perm-bar" id="perm-bar" style="display:none;">
-      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px;"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M7 4.5V7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="9.5" r="0.7" fill="currentColor"/></svg>
-      <span id="perm-txt">Click Record and your browser will ask to use your microphone.</span>
-    </div>
+    <!-- ══ SIDEBAR ══════════════════════════════ -->
+    <div class="app-sidebar">
 
-    <!-- iOS dictation tip: mobile only, hidden on desktop -->
-    <div class="ios-dictation-tip" id="ios-dictation-tip">
-      <div class="idt-inner">
-        <div class="idt-icon">
-          <svg width="17" height="17" viewBox="0 0 20 20" fill="none"><rect x="7" y="1.5" width="6" height="9" rx="3" fill="var(--esp)" opacity="0.12" stroke="var(--esp)" stroke-width="1.5"/><path d="M4 10c0 3.3 2.7 6 6 6s6-2.7 6-6" stroke="var(--esp)" stroke-width="1.5" stroke-linecap="round" fill="none"/><line x1="10" y1="16" x2="10" y2="19" stroke="var(--esp)" stroke-width="1.5" stroke-linecap="round"/><line x1="7" y1="19" x2="13" y2="19" stroke="var(--esp)" stroke-width="1.5" stroke-linecap="round"/></svg>
-        </div>
-        <div class="idt-text">
-          <div class="idt-head">Voice available</div>
-          <div class="idt-sub">Tap the mic icon on your keyboard to dictate</div>
-        </div>
-        <div class="idt-steps">
-          <div class="idt-step"><span class="idt-n">1</span>Tap text box</div>
-          <div class="idt-step"><span class="idt-n">2</span>Tap <svg width="11" height="11" viewBox="0 0 20 20" fill="none" style="vertical-align:-1px;"><rect x="7" y="2" width="6" height="9" rx="3" fill="currentColor" opacity="0.7"/><path d="M4 10c0 3.3 2.7 6 6 6s6-2.7 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg> on keyboard</div>
+      <div class="app-sb-section">
+        <div class="app-sb-label">Tracks</div>
+        <div class="app-tracks" id="app-tracks">
+          <!-- Populated by JS via renderSidebar() -->
         </div>
       </div>
-    </div>
 
-    <div class="ans-box fadeup d2">
-      <div class="ans-tb">
-        <span class="ans-lbl">Your answer</span>
-        <div class="ans-tr">
-          <span class="wc-lbl" id="wc-lbl">0 words</span>
-          <!-- Desktop only: Record button -->
-          <button class="mic-btn desktop-only" id="mic-btn" onclick="toggleMic()">
-            <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="4.5" y="1.5" width="5" height="7" rx="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 7.5c0 2.8 2.3 4.5 5 4.5s5-1.7 5-4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="7" y1="12" x2="7" y2="13.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="5" y1="13.5" x2="9" y2="13.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-            <span class="rdot" id="rdot"></span>
-            <span id="mic-lbl">Record</span>
+      <div class="app-sb-divider"></div>
+
+      <div class="app-sb-section">
+        <div class="app-sb-label">Progress</div>
+        <div class="app-progress-list" id="app-progress-list">
+          <div class="app-prog-row">
+            <span class="app-prog-name">Behavioral</span>
+            <span class="app-prog-pct" id="sb-beh-pct">—</span>
+          </div>
+          <div class="app-prog-track"><div class="app-prog-fill" id="sb-beh-fill" style="width:0%"></div></div>
+          <div class="app-prog-row" style="margin-top:8px;">
+            <span class="app-prog-name">Situational</span>
+            <span class="app-prog-pct" id="sb-sit-pct">—</span>
+          </div>
+          <div class="app-prog-track"><div class="app-prog-fill" id="sb-sit-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+
+    </div><!-- /sidebar -->
+
+    <!-- ══ MAIN CHAT ═════════════════════════════ -->
+    <div class="app-main">
+
+      <!-- Top bar -->
+      <div class="app-main-top">
+        <div class="app-main-meta">
+          <div class="app-firm-pill" id="app-firm-pill">
+            <div class="app-firm-dot" id="app-firm-dot">M</div>
+            <span id="app-firm-name">McKinsey</span>
+          </div>
+          <div class="app-round-pill" id="app-round-pill">Behavioral Round 1</div>
+        </div>
+        <div class="app-timer-pill">
+          <div class="app-timer-dot"></div>
+          <span id="prac-timer">2:00</span>
+        </div>
+      </div>
+
+      <!-- Messages area -->
+      <div class="app-messages" id="app-messages">
+
+        <!-- Mocha Coach question bubble -->
+        <div class="app-msg app-msg-coach">
+          <div class="app-coach-label">MOCHA COACH</div>
+          <div class="app-msg-bubble app-bubble-coach" id="prac-q">Loading question…</div>
+        </div>
+
+        <!-- User answer bubble (shown after typing) -->
+        <div class="app-msg app-msg-user" id="app-user-msg" style="display:none;">
+          <div class="app-msg-label-user">You</div>
+          <div class="app-bubble-user" id="app-user-bubble"></div>
+        </div>
+
+      </div>
+
+      <!-- Perm bar (microphone permission) -->
+      <div class="perm-bar" id="perm-bar" style="display:none;">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M7 4.5V7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="9.5" r="0.7" fill="currentColor"/></svg>
+        <span id="perm-txt">Click Record and your browser will ask to use your microphone.</span>
+      </div>
+
+      <!-- iOS dictation tip -->
+      <div class="ios-dictation-tip" id="ios-dictation-tip">
+        <div class="idt-inner">
+          <div class="idt-icon"><svg width="17" height="17" viewBox="0 0 20 20" fill="none"><rect x="7" y="1.5" width="6" height="9" rx="3" fill="var(--esp)" opacity="0.12" stroke="var(--esp)" stroke-width="1.5"/><path d="M4 10c0 3.3 2.7 6 6 6s6-2.7 6-6" stroke="var(--esp)" stroke-width="1.5" stroke-linecap="round" fill="none"/><line x1="10" y1="16" x2="10" y2="19" stroke="var(--esp)" stroke-width="1.5" stroke-linecap="round"/><line x1="7" y1="19" x2="13" y2="19" stroke="var(--esp)" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          <div class="idt-text"><div class="idt-head">Voice available</div><div class="idt-sub">Tap the mic icon on your keyboard to dictate</div></div>
+          <div class="idt-steps"><div class="idt-step"><span class="idt-n">1</span>Tap text box</div><div class="idt-step"><span class="idt-n">2</span>Tap mic on keyboard</div></div>
+        </div>
+      </div>
+
+      <!-- Answer input -->
+      <div class="app-input-area">
+        <div class="app-input-meta">
+          <span class="app-your-answer">YOUR ANSWER</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="wc-lbl" id="wc-lbl">0 words</span>
+            <button class="mic-btn desktop-only" id="mic-btn" onclick="toggleMic()">
+              <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="4.5" y="1.5" width="5" height="7" rx="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 7.5c0 2.8 2.3 4.5 5 4.5s5-1.7 5-4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="7" y1="12" x2="7" y2="13.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="5" y1="13.5" x2="9" y2="13.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              <span class="rdot" id="rdot"></span>
+              <span id="mic-lbl">Record</span>
+            </button>
+          </div>
+        </div>
+        <textarea class="ans-ta app-ta" id="ans-ta"
+          placeholder="e.g. In my internship last summer, I had to… (Use STAR: Situation, Task, Action, Result)"
+          oninput="onInput();updateUserBubble();"
+          onkeydown="if((event.metaKey||event.ctrlKey)&&event.key==='Enter'){var b=document.getElementById('sub-btn');if(!b.disabled)doSubmit();}"></textarea>
+        <div class="star-bar">
+          <span class="si"><b>S</b>&nbsp;Situation</span>
+          <span class="si"><b>T</b>&nbsp;Task</span>
+          <span class="si"><b>A</b>&nbsp;Action</span>
+          <span class="si"><b>R</b>&nbsp;Result</span>
+        </div>
+      </div>
+
+      <!-- Submit row -->
+      <div class="app-submit-row">
+        <span class="sub-hint" id="sub-hint">Write or speak at least 10 words</span>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:10px;color:var(--m-muted,#7aaa8a);display:none;" id="cmd-hint">⌘↵</span>
+          <button class="btn-sub" id="sub-btn" onclick="doSubmit()" disabled>
+            Get feedback
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3L12 7L8 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
         </div>
       </div>
-      <textarea class="ans-ta" id="ans-ta" placeholder="e.g. In my internship last summer, I had to… (Use STAR: Situation, Task, Action, Result)" oninput="onInput()" onkeydown="if((event.metaKey||event.ctrlKey)&&event.key==='Enter'){var b=document.getElementById('sub-btn');if(!b.disabled)doSubmit();}"></textarea>
-      <div class="star-bar">
-        <span class="si"><b>S</b>&nbsp;Situation</span>
-        <span class="si"><b>T</b>&nbsp;Task</span>
-        <span class="si"><b>A</b>&nbsp;Action</span>
-        <span class="si"><b>R</b>&nbsp;Result</span>
+
+    </div><!-- /main -->
+
+    <!-- ══ FEEDBACK PANEL ════════════════════════ -->
+    <div class="app-fb-panel" id="app-fb-panel">
+
+      <!-- Header -->
+      <div class="app-fb-hd">
+        <div class="app-fb-brand">
+          <div class="app-fb-avatar">m</div>
+          <div>
+            <div class="app-fb-title">Mocha Coach</div>
+            <div class="app-fb-sub">Live Feedback</div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="sub-row fadeup d3">
-      <span class="sub-hint" id="sub-hint">Write or speak at least 10 words</span>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span style="font-size:10px;color:var(--m-muted,#7aaa8a);display:none;" id="cmd-hint">⌘↵</span>
-        <button class="btn-sub" id="sub-btn" onclick="doSubmit()" disabled>
-          Get feedback
-          <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3L12 7L8 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
+
+      <!-- Score ring (shows after grading) -->
+      <div class="app-fb-score-wrap" id="app-fb-score-wrap" style="display:none;">
+        <div class="app-fb-ring-container">
+          <svg class="app-fb-ring-svg" viewBox="0 0 100 100">
+            <circle class="app-fb-ring-bg"   cx="50" cy="50" r="40"/>
+            <circle class="app-fb-ring-fill" cx="50" cy="50" r="40" id="app-ring-circle"/>
+          </svg>
+          <div class="app-fb-ring-inner">
+            <span class="app-fb-score-n" id="app-fb-score">—</span>
+          </div>
+        </div>
+        <div class="app-fb-verdict" id="app-fb-verdict">—</div>
       </div>
-    </div>
-  </div>
+
+      <!-- Waiting state (before grading) -->
+      <div class="app-fb-waiting" id="app-fb-waiting">
+        <div class="app-fb-wait-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="16" r="14" stroke="rgba(77,201,148,.20)" stroke-width="2"/>
+            <path d="M16 9v7l4 4" stroke="#4dc994" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="app-fb-wait-txt">Answer the question<br>to get live feedback</div>
+      </div>
+
+      <!-- Bars (show after grading) -->
+      <div class="app-fb-bars" id="app-fb-bars" style="display:none;">
+        <div class="app-fb-bar-r"><span class="app-fb-bar-l">Structure</span><div class="app-fb-bar-t"><div class="app-fb-bar-f" id="app-bar-s"></div></div><span class="app-fb-bar-v" id="app-bar-sv">—</span></div>
+        <div class="app-fb-bar-r"><span class="app-fb-bar-l">Clarity</span><div class="app-fb-bar-t"><div class="app-fb-bar-f" id="app-bar-c"></div></div><span class="app-fb-bar-v" id="app-bar-cv">—</span></div>
+        <div class="app-fb-bar-r"><span class="app-fb-bar-l">Ownership</span><div class="app-fb-bar-t"><div class="app-fb-bar-f" id="app-bar-o"></div></div><span class="app-fb-bar-v" id="app-bar-ov">—</span></div>
+        <div class="app-fb-bar-r"><span class="app-fb-bar-l">Impact</span><div class="app-fb-bar-t"><div class="app-fb-bar-f" id="app-bar-iv2"></div></div><span class="app-fb-bar-v" id="app-bar-ivv">—</span></div>
+      </div>
+
+      <!-- Tags (show after grading) -->
+      <div class="app-fb-tags-wrap" id="app-fb-tags-wrap" style="display:none;">
+        <div class="app-fb-tags-label">Strengths</div>
+        <div class="app-fb-tags-row" id="app-fb-strengths"></div>
+        <div class="app-fb-tags-label" style="margin-top:8px;">Improve</div>
+        <div class="app-fb-tags-row" id="app-fb-improve"></div>
+      </div>
+
+      <!-- Tip (show after grading) -->
+      <div class="app-fb-tip" id="app-fb-tip" style="display:none;"></div>
+
+      <!-- CTA -->
+      <button class="app-fb-cta" id="app-fb-cta" onclick="doSubmit()" disabled>
+        <span id="app-fb-cta-txt">Get feedback →</span>
+      </button>
+
+    </div><!-- /fb-panel -->
+
+  </div><!-- /app-layout -->
 </div>
+
 
 <!-- FEEDBACK -->
 <div class="page" id="page-feedback" style="padding-top:54px;">
@@ -9114,7 +9531,192 @@ function initPractice() {
   }, 1000);
   checkMic();
 
+  // Render sidebar + reset panel
+  renderAppSidebar();
+  resetFeedbackPanel();
+
+  // Clear user bubble
+  var userMsgEl = document.getElementById('app-user-msg');
+  if (userMsgEl) userMsgEl.style.display = 'none';
+  var userBubble = document.getElementById('app-user-bubble');
+  if (userBubble) userBubble.textContent = '';
 }
+
+// ── Render sidebar tracks ────────────────────────────────────────
+function renderAppSidebar() {
+  var tracksEl = document.getElementById('app-tracks');
+  if (!tracksEl) return;
+
+  var trackDefs = [
+    { id:'consulting', label:'Consulting', code:'MC' },
+    { id:'banking',    label:'Banking',    code:'IB' },
+    { id:'product',    label:'Tech & Product', code:'TP' },
+    { id:'finance',    label:'Finance',    code:'PE' },
+    { id:'marketing',  label:'Marketing',  code:'MK' },
+    { id:'nonprofit',  label:'Nonprofit',  code:'NP' },
+    { id:'healthcare', label:'Healthcare', code:'HC' },
+    { id:'retail',     label:'Retail',     code:'RT' },
+  ];
+
+  var active = (appPersona || PERSONAS[0]).id;
+  tracksEl.innerHTML = trackDefs.map(function(t) {
+    var isActive = t.id === active;
+    return '<div class="app-track-item' + (isActive ? ' active' : '') + '" onclick="switchTrack(\'' + t.id + '\')">'
+      + '<div class="app-track-badge">' + t.code + '</div>'
+      + '<span>' + t.label + '</span>'
+      + '</div>';
+  }).join('');
+
+  // Update firm pill in main header
+  var p = appPersona || PERSONAS[0];
+  var firmEl = document.getElementById('app-firm-name');
+  var dotEl  = document.getElementById('app-firm-dot');
+  var roundEl = document.getElementById('app-round-pill');
+  if (firmEl) firmEl.textContent = p.source || p.role;
+  if (dotEl)  dotEl.textContent = p.id.charAt(0).toUpperCase();
+  if (roundEl) roundEl.textContent = p.role + ' Round 1';
+
+  // Progress bars
+  if (appHistory.length > 0) {
+    var beh = appHistory.filter(function(h){ return h.cat !== 'Situational'; }).length;
+    var sit = appHistory.filter(function(h){ return h.cat === 'Situational'; }).length;
+    var behPct = Math.min(100, Math.round(beh / 20 * 100));
+    var sitPct = Math.min(100, Math.round(sit / 20 * 100));
+    var bfEl = document.getElementById('sb-beh-fill');
+    var bpEl = document.getElementById('sb-beh-pct');
+    var sfEl = document.getElementById('sb-sit-fill');
+    var spEl = document.getElementById('sb-sit-pct');
+    if (bfEl) setTimeout(function(){ bfEl.style.width = behPct + '%'; }, 300);
+    if (bpEl) bpEl.textContent = behPct + '%';
+    if (sfEl) setTimeout(function(){ sfEl.style.width = sitPct + '%'; }, 400);
+    if (spEl) spEl.textContent = sitPct + '%';
+  }
+}
+
+// ── Switch track from sidebar ────────────────────────────────────
+function switchTrack(trackId) {
+  var newPersona = PERSONAS.find(function(p){ return p.id === trackId; });
+  if (newPersona) {
+    appPersona = newPersona;
+    sv('mocha_persona', appPersona);
+    currentQ = null;
+    initPractice();
+    renderAppSidebar();
+    resetFeedbackPanel();
+    // Clear answer
+    var ta = document.getElementById('ans-ta');
+    if (ta) { ta.value = ''; onInput(); }
+    var userMsg = document.getElementById('app-user-msg');
+    if (userMsg) userMsg.style.display = 'none';
+  }
+}
+
+// ── Update user bubble in real time ──────────────────────────────
+function updateUserBubble() {
+  var ta = document.getElementById('ans-ta');
+  var bubble = document.getElementById('app-user-bubble');
+  var userMsg = document.getElementById('app-user-msg');
+  if (!ta || !bubble || !userMsg) return;
+  var val = ta.value.trim();
+  if (val.length > 0) {
+    bubble.textContent = val.length > 300 ? val.slice(0, 297) + '...' : val;
+    userMsg.style.display = 'flex';
+  } else {
+    userMsg.style.display = 'none';
+  }
+}
+
+// ── Reset the right-panel to waiting state ───────────────────────
+function resetFeedbackPanel() {
+  var els = ['app-fb-score-wrap','app-fb-bars','app-fb-tags-wrap','app-fb-tip'];
+  els.forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display='none'; });
+  var wait = document.getElementById('app-fb-waiting'); if(wait) wait.style.display='flex';
+  var cta = document.getElementById('app-fb-cta');
+  if (cta) { cta.disabled = true; document.getElementById('app-fb-cta-txt').textContent = 'Get feedback →'; }
+  var ring = document.getElementById('app-ring-circle');
+  if (ring) ring.style.strokeDashoffset = '251.2';
+}
+
+// ── Populate the right panel with AI results ─────────────────────
+function populateSidePanel(r) {
+  var waiting = document.getElementById('app-fb-waiting'); if(waiting) waiting.style.display='none';
+  var scoreWrap = document.getElementById('app-fb-score-wrap'); if(scoreWrap) scoreWrap.style.display='flex';
+  var barsWrap = document.getElementById('app-fb-bars'); if(barsWrap) barsWrap.style.display='flex';
+  var tagsWrap = document.getElementById('app-fb-tags-wrap'); if(tagsWrap) tagsWrap.style.display='block';
+
+  // Score + ring
+  var target = parseFloat(r.overall) || 0;
+  var scoreEl = document.getElementById('app-fb-score');
+  if (scoreEl) {
+    var dur=900, startT=null;
+    (function step(ts){
+      if(!startT) startT=ts;
+      var p2=Math.min((ts-startT)/dur,1);
+      scoreEl.textContent=(target*(1-Math.pow(1-p2,3))).toFixed(1);
+      if(p2<1) requestAnimationFrame(step);
+      else scoreEl.textContent=target.toFixed(1);
+    })(performance.now());
+  }
+  var ring = document.getElementById('app-ring-circle');
+  if (ring) {
+    setTimeout(function(){
+      ring.style.strokeDashoffset = (251.2*(1-target/10)).toFixed(1);
+      ring.style.stroke = target>=8?'#4dc994':target>=6.5?'#f59e0b':'#ef4444';
+    }, 150);
+  }
+
+  // Verdict
+  var verd = document.getElementById('app-fb-verdict');
+  if (verd) {
+    verd.textContent = target>=8.5?'Strong Answer':target>=7?'Solid Answer':target>=5.5?'Developing':'Needs Work';
+    verd.style.color = target>=7.5?'#4dc994':target>=5.5?'#f59e0b':'#ef4444';
+    verd.style.background = target>=7.5?'rgba(77,201,148,.12)':target>=5.5?'rgba(245,158,11,.10)':'rgba(239,68,68,.10)';
+  }
+
+  // Bars
+  var sc = r.scores || {};
+  var barData = [
+    {bar:'app-bar-s',val:'app-bar-sv',v:parseFloat(sc.structure||0)},
+    {bar:'app-bar-c',val:'app-bar-cv',v:parseFloat(sc.clarity||0)},
+    {bar:'app-bar-o',val:'app-bar-ov',v:parseFloat(sc.ownership||0)},
+    {bar:'app-bar-iv2',val:'app-bar-ivv',v:parseFloat(sc.impact||0)}
+  ];
+  barData.forEach(function(d,i){
+    var ve=document.getElementById(d.val); var be=document.getElementById(d.bar);
+    if(ve) ve.textContent=d.v.toFixed(1);
+    if(be) setTimeout(function(el,v){el.style.width=Math.round(v*10)+'%';},300+i*100,be,d.v);
+  });
+
+  // Tags
+  var sb = r.star_breakdown || {};
+  var strengthsList = r.strengths ? r.strengths.split(',').map(function(s){return s.trim();}).filter(Boolean) : [];
+  if (!strengthsList.length) { barData.forEach(function(d,i){if(d.v>=7.5) strengthsList.push(['Structure','Clarity','Ownership','Impact'][i]);}); }
+  if (!strengthsList.length) strengthsList.push('Attempted');
+  var improveList = sb.weak_components ? sb.weak_components.split(',').map(function(s){return s.trim();}).filter(Boolean) : [];
+
+  var sEl = document.getElementById('app-fb-strengths');
+  var iEl = document.getElementById('app-fb-improve');
+  if(sEl) sEl.innerHTML = strengthsList.slice(0,4).map(function(s){return '<span class="app-fb-tag app-fb-tag-good">✓ '+escHtml(s)+'</span>';}).join('');
+  if(iEl) iEl.innerHTML = improveList.slice(0,4).map(function(s){return '<span class="app-fb-tag app-fb-tag-imp">+ '+escHtml(s)+'</span>';}).join('');
+
+  // Tip
+  var tipEl = document.getElementById('app-fb-tip');
+  if (tipEl && r.verdict) {
+    tipEl.innerHTML = '<strong>Tip:</strong> ' + escHtml(r.verdict);
+    tipEl.style.display = 'block';
+  }
+
+  // CTA: switch to "See full feedback"
+  var cta = document.getElementById('app-fb-cta');
+  var ctaTxt = document.getElementById('app-fb-cta-txt');
+  if (cta && ctaTxt) {
+    cta.disabled = false;
+    ctaTxt.textContent = 'See full feedback →';
+    cta.onclick = function(){ showPage('page-feedback'); window.scrollTo(0,0); };
+  }
+}
+
+
 
 function updateTimer() {
   var m = Math.floor(timeLeft / 60);
@@ -9139,6 +9741,13 @@ function onInput() {
   }
   document.getElementById('wc-lbl').textContent = w + ' word' + (w !== 1 ? 's' : '') + (w >= MAX_ANSWER_WORDS ? ' (max)' : '');
   document.getElementById('sub-btn').disabled = w < 10;
+  // Sync side panel CTA
+  var sCta = document.getElementById('app-fb-cta');
+  var sCtaTxt = document.getElementById('app-fb-cta-txt');
+  if (sCta && sCtaTxt && sCta.textContent.indexOf('full feedback') === -1) {
+    sCta.disabled = w < 10;
+    if (w >= 10) { sCta.onclick = function(){ doSubmit(); }; }
+  }
   var cmdHint = document.getElementById('cmd-hint');
   if (cmdHint) cmdHint.style.display = w >= 10 ? 'inline' : 'none';
   document.getElementById('sub-hint').textContent = w < 10
@@ -9822,6 +10431,7 @@ function doSubmit() {
       return;
     }
     renderFeedback(r, isFree);
+    populateSidePanel(r);
   }, function(errMsg) {
     clearInterval(li);
     _submitting = false;

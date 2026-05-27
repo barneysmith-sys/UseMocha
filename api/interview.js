@@ -580,24 +580,32 @@ export default async function handler(req, res) {
     .trim();
 
   let parsed;
-  try {
-    parsed = JSON.parse(cleaned);
-  } catch {
-    const match = cleaned.match(/\{[\s\S]*\}/);
-    if (match) {
-      try { parsed = JSON.parse(match[0]); } catch {
-        const truncated  = match[0];
-        const lastComma  = truncated.lastIndexOf(',"overall"');
-        if (lastComma > 0) {
-          try { parsed = JSON.parse(truncated.slice(0, lastComma) + '}'); } catch { parsed = null; }
-        } else {
-          parsed = null;
-        }
+  // Robust JSON parse — handles newlines and special chars in string values
+  function robustParse(str) {
+    // First try direct parse
+    try { return JSON.parse(str); } catch {}
+    // Normalize newlines inside strings: replace literal newlines within JSON strings
+    try {
+      const normalized = str.replace(/:\s*"((?:[^"\\]|\\[\s\S])*?)"/gs, (m, inner) => {
+        return ': "' + inner.replace(/\n/g, '\\n').replace(/\r/g, '') + '"';
+      });
+      return JSON.parse(normalized);
+    } catch {}
+    // Extract outermost {} and try
+    const match = str.match(/\{[\s\S]*\}/);
+    if (!match) return null;
+    try { return JSON.parse(match[0]); } catch {}
+    // Last resort: truncate to last known-good key
+    const keys = [',"overall"', ',"verdict"', ',"scores"'];
+    for (const key of keys) {
+      const pos = match[0].lastIndexOf(key);
+      if (pos > 0) {
+        try { return JSON.parse(match[0].slice(0, pos) + '}'); } catch {}
       }
-    } else {
-      parsed = null;
     }
+    return null;
   }
+  parsed = robustParse(cleaned);
 
   if (!parsed) {
     log('warn', rid, { event: 'json_extract_failed', raw_head: rawText.slice(0, 100) });

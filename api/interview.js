@@ -660,11 +660,11 @@ export default async function handler(req, res) {
 
     const rwBody = JSON.stringify({
       contents: [{ parts: [{ text: rwPrompt }] }],
-      generationConfig: { temperature: 0.7, maxOutputTokens: 1500 }
+      generationConfig: { temperature: 0.7, maxOutputTokens: 2000 }
     });
 
     const rwController = new AbortController();
-    const rwTimeout = setTimeout(() => rwController.abort(), 15000);
+    const rwTimeout = setTimeout(() => rwController.abort(), 25000);
     const rwEndpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + process.env.GEMINI_API_KEY;
     const rwRes = await fetch(rwEndpoint,
       { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: rwBody, signal: rwController.signal }

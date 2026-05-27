@@ -660,7 +660,7 @@ export default async function handler(req, res) {
 
     const rwBody = JSON.stringify({
       contents: [{ parts: [{ text: rwPrompt }] }],
-      generationConfig: { temperature: 0.7, maxOutputTokens: 600 }
+      generationConfig: { temperature: 0.7, maxOutputTokens: 1500 }
     });
 
     const rwController = new AbortController();

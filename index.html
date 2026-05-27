@@ -2864,7 +2864,7 @@ function escHtmlDemo(s) {
         </div>
         <div style="font-size:9px;font-weight:600;color:rgba(15,26,20,.28);font-family:'DM Sans',sans-serif;margin-left:auto;padding-right:4px;">McKinsey &middot; Behavioral</div>
       </div>
-      <div class="dw-body" style="display:grid!important;grid-template-columns:140px 1fr 180px!important;height:440px!important;min-height:440px!important;max-height:440px!important;overflow:hidden!important;">
+      <div class="dw-body" id="dw-body-el" style="display:grid!important;grid-template-columns:140px 1fr 180px!important;height:440px!important;min-height:440px!important;max-height:440px!important;overflow:hidden!important;">
         <div class="dw-sidebar" style="display:flex!important;flex-direction:column!important;flex-shrink:0!important;">
           <div class="dw-sb-label">Tracks</div>
           <div class="dw-sb-item dw-active"><div class="dw-sb-icon" style="font-size:8px;font-weight:800;font-family:'DM Sans',sans-serif;color:var(--ln);">MC</div>Consulting</div>
@@ -4142,6 +4142,32 @@ document.addEventListener('keydown', function(e) {
 });
 
 </script>
+
+
+// Mobile demo window fix - override inline styles directly
+(function() {
+  function fixMobileDemo() {
+    if (window.innerWidth >= 700) return;
+    var body = document.getElementById('dw-body-el');
+    var main = document.getElementById('dw-main-panel');
+    var sidebar = document.querySelector('.dw-sidebar');
+    var feedback = document.getElementById('dw-feedback-panel');
+    if (body) {
+      body.style.cssText = 'display:block!important;height:auto!important;min-height:unset!important;max-height:unset!important;overflow:hidden!important;width:100%!important;';
+    }
+    if (main)     main.style.cssText     = 'display:none!important;';
+    if (sidebar)  sidebar.style.cssText  = 'display:none!important;';
+    if (feedback) {
+      feedback.style.cssText = 'display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;height:auto!important;min-height:unset!important;max-height:unset!important;overflow:visible!important;padding:16px!important;';
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fixMobileDemo);
+  } else {
+    fixMobileDemo();
+  }
+  window.addEventListener('resize', fixMobileDemo);
+})();
 
 </body>
 </html

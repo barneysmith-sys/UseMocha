@@ -2410,10 +2410,10 @@ body { overflow-y: auto !important; height: auto !important; }
 </style>
 <style>
 @media screen and (max-width:767px){
-  .dw-sidebar[style]{display:none!important;visibility:hidden!important;width:0!important;max-width:0!important;overflow:hidden!important;flex:0!important;min-width:0!important;}
-  #dw-feedback-panel[style]{display:none!important;visibility:hidden!important;width:0!important;max-width:0!important;overflow:hidden!important;}
-  .dw-body[style]{grid-template-columns:1fr!important;display:grid!important;}
-  #dw-main-panel[style]{width:100%!important;max-width:100%!important;border-right:none!important;}
+  .dw-sidebar{display:none!important;}
+  #dw-feedback-panel{display:none!important;}
+  #dw-body-el{grid-template-columns:1fr!important;}
+  #dw-main-panel{width:100%!important;max-width:100%!important;border-right:none!important;}
 }
 </style>
 </head>
@@ -2880,7 +2880,7 @@ function escHtmlDemo(s) {
         <div style="font-size:9px;font-weight:600;color:rgba(15,26,20,.28);font-family:'DM Sans',sans-serif;margin-left:auto;padding-right:4px;">McKinsey &middot; Behavioral</div>
       </div>
       <div class="dw-body" id="dw-body-el" style="display:grid!important;grid-template-columns:140px 1fr 180px!important;height:440px!important;min-height:440px!important;max-height:440px!important;overflow:hidden!important;">
-        <div class="dw-sidebar" style="display:flex!important;flex-direction:column!important;flex-shrink:0!important;">
+        <div class="dw-sidebar" style="flex-direction:column!important;flex-shrink:0!important;">
           <div class="dw-sb-label">Tracks</div>
           <div class="dw-sb-item dw-active"><div class="dw-sb-icon" style="font-size:8px;font-weight:800;font-family:'DM Sans',sans-serif;color:var(--ln);">MC</div>Consulting</div>
           <div class="dw-sb-item"><div class="dw-sb-icon" style="font-size:8px;font-weight:800;font-family:'DM Sans',sans-serif;">IB</div>Banking</div>
@@ -2914,7 +2914,7 @@ function escHtmlDemo(s) {
             </div>
           </div>
         </div>
-        <div class="dw-feedback" id="dw-feedback-panel" style="display:block!important;width:180px!important;min-width:180px!important;max-width:180px!important;height:440px!important;min-height:440px!important;max-height:440px!important;overflow-y:auto!important;flex-direction:unset!important;align-items:unset!important;flex-wrap:unset!important;">
+        <div class="dw-feedback" id="dw-feedback-panel" style="width:180px!important;min-width:180px!important;max-width:180px!important;height:440px!important;min-height:440px!important;max-height:440px!important;overflow-y:auto!important;">
           <div class="dw-fb-header"><div class="dw-fb-avatar">m</div><div><div class="dw-fb-title">Mocha Coach</div><div class="dw-fb-sub">Live feedback</div></div></div>
           <div class="dw-score-ring-wrap">
             <div class="dw-ring-container">

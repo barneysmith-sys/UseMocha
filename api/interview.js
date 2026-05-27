@@ -656,7 +656,7 @@ export default async function handler(req, res) {
 
   // ── Separate rewrite call — simple, isolated, no JSON ──────────
   try {
-    const rwPrompt = `You are a ${rubric.shortName} interviewer. The candidate answered this question:\n\nQUESTION: ${cleanQuestion}\n\nCANDIDATE ANSWER: ${cleanAnswer}\n\nRewrite their answer as a model ${rubric.firms} response. Write it in first person as if you are the candidate speaking in an interview. Use their details where possible; invent realistic specifics where missing. Write 5-6 complete sentences covering: situation with context, your specific responsibility, 2-3 concrete actions you took personally using "I" language, a quantified result, and one reflection. Do not use any brackets or placeholders. Just write the answer as natural spoken prose starting with "During my..." or "In my role...". Minimum 100 words.`;
+    const rwPrompt = 'You are a ' + rubric.shortName + ' interviewer. The candidate answered this question:\n\nQUESTION: ' + cleanQuestion + '\n\nCANDIDATE ANSWER: ' + cleanAnswer + '\n\nRewrite their answer as a model ' + rubric.firms + ' response. Write it in first person as if you are the candidate speaking in an interview. Use their details where possible; invent realistic specifics where missing. Write 5-6 complete sentences: situation with specific context, your personal responsibility, 2-3 concrete actions using I-language, a quantified result, one reflection. No brackets. No instructions. Just the answer starting with During my or In my role. Minimum 100 words.';
 
     const rwBody = JSON.stringify({
       contents: [{ parts: [{ text: rwPrompt }] }],
@@ -665,20 +665,20 @@ export default async function handler(req, res) {
 
     const rwController = new AbortController();
     const rwTimeout = setTimeout(() => rwController.abort(), 15000);
-    const rwRes = await fetch(
-      \`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=\${process.env.GEMINI_API_KEY}\`,
+    const rwEndpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + process.env.GEMINI_API_KEY;
+    const rwRes = await fetch(rwEndpoint,
       { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: rwBody, signal: rwController.signal }
     );
     clearTimeout(rwTimeout);
     if (rwRes.ok) {
       const rwData = await rwRes.json();
-      const rwText = rwData.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+      const rwText = (rwData.candidates && rwData.candidates[0] && rwData.candidates[0].content && rwData.candidates[0].content.parts && rwData.candidates[0].content.parts[0] && rwData.candidates[0].content.parts[0].text) ? rwData.candidates[0].content.parts[0].text.trim() : '';
       if (rwText && rwText.length > 50) {
         parsed.improved_answer = rwText;
       }
     }
   } catch (e) {
-    // rewrite failed - keep placeholder, not critical
+    // rewrite failed silently
   }
 
   return res.status(200).json(parsed);

@@ -1,1 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mocha for Universities · Career Readiness at Scale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --esp: #0f1a14; --med: #0a5c44; --lt: #0d7a5c;
+  --ln: #f5ede0; --ln2: #eddece;
+  --cr: #ffffff; --oat: #7a8f85;
+  --sil: #e0ebe6; --sil2: #eef5f2; --surf: #fafcfb;
+  --warm: #faf9f6; --warm2: #f5f3ee; --warm3: #edeae3;
+  --border: rgba(15,26,20,.09); --border-m: rgba(15,26,20,.13);
+  --dim: rgba(15,26,20,.44); --mid: rgba(15,26,20,.62);
+  --g-soft: #e8f3ee; --g-mid: #c4ddd1;
+  --r: 8px; --rlg: 12px; --rxl: 16px; --rpill: 99px;
+  --sh-sm: 0 1px 0 rgba(0,0,0,.05),0 2px 8px rgba(0,0,0,.04);
+  --sh-md: 0 1px 0 rgba(0,0,0,.06),0 4px 20px rgba(0,0,0,.07);
+  --sh-lg: 0 2px 0 rgba(0,0,0,.07),0 12px 40px rgba(0,0,0,.10);
+  --sh-xl: 0 2px 0 rgba(0,0,0,.08),0 20px 60px rgba(0,0,0,.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+body{font-family:"DM Sans",system-ui,sans-serif;background:var(--warm);color:var(--esp);overflow-x:hidden;font-size:15px;line-height:1.6}
 
+/* SR */
+.sr{opacity:0;transform:translateY(16px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1);transition-delay:var(--d,0s)}
+.sr.on{opacity:1;transform:none}
+.d1{--d:.07s}.d2{--d:.14s}.d3{--d:.21s}.d4{--d:.28s}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;background:rgba(250,249,246,.92);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
+.nav-in{max-width:1100px;margin:0 auto;padding:0 28px;height:100%;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:"DM Serif Display",serif;font-size:18px;color:var(--esp);text-decoration:none;letter-spacing:-.03em;display:flex;align-items:center;gap:9px}
+.nav-badge{background:var(--esp);color:var(--ln);font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-family:"DM Sans",sans-serif;padding:2px 7px;border-radius:4px}
+.nav-links{display:flex;align-items:center;gap:4px;list-style:none}
+.nav-links a{font-size:13.5px;font-weight:500;color:var(--mid);text-decoration:none;padding:5px 11px;border-radius:var(--rpill);transition:color .15s,background .15s}
+.nav-links a:hover{color:var(--esp);background:var(--sil2)}
+.nav-links a.on{color:var(--med);font-weight:600}
+.nav-r{display:flex;align-items:center;gap:8px}
+.btn-ghost{font-size:13.5px;font-weight:500;color:var(--mid);text-decoration:none;padding:7px 14px;border-radius:var(--rpill);border:1px solid var(--border-m);transition:all .15s;cursor:pointer;background:transparent;font-family:"DM Sans",sans-serif}
+.btn-ghost:hover{color:var(--esp);border-color:rgba(15,26,20,.22);background:var(--cr)}
+.btn-dark{font-size:13.5px;font-weight:600;color:var(--ln);background:var(--esp);padding:7px 16px;border-radius:var(--rpill);border:none;cursor:pointer;font-family:"DM Sans",sans-serif;text-decoration:none;transition:background .15s;letter-spacing:-.01em}
+.btn-dark:hover{background:#1a2e1e}
+@media(max-width:700px){.nav-links,.btn-ghost{display:none}}
+
+/* HERO */
+.hero{padding:106px 28px 72px;background:var(--warm);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 700px 400px at 55% -80px,rgba(10,92,68,.05) 0%,transparent 65%);pointer-events:none}
+.hero-in{max-width:1100px;margin:0 auto}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--med);margin-bottom:.9rem}
+.eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--med);animation:pulse 2.5s ease-in-out infinite}
+h1{font-family:"DM Serif Display",serif;font-size:clamp(2.4rem,4.5vw,3.5rem);font-weight:400;color:var(--esp);letter-spacing:-.055em;line-height:1.04;margin-bottom:1rem}
+h1 em{font-style:italic;color:var(--med)}
+.hero-sub{font-size:16px;color:var(--mid);line-height:1.72;max-width:520px;margin-bottom:2.25rem}
+.hero-actions{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-bottom:2.5rem}
+.btn-hero{background:var(--esp);color:var(--ln);padding:13px 26px;border-radius:var(--rpill);font-size:14px;font-weight:600;letter-spacing:-.01em;border:none;cursor:pointer;font-family:"DM Sans",sans-serif;text-decoration:none;transition:background .15s}
+.btn-hero:hover{background:#1a2e1e}
+.btn-outline{background:transparent;color:var(--esp);padding:12px 22px;border-radius:var(--rpill);font-size:14px;font-weight:500;border:1.5px solid var(--border-m);cursor:pointer;font-family:"DM Sans",sans-serif;text-decoration:none;transition:border-color .15s,background .15s}
+.btn-outline:hover{border-color:rgba(15,26,20,.25);background:var(--cr)}
+.hero-proof{display:flex;align-items:center;gap:10px}
+.proof-text{font-size:13px;color:var(--dim);line-height:1.5}
+.proof-text strong{color:var(--esp);font-weight:600}
+
+/* STATS */
+.stats{background:var(--cr);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:3rem 28px}
+.stats-in{max-width:820px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);text-align:center;gap:2rem}
+.stat-n{font-family:"DM Serif Display",serif;font-size:2.6rem;font-weight:400;color:var(--esp);letter-spacing:-.06em;line-height:1}
+.stat-n em{font-style:italic;color:var(--med)}
+.stat-l{font-size:11px;font-weight:700;color:var(--dim);margin-top:5px;letter-spacing:.06em;text-transform:uppercase}
+@media(max-width:600px){.stats-in{grid-template-columns:1fr;gap:1.5rem}}
+
+/* TICKER */
+.ticker{background:var(--warm2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;position:relative}
+.ticker::before,.ticker::after{content:"";position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none}
+.ticker::before{left:0;background:linear-gradient(to right,var(--warm2),transparent)}
+.ticker::after{right:0;background:linear-gradient(to left,var(--warm2),transparent)}
+.ticker-in{padding:12px 0}
+.ticker-eyebrow{text-align:center;font-size:9px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);margin-bottom:9px}
+.ticker-track{display:flex;width:max-content;animation:tick 36s linear infinite}
+.ticker-track:hover{animation-play-state:paused}
+.ticker-item{display:flex;align-items:center;padding:0 18px;white-space:nowrap}
+.ticker-item::after{content:"";display:block;width:3px;height:3px;border-radius:50%;background:var(--g-mid);margin-left:18px}
+.ticker-pill{background:var(--cr);border:1px solid var(--border);border-radius:7px;padding:4px 11px;font-size:12px;font-weight:500;color:var(--mid);font-family:"DM Serif Display",serif;letter-spacing:-.01em}
+
+/* DASHBOARD SECTION */
+.dash-section{background:var(--warm);padding:5.5rem 28px;border-bottom:1px solid var(--border)}
+.dash-in{max-width:1100px;margin:0 auto}
+.section-label{display:inline-flex;align-items:center;gap:7px;font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--med);margin-bottom:.75rem}
+.section-line{width:20px;height:1.5px;background:var(--med);border-radius:2px}
+h2{font-family:"DM Serif Display",serif;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:400;color:var(--esp);letter-spacing:-.05em;line-height:1.1;margin-bottom:.65rem}
+h2 em{font-style:italic;color:var(--med)}
+.section-sub{font-size:14.5px;color:var(--mid);line-height:1.72;max-width:480px;margin-bottom:3rem}
+
+/* mock badge */
+.mock-badge{display:inline-flex;align-items:center;gap:6px;background:#fff8ec;border:1px solid #e8d9b8;border-radius:var(--rpill);padding:5px 13px;font-size:11px;font-weight:600;color:#7a5c1a;margin-bottom:2.5rem}
+.mock-badge svg{flex-shrink:0}
+
+/* Window */
+.dash-window{background:var(--cr);border:1px solid var(--border);border-radius:20px;box-shadow:var(--sh-xl);overflow:hidden;max-width:960px;margin:0 auto}
+.dw-chrome{display:flex;align-items:center;gap:9px;padding:12px 16px;background:var(--surf);border-bottom:1px solid var(--border)}
+.dw-dots{display:flex;gap:5px}
+.dw-dot{width:8px;height:8px;border-radius:50%}
+.dw-dot-r{background:#EE6B5E}.dw-dot-y{background:#F5C843}.dw-dot-g{background:#58C142}
+.dw-url{flex:1;background:rgba(15,26,20,.05);border-radius:5px;padding:4px 12px;font-size:10.5px;color:var(--dim);text-align:center;font-family:monospace;max-width:240px;margin:0 auto}
+
+.dw-body{display:grid;grid-template-columns:152px 1fr;min-height:480px}
+.dw-sidebar{border-right:1px solid var(--border);padding:14px 10px;background:var(--surf);display:flex;flex-direction:column;gap:2px}
+.sb-label{font-size:8.5px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--dim);margin:6px 0 5px 8px}
+.sb-item{display:flex;align-items:center;gap:7px;padding:7px 9px;border-radius:7px;font-size:11.5px;font-weight:500;color:var(--med);cursor:default;transition:all .15s}
+.sb-item.act{background:var(--esp);color:var(--ln);box-shadow:0 1px 4px rgba(15,26,20,.18)}
+.sb-icon{width:17px;height:17px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;background:var(--sil2)}
+.act .sb-icon{background:rgba(245,237,224,.12)}
+.sb-div{height:1px;background:var(--border);margin:5px 0}
+
+.dw-main{padding:20px 22px;overflow:auto}
+.dw-main-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.dw-title{font-size:13px;font-weight:700;color:var(--esp);letter-spacing:-.01em}
+.dw-period{font-size:11px;color:var(--dim);background:var(--warm);border:1px solid var(--border);border-radius:6px;padding:3px 10px}
+
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.kpi{background:var(--warm);border:1px solid var(--border);border-radius:12px;padding:13px 14px}
+.kpi-val{font-family:"DM Serif Display",serif;font-size:22px;font-weight:400;color:var(--esp);letter-spacing:-.05em;line-height:1}
+.kpi-val.g{color:var(--med)}
+.kpi-lbl{font-size:9.5px;font-weight:600;color:var(--dim);margin-top:4px;letter-spacing:.04em;text-transform:uppercase}
+.kpi-ch{font-size:10px;font-weight:600;color:var(--med);margin-top:2px}
+
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.chart-card{background:var(--warm);border:1px solid var(--border);border-radius:12px;padding:14px 15px}
+.cc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.cc-title{font-size:11px;font-weight:700;color:var(--esp)}
+.cc-badge{background:#eaf5ef;color:var(--med);font-size:9px;font-weight:700;padding:2px 7px;border-radius:var(--rpill)}
+
+/* bars */
+.bars{display:flex;align-items:flex-end;gap:4px;height:54px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;height:100%}
+.bar{width:100%;border-radius:3px 3px 0 0;background:var(--g-mid)}
+.bar.hi{background:var(--med)}
+.bar-x{font-size:8px;color:var(--dim);font-weight:500}
+
+/* prog */
+.prog-list{display:flex;flex-direction:column;gap:8px}
+.prog-row{display:flex;align-items:center;gap:10px}
+.prog-label{font-size:11px;font-weight:500;color:var(--esp);min-width:120px}
+.prog-track{flex:1;height:5px;background:var(--sil);border-radius:var(--rpill);overflow:hidden}
+.prog-fill{height:100%;border-radius:var(--rpill);background:var(--med);width:0;transition:width 1s cubic-bezier(.16,1,.3,1)}
+.prog-fill.go{width:var(--tw)}
+.prog-val{font-size:10.5px;font-weight:700;color:var(--esp);min-width:30px;text-align:right}
+
+/* table */
+.table-card{background:var(--warm);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+table{width:100%;border-collapse:collapse}
+th{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--dim);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);background:var(--surf)}
+td{padding:8px 12px;font-size:11.5px;color:var(--esp);border-bottom:1px solid rgba(15,26,20,.04)}
+tr:last-child td{border-bottom:none}
+.badge{display:inline-flex;padding:2px 8px;border-radius:var(--rpill);font-size:9.5px;font-weight:700}
+.badge.hi{background:#e5f5ed;color:#0a5c44}
+.badge.md{background:#fef3cd;color:#8a6800}
+
+/* CTA */
+.cta-section{background:var(--esp);padding:5.5rem 28px;position:relative;overflow:hidden;text-align:center}
+.cta-section::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 800px 500px at 50% 110%,rgba(10,92,68,.38) 0%,transparent 65%);pointer-events:none}
+.cta-in{max-width:580px;margin:0 auto;position:relative;z-index:1}
+.cta-eyebrow{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:rgba(245,237,224,.45);margin-bottom:1.1rem}
+.cta-h{font-family:"DM Serif Display",serif;font-size:clamp(2rem,3.8vw,2.9rem);font-weight:400;color:var(--ln);letter-spacing:-.055em;line-height:1.08;margin-bottom:.85rem}
+.cta-h em{font-style:italic;color:rgba(245,237,224,.6)}
+.cta-sub{font-size:14.5px;color:rgba(245,237,224,.55);line-height:1.72;margin-bottom:2.25rem}
+.cta-actions{display:flex;gap:11px;justify-content:center;flex-wrap:wrap}
+.btn-cta{background:var(--ln);color:var(--esp);padding:13px 28px;border-radius:var(--rpill);font-size:14px;font-weight:700;letter-spacing:-.01em;border:none;cursor:pointer;font-family:"DM Sans",sans-serif;text-decoration:none;transition:background .15s}
+.btn-cta:hover{background:var(--ln2)}
+.btn-cta-ghost{background:transparent;color:rgba(245,237,224,.7);padding:12px 24px;border-radius:var(--rpill);font-size:14px;font-weight:500;border:1.5px solid rgba(245,237,224,.2);cursor:pointer;font-family:"DM Sans",sans-serif;text-decoration:none;transition:border-color .15s,color .15s}
+.btn-cta-ghost:hover{border-color:rgba(245,237,224,.4);color:var(--ln)}
+
+/* FOOTER */
+footer{background:#070f0a;padding:3rem 28px 2.5rem;border-top:1px solid rgba(255,255,255,.06)}
+.foot-in{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:24px;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:1.5rem}
+.foot-brand{font-family:"DM Serif Display",serif;font-size:17px;color:var(--ln);letter-spacing:-.03em}
+.foot-tag{font-size:12px;color:rgba(245,237,224,.3);margin-top:3px}
+.foot-links{display:flex;gap:32px;flex-wrap:wrap}
+.foot-col-h{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:rgba(245,237,224,.3);margin-bottom:10px}
+.foot-col a{display:block;font-size:12.5px;color:rgba(245,237,224,.5);text-decoration:none;margin-bottom:7px;transition:color .15s}
+.foot-col a:hover{color:var(--ln)}
+.foot-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.foot-copy{font-size:11.5px;color:rgba(245,237,224,.25)}
+.foot-legal{display:flex;gap:16px}
+.foot-legal a{font-size:11.5px;color:rgba(245,237,224,.25);text-decoration:none;transition:color .15s}
+.foot-legal a:hover{color:rgba(245,237,224,.5)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <a href="index.html" class="nav-logo">
+      mocha
+      <span class="nav-badge">For Universities</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Product</a></li>
+      <li><a href="universities.html" class="on">Universities</a></li>
+      <li><a href="#">Pricing</a></li>
+    </ul>
+    <div class="nav-r">
+      <a href="#" class="btn-ghost">Log in</a>
+      <a href="#cta" class="btn-dark">Get in Touch</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-in">
+    <div class="eyebrow sr"><span class="eyebrow-dot"></span> For Career Centers</div>
+    <h1 class="sr d1">Prepare students for<br>high-stakes interviews <em>at scale.</em></h1>
+    <p class="hero-sub sr d2">Mocha helps career centers deliver AI-powered interview preparation, personalized feedback, and measurable career readiness outcomes across every program on campus.</p>
+    <div class="hero-actions sr d3">
+      <a href="#cta" class="btn-hero">Get in Touch</a>
+      <a href="#dashboard" class="btn-outline">See the Dashboard →</a>
+    </div>
+    <div class="hero-proof sr d4">
+      <p class="proof-text"><strong>1,600 students</strong> found Mocha before launch &nbsp;·&nbsp; active at <strong>19 universities</strong> organically &nbsp;·&nbsp; zero paid acquisition</p>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="stats-in">
+    <div class="sr">
+      <div class="stat-n"><em>1,600</em></div>
+      <div class="stat-l">Students Before Launch</div>
+    </div>
+    <div class="sr d1">
+      <div class="stat-n">19<em>+</em></div>
+      <div class="stat-l">Universities Represented</div>
+    </div>
+    <div class="sr d2">
+      <div class="stat-n"><em>0</em></div>
+      <div class="stat-l">Paid to Acquire Them</div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-in">
+    <div class="ticker-eyebrow">Students already using Mocha from</div>
+    <div class="ticker-track">
+      <div class="ticker-item"><span class="ticker-pill">Georgetown</span></div>
+      <div class="ticker-item"><span class="ticker-pill">Northeastern</span></div>
+      <div class="ticker-item"><span class="ticker-pill">Michigan</span></div>
+      <div class="ticker-item"><span class="ticker-pill">NYU</span></div>
+      <div class="ticker-item"><span class="ticker-pill">Emory</span></div>
+      <div class="ticker-item"><span class="ticker-pill">USC</span></div>
+      <div class="ticker-item"><span class="ticker-pill">Boston College</span></div>
+      <div class="ticker-item"><span class="ticker-pill">Vanderbilt</span></div>
+      <div class="ticker-item"><span class="ticker-pill">Indiana</span></div>
+      <div class="ticker-item"><span class="ticker-pill">UNC</span></div>
+      <div class="ticker-item"><span class="ticker-pill">Rice</span></div>
+      <div class="ticker-item"><span class="ticker-pill">American University</span></div>
+      <div class="ticker-item"><span class="ticker-pill">Georgetown</span></div>
+      <div class="ticker-item"><span class="ticker-pill">Northeastern</span></div>
+      <div class="ticker-item"><span class="ticker-pill">Michigan</span></div>
+      <div class="ticker-item"><span class="ticker-pill">NYU</span></div>
+      <div class="ticker-item"><span class="ticker-pill">Emory</span></div>
+      <div class="ticker-item"><span class="ticker-pill">USC</span></div>
+      <div class="ticker-item"><span class="ticker-pill">Boston College</span></div>
+      <div class="ticker-item"><span class="ticker-pill">Vanderbilt</span></div>
+      <div class="ticker-item"><span class="ticker-pill">Indiana</span></div>
+      <div class="ticker-item"><span class="ticker-pill">UNC</span></div>
+      <div class="ticker-item"><span class="ticker-pill">Rice</span></div>
+      <div class="ticker-item"><span class="ticker-pill">American University</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD SECTION -->
+<section class="dash-section" id="dashboard">
+  <div class="dash-in">
+    <div class="sr">
+      <div class="section-label"><span class="section-line"></span> Career Center Dashboard</div>
+      <h2>What a university deployment<br><em>would look like.</em></h2>
+      <p class="section-sub">We haven't launched a formal university partnership yet — but this is exactly what we're building toward. A real career center admin view, backed by data that already exists.</p>
+    </div>
+
+    <!-- Honest mock badge -->
+    <div class="sr d1">
+      <div class="mock-badge">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="#7a5c1a" stroke-width="1.2"/><path d="M6.5 4v3.5" stroke="#7a5c1a" stroke-width="1.2" stroke-linecap="round"/><circle cx="6.5" cy="9.5" r=".6" fill="#7a5c1a"/></svg>
+        Mock dashboard — illustrative only. Real data from actual university deployments coming soon.
+      </div>
+    </div>
+
+    <div class="dash-window sr d2">
+      <div class="dw-chrome">
+        <div class="dw-dots">
+          <div class="dw-dot dw-dot-r"></div>
+          <div class="dw-dot dw-dot-y"></div>
+          <div class="dw-dot dw-dot-g"></div>
+        </div>
+        <div class="dw-url">career.usemocha.app/dashboard</div>
+      </div>
+      <div class="dw-body">
+        <!-- Sidebar -->
+        <div class="dw-sidebar">
+          <div class="sb-label">Overview</div>
+          <div class="sb-item act"><div class="sb-icon">📊</div> Dashboard</div>
+          <div class="sb-item"><div class="sb-icon">👥</div> Students</div>
+          <div class="sb-item"><div class="sb-icon">📈</div> Progress</div>
+          <div class="sb-div"></div>
+          <div class="sb-label">Programs</div>
+          <div class="sb-item"><div class="sb-icon">🏛️</div> Business</div>
+          <div class="sb-item"><div class="sb-icon">⚙️</div> Engineering</div>
+          <div class="sb-item"><div class="sb-icon">⭐</div> Honors</div>
+          <div class="sb-div"></div>
+          <div class="sb-label">Admin</div>
+          <div class="sb-item"><div class="sb-icon">⚙️</div> Settings</div>
+        </div>
+        <!-- Main content -->
+        <div class="dw-main">
+          <div class="dw-main-header">
+            <div class="dw-title">Spring 2025 · All Programs</div>
+            <div class="dw-period">Last 30 days</div>
+          </div>
+          <!-- KPIs -->
+          <div class="kpi-row">
+            <div class="kpi">
+              <div class="kpi-val g">847</div>
+              <div class="kpi-lbl">Active Students</div>
+              <div class="kpi-ch">↑ 23% this month</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-val">3,241</div>
+              <div class="kpi-lbl">Sessions Done</div>
+              <div class="kpi-ch">↑ 18% vs last term</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-val g">82%</div>
+              <div class="kpi-lbl">Engagement Rate</div>
+              <div class="kpi-ch">↑ 11pts vs fall</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-val">67</div>
+              <div class="kpi-lbl">Avg Readiness Score</div>
+              <div class="kpi-ch">↑ 31% from start</div>
+            </div>
+          </div>
+          <!-- Charts -->
+          <div class="charts-row">
+            <div class="chart-card">
+              <div class="cc-head">
+                <span class="cc-title">Weekly Practice Sessions</span>
+                <span class="cc-badge">↑ 18%</span>
+              </div>
+              <div class="bars">
+                <div class="bar-col"><div class="bar" style="height:44%"></div><div class="bar-x">W1</div></div>
+                <div class="bar-col"><div class="bar" style="height:55%"></div><div class="bar-x">W2</div></div>
+                <div class="bar-col"><div class="bar" style="height:51%"></div><div class="bar-x">W3</div></div>
+                <div class="bar-col"><div class="bar" style="height:66%"></div><div class="bar-x">W4</div></div>
+                <div class="bar-col"><div class="bar" style="height:72%"></div><div class="bar-x">W5</div></div>
+                <div class="bar-col"><div class="bar" style="height:80%"></div><div class="bar-x">W6</div></div>
+                <div class="bar-col"><div class="bar hi" style="height:92%"></div><div class="bar-x">W7</div></div>
+              </div>
+            </div>
+            <div class="chart-card">
+              <div class="cc-head">
+                <span class="cc-title">Top Practice Categories</span>
+              </div>
+              <div class="prog-list">
+                <div class="prog-row">
+                  <span class="prog-label">Behavioral / STAR</span>
+                  <div class="prog-track"><div class="prog-fill" style="--tw:91%"></div></div>
+                  <span class="prog-val">91%</span>
+                </div>
+                <div class="prog-row">
+                  <span class="prog-label">Case Interviews</span>
+                  <div class="prog-track"><div class="prog-fill" style="--tw:74%"></div></div>
+                  <span class="prog-val">74%</span>
+                </div>
+                <div class="prog-row">
+                  <span class="prog-label">Finance Technical</span>
+                  <div class="prog-track"><div class="prog-fill" style="--tw:62%"></div></div>
+                  <span class="prog-val">62%</span>
+                </div>
+                <div class="prog-row">
+                  <span class="prog-label">Leadership / Fit</span>
+                  <div class="prog-track"><div class="prog-fill" style="--tw:55%"></div></div>
+                  <span class="prog-val">55%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Cohort table -->
+          <div class="table-card">
+            <table>
+              <thead>
+                <tr><th>Program</th><th>Students</th><th>Avg Score</th><th>Status</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Business School</td><td>342</td><td>71</td><td><span class="badge hi">On Track</span></td></tr>
+                <tr><td>Honors Program</td><td>128</td><td>68</td><td><span class="badge hi">On Track</span></td></tr>
+                <tr><td>Engineering · CS</td><td>214</td><td>62</td><td><span class="badge md">Developing</span></td></tr>
+                <tr><td>First-Gen Initiative</td><td>163</td><td>55</td><td><span class="badge md">Needs Support</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="cta-in">
+    <div class="cta-eyebrow sr">Bring Mocha to Your Campus</div>
+    <h2 class="cta-h sr d1">Interested in a<br>formal <em>partnership?</em></h2>
+    <p class="cta-sub sr d2">We're actively working with career centers to launch our first university partnerships. If you're a career services administrator, we'd love to talk.</p>
+    <div class="cta-actions sr d3">
+      <a href="mailto:hello@usemocha.app" class="btn-cta">Get in Touch</a>
+      <a href="index.html" class="btn-cta-ghost">Try Mocha Free</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-in">
+    <div>
+      <div class="foot-brand">mocha</div>
+      <div class="foot-tag">Career readiness for the AI era.</div>
+    </div>
+    <div class="foot-links">
+      <div class="foot-col">
+        <div class="foot-col-h">Product</div>
+        <a href="index.html">How It Works</a>
+        <a href="#">Pricing</a>
+        <a href="universities.html">For Universities</a>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-h">Company</div>
+        <a href="#">About</a>
+        <a href="mailto:hello@usemocha.app">Contact</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot-in" style="border-bottom:none;padding-bottom:0;margin-bottom:0">
+    <div class="foot-bottom" style="width:100%">
+      <div class="foot-copy">© 2025 Mocha. All rights reserved.</div>
+      <div class="foot-legal"><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// SR
+(function(){
+  const els=document.querySelectorAll('.sr');
+  if(!('IntersectionObserver' in window)){els.forEach(e=>e.classList.add('on'));return}
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');obs.unobserve(e.target)}})
+  },{threshold:.1,rootMargin:'0px 0px -30px 0px'});
+  els.forEach(e=>obs.observe(e));
+})();
+
+// Progress bars
+(function(){
+  const fills=document.querySelectorAll('.prog-fill');
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('go'),200);obs.unobserve(e.target)}})
+  },{threshold:.5});
+  fills.forEach(f=>obs.observe(f));
+})();
+</script>
+</body>
+</html>

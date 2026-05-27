@@ -6573,43 +6573,175 @@ body,
 }
 
 /* ════════════════════════════════════════
-   DASHBOARD
+   DASHBOARD — 10/10
 ════════════════════════════════════════ */
-.dash-pg    { max-width: 680px; margin: 0 auto; padding: 2rem 20px 4rem; }
-.greet-wrap { margin-bottom: 1.5rem; }
-.greet-time {
-  font-size: 11px; font-weight: 700; letter-spacing: .10em;
-  text-transform: uppercase; color: rgba(10,92,68,.38); margin-bottom: 6px;
+
+#page-dashboard { background: #f5f3ef !important; }
+
+.dash-pg {
+  max-width: 580px; margin: 0 auto;
+  padding: 2.25rem 20px 5rem;
 }
-.greet-txt  {
+
+/* Greeting */
+.dash-greet      { margin-bottom: 2rem; }
+.dash-greet-time {
+  font-size: 11px; font-weight: 700; letter-spacing: .11em;
+  text-transform: uppercase; color: rgba(10,92,68,.42); margin-bottom: 6px;
+}
+.dash-greet-name {
   font-family: 'DM Serif Display', serif;
-  font-size: clamp(1.5rem,3vw,2rem); font-weight: 400;
-  color: #0b2215; letter-spacing: -.02em; line-height: 1.2; min-height: 2.5rem;
+  font-size: clamp(1.75rem, 4vw, 2.4rem); font-weight: 400;
+  color: #0b2215; letter-spacing: -.03em; line-height: 1.15;
+  min-height: 2.8rem;
 }
-.stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 1.25rem; }
-.stat-c {
+
+/* Stat cards */
+.dash-stats {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 10px; margin-bottom: 14px;
+}
+.dash-stat {
   background: #fff; border: 1px solid rgba(10,92,68,.09);
-  border-radius: 18px; padding: 1.25rem 1rem 1rem;
+  border-radius: 18px; padding: 1.2rem 1rem 1rem;
   text-align: center; transition: box-shadow .15s;
+  display: flex; flex-direction: column; align-items: center;
 }
-.stat-c:hover { box-shadow: 0 4px 20px rgba(10,92,68,.10); }
-.stat-ico  { display: none; }
-.stat-streak-circle {
+.dash-stat:hover { box-shadow: 0 4px 20px rgba(10,92,68,.09); }
+.dash-stat-icon {
   width: 44px; height: 44px; border-radius: 50%;
-  background: #0a5c44; display: flex; align-items: center;
-  justify-content: center; margin: 0 auto 10px;
-  color: rgba(253,232,204,.85);
+  background: #0a5c44;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 10px;
 }
-.stat-n {
+.dash-stat-num {
   font-family: 'DM Serif Display', serif;
-  font-size: 2.5rem; letter-spacing: -.05em;
+  font-size: 2.4rem; letter-spacing: -.05em;
   font-weight: 400; color: #0a5c44; line-height: 1; margin-bottom: 5px;
 }
-.stat-l {
+.dash-stat-label {
   font-size: 9.5px; font-weight: 700; color: rgba(10,92,68,.38);
   text-transform: uppercase; letter-spacing: .09em; margin-bottom: 4px;
 }
-.stat-t { font-size: 11px; color: rgba(10,20,15,.35); font-weight: 500; }
+.dash-stat-sub { font-size: 11px; color: rgba(10,20,15,.35); font-weight: 500; }
+
+/* Continue path card */
+.dash-path-card {
+  background: #0a5c44; border-radius: 18px;
+  padding: 1.4rem 1.5rem; margin-bottom: 10px;
+  box-shadow: 0 4px 24px rgba(10,92,68,.18);
+}
+.dash-path-inner {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 1rem;
+}
+.dash-path-eye {
+  font-size: 9px; font-weight: 700; letter-spacing: .10em;
+  text-transform: uppercase; color: rgba(253,232,204,.55);
+  margin-bottom: 5px;
+}
+.dash-path-track {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.2rem; font-weight: 400; color: #fde8cc;
+  letter-spacing: -.02em; margin-bottom: 3px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.dash-path-sub { font-size: 12px; color: rgba(253,232,204,.50); line-height: 1.5; }
+.dash-path-btn {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(253,232,204,.90); color: #0a2015;
+  border: none; border-radius: 99px;
+  padding: 10px 18px; font-size: 12px; font-weight: 700;
+  cursor: pointer; font-family: 'DM Sans', sans-serif;
+  white-space: nowrap; flex-shrink: 0; transition: opacity .12s;
+}
+.dash-path-btn:hover { opacity: .88; }
+
+/* Today's question card */
+.dash-today-card {
+  background: #0f1a14; border-radius: 18px;
+  padding: 1.4rem 1.5rem; margin-bottom: 10px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.15);
+}
+.dash-today-eye {
+  font-size: 9px; font-weight: 700; letter-spacing: .10em;
+  text-transform: uppercase; color: rgba(253,232,204,.40);
+  margin-bottom: 8px;
+}
+.dash-today-badge {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: #4dc994; background: rgba(77,201,148,.12);
+  padding: 3px 10px; border-radius: 99px; margin-bottom: 10px;
+}
+.dash-today-q {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.15rem; font-weight: 400; color: #fde8cc;
+  line-height: 1.45; margin-bottom: 14px; letter-spacing: -.02em;
+}
+.dash-today-row { display: flex; align-items: center; gap: 12px; }
+.dash-today-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(253,232,204,.90); color: #0a2015;
+  border: none; border-radius: 99px;
+  padding: 9px 18px; font-size: 12px; font-weight: 700;
+  cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity .12s;
+}
+.dash-today-btn:hover { opacity: .88; }
+.dash-today-meta { font-size: 11px; color: rgba(253,232,204,.35); font-weight: 500; }
+
+/* Week card */
+.dash-week-card {
+  background: #fff; border: 1px solid rgba(10,92,68,.09);
+  border-radius: 18px; padding: 1.2rem 1.4rem;
+  margin-bottom: 10px;
+}
+.dash-week-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+}
+.dash-week-title { font-size: 12px; font-weight: 700; color: #0b2215; }
+.dash-week-sub   { font-size: 11px; color: rgba(10,20,15,.40); font-weight: 500; }
+.dash-wdays      { display: flex; gap: 6px; }
+
+/* Sessions card */
+.dash-sess-card {
+  background: #fff; border: 1px solid rgba(10,92,68,.09);
+  border-radius: 18px; overflow: hidden;
+}
+.dash-sess-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.1rem 1.4rem; border-bottom: 1px solid rgba(10,92,68,.07);
+}
+.dash-sess-title { font-size: 12px; font-weight: 700; color: #0b2215; }
+.dash-sess-link  {
+  font-size: 11px; font-weight: 600; color: #0a5c44; cursor: pointer;
+}
+.dash-sess-link:hover { text-decoration: underline; }
+
+/* Legacy aliases so existing JS still works */
+.greet-wrap     { margin-bottom: 0; }
+.greet-time     { display: none; }
+.greet-txt      { display: none; }
+.stats-row      { display: none !important; }
+.stat-c         { display: none !important; }
+.continue-path-card { display: none !important; }
+.today-card     { display: none !important; }
+.week-card      { display: none !important; }
+.sess-card      { display: none !important; }
+
+/* Mobile */
+@media (max-width: 480px) {
+  .dash-pg        { padding: 1.75rem 14px 4rem; }
+  .dash-greet-name { font-size: 1.75rem; }
+  .dash-stats     { gap: 8px; }
+  .dash-stat      { padding: 1rem .75rem .875rem; border-radius: 14px; }
+  .dash-stat-num  { font-size: 2rem; }
+  .dash-stat-icon { width: 38px; height: 38px; margin-bottom: 8px; }
+  .dash-path-card, .dash-today-card { padding: 1.2rem 1.2rem; border-radius: 14px; }
+  .dash-path-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .dash-path-btn  { width: 100%; justify-content: center; }
+}
 
 /* ── Suppress old classes ── */
 .score-hero,.metrics,.met,.editorial,.rw-block,.crit-sec,
@@ -7603,68 +7735,93 @@ body,
 </div>
 
 <!-- DASHBOARD -->
-<div class="page" id="page-dashboard" style="padding-top:54px;">
+<div class="page" <div class="page" id="page-dashboard" style="padding-top:54px;">
   <div class="dash-pg">
-    <div class="greet-wrap fadeup">
-      <div class="greet-time" id="greet-time"></div>
-      <div class="greet-txt" id="greet-txt"><span class="cursor"></span></div>
+
+    <!-- Greeting -->
+    <div class="dash-greet fadeup">
+      <div class="dash-greet-time" id="greet-time"></div>
+      <div class="dash-greet-name" id="dash-greet-name"><span class="cursor"></span></div>
     </div>
-    <div class="stats-row fadeup d1">
-      <div class="stat-c stat-streak" id="stat-streak-card">
-        <div class="stat-streak-circle" id="ds-streak-ico">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+
+    <!-- 3 stat cards — equal columns -->
+    <div class="dash-stats fadeup d1">
+
+      <div class="dash-stat" id="stat-streak-card">
+        <div class="dash-stat-icon">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+            <path d="M4 10.5L8 14.5L16 6.5" stroke="rgba(253,232,204,.90)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
-        <div class="stat-n" id="ds-streak">5</div>
-        <div class="stat-l">Day streak</div>
-        <div class="stat-t" id="ds-streak-msg">Keep it up</div>
+        <div class="dash-stat-num" id="ds-streak">0</div>
+        <div class="dash-stat-label">Day streak</div>
+        <div class="dash-stat-sub" id="ds-streak-msg">Start today</div>
       </div>
-      <div class="stat-c">
-        <div class="stat-n" id="ds-avg">7.3</div>
-        <div class="stat-l">Avg score</div>
-        <div class="stat-t" id="ds-avg-msg">Last 7 days</div>
+
+      <div class="dash-stat">
+        <div class="dash-stat-num" id="ds-avg">—</div>
+        <div class="dash-stat-label">Avg score</div>
+        <div class="dash-stat-sub" id="ds-avg-msg">Last 7 days</div>
       </div>
-      <div class="stat-c">
-        <div class="stat-n" id="ds-total">12</div>
-        <div class="stat-l">Sessions</div>
-        <div class="stat-t">All time</div>
+
+      <div class="dash-stat">
+        <div class="dash-stat-num" id="ds-total">0</div>
+        <div class="dash-stat-label">Sessions</div>
+        <div class="dash-stat-sub">All time</div>
       </div>
+
     </div>
-    <div class="continue-path-card fadeup d2" id="continue-path-card" style="display:none;">
-      <div class="cp-inner">
-        <div class="cp-left">
-          <div class="cp-eyebrow">Continue your path</div>
-          <div class="cp-track" id="cp-track-name">Management Consulting</div>
-          <div class="cp-sub" id="cp-track-sub">You're on a 5 day streak. Keep it going.</div>
+
+    <!-- Continue your path -->
+    <div class="dash-path-card fadeup d2" id="continue-path-card" style="display:none;">
+      <div class="dash-path-inner">
+        <div>
+          <div class="dash-path-eye">Continue your path</div>
+          <div class="dash-path-track" id="cp-track-name">Management Consulting</div>
+          <div class="dash-path-sub" id="cp-track-sub">Answer today's question to keep your streak going.</div>
         </div>
-        <button class="btn-cta" style="font-size:12px;padding:8px 16px;flex-shrink:0;" onclick="goToPractice()">
+        <button class="dash-path-btn" onclick="goToPractice()">
           Practice now
           <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3L12 7L8 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
     </div>
 
-    <div class="today-card fadeup d2">
-      <div class="tc-lbl">Today's question</div>
-      <span class="tc-badge tcb-beh" id="dash-badge">Behavioral</span>
-      <div class="tc-q" id="dash-q">Loading your question…</div>
-      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-        <button class="btn-go" onclick="goToPractice()">
+    <!-- Today's question -->
+    <div class="dash-today-card fadeup d2">
+      <div class="dash-today-eye">Today's question</div>
+      <div class="dash-today-badge" id="dash-badge">Behavioral</div>
+      <div class="dash-today-q" id="dash-q">Loading your question…</div>
+      <div class="dash-today-row">
+        <button class="dash-today-btn" onclick="goToPractice()">
           <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M5.5 5L9.5 7L5.5 9V5Z" fill="currentColor"/></svg>
           Start practicing
         </button>
-        <span style="font-size:11px;color:rgba(253,232,204,.38);font-weight:500;">2 min · AI feedback</span>
+        <span class="dash-today-meta">2 min · AI feedback</span>
       </div>
     </div>
-    <div class="week-card fadeup d3">
-      <div class="wc-h"><span class="wc-t">This week</span><span class="wc-s" id="week-sub">5 of 7 days</span></div>
-      <div class="wdays" id="wdays"></div>
+
+    <!-- Week view -->
+    <div class="dash-week-card fadeup d3">
+      <div class="dash-week-hd">
+        <span class="dash-week-title">This week</span>
+        <span class="dash-week-sub" id="week-sub">0 of 7 days</span>
+      </div>
+      <div class="dash-wdays" id="wdays"></div>
     </div>
-    <div class="sess-card fadeup d4">
-      <div class="sc-h"><span class="sc-t">Recent sessions</span><span class="sc-lnk" onclick="showView('history')">See all</span></div>
+
+    <!-- Recent sessions -->
+    <div class="dash-sess-card fadeup d4">
+      <div class="dash-sess-hd">
+        <span class="dash-sess-title">Recent sessions</span>
+        <span class="dash-sess-link" onclick="showView('history')">See all</span>
+      </div>
       <div id="dash-sess"></div>
     </div>
+
   </div>
 </div>
+
 
 <!-- HISTORY -->
 <div class="page" id="page-history" style="padding-top:54px;">
@@ -9382,7 +9539,8 @@ function dashEraseStr(el, cb, spd) {
 }
 function runDashTW() {
   clearTimeout(dashTwTimer);
-  var el = document.getElementById('greet-txt');
+  // Target new dash-greet-name if available, fall back to greet-txt
+  var el = document.getElementById('dash-greet-name') || document.getElementById('greet-txt');
   if (!el) return;
   dashTypeStr(el, getGreeting(), function() {
     dashTwTimer = setTimeout(function() {
@@ -9414,7 +9572,10 @@ function renderDash() {
     weekday: 'long', month: 'long', day: 'numeric',
     timeZone: tz
   });
-  document.getElementById('greet-time').textContent = lbl + ' \u00b7 ' + dateStr;
+  var greetTimeEl = document.getElementById('greet-time') || document.getElementById('dash-greet-time-legacy');
+  if (greetTimeEl) greetTimeEl.textContent = lbl + ' \u00b7 ' + dateStr;
+  var dashTime = document.getElementById('greet-time');
+  if (dashTime) dashTime.textContent = lbl.toUpperCase() + ' \u00b7 ' + dateStr.toUpperCase();
   runDashTW();
 
   // Continue-your-path card
@@ -9482,7 +9643,7 @@ function renderDash() {
   document.getElementById('dash-q').textContent = currentQ.text;
   var badge = document.getElementById('dash-badge');
   badge.textContent = currentQ.cat;
-  badge.className = 'tc-badge ' + (currentQ.cat === 'Situational' ? 'tcb-sit' : currentQ.cat === 'Networking' ? 'tcb-net' : 'tcb-beh');
+  badge.className = 'dash-today-badge ' + (currentQ.cat === 'Situational' ? 'tcb-sit' : currentQ.cat === 'Networking' ? 'tcb-net' : 'tcb-beh');
 
   var streak = appUser ? (appUser.streak || 0) : 0;
   // Get current day of week (0=Sun, 1=Mon ... 6=Sat) in local timezone

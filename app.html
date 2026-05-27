@@ -5998,183 +5998,208 @@ body,
 }
 
 /* ════════════════════════════════════════
-   FEEDBACK + DASHBOARD — MATCHES LANDING
+   FEEDBACK + DASHBOARD — 10/10 FINAL
    ════════════════════════════════════════ */
 
-/* Page */
-#page-feedback  { background: #0d1912; }
+/* ── Page shells ── */
+#page-feedback  { background: #f0ede8; }   /* warm cream — panel floats against it */
 #page-dashboard { background: #f5f3ef !important; }
 #page-practice  { background: #f5f3ef !important; }
 
+/* ── Feedback wrapper ── */
 .fb-pg {
-  max-width: 560px; margin: 0 auto;
+  max-width: 440px; margin: 0 auto;
   padding: 0 16px 5rem;
 }
 
-/* Question crumb */
+/* ── Question crumb ── */
 .fb-q {
   font-size: 10px; font-weight: 700; letter-spacing: .11em;
-  text-transform: uppercase; color: rgba(245,237,224,.30);
+  text-transform: uppercase; color: rgba(10,92,68,.42);
   padding: 16px 0 12px;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 
-/* ══ MAIN PANEL — dark, matches landing ══ */
+/* ════════════════════════════════════════
+   MAIN DARK PANEL
+════════════════════════════════════════ */
 .fb-panel {
   background: #0a1810;
-  border-radius: 20px;
-  padding: 18px;
-  margin-bottom: 12px;
-  box-shadow: 0 4px 32px rgba(0,0,0,.35);
+  border-radius: 22px;
+  padding: 20px 20px 18px;
+  margin-bottom: 10px;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.05) inset,
+    0 -1px 0 rgba(0,0,0,.20) inset,
+    0 12px 48px rgba(0,0,0,.38),
+    0 4px 16px rgba(0,0,0,.24);
   animation: fbIn .55s cubic-bezier(.16,1,.3,1) both;
 }
 @keyframes fbIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: none; }
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:none; }
 }
 
 /* Header */
 .fb-panel-hd {
   display: flex; align-items: center;
-  justify-content: space-between; margin-bottom: 14px;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
-.fb-panel-brand { display: flex; align-items: center; gap: 8px; }
+.fb-panel-brand { display: flex; align-items: center; gap: 10px; }
 .fb-panel-avatar {
-  width: 28px; height: 28px; border-radius: 7px;
+  width: 32px; height: 32px; border-radius: 9px;
   background: rgba(245,237,224,.10);
   display: flex; align-items: center; justify-content: center;
-  font-family: 'DM Serif Display', serif; font-size: 13px;
-  color: #f5ede0; font-style: italic;
+  font-family: 'DM Serif Display', serif; font-size: 15px;
+  color: #f5ede0; font-style: italic; flex-shrink: 0;
 }
-.fb-panel-title { font-size: 12px; font-weight: 700; color: #f5ede0; }
-.fb-panel-sub   { font-size: 9px; color: rgba(245,237,224,.38); margin-top: 1px; }
+.fb-panel-title { font-size: 13px; font-weight: 700; color: #f5ede0; line-height: 1.2; }
+.fb-panel-sub   { font-size: 9px; color: rgba(245,237,224,.35); margin-top: 2px; }
 .fb-panel-track {
-  font-size: 9px; font-weight: 700; letter-spacing: .07em;
-  text-transform: uppercase; color: rgba(245,237,224,.22);
+  font-size: 9px; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; color: rgba(245,237,224,.18);
+  text-align: right; max-width: 120px; line-height: 1.5;
 }
 
-/* Score */
-.fb-score-wrap {
-  text-align: center;
-  padding: 12px 0 14px;
+/* ── Score Ring ── */
+.fb-ring-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 6px 0 18px;
   border-bottom: 1px solid rgba(245,237,224,.07);
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
-.fb-score-eyebrow {
-  font-size: 8px; font-weight: 700; letter-spacing: .12em;
-  text-transform: uppercase; color: rgba(245,237,224,.28);
-  margin-bottom: 4px;
+.fb-ring-container {
+  position: relative; width: 116px; height: 116px; margin-bottom: 12px;
 }
-.fb-score-row { display: flex; align-items: baseline; justify-content: center; gap: 3px; }
+.fb-ring-svg {
+  width: 116px; height: 116px;
+  transform: rotate(-90deg);
+  animation: fbIn .6s .08s cubic-bezier(.16,1,.3,1) both;
+  filter: drop-shadow(0 0 10px rgba(77,201,148,.20));
+}
+.fb-ring-bg {
+  fill: none; stroke: rgba(77,201,148,.12); stroke-width: 7;
+}
+.fb-ring-fill {
+  fill: none; stroke: #4dc994; stroke-width: 7;
+  stroke-linecap: round;
+  stroke-dasharray: 263.9;
+  stroke-dashoffset: 263.9;
+  transition: stroke-dashoffset 1.4s cubic-bezier(.16,1,.3,1) .25s,
+              stroke .4s ease;
+}
+.fb-ring-inner {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+}
 .fb-score-n {
   font-family: 'DM Serif Display', serif;
-  font-size: 5rem; font-weight: 400;
-  color: #f5ede0; letter-spacing: -.06em; line-height: 1;
+  font-size: 2.6rem; font-weight: 400;
+  color: #f5ede0; letter-spacing: -.05em; line-height: 1;
   animation: fbScore .7s cubic-bezier(.16,1,.3,1) both;
 }
 @keyframes fbScore {
-  from { opacity: 0; transform: scale(.88) translateY(8px); }
-  to   { opacity: 1; transform: none; }
-}
-.fb-score-d {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.75rem; font-weight: 400;
-  color: rgba(245,237,224,.25); letter-spacing: -.04em;
-  align-self: flex-end; padding-bottom: 6px;
+  from { opacity:0; transform:scale(.80); }
+  to   { opacity:1; transform:none; }
 }
 .fb-score-verdict {
-  display: inline-block; margin-top: 10px;
-  font-size: 9px; font-weight: 800; letter-spacing: .10em;
+  font-size: 9px; font-weight: 800; letter-spacing: .12em;
   text-transform: uppercase; color: #4dc994;
   background: rgba(77,201,148,.12);
-  padding: 4px 12px; border-radius: 99px;
+  padding: 5px 16px; border-radius: 99px;
+  display: inline-block;
 }
 
-/* Bars */
+/* ── Dimension bars ── */
 .fb-bars {
-  display: flex; flex-direction: column; gap: 7px;
-  margin-bottom: 14px; padding-bottom: 14px;
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 16px; padding-bottom: 16px;
   border-bottom: 1px solid rgba(245,237,224,.07);
-  animation: fbIn .4s .12s cubic-bezier(.16,1,.3,1) both;
 }
-.fb-bar-r { display: flex; align-items: center; gap: 7px; }
+.fb-bar-r { display: flex; align-items: center; gap: 9px; }
 .fb-bar-l {
-  font-size: 8px; font-weight: 600; letter-spacing: .05em;
+  font-size: 8.5px; font-weight: 700; letter-spacing: .05em;
   text-transform: uppercase; color: rgba(245,237,224,.28);
-  width: 58px; flex-shrink: 0;
+  width: 62px; flex-shrink: 0;
 }
 .fb-bar-t {
-  flex: 1; height: 2px; background: rgba(77,201,148,.08);
+  flex: 1; height: 2px; background: rgba(77,201,148,.09);
   border-radius: 99px; overflow: hidden;
 }
 .fb-bar-f {
   height: 100%; width: 0; border-radius: 99px;
-  background: linear-gradient(90deg, rgba(10,92,68,.80), #4dc994);
+  background: linear-gradient(90deg, rgba(10,92,68,.90), #4dc994);
   transition: width 1.1s cubic-bezier(.16,1,.3,1);
 }
 .fb-bar-v {
-  font-size: 10px; font-weight: 700; color: #4dc994;
+  font-size: 11px; font-weight: 700; color: #4dc994;
   width: 28px; text-align: right; flex-shrink: 0;
   font-variant-numeric: tabular-nums;
 }
 
-/* Tags */
-.fb-tags-section { margin-bottom: 8px; }
+/* ── Tags ── */
+.fb-tags-section { margin-bottom: 10px; }
 .fb-tags-label {
-  font-size: 7px; font-weight: 700; letter-spacing: .10em;
-  text-transform: uppercase; color: rgba(245,237,224,.32);
-  margin-bottom: 4px;
+  font-size: 7.5px; font-weight: 800; letter-spacing: .11em;
+  text-transform: uppercase; color: rgba(245,237,224,.30);
+  margin-bottom: 6px;
 }
-.fb-tags-row { display: flex; flex-wrap: wrap; gap: 3px; }
+.fb-tags-row { display: flex; flex-wrap: wrap; gap: 5px; }
 .fb-tag {
-  display: inline-flex; font-size: 9.5px; font-weight: 600;
-  padding: 3px 9px; border-radius: 99px;
+  display: inline-flex; align-items: center;
+  font-size: 10px; font-weight: 600;
+  padding: 4px 11px; border-radius: 99px;
 }
-.fb-tag-good { background: rgba(52,199,89,.12); color: #4dc994; }
-.fb-tag-imp  { background: rgba(10,92,68,.12); color: rgba(77,201,148,.70); }
+.fb-tag-good { background: rgba(52,199,89,.12);  color: #4dc994; }
+.fb-tag-imp  { background: rgba(10,92,68,.18);   color: rgba(77,201,148,.60); }
 
-/* Key fix tip */
+/* ── Coaching tip ── */
 .fb-tip-block {
-  font-size: 10.5px; line-height: 1.55; color: rgba(224,235,230,.65);
-  background: rgba(10,92,68,.10); border-radius: 8px;
-  padding: 8px 11px; margin-top: 10px;
-  border: 1px solid rgba(10,92,68,.18);
+  font-size: 11.5px; line-height: 1.60; color: rgba(224,235,230,.65);
+  background: rgba(10,92,68,.12); border-radius: 10px;
+  padding: 11px 14px; margin-top: 12px;
+  border: 1px solid rgba(10,92,68,.22);
 }
 .fb-tip-block:empty { display: none; }
 
-/* IV banner */
+/* ── IV banner ── */
 .fb-iv-banner {
   font-size: 12px; font-weight: 700; margin-top: 10px;
-  padding: 9px 12px; border-radius: 10px; letter-spacing: .01em;
+  padding: 10px 14px; border-radius: 10px; letter-spacing: .01em;
 }
 
-/* ══ COACHING DETAIL — white card below ══ */
+/* ════════════════════════════════════════
+   DETAIL CARD
+════════════════════════════════════════ */
 .fb-detail {
   background: #fff;
-  border-radius: 18px; overflow: hidden;
-  box-shadow: 0 2px 16px rgba(0,0,0,.12);
+  border-radius: 20px; overflow: hidden;
+  box-shadow: 0 2px 20px rgba(0,0,0,.10), 0 1px 0 rgba(10,92,68,.06);
   animation: fbIn .4s .18s cubic-bezier(.16,1,.3,1) both;
 }
 .fb-detail-section {
   padding: 1.15rem 1.4rem;
-  border-bottom: 1px solid rgba(10,92,68,.07);
+  border-bottom: 1px solid rgba(10,92,68,.065);
 }
 .fb-detail-section:last-child { border-bottom: none; }
 .fb-detail-label {
   font-size: 9px; font-weight: 800; letter-spacing: .11em;
   text-transform: uppercase; color: rgba(10,92,68,.35);
-  margin-bottom: 8px;
+  margin-bottom: 9px;
   display: flex; align-items: center; justify-content: space-between;
 }
-.fb-detail-body { font-size: 14px; line-height: 1.74; color: rgba(10,20,15,.67); }
-.fb-detail-sub  {
-  font-size: 12.5px; line-height: 1.65; color: rgba(10,20,15,.38);
-  font-style: italic; margin-top: 10px; padding-top: 10px;
+.fb-detail-body {
+  font-size: 14.5px; line-height: 1.75; color: rgba(10,20,15,.68);
+}
+.fb-detail-sub {
+  font-size: 13px; line-height: 1.65; color: rgba(10,20,15,.38);
+  font-style: italic; margin-top: 11px; padding-top: 11px;
   border-top: 1px solid rgba(10,92,68,.06);
 }
 
 /* STAR */
-.fb-star-wrap { padding: 0; }
+.fb-star-wrap   { padding: 0; }
 .fb-star-toggle {
   padding: 1.1rem 1.4rem; cursor: pointer;
   font-size: 9px; font-weight: 800; letter-spacing: .11em;
@@ -6182,57 +6207,59 @@ body,
   margin-bottom: 0; display: flex; align-items: center;
   justify-content: space-between;
 }
-.fb-star-toggle:hover { background: rgba(10,92,68,.02); }
-.fb-chevron { color: rgba(10,92,68,.28); transition: transform .2s; flex-shrink: 0; }
+.fb-star-toggle:hover { background: rgba(10,92,68,.018); }
+.fb-chevron { color: rgba(10,92,68,.28); transition: transform .22s; flex-shrink: 0; }
 .fb-star-wrap.fb-open .fb-chevron { transform: rotate(180deg); }
-.fb-star-body { display: none; border-top: 1px solid rgba(10,92,68,.07); }
+.fb-star-body   { display: none; border-top: 1px solid rgba(10,92,68,.07); }
 .fb-star-wrap.fb-open .fb-star-body { display: block; }
 .fb-citation {
   font-size: 11px; color: #0a5c44; opacity: .55;
-  padding: 9px 1.4rem 4px; font-style: italic; line-height: 1.5;
+  padding: 10px 1.4rem 4px; font-style: italic; line-height: 1.5;
 }
 .crit-item {
-  display: flex; align-items: flex-start; gap: 11px;
-  padding: 11px 1.4rem; border-bottom: 1px solid rgba(10,92,68,.05);
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 1.4rem; border-bottom: 1px solid rgba(10,92,68,.05);
 }
 .crit-item:last-of-type { border-bottom: none; }
 .crit-idx {
-  width: 24px; height: 24px; border-radius: 7px; flex-shrink: 0;
+  width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 800; margin-top: 2px;
+  font-size: 11px; font-weight: 800; margin-top: 1px;
 }
-.crit-txt { font-size: 13px; color: rgba(10,20,15,.66); line-height: 1.60; }
+.crit-txt   { font-size: 13.5px; color: rgba(10,20,15,.66); line-height: 1.62; }
 .crit-txt b { color: #0b2215; font-weight: 700; }
-.fb-src-row { padding: 7px 1.4rem 9px; }
-#fb-src-tag, .src-tag {
+.fb-src-row { padding: 8px 1.4rem 10px; }
+#fb-src-tag,.src-tag {
   font-size: 9px; font-weight: 700; letter-spacing: .08em;
   text-transform: uppercase; color: rgba(10,92,68,.22);
 }
 
 /* Rewrite */
-.fb-rw-section { background: #0a5c44; border-radius: 0; overflow: hidden; }
-.fb-rw-label   { padding: 1rem 1.4rem .75rem; border-bottom: 1px solid rgba(253,232,204,.08); }
+.fb-rw-section { background: #0a5c44; border-radius: 0 0 20px 20px; overflow: hidden; }
+.fb-rw-label   { padding: 1.1rem 1.4rem .85rem; border-bottom: 1px solid rgba(253,232,204,.08); }
 .fb-rw-badge   {
-  display: block; font-size: 9px; font-weight: 800; letter-spacing: .12em;
-  text-transform: uppercase; color: rgba(253,232,204,.55); margin-bottom: 2px;
+  display: block; font-size: 9px; font-weight: 800; letter-spacing: .13em;
+  text-transform: uppercase; color: rgba(253,232,204,.55); margin-bottom: 3px;
 }
 .fb-rw-sub  { font-size: 11px; color: rgba(253,232,204,.28); }
 .fb-rw-body {
-  padding: 1.1rem 1.4rem 1.4rem; font-size: 14px; line-height: 1.82;
+  padding: 1.2rem 1.4rem 1.5rem; font-size: 14px; line-height: 1.84;
   color: rgba(253,232,204,.92); white-space: pre-wrap;
 }
 
 /* Next question */
 #fb-next-question {
-  background: rgba(10,92,68,.06) !important; border: none !important;
-  border-top: 1px solid rgba(10,92,68,.10) !important;
-  border-radius: 0 0 14px 14px !important;
-  padding: 13px 1.4rem !important; font-size: 13px !important;
-  line-height: 1.55 !important; color: rgba(10,20,15,.60) !important;
+  background: rgba(10,92,68,.04) !important; border: none !important;
+  border-top: 1px solid rgba(10,92,68,.08) !important;
+  border-radius: 0 0 16px 16px !important;
+  padding: 14px 1.4rem !important; font-size: 13.5px !important;
+  line-height: 1.55 !important; color: rgba(10,20,15,.62) !important;
   cursor: pointer !important; margin: 0 !important;
 }
 
-/* ── DASHBOARD ── */
+/* ════════════════════════════════════════
+   DASHBOARD
+════════════════════════════════════════ */
 .dash-pg    { max-width: 680px; margin: 0 auto; padding: 2rem 20px 4rem; }
 .greet-wrap { margin-bottom: 1.5rem; }
 .greet-time {
@@ -6241,8 +6268,8 @@ body,
 }
 .greet-txt  {
   font-family: 'DM Serif Display', serif;
-  font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 400;
-  color: #0b2215; letter-spacing: -0.02em; line-height: 1.2; min-height: 2.5rem;
+  font-size: clamp(1.5rem,3vw,2rem); font-weight: 400;
+  color: #0b2215; letter-spacing: -.02em; line-height: 1.2; min-height: 2.5rem;
 }
 .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 1.25rem; }
 .stat-c {
@@ -6260,7 +6287,7 @@ body,
 }
 .stat-n {
   font-family: 'DM Serif Display', serif;
-  font-size: 2.5rem; letter-spacing: -0.05em;
+  font-size: 2.5rem; letter-spacing: -.05em;
   font-weight: 400; color: #0a5c44; line-height: 1; margin-bottom: 5px;
 }
 .stat-l {
@@ -6277,26 +6304,28 @@ body,
 .r-rw-wrap,.r-report,.sh-top,.sh-in,.sh-bars,
 .r-hero-top,.r-hero-left,.r-hero-right,.r-hero-main,.r-hero-center,
 .r-dims,.r-dim-row,.fb-card,.fb-rw-card,.fb-star-card,.fb-key-card,
-.r-hero,.r-bars,.r-bar,.r-card { display: none !important; }
+.r-bars,.r-bar { display: none !important; }
 
 #fb-star-sec { display: block !important; }
 #fb-interviewer-verdict { display: none; }
 
 /* ── Mobile ── */
 @media (max-width: 520px) {
-  .fb-pg      { padding: 0 12px 5rem; }
-  .fb-score-n { font-size: 4.5rem; }
-  .fb-panel   { padding: 14px; border-radius: 16px; }
-  .fb-detail-section { padding: 1rem 1.15rem; }
-  .crit-item  { padding: 10px 1.15rem; }
-  .fb-citation { padding: 9px 1.15rem 4px; }
-  .fb-rw-label { padding: .9rem 1.15rem .7rem; }
-  .fb-rw-body  { padding: 1rem 1.15rem 1.2rem; font-size: 13.5px; }
-  .fb-star-toggle { padding: .95rem 1.15rem; }
-  .fb-src-row { padding: 7px 1.15rem; }
-  .stats-row  { gap: 8px; }
-  .stat-c     { padding: 1rem .75rem .875rem; border-radius: 14px; }
-  .stat-n     { font-size: 2.1rem; }
+  .fb-pg       { padding: 0 12px 5rem; }
+  .fb-panel    { padding: 16px; border-radius: 18px; }
+  .fb-ring-container { width: 104px; height: 104px; }
+  .fb-ring-svg { width: 104px; height: 104px; }
+  .fb-score-n  { font-size: 2.3rem; }
+  .fb-detail-section { padding: 1rem 1.2rem; }
+  .crit-item   { padding: 11px 1.2rem; }
+  .fb-citation { padding: 10px 1.2rem 4px; }
+  .fb-rw-label { padding: 1rem 1.2rem .8rem; }
+  .fb-rw-body  { padding: 1rem 1.2rem 1.3rem; font-size: 13.5px; }
+  .fb-star-toggle { padding: 1rem 1.2rem; }
+  .fb-src-row  { padding: 8px 1.2rem; }
+  .stats-row   { gap: 8px; }
+  .stat-c      { padding: 1rem .75rem .875rem; border-radius: 14px; }
+  .stat-n      { font-size: 2.1rem; }
 }
 </style>
 </head>
@@ -6891,32 +6920,36 @@ body,
   <!-- Question crumb -->
   <div class="fb-q" id="fb-qlbl"></div>
 
-  <!-- ══ MAIN PANEL — matches landing mockup exactly ══ -->
+  <!-- ══ MAIN DARK PANEL — exact reference match ══ -->
   <div class="fb-panel">
 
-    <!-- Header: Mocha Coach + track -->
+    <!-- Header -->
     <div class="fb-panel-hd">
       <div class="fb-panel-brand">
         <div class="fb-panel-avatar">m</div>
         <div>
           <div class="fb-panel-title">Mocha Coach</div>
-          <div class="fb-panel-sub">Live feedback</div>
+          <div class="fb-panel-sub">Live Feedback</div>
         </div>
       </div>
       <div class="fb-panel-track" id="fb-src-tag-hero"></div>
     </div>
 
-    <!-- Score + verdict -->
-    <div class="fb-score-wrap">
-      <div class="fb-score-eyebrow">Score</div>
-      <div class="fb-score-row">
-        <span class="fb-score-n" id="fb-score">—</span>
-        <span class="fb-score-d">/10</span>
+    <!-- SVG Score Ring — matches reference circle exactly -->
+    <div class="fb-ring-wrap">
+      <div class="fb-ring-container">
+        <svg class="fb-ring-svg" viewBox="0 0 100 100">
+          <circle class="fb-ring-bg"   cx="50" cy="50" r="42"/>
+          <circle class="fb-ring-fill" cx="50" cy="50" r="42" id="fb-ring-circle"/>
+        </svg>
+        <div class="fb-ring-inner">
+          <span class="fb-score-n" id="fb-score">—</span>
+        </div>
       </div>
-      <div class="fb-score-verdict" id="fb-verdict"></div>
+      <div class="fb-score-verdict" id="fb-verdict">—</div>
     </div>
 
-    <!-- 4 bars -->
+    <!-- 4 dimension bars -->
     <div class="fb-bars">
       <div class="fb-bar-r"><span class="fb-bar-l">Structure</span><div class="fb-bar-t"><div class="fb-bar-f" id="sh-bar-s"></div></div><span class="fb-bar-v" id="fb-clarity">—</span></div>
       <div class="fb-bar-r"><span class="fb-bar-l">Clarity</span><div class="fb-bar-t"><div class="fb-bar-f" id="sh-bar-c"></div></div><span class="fb-bar-v" id="fb-star">—</span></div>
@@ -6924,25 +6957,27 @@ body,
       <div class="fb-bar-r"><span class="fb-bar-l">Impact</span><div class="fb-bar-t"><div class="fb-bar-f" id="sh-bar-i"></div></div><span class="fb-bar-v" id="fb-conf">—</span></div>
     </div>
 
-    <!-- Strengths + Improve tags -->
+    <!-- Strengths tags -->
     <div class="fb-tags-section">
       <div class="fb-tags-label">Strengths</div>
       <div class="fb-tags-row" id="fb-strengths-tags"></div>
     </div>
-    <div class="fb-tags-section">
+
+    <!-- Improve tags -->
+    <div class="fb-tags-section" style="margin-bottom:10px;">
       <div class="fb-tags-label">Improve</div>
       <div class="fb-tags-row" id="fb-improve-tags"></div>
     </div>
 
-    <!-- Key fix tip -->
+    <!-- Tip -->
     <div class="fb-tip-block" id="fb-verdict-full"></div>
 
-    <!-- Interviewer verdict banner -->
+    <!-- IV verdict -->
     <div class="fb-iv-banner" id="fb-interviewer-verdict" style="display:none;"></div>
 
   </div><!-- /fb-panel -->
 
-  <!-- ══ COACHING DETAIL — expands below ══ -->
+  <!-- ══ DETAIL CARD — white, below dark panel ══ -->
   <div class="fb-detail">
 
     <!-- Critique -->
@@ -6952,7 +6987,7 @@ body,
       <div class="fb-detail-sub" id="fb-interv"></div>
     </div>
 
-    <!-- STAR breakdown -->
+    <!-- STAR -->
     <div class="fb-detail-section fb-star-wrap" id="fb-star-sec">
       <div class="fb-detail-label fb-star-toggle" onclick="this.closest('.fb-star-wrap').classList.toggle('fb-open')">
         STAR breakdown
@@ -6974,15 +7009,15 @@ body,
       <div class="fb-rw-body" id="fb-rewrite"></div>
     </div>
 
-  </div><!-- /fb-detail -->
+  </div>
 
   <!-- Next question -->
   <div id="fb-next-question" style="display:none;"></div>
 
-  <!-- Hidden legacy IDs used by JS -->
-  <span id="fb-src-tag-hero-legacy" style="display:none;"></span>
-  <div id="fb-score-trend" style="display:none;"></div>
+  <!-- Legacy IDs for JS -->
+  <div id="fb-score-trend"           style="display:none;"></div>
   <div id="fb-interviewer-verdict-pill" style="display:none;"></div>
+  <span id="fb-src-tag-hero-legacy"  style="display:none;"></span>
 
 <!-- FOLLOW-UP CHAT -->
       <div class="followup-chat" id="followup-chat" style="display:none;">
@@ -9800,13 +9835,13 @@ function doSubmit() {
 }
 
 function renderFeedback(r, isFree) {
-  // Snap load bar + hide loader
+  // Hide loader, show result
   var snapBar = document.getElementById('load-bar');
-  if (snapBar) { snapBar.style.transition = 'width 0.3s ease'; snapBar.style.width = '100%'; }
+  if (snapBar) { snapBar.style.transition='width 0.3s ease'; snapBar.style.width='100%'; }
   document.getElementById('fb-load').style.display   = 'none';
   document.getElementById('fb-result').style.display = 'block';
 
-  // Scroll to top
+  // Scroll to top immediately
   window.scrollTo({ top: 0, behavior: 'instant' });
   document.documentElement.scrollTop = 0; document.body.scrollTop = 0;
   requestAnimationFrame(function() {
@@ -9817,11 +9852,11 @@ function renderFeedback(r, isFree) {
     if (res) res.scrollIntoView({ block: 'start', behavior: 'instant' });
   });
 
-  // Question
+  // Question crumb
   var qlbl = document.getElementById('fb-qlbl');
   if (qlbl) qlbl.textContent = currentQ ? currentQ.text : '';
 
-  // Score count-up
+  // Score — count up
   var target = parseFloat(r.overall) || 0;
   var scoreEl = document.getElementById('fb-score');
   if (scoreEl) {
@@ -9829,30 +9864,43 @@ function renderFeedback(r, isFree) {
     (function step(ts) {
       if (!startT) startT = ts;
       var p = Math.min((ts - startT) / dur, 1);
-      var ease = 1 - Math.pow(1 - p, 3);
-      scoreEl.textContent = (target * ease).toFixed(1);
+      var v = target * (1 - Math.pow(1 - p, 3));
+      scoreEl.textContent = v.toFixed(1);
       if (p < 1) requestAnimationFrame(step);
       else scoreEl.textContent = target.toFixed(1);
     })(performance.now());
   }
 
-  // Verdict label
-  var verdEl = document.getElementById('fb-verdict');
-  if (verdEl) {
-    verdEl.textContent = target >= 8.5 ? 'Strong Answer' :
-                         target >= 7.0 ? 'Solid Answer' :
-                         target >= 5.5 ? 'Developing' : 'Needs Work';
-    verdEl.style.color = target >= 7.5 ? '#4dc994' : target >= 5.5 ? '#f59e0b' : '#ef4444';
-    verdEl.style.background = target >= 7.5 ? 'rgba(77,201,148,.12)' : target >= 5.5 ? 'rgba(245,158,11,.10)' : 'rgba(239,68,68,.10)';
+  // Animate SVG ring — circumference = 2π×42 = 263.9
+  var ringCircle = document.getElementById('fb-ring-circle');
+  if (ringCircle) {
+    var circumference = 263.9;
+    var pct = Math.max(0, Math.min(1, target / 10));
+    setTimeout(function() {
+      ringCircle.style.strokeDashoffset = (circumference * (1 - pct)).toFixed(1);
+      ringCircle.style.stroke = target >= 8 ? '#4dc994' : target >= 6.5 ? '#f59e0b' : '#ef4444';
+    }, 200);
   }
 
-  // Scores + bars
+  // Verdict pill
+  var verdEl = document.getElementById('fb-verdict');
+  if (verdEl) {
+    var vLabel = target >= 8.5 ? 'Strong Answer' :
+                 target >= 7.0 ? 'Solid Answer'  :
+                 target >= 5.5 ? 'Developing'    : 'Needs Work';
+    verdEl.textContent = vLabel;
+    verdEl.style.color = target >= 7.5 ? '#4dc994' : target >= 5.5 ? '#f59e0b' : '#ef4444';
+    verdEl.style.background = target >= 7.5 ? 'rgba(77,201,148,.12)' :
+                               target >= 5.5 ? 'rgba(245,158,11,.10)' : 'rgba(239,68,68,.10)';
+  }
+
+  // Dimension scores + bars
   var sc = r.scores || {};
   var dims = [
-    { val: 'fb-clarity', bar: 'sh-bar-s', v: parseFloat(sc.structure || 0) },
-    { val: 'fb-star',    bar: 'sh-bar-c', v: parseFloat(sc.clarity   || 0) },
-    { val: 'fb-spec',    bar: 'sh-bar-o', v: parseFloat(sc.ownership || 0) },
-    { val: 'fb-conf',    bar: 'sh-bar-i', v: parseFloat(sc.impact    || 0) }
+    { val:'fb-clarity', bar:'sh-bar-s', v: parseFloat(sc.structure || 0) },
+    { val:'fb-star',    bar:'sh-bar-c', v: parseFloat(sc.clarity   || 0) },
+    { val:'fb-spec',    bar:'sh-bar-o', v: parseFloat(sc.ownership || 0) },
+    { val:'fb-conf',    bar:'sh-bar-i', v: parseFloat(sc.impact    || 0) }
   ];
   dims.forEach(function(d, i) {
     var ve = document.getElementById(d.val);
@@ -9865,81 +9913,66 @@ function renderFeedback(r, isFree) {
   var p = appPersona || PERSONAS[0];
   var industryLabels = {
     consulting:'Consulting · MBB PEI', banking:'Banking · Goldman/JPM',
-    product:'Tech · Amazon LPs', finance:'Private Equity',
-    marketing:'Marketing · P&G/Airbnb', nonprofit:'Social Impact · TFA',
-    healthcare:'Healthcare · J&J', retail:'Retail · Amazon/LVMH'
+    product:'Tech · Amazon LPs',       finance:'Private Equity',
+    marketing:'P&G/Airbnb',            nonprofit:'TFA/Gates',
+    healthcare:'J&J/McKinsey',         retail:'Amazon Retail'
   };
   var trackLbl = industryLabels[p.id] || p.source || 'Behavioral';
   ['fb-src-tag-hero','fb-src-tag'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.textContent = trackLbl;
+    var el = document.getElementById(id); if (el) el.textContent = trackLbl;
   });
 
-  // Strengths + Improve tags from star_breakdown weak_components + STAR data
-  var sb = r.star_breakdown || {};
+  // Strengths + Improve tags — from AI's explicit fields
   var strEl = document.getElementById('fb-strengths-tags');
   var impEl = document.getElementById('fb-improve-tags');
+  var sb = r.star_breakdown || {};
 
-  // Build strengths from what IS present and strong
-  var strengths = [];
-  var improves  = [];
-  var starKeys = ['situation','task','action','result'];
-  starKeys.forEach(function(k) {
-    var val = sb[k] || '';
-    var missing = !val || val.toUpperCase().indexOf('MISSING') > -1;
-    var weak = val.toLowerCase().indexOf('weak') > -1 || val.toLowerCase().indexOf('vague') > -1 || val.toLowerCase().indexOf('unclear') > -1;
-    if (!missing && !weak) {
-      var label = k.charAt(0).toUpperCase() + k.slice(1) + ' clear';
-      strengths.push(label);
-    } else if (missing) {
-      improves.push(k.charAt(0).toUpperCase() + k.slice(1) + ' missing');
-    } else {
-      improves.push(k.charAt(0).toUpperCase() + k.slice(1) + ' needs detail');
-    }
-  });
-
-  // Also add from interviewer_verdict context
-  if (r.interviewer_verdict && r.interviewer_verdict.indexOf('advance') > -1 && r.interviewer_verdict.indexOf('not') === -1) {
-    strengths.unshift('Offer standard');
-  }
-  if (r.scores) {
-    var maxDim = dims.reduce(function(a, b) { return a.v > b.v ? a : b; });
-    var dimNames = ['Structure','Clarity','Ownership','Impact'];
-    if (maxDim.v >= 7.5) strengths.unshift(dimNames[dims.indexOf(maxDim)] + ' ✓');
-    var minDim = dims.reduce(function(a, b) { return a.v < b.v ? a : b; });
-    if (minDim.v < 7.0) improves.push(dimNames[dims.indexOf(minDim)] + ' gap');
+  // Use AI's explicit strengths field if present, otherwise derive
+  var strengthsList = [];
+  if (r.strengths && r.strengths.length > 0) {
+    strengthsList = r.strengths.split(',').map(function(s){ return s.trim(); }).filter(Boolean).slice(0,4);
+  } else {
+    // Derive from what's present and strong in STAR
+    var dimNames2 = ['Structure','Clarity','Ownership','Impact'];
+    dims.forEach(function(d,i){ if(d.v >= 7.5) strengthsList.push(dimNames2[i]); });
+    if (strengthsList.length === 0) strengthsList.push('Attempted');
   }
 
-  if (strEl) {
-    strEl.innerHTML = strengths.slice(0,3).map(function(s) {
-      return '<span class="fb-tag fb-tag-good">✓ ' + escHtml(s) + '</span>';
-    }).join('') || '<span class="fb-tag fb-tag-good">✓ Attempted</span>';
-  }
-  if (impEl) {
-    impEl.innerHTML = improves.slice(0,3).map(function(s) {
-      return '<span class="fb-tag fb-tag-imp">+ ' + escHtml(s) + '</span>';
-    }).join('') || '';
+  // Use AI's weak_components for improve list
+  var improveList = [];
+  if (sb.weak_components && sb.weak_components.length > 0) {
+    improveList = sb.weak_components.split(',').map(function(s){ return s.trim(); }).filter(Boolean).slice(0,4);
+  } else {
+    var dimNames3 = ['Structure','Clarity','Ownership','Impact'];
+    dims.forEach(function(d,i){ if(d.v < 6.5) improveList.push(dimNames3[i] + ' gap'); });
   }
 
-  // Key fix tip
+  if (strEl) strEl.innerHTML = strengthsList.map(function(s){
+    return '<span class="fb-tag fb-tag-good">✓ ' + escHtml(s) + '</span>';
+  }).join('');
+  if (impEl) impEl.innerHTML = improveList.map(function(s){
+    return '<span class="fb-tag fb-tag-imp">+ ' + escHtml(s) + '</span>';
+  }).join('');
+
+
+  // Tip block — full verdict, no trimming
   var tipEl = document.getElementById('fb-verdict-full');
   if (tipEl) {
-    var fixText = r.verdict || r.key_improvement || '';
-    // Trim to 2 sentences
-    var sents = fixText.split(/(?<=[.!?])\s+/);
-    if (sents.length > 2) fixText = sents.slice(0, 2).join(' ');
-    tipEl.innerHTML = fixText ? '<strong>Tip:</strong> ' + escHtml(fixText) : '';
+    var raw = r.verdict || r.key_improvement || '';
+    tipEl.innerHTML = raw ? '<strong>Coaching:</strong> ' + escHtml(raw) : '';
   }
 
-  // Interviewer verdict banner
+  // IV banner
   var banner = document.getElementById('fb-interviewer-verdict');
   if (banner && r.interviewer_verdict) {
-    banner.style.display = 'block';
     var iv = r.interviewer_verdict;
-    if (iv.indexOf('advance') > -1 && iv.indexOf('not') === -1) {
+    banner.style.display = 'block';
+    var advance = iv.indexOf('advance') > -1 && iv.indexOf('not') === -1;
+    var fence   = iv.indexOf('fence') > -1;
+    if (advance) {
       banner.style.cssText = 'display:block;background:rgba(77,201,148,.12);color:#4dc994;font-size:12px;font-weight:700;padding:9px 12px;border-radius:10px;margin-top:10px;';
       banner.textContent = '✓ Would advance to next round';
-    } else if (iv.indexOf('fence') > -1) {
+    } else if (fence) {
       banner.style.cssText = 'display:block;background:rgba(245,158,11,.10);color:#f59e0b;font-size:12px;font-weight:700;padding:9px 12px;border-radius:10px;margin-top:10px;';
       banner.textContent = '~ On the fence — one key fix away';
     } else {
@@ -9950,7 +9983,7 @@ function renderFeedback(r, isFree) {
 
   // Critique labels
   var critiqueLabels = {
-    consulting:'McKinsey interviewer critique', banking:'Goldman Sachs critique',
+    consulting:'McKinsey PEI critique', banking:'Goldman Sachs critique',
     product:'Amazon bar-raiser critique', finance:'Blackstone critique',
     marketing:'P&G brand director critique', nonprofit:'TFA/Gates critique',
     healthcare:'J&J/McKinsey critique', retail:'Amazon Retail critique'
@@ -9968,16 +10001,13 @@ function renderFeedback(r, isFree) {
   var clEl = document.getElementById('fb-critique-label');
   var plEl = document.getElementById('fb-perspective-label');
   if (clEl) clEl.textContent = critiqueLabels[p.id] || 'Interviewer critique';
-  if (plEl) plEl.textContent = perspLabels[p.id] || 'How the best candidates answer this';
+  if (plEl) plEl.textContent = perspLabels[p.id]  || 'How the best candidates answer this';
 
-  // Critique + perspective
+  // Critique + perspective text
   var editEl = document.getElementById('fb-editorial');
   if (editEl) editEl.textContent = r.industry_critique || '';
   var intervEl = document.getElementById('fb-interv');
-  if (intervEl) {
-    intervEl.textContent = r.interviewer_perspective || '';
-    intervEl.style.display = r.interviewer_perspective ? 'block' : 'none';
-  }
+  if (intervEl) { intervEl.textContent = r.interviewer_perspective || ''; intervEl.style.display = r.interviewer_perspective ? 'block':'none'; }
 
   // STAR breakdown
   var citEl = document.getElementById('fb-citation');
@@ -9991,17 +10021,15 @@ function renderFeedback(r, isFree) {
   ];
   var impsHtml = '';
   starItems.forEach(function(item) {
-    var missing = !item.val || item.val.toUpperCase().indexOf('MISSING') > -1;
-    var bgCol = missing ? 'rgba(239,68,68,.10)' : 'rgba(10,92,68,.08)';
-    var fgCol = missing ? '#ef4444' : '#0a5c44';
+    var missing = !item.val || /MISSING/i.test(item.val);
     impsHtml += '<div class="crit-item">'
-      + '<div class="crit-idx" style="background:' + bgCol + ';color:' + fgCol + ';">' + item.label + '</div>'
+      + '<div class="crit-idx" style="background:' + (missing?'rgba(239,68,68,.10)':'rgba(10,92,68,.08)') + ';color:' + (missing?'#ef4444':'#0a5c44') + ';">' + item.label + '</div>'
       + '<div class="crit-txt"><b>' + item.key + ':</b> '
-      + (missing ? '<span style="color:#ef4444;font-weight:700;">Missing</span> — add this to lift your structure score.' : escHtml(item.val))
+      + (missing ? '<span style="color:#ef4444;font-weight:700;">Missing</span> — add this component.' : escHtml(item.val))
       + '</div></div>';
   });
   if (sb.weak_components) {
-    impsHtml += '<div style="padding:8px 1.4rem 10px;font-size:12px;color:#92400e;font-weight:600;background:rgba(245,158,11,.05);">⚠ Weakest: ' + escHtml(sb.weak_components) + '</div>';
+    impsHtml += '<div style="padding:8px 1.35rem 10px;font-size:12px;color:#92400e;font-weight:600;background:rgba(245,158,11,.05);">⚠ Weakest: ' + escHtml(sb.weak_components) + '</div>';
   }
   var impsEl = document.getElementById('fb-imps');
   if (impsEl) impsEl.innerHTML = impsHtml;
@@ -10029,36 +10057,34 @@ function renderFeedback(r, isFree) {
   if (r.next_question) {
     var nqEl = document.getElementById('fb-next-question');
     if (nqEl) {
-      nqEl.innerHTML = '<span style="font-weight:700;color:#0f1a14;">Interviewer follow-up:</span> ' + escHtml(r.next_question) + '<span style="color:#0a5c44;font-size:11px;font-weight:700;margin-left:8px;">Practice →</span>';
+      nqEl.innerHTML = '<span style="font-weight:700;color:#0f1a14;">Follow-up:</span> ' + escHtml(r.next_question) + ' <span style="color:#0a5c44;font-size:11px;font-weight:700;margin-left:6px;">Practice →</span>';
       nqEl.style.display = 'block';
-      nqEl.onclick = function() { var inp = document.getElementById('fc-input'); if (inp) { inp.value = r.next_question; inp.focus(); } };
+      nqEl.onclick = function(){ var inp=document.getElementById('fc-input'); if(inp){inp.value=r.next_question;inp.focus();} };
     }
     window._fcContext = window._fcContext || {};
     window._fcContext.nextQuestion = r.next_question;
   }
 
-  // Adaptive follow-up
+  // Adaptive follow-up + share
   _showAdaptiveFollowUp(r);
-
-  // Share line
   if (r.share_line) { try { window._shareLine = r.share_line; } catch(e){} }
-
-  // Save session
   updateShareCard(r);
   _saveSessionDate();
   markFreeCallUsed();
+
+  // Save session to history
   if (appUser) {
     var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    var d = new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', timeZone:tz });
-    var newEntry = { q: currentQ ? currentQ.text : '', cat: currentQ ? currentQ.cat : 'Behavioral', score: target, date: d, persona: p.role };
-    appHistory.unshift(newEntry);
-    if (appHistory.length > 100) appHistory = appHistory.slice(0, 100);
-    if (appUser.id) _sbSaveSession(newEntry);
+    var d = new Date().toLocaleDateString('en-US',{ month:'short', day:'numeric', timeZone:tz });
+    var entry = { q: currentQ?currentQ.text:'', cat: currentQ?currentQ.cat:'Behavioral', score:target, date:d, persona:p.role };
+    appHistory.unshift(entry);
+    if (appHistory.length > 100) appHistory = appHistory.slice(0,100);
+    if (appUser.id) _sbSaveSession(entry);
     sv('mocha_hist', appHistory);
     var todayStr = new Date().toLocaleDateString('en-CA');
     if (appUser.lastPracticed !== todayStr) {
-      var yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-      appUser.streak = appUser.lastPracticed === yesterday.toLocaleDateString('en-CA') ? (appUser.streak || 0) + 1 : 1;
+      var yest = new Date(); yest.setDate(yest.getDate()-1);
+      appUser.streak = (appUser.lastPracticed === yest.toLocaleDateString('en-CA')) ? (appUser.streak||0)+1 : 1;
       appUser.lastPracticed = todayStr;
       sv('mocha_user', appUser);
     }
@@ -10066,20 +10092,20 @@ function renderFeedback(r, isFree) {
 
   // Gate / follow-up chat
   if (isFree && freeTries <= 0) {
-    var gate = document.getElementById('fb-gate'); if (gate) gate.style.display = 'block';
-    var acts = document.getElementById('fb-acts'); if (acts) acts.style.display = 'none';
-    var fc = document.getElementById('followup-chat'); if (fc) fc.style.display = 'none';
+    var gate=document.getElementById('fb-gate'); if(gate) gate.style.display='block';
+    var acts=document.getElementById('fb-acts'); if(acts) acts.style.display='none';
+    var fc=document.getElementById('followup-chat'); if(fc) fc.style.display='none';
   } else {
-    var gate2 = document.getElementById('fb-gate'); if (gate2) gate2.style.display = 'none';
-    var acts2 = document.getElementById('fb-acts'); if (acts2) acts2.style.display = 'flex';
-    var fc2 = document.getElementById('followup-chat');
+    var g2=document.getElementById('fb-gate'); if(g2) g2.style.display='none';
+    var a2=document.getElementById('fb-acts'); if(a2) a2.style.display='flex';
+    var fc2=document.getElementById('followup-chat');
     if (fc2) {
-      fc2.style.display = 'block';
-      var msgs = document.getElementById('fc-msgs'); if (msgs) msgs.innerHTML = '';
-      var inp = document.getElementById('fc-input'); if (inp) inp.value = '';
-      _fcCount = 0;
-      var btn = document.getElementById('fc-send'); if (btn) btn.disabled = false;
-      window._fcContext = { question: currentQ ? currentQ.text : '' };
+      fc2.style.display='block';
+      var msgs=document.getElementById('fc-msgs'); if(msgs) msgs.innerHTML='';
+      var inp2=document.getElementById('fc-input'); if(inp2) inp2.value='';
+      _fcCount=0;
+      var btn=document.getElementById('fc-send'); if(btn) btn.disabled=false;
+      window._fcContext = { question: currentQ?currentQ.text:'' };
     }
   }
 }

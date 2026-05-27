@@ -6284,6 +6284,21 @@ body,
 .app-fb-cta:hover { opacity:.88; }
 .app-fb-cta:disabled { background:rgba(245,237,224,.15); color:rgba(245,237,224,.30); cursor:default; }
 
+/* ── Firm context card ─────────────────── */
+.app-ctx-card {
+  background: #fff; border: 1px solid rgba(10,92,68,.08);
+  border-radius: 12px; padding: 10px 14px; margin-bottom: 4px;
+}
+.app-ctx-inner { display: flex; align-items: flex-start; gap: 10px; }
+.app-ctx-name  { font-size: 12px; font-weight: 700; color: #0b2215; margin-bottom: 2px; }
+.app-ctx-src   {
+  display: inline-block; font-size: 9px; font-weight: 700;
+  letter-spacing: .05em; text-transform: uppercase;
+  color: #0a5c44; background: rgba(10,92,68,.08);
+  border-radius: 4px; padding: 2px 7px; margin-bottom: 5px;
+}
+.app-ctx-tip   { font-size: 11.5px; color: rgba(10,20,15,.45); line-height: 1.5; font-style: italic; }
+
 /* ── Mobile: stack vertically ─────────── */
 @media (max-width: 768px) {
   .app-layout {
@@ -7150,9 +7165,21 @@ body,
       <!-- Messages area -->
       <div class="app-messages" id="app-messages">
 
+        <!-- Firm context card -->
+        <div class="app-ctx-card" id="ctx-card">
+          <div class="app-ctx-inner">
+            <span class="ctx-em" id="ctx-em" style="display:none;"></span>
+            <div>
+              <div class="app-ctx-name" id="ctx-name">Management Consulting</div>
+              <div class="app-ctx-src" id="ctx-src">McKinsey &amp; Co</div>
+              <div class="app-ctx-tip" id="ctx-tip">Structure everything. Lead with the answer. Quantify your impact.</div>
+            </div>
+          </div>
+        </div>
+
         <!-- Mocha Coach question bubble -->
         <div class="app-msg app-msg-coach">
-          <div class="app-coach-label">MOCHA COACH</div>
+          <div class="app-coach-label">MOCHA COACH <span class="q-pill qp-beh" id="prac-pill" style="margin-left:6px;vertical-align:middle;"></span></div>
           <div class="app-msg-bubble app-bubble-coach" id="prac-q">Loading question…</div>
         </div>
 

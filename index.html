@@ -2076,25 +2076,25 @@ body { overflow-x: hidden !important; max-width: 100vw !important; }
    ══════════════════════════════════════════════ */
 
 /* Base: hidden on desktop */
-.ob-mob-logo, .ob-mob-menu, .ob-mob-start, .ob-mob-demo  { left:14%; top:88.0%; width:72%; height:5.0%; z-index:30; border-radius:99px; pointer-events:all; cursor:pointer; }
+.ob-mob-logo, .ob-mob-menu, .ob-mob-start, .ob-mob-demo  { left:14%; top:87.5%; width:72%; height:5.5%; z-index:30; border-radius:99px; pointer-events:all !important; cursor:pointer; }
 
 /* Pixel-calibrated positions */
 .ob-mob-logo  { left:3%;   top:0;    width:42%; height:7%; z-index:30; }
 .ob-mob-menu  { left:78%;  top:0;    width:22%; height:7%; z-index:30; }
-.ob-mob-start { left:14%; top:82.0%; width:72%; height:5.2%; z-index:30; border-radius:99px; pointer-events:all; cursor:pointer; }
-.ob-mob-demo  { left:14%; top:88.0%; width:72%; height:5.0%; z-index:30; border-radius:99px; pointer-events:all; cursor:pointer; }
+.ob-mob-start { left:14%; top:81.5%; width:72%; height:5.5%; z-index:30; border-radius:99px; pointer-events:all !important; cursor:pointer; }
+.ob-mob-demo  { left:14%; top:87.5%; width:72%; height:5.5%; z-index:30; border-radius:99px; pointer-events:all !important; cursor:pointer; }
 
 /* Show on mobile */
 @media(max-width:768px) {
   .ob-mob-logo  { display:block !important; pointer-events:all !important; }
   .ob-mob-menu  { display:block !important; pointer-events:all !important; }
-  .ob-mob-start { display:block !important; left:14%; top:82.0%; width:72%; height:5.2%; z-index:30; border-radius:99px; pointer-events:all !important; cursor:pointer; }
-  .ob-mob-demo  { display:block !important; left:14%; top:88.0%; width:72%; height:5.0%; z-index:30; border-radius:99px; pointer-events:all !important; cursor:pointer; }
+  .ob-mob-start { left:14%; top:81.5%; width:72%; height:5.5%; z-index:30; border-radius:99px; pointer-events:all !important; cursor:pointer; }
+  .ob-mob-demo  { left:14%; top:87.5%; width:72%; height:5.5%; z-index:30; border-radius:99px; pointer-events:all !important; cursor:pointer; }
 }
 
 /* Desktop: hide mobile buttons */
 @media(min-width:769px) {
-  .ob-mob-logo, .ob-mob-menu, .ob-mob-start, .ob-mob-demo  { left:14%; top:88.0%; width:72%; height:5.0%; z-index:30; border-radius:99px; pointer-events:all; cursor:pointer; }
+  .ob-mob-logo, .ob-mob-menu, .ob-mob-start, .ob-mob-demo  { left:14%; top:87.5%; width:72%; height:5.5%; z-index:30; border-radius:99px; pointer-events:all !important; cursor:pointer; }
   .ob-start {left:4.5%;top:65.2%;width:10.8%;height:6.7%;border-radius:99px;z-index:20;position:absolute;pointer-events:all;cursor:pointer;}
   .ob-demo  {left:15.3%;top:65.2%;width:10.5%;height:6.7%;border-radius:99px;z-index:20;position:absolute;pointer-events:all;cursor:pointer;}
 }
@@ -4144,29 +4144,49 @@ document.addEventListener('keydown', function(e) {
 </script>
 
 
-// Mobile demo window fix - override inline styles directly
+// Mobile demo: scale down to fit, hide clipped chat
 (function() {
   function fixMobileDemo() {
-    if (window.innerWidth >= 700) return;
+    var isMobile = window.innerWidth < 768;
+    var demoWin = document.querySelector('.demo-window');
     var body = document.getElementById('dw-body-el');
     var main = document.getElementById('dw-main-panel');
     var sidebar = document.querySelector('.dw-sidebar');
     var feedback = document.getElementById('dw-feedback-panel');
-    if (body) {
-      body.style.cssText = 'display:block!important;height:auto!important;min-height:unset!important;max-height:unset!important;overflow:hidden!important;width:100%!important;';
-    }
-    if (main)     main.style.cssText     = 'display:none!important;';
-    if (sidebar)  sidebar.style.cssText  = 'display:none!important;';
-    if (feedback) {
-      feedback.style.cssText = 'display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;height:auto!important;min-height:unset!important;max-height:unset!important;overflow:visible!important;padding:16px!important;';
+    if (!demoWin || !body) return;
+
+    if (isMobile) {
+      // Hide sidebar and chat, show only feedback panel small on right
+      body.setAttribute('style',
+        'display:flex!important;flex-direction:row!important;' +
+        'height:auto!important;min-height:unset!important;max-height:unset!important;' +
+        'overflow:hidden!important;width:100%!important;');
+      if (sidebar) sidebar.setAttribute('style', 'display:none!important;');
+      if (main)    main.setAttribute('style', 'display:none!important;');
+      if (feedback) feedback.setAttribute('style',
+        'display:block!important;width:100%!important;max-width:100%!important;' +
+        'min-width:0!important;height:auto!important;min-height:unset!important;' +
+        'max-height:unset!important;overflow:visible!important;' +
+        'padding:14px!important;box-sizing:border-box!important;');
+    } else {
+      // Restore desktop inline styles
+      body.setAttribute('style',
+        'display:grid!important;grid-template-columns:140px 1fr 180px!important;' +
+        'height:440px!important;min-height:440px!important;max-height:440px!important;' +
+        'overflow:hidden!important;');
+      if (sidebar) sidebar.removeAttribute('style');
+      if (main)    main.removeAttribute('style');
+      if (feedback) feedback.setAttribute('style',
+        'display:block!important;width:180px!important;min-width:180px!important;' +
+        'max-width:180px!important;height:440px!important;min-height:440px!important;' +
+        'max-height:440px!important;overflow-y:auto!important;');
     }
   }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', fixMobileDemo);
-  } else {
-    fixMobileDemo();
-  }
+  fixMobileDemo();
+  document.addEventListener('DOMContentLoaded', fixMobileDemo);
+  window.addEventListener('load', fixMobileDemo);
   window.addEventListener('resize', fixMobileDemo);
+  [100, 300, 600, 1200, 2000].forEach(function(t) { setTimeout(fixMobileDemo, t); });
 })();
 
 </body>

@@ -615,6 +615,18 @@ footer{background:var(--esp);border-top:1px solid rgba(255,255,255,.07);padding:
 /* Score ring override */
 .dw-score-num { font-size:20px !important; color:#4dc994 !important; }
 .dw-score-ring { width:70px !important; height:70px !important; }
+.dw-ring-container { position:relative; width:80px; height:80px; flex-shrink:0; }
+.dw-ring-svg { width:80px; height:80px; transform:rotate(-90deg); }
+.dw-ring-bg { fill:none; stroke:rgba(77,201,148,.15); stroke-width:4; }
+.dw-ring-fill { fill:none; stroke:#4dc994; stroke-width:4; stroke-linecap:round;
+  stroke-dasharray:188.5; stroke-dashoffset:188.5;
+  transition:stroke-dashoffset 1.2s cubic-bezier(.16,1,.3,1) .5s; }
+.dw-ring-fill.animated { stroke-dashoffset:37.7; } /* 188.5 * (1 - 0.8) = 37.7 for 8.5/10 */
+.dw-ring-inner {
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+}
+.dw-ring-container .dw-score-num { font-size:20px !important; }
+.dw-score-ring-wrap { display:flex; flex-direction:column; align-items:center; gap:8px; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid rgba(245,237,224,.07); }
 .dw-score-ring svg { width:70px !important; height:70px !important; }
 
 
@@ -2062,34 +2074,25 @@ body { overflow-x: hidden !important; max-width: 100vw !important; }
    ══════════════════════════════════════════════ */
 
 /* Base: hidden on desktop */
-.ob-mob-logo, .ob-mob-menu, .ob-mob-start, .ob-mob-demo {
-  display: none;
-  position: absolute;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
-  pointer-events: all;
-}
+.ob-mob-logo, .ob-mob-menu, .ob-mob-start, .ob-mob-demo  { left:14%; top:88.0%; width:72%; height:5.0%; z-index:30; border-radius:99px; pointer-events:all; cursor:pointer; }
 
 /* Pixel-calibrated positions */
 .ob-mob-logo  { left:3%;   top:0;    width:42%; height:7%; z-index:30; }
 .ob-mob-menu  { left:78%;  top:0;    width:22%; height:7%; z-index:30; }
-.ob-mob-start { left:16%;  top:73%;  width:68%; height:6.5%; z-index:30; border-radius:99px; }
-.ob-mob-demo  { left:16%;  top:80%;  width:68%; height:5.5%; z-index:30; border-radius:99px; }
+.ob-mob-start { left:14%; top:82.0%; width:72%; height:5.2%; z-index:30; border-radius:99px; pointer-events:all; cursor:pointer; }
+.ob-mob-demo  { left:14%; top:88.0%; width:72%; height:5.0%; z-index:30; border-radius:99px; pointer-events:all; cursor:pointer; }
 
 /* Show on mobile */
 @media(max-width:768px) {
   .ob-mob-logo  { display:block !important; pointer-events:all !important; }
   .ob-mob-menu  { display:block !important; pointer-events:all !important; }
-  .ob-mob-start { display:block !important; pointer-events:all !important; }
-  .ob-mob-demo  { display:block !important; pointer-events:all !important; }
+  .ob-mob-start { display:block !important; left:14%; top:82.0%; width:72%; height:5.2%; z-index:30; border-radius:99px; pointer-events:all !important; cursor:pointer; }
+  .ob-mob-demo  { display:block !important; left:14%; top:88.0%; width:72%; height:5.0%; z-index:30; border-radius:99px; pointer-events:all !important; cursor:pointer; }
 }
 
 /* Desktop: hide mobile buttons */
 @media(min-width:769px) {
-  .ob-mob-logo, .ob-mob-menu, .ob-mob-start, .ob-mob-demo { display:none !important; }
+  .ob-mob-logo, .ob-mob-menu, .ob-mob-start, .ob-mob-demo  { left:14%; top:88.0%; width:72%; height:5.0%; z-index:30; border-radius:99px; pointer-events:all; cursor:pointer; }
   .ob-start {left:4.5%;top:65.2%;width:10.8%;height:6.7%;border-radius:99px;z-index:20;position:absolute;pointer-events:all;cursor:pointer;}
   .ob-demo  {left:15.3%;top:65.2%;width:10.5%;height:6.7%;border-radius:99px;z-index:20;position:absolute;pointer-events:all;cursor:pointer;}
 }
@@ -2716,6 +2719,17 @@ function showDemoFreeResult(data) {
   document.getElementById('dfr-ownership').textContent = ownership;
   document.getElementById('dfr-impact').textContent = impact;
 
+  // Animate SVG ring
+  var ringEl = document.getElementById('dw-ring-circle');
+  if (ringEl) {
+    var pct = scoreNum / 10;
+    ringEl.style.strokeDashoffset = (188.5 * (1 - pct)).toFixed(1);
+    ringEl.style.stroke = scoreNum >= 8 ? '#4dc994' : scoreNum >= 6.5 ? '#f59e0b' : '#ef4444';
+  }
+  // Update verdict text
+  var vd = document.getElementById('dw-score-verdict-txt');
+  if (vd) { vd.textContent = verdict; }
+
   // Animate bars
   setTimeout(function() {
     ['dfr-bar-s','dfr-bar-c','dfr-bar-o','dfr-bar-i'].forEach(function(id, idx) {
@@ -2886,11 +2900,16 @@ function escHtmlDemo(s) {
         <div class="dw-feedback" id="dw-feedback-panel" style="display:block!important;width:180px!important;min-width:180px!important;max-width:180px!important;height:440px!important;min-height:440px!important;max-height:440px!important;overflow-y:auto!important;flex-direction:unset!important;align-items:unset!important;flex-wrap:unset!important;">
           <div class="dw-fb-header"><div class="dw-fb-avatar">m</div><div><div class="dw-fb-title">Mocha Coach</div><div class="dw-fb-sub">Live feedback</div></div></div>
           <div class="dw-score-ring-wrap">
-            <div>
-              <div style="font-size:8px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(245,237,224,.30);margin-bottom:2px;">Score</div>
-              <div class="dw-score-big"><span class="dw-score-num" id="demo-score-ring">8.5</span><span class="dw-score-unit">/10</span></div>
+            <div class="dw-ring-container">
+              <svg class="dw-ring-svg" viewBox="0 0 72 72">
+                <circle class="dw-ring-bg"   cx="36" cy="36" r="30"/>
+                <circle class="dw-ring-fill" cx="36" cy="36" r="30" id="dw-ring-circle"/>
+              </svg>
+              <div class="dw-ring-inner">
+                <span class="dw-score-num" id="demo-score-ring">8.5</span>
+              </div>
             </div>
-            <div class="dw-score-verdict">Strong Answer</div>
+            <div class="dw-score-verdict" id="dw-score-verdict-txt">Strong Answer</div>
           </div>
           <div class="dw-score-bars">
             <div class="dw-score-bar-row"><div class="dw-score-bar-lbl">Structure</div><div class="dw-score-bar-track"><div class="dw-score-bar-fill" style="--bw:91%"></div></div><div class="dw-score-bar-val">9.1</div></div>
@@ -3572,8 +3591,18 @@ function demoStep(){var msgsEl=document.getElementById('dw-messages');if(!msgsEl
   if(s.t==='typing'){var tDiv=document.createElement('div');tDiv.className='dw-typing-bubble';tDiv.innerHTML='<div class="dw-bubble-text"><div class="dw-t-dot"></div><div class="dw-t-dot"></div><div class="dw-t-dot"></div></div>';msgsEl.appendChild(tDiv);setTimeout(function(){tDiv.classList.add('visible');},20);msgsEl.scrollTop=msgsEl.scrollHeight;_demoTimer=setTimeout(function(){if(tDiv.parentNode)tDiv.parentNode.removeChild(tDiv);demoStep();},s.ms);return;}
   if(s.t==='input'){var inEl=document.getElementById('dw-input-text');if(inEl){inEl.textContent=s.text;inEl.classList.add('active');}_demoTimer=setTimeout(demoStep,s.ms);return;}
   if(s.t==='send'){var sendEl=document.getElementById('dw-input-send');if(sendEl){sendEl.classList.add('flash');setTimeout(function(){sendEl.classList.remove('flash');},400);}var inEl2=document.getElementById('dw-input-text');if(inEl2){inEl2.textContent='Type your answer…';inEl2.classList.remove('active');}_demoTimer=setTimeout(demoStep,300);return;}
-  if(s.t==='feedback'){var fbPanel=document.getElementById('dw-feedback-panel');if(fbPanel)fbPanel.classList.add('revealed');var ring=document.getElementById('demo-score-ring');if(ring)ring.classList.add('anim');var fills=document.querySelectorAll('.dw-prog-fill');for(var f=0;f<fills.length;f++){fills[f].classList.add('anim');}_demoTimer=setTimeout(demoStep,200);return;}
-  if(s.t==='reset'){var fbPanel2=document.getElementById('dw-feedback-panel');if(fbPanel2)fbPanel2.classList.remove('revealed');var ring2=document.getElementById('demo-score-ring');if(ring2)ring2.classList.remove('anim');var fills2=document.querySelectorAll('.dw-prog-fill');for(var ff=0;ff<fills2.length;ff++){fills2[ff].classList.remove('anim');}var msgsEl2=document.getElementById('dw-messages');if(msgsEl2)msgsEl2.innerHTML='';_demoIdx=0;_demoTimer=setTimeout(demoStep,800);return;}
+  if(s.t==='feedback'){var fbPanel=document.getElementById('dw-feedback-panel');if(fbPanel)fbPanel.classList.add('revealed');var ring=document.getElementById('demo-score-ring');if(ring)ring.classList.add('anim');
+    var svgRing=document.getElementById('dw-ring-circle');
+    if(svgRing){
+      // Calculate offset based on current score (8.5/10 = 85%)
+      var score=parseFloat(ring.textContent)||8.5;
+      var pct=score/10;
+      var circumference=188.5;
+      svgRing.style.strokeDashoffset=circumference*(1-pct);
+      svgRing.style.stroke=score>=8?'#4dc994':score>=6.5?'#f59e0b':'#ef4444';
+    }var fills=document.querySelectorAll('.dw-prog-fill');for(var f=0;f<fills.length;f++){fills[f].classList.add('anim');}_demoTimer=setTimeout(demoStep,200);return;}
+  if(s.t==='reset'){var fbPanel2=document.getElementById('dw-feedback-panel');if(fbPanel2)fbPanel2.classList.remove('revealed');var ring2=document.getElementById('demo-score-ring');if(ring2)ring2.classList.remove('anim');
+    var svgRing2=document.getElementById('dw-ring-circle');if(svgRing2){svgRing2.style.strokeDashoffset='188.5';}var fills2=document.querySelectorAll('.dw-prog-fill');for(var ff=0;ff<fills2.length;ff++){fills2[ff].classList.remove('anim');}var msgsEl2=document.getElementById('dw-messages');if(msgsEl2)msgsEl2.innerHTML='';_demoIdx=0;_demoTimer=setTimeout(demoStep,800);return;}
   demoStep();
 }
 function initDemoObserver(){startDemoLoop();startDemoTimer();}

@@ -2412,9 +2412,14 @@ body { overflow-y: auto !important; height: auto !important; }
 @media screen and (max-width:767px){
   .dw-sidebar{display:none!important;width:0!important;min-width:0!important;max-width:0!important;overflow:hidden!important;padding:0!important;flex:none!important;}
   #dw-feedback-panel{display:none!important;width:0!important;min-width:0!important;max-width:0!important;overflow:hidden!important;padding:0!important;}
-  #dw-body-el{grid-template-columns:1fr!important;display:flex!important;flex-direction:column!important;}
-  #dw-main-panel{width:100%!important;max-width:100%!important;min-width:0!important;flex:1!important;border-right:none!important;border-bottom:none!important;}
-  .demo-window{border-radius:12px!important;}
+  #dw-body-el{display:block!important;width:100%!important;}
+  #dw-main-panel{width:100%!important;max-width:100%!important;min-width:0!important;flex:1 1 100%!important;border-right:none!important;border-bottom:none!important;align-self:stretch!important;}
+  .demo-window{border-radius:12px!important;width:100%!important;max-width:100%!important;min-width:0!important;}
+  .demo-wrap{padding:0 12px!important;max-width:100%!important;}
+  .demo-section{padding-left:0!important;padding-right:0!important;}
+  .dw-chrome{padding:6px 10px!important;}
+  .dw-messages{padding:10px!important;}
+  .dw-input-bar{padding:6px 10px!important;}
 }
 </style>
 </head>

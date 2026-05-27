@@ -1805,33 +1805,35 @@ body {
   .demo-score-teaser { display:none !important; }
   .demo-window { border-radius:14px !important; overflow:hidden !important; width:100% !important; max-width:100% !important; }
   .dw-body {
-    display:grid !important;
-    grid-template-columns:120px 180px !important;
-    height:380px !important; min-height:380px !important; max-height:380px !important;
+    display:block !important;
+    height:auto !important; min-height:unset !important; max-height:unset !important;
     overflow:hidden !important; width:100% !important;
   }
-  .dw-sidebar { display:flex !important; width:120px !important; min-width:120px !important; }
-  .dw-main { display:none !important; }
-  .dw-feedback { display:block !important; width:180px !important; min-width:180px !important; max-width:180px !important; height:380px !important; min-height:380px !important; max-height:380px !important; overflow-y:auto !important; }
-  /* Scale down fonts inside demo */
-  .dw-sidebar { font-size:9px !important; }
-  .dw-sb-label { font-size:7px !important; }
-  .dw-sb-item { font-size:9px !important; padding:5px 7px !important; }
-  .dw-q-company { font-size:8px !important; }
-  .dw-round-pill { font-size:7px !important; }
-  .dw-messages { font-size:10px !important; }
-  .dw-input-bar { padding:6px 8px !important; }
-  .dw-fb-title { font-size:10px !important; }
-  .dw-fb-sub { font-size:8px !important; }
-  .dw-score-num { font-size:1.8rem !important; }
-  .dw-score-unit { font-size:.7rem !important; }
-  .dw-score-verdict { font-size:7px !important; }
-  .dw-score-bar-lbl { font-size:7.5px !important; }
-  .dw-score-bar-val { font-size:8px !important; }
-  .dw-fb-section-title { font-size:6.5px !important; }
-  .dw-tag { font-size:7.5px !important; padding:2px 5px !important; }
-  .dw-fb-tip { font-size:8px !important; padding:5px 7px !important; }
-  .dw-next-btn { font-size:9px !important; padding:7px 10px !important; }
+  .dw-sidebar { display:none !important; }
+  .dw-main    { display:none !important; }
+  .dw-feedback {
+    display:block !important;
+    width:100% !important; min-width:0 !important; max-width:100% !important;
+    height:auto !important; min-height:unset !important; max-height:unset !important;
+    overflow:visible !important; padding:16px !important;
+  }
+  /* Mobile feedback panel - full width score card */
+  .dw-fb-header  { margin-bottom:12px !important; }
+  .dw-fb-title   { font-size:13px !important; }
+  .dw-fb-sub     { font-size:10px !important; }
+  .dw-score-ring-wrap { margin-bottom:12px !important; }
+  .dw-score-num  { font-size:2.8rem !important; }
+  .dw-score-unit { font-size:1rem !important; }
+  .dw-score-verdict { font-size:9px !important; margin-top:6px !important; }
+  .dw-score-bars { gap:8px !important; margin-bottom:12px !important; }
+  .dw-score-bar-lbl { font-size:11px !important; width:64px !important; }
+  .dw-score-bar-track { height:3px !important; }
+  .dw-score-bar-val { font-size:11px !important; }
+  .dw-fb-section { margin-bottom:8px !important; }
+  .dw-fb-section-title { font-size:8px !important; margin-bottom:5px !important; }
+  .dw-tag { font-size:10px !important; padding:3px 9px !important; }
+  .dw-fb-tip { font-size:11px !important; padding:8px 11px !important; line-height:1.5 !important; margin:10px 0 !important; }
+  .dw-next-btn { width:100% !important; padding:11px !important; font-size:12px !important; text-align:center !important; margin-top:10px !important; }
   .dw-bean-bottom { display:none !important; }
 
 

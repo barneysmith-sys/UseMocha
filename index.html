@@ -1791,44 +1791,35 @@ body {
   .demo-h { font-size:1.55rem !important; line-height:1.15 !important; text-align:left !important; }
   .demo-sub { font-size:13px !important; text-align:left !important; max-width:100% !important; margin:0 !important; }
   .demo-score-teaser { display:none !important; }
-  .demo-window { border-radius:16px !important; overflow:hidden !important; width:100% !important; max-width:100% !important; box-shadow:0 4px 32px rgba(15,26,20,.14) !important; }
-  .dw-body { display:flex !important; flex-direction:column !important; height:auto !important; min-height:unset !important; max-height:unset !important; overflow:hidden !important; width:100% !important; grid-template-columns:unset !important; }
-  /* On mobile: hide chat + sidebar, show ONLY the score panel */
-  .dw-sidebar { display:none !important; }
-  .dw-main { display:none !important; }
-  #dw-feedback-panel {
-    display:block !important; width:100% !important; min-width:0 !important;
-    max-width:100% !important; height:auto !important; min-height:unset !important;
-    max-height:unset !important; padding:20px 20px 16px !important;
-    flex-direction:unset !important; align-items:unset !important;
-    flex-wrap:unset !important; overflow:visible !important;
-    opacity:1 !important; transform:none !important;
+  .demo-window { border-radius:14px !important; overflow:hidden !important; width:100% !important; max-width:100% !important; }
+  .dw-body {
+    display:grid !important;
+    grid-template-columns:110px 1fr 150px !important;
+    height:360px !important; min-height:360px !important; max-height:360px !important;
+    overflow:hidden !important; width:100% !important;
   }
-  /* Header */
-  .dw-fb-header { display:flex !important; align-items:center !important; gap:8px !important; margin-bottom:14px !important; }
-  .dw-fb-avatar { width:28px !important; height:28px !important; font-size:12px !important; }
-  .dw-fb-title { font-size:13px !important; }
-  .dw-fb-sub { font-size:10px !important; }
-  /* Score display: big and prominent */
-  .dw-score-ring-wrap { display:flex !important; flex-direction:column !important; align-items:center !important; justify-content:center !important; margin-bottom:16px !important; }
-  .dw-score-big { display:flex !important; align-items:baseline !important; gap:3px !important; justify-content:center !important; }
-  .dw-score-num { font-size:4.5rem !important; color:#fde8cc !important; }
-  .dw-score-unit { font-size:1.6rem !important; color:rgba(253,232,204,.35) !important; }
-  .dw-score-verdict { text-align:center !important; margin-top:6px !important; font-size:9px !important; letter-spacing:.14em !important; }
-  /* Score bars full width */
-  .dw-score-bars { display:flex !important; flex-direction:column !important; gap:8px !important; margin-bottom:14px !important; width:100% !important; }
-  .dw-score-bar-row { display:flex !important; align-items:center !important; gap:10px !important; width:100% !important; }
-  .dw-score-bar-lbl { font-size:11px !important; width:64px !important; flex-shrink:0 !important; }
-  .dw-score-bar-track { flex:1 !important; height:2px !important; }
-  .dw-score-bar-val { font-size:11px !important; width:28px !important; text-align:right !important; }
-  /* Tags */
-  .dw-fb-section { margin-bottom:10px !important; display:block !important; }
-  .dw-fb-section-title { font-size:8px !important; margin-bottom:5px !important; display:block !important; }
-  .dw-tag { font-size:10px !important; padding:3px 9px !important; }
-  /* Tip */
-  .dw-fb-tip { font-size:11px !important; padding:8px 12px !important; margin:10px 0 !important; line-height:1.55 !important; }
-  /* CTA button */
-  .dw-next-btn { display:block !important; width:100% !important; margin-top:12px !important; padding:12px !important; font-size:13px !important; text-align:center !important; }
+  .dw-sidebar { display:flex !important; }
+  .dw-main { display:flex !important; flex-direction:column !important; height:360px !important; min-height:360px !important; max-height:360px !important; overflow:hidden !important; }
+  .dw-feedback { display:block !important; width:150px !important; min-width:150px !important; max-width:150px !important; height:360px !important; min-height:360px !important; max-height:360px !important; overflow-y:auto !important; }
+  /* Scale down fonts inside demo */
+  .dw-sidebar { font-size:9px !important; }
+  .dw-sb-label { font-size:7px !important; }
+  .dw-sb-item { font-size:9px !important; padding:5px 7px !important; }
+  .dw-q-company { font-size:8px !important; }
+  .dw-round-pill { font-size:7px !important; }
+  .dw-messages { font-size:10px !important; }
+  .dw-input-bar { padding:6px 8px !important; }
+  .dw-fb-title { font-size:10px !important; }
+  .dw-fb-sub { font-size:8px !important; }
+  .dw-score-num { font-size:1.8rem !important; }
+  .dw-score-unit { font-size:.7rem !important; }
+  .dw-score-verdict { font-size:7px !important; }
+  .dw-score-bar-lbl { font-size:7.5px !important; }
+  .dw-score-bar-val { font-size:8px !important; }
+  .dw-fb-section-title { font-size:6.5px !important; }
+  .dw-tag { font-size:7.5px !important; padding:2px 5px !important; }
+  .dw-fb-tip { font-size:8px !important; padding:5px 7px !important; }
+  .dw-next-btn { font-size:9px !important; padding:7px 10px !important; }
   .dw-bean-bottom { display:none !important; }
 
 
@@ -4118,6 +4109,7 @@ function closeDesktopNav() {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') { closeDesktopNav(); closeMobileNav(); }
 });
+
 </script>
 
 </body>

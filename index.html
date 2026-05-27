@@ -4184,24 +4184,7 @@ document.addEventListener('keydown', function(e) {
 </script>
 
 
-// Mobile demo: hide sidebar+feedback via JS (inline styles need setAttribute)
-(function(){
-  function fixDemo(){
-    if(window.innerWidth>=768)return;
-    var sb=document.querySelector('.dw-sidebar');
-    var fb=document.getElementById('dw-feedback-panel');
-    var body=document.getElementById('dw-body-el');
-    var main=document.getElementById('dw-main-panel');
-    if(sb)sb.setAttribute('style','display:none!important;');
-    if(fb)fb.setAttribute('style','display:none!important;');
-    if(body)body.setAttribute('style','display:grid!important;grid-template-columns:1fr!important;height:440px!important;min-height:440px!important;max-height:440px!important;overflow:hidden!important;');
-    if(main)main.setAttribute('style','display:flex!important;flex-direction:column!important;width:100%!important;height:440px!important;min-height:440px!important;max-height:440px!important;overflow:hidden!important;border-right:none!important;');
-  }
-  fixDemo();
-  document.addEventListener('DOMContentLoaded',fixDemo);
-  window.addEventListener('load',fixDemo);
-  [200,600,1500].forEach(function(t){setTimeout(fixDemo,t);});
-})();
+
 
 </body>
 </html

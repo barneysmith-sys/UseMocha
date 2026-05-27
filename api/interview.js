@@ -524,7 +524,7 @@ export default async function handler(req, res) {
       ``,
       `LENGTH REQUIREMENT: Every text field must be substantive. verdict = minimum 4 sentences. industry_critique = minimum 4 sentences. improved_answer = minimum 150 words. star_breakdown fields = specific coaching sentences not just labels. Short responses are wrong responses.`,
       `Respond ONLY with valid JSON, no markdown fences — but make every string field LONG and SPECIFIC:
-{"star_breakdown":{"situation":"<present/MISSING — if present: rate strength (strong/weak), name what context was given, then give the exact sentence they should add to strengthen it; if MISSING: write the exact opening sentence they should use>","task":"<clear/unclear/MISSING — state whether their specific responsibility was explicit, then write the exact sentence they should add to clarify their personal ownership>","action":"<I-language present/absent — exact actions taken + what specific I-statement to add or strengthen>","result":"<quantified/vague/MISSING — specific number or outcome present? + exact improvement or example result to add>","weak_components":"<comma-separated list of the 1-3 weakest STAR components>","strengths":"<comma-separated list of 2-4 genuine strengths — specific, e.g. 'Quantified result', 'Strong I-language', 'Clear situation', 'Commercial insight'>"},"industry_critique":"<4+ sentences grading against ${rubric.framework}: What was strong? Which dimension cost most points and why? What do 9.0+ answers at ${rubric.firms} always include? Give one specific coaching instruction starting with a verb.>","improved_answer":"<Write the full rewritten answer as spoken prose. Example of correct format: During my summer at Goldman Sachs I was staffed on a live M&A deal where the client wanted to expand into Southeast Asia. I was personally responsible for building the market entry model from scratch. I spent three days interviewing regional advisors, rebuilt the comps from local precedent transactions rather than global ones, and flagged a 40 percent revenue assumption the partner had missed. The revised model changed the bid price by twelve million dollars and the deal closed at our recommended valuation. That experience taught me that the most valuable thing a junior can do is question assumptions early rather than inherit them. Now write a similarly complete, specific, first-person answer using the candidate's details above. Minimum 120 words. No brackets. No instructions. Just the answer.>","interviewer_perspective":"<1 sentence — yes/borderline/no at ${rubric.firms} + main reason>","interviewer_verdict":"<'Would advance to next round' OR 'On the fence' OR 'Would not advance'>","scores":{"structure":x.x,"clarity":x.x,"ownership":x.x,"impact":x.x},"overall":x.x,"verdict":"<4+ sentences: Does this meet ${rubric.firms} standard? Name the exact gap. Give the specific fix with example wording. What do top ${rubric.firms} answers always include that this missed?>","share_line":"<one punchy sentence the user can share — score + gap + mocha — e.g. 'I scored 7.8/10 on a McKinsey PEI question. Ownership was my gap. Fixing it with Mocha.'>","next_question":"<one follow-up the interviewer asks based on answer gaps>","framework_used":"${rubric.framework}","firms_standard":"${rubric.firms}","citation":"${rubric.citation}"}`,
+{"star_breakdown":{"situation":"<present/MISSING — if present: rate strength (strong/weak), name what context was given, then give the exact sentence they should add to strengthen it; if MISSING: write the exact opening sentence they should use>","task":"<clear/unclear/MISSING — state whether their specific responsibility was explicit, then write the exact sentence they should add to clarify their personal ownership>","action":"<I-language present/absent — exact actions taken + what specific I-statement to add or strengthen>","result":"<quantified/vague/MISSING — specific number or outcome present? + exact improvement or example result to add>","weak_components":"<comma-separated list of the 1-3 weakest STAR components>","strengths":"<comma-separated list of 2-4 genuine strengths — specific, e.g. 'Quantified result', 'Strong I-language', 'Clear situation', 'Commercial insight'>"},"industry_critique":"<4+ sentences grading against ${rubric.framework}: What was strong? Which dimension cost most points and why? What do 9.0+ answers at ${rubric.firms} always include? Give one specific coaching instruction starting with a verb.>","improved_answer":"REWRITE_PLACEHOLDER","interviewer_perspective":"<1 sentence — yes/borderline/no at ${rubric.firms} + main reason>","interviewer_verdict":"<'Would advance to next round' OR 'On the fence' OR 'Would not advance'>","scores":{"structure":x.x,"clarity":x.x,"ownership":x.x,"impact":x.x},"overall":x.x,"verdict":"<4+ sentences: Does this meet ${rubric.firms} standard? Name the exact gap. Give the specific fix with example wording. What do top ${rubric.firms} answers always include that this missed?>","share_line":"<one punchy sentence the user can share — score + gap + mocha — e.g. 'I scored 7.8/10 on a McKinsey PEI question. Ownership was my gap. Fixing it with Mocha.'>","next_question":"<one follow-up the interviewer asks based on answer gaps>","framework_used":"${rubric.framework}","firms_standard":"${rubric.firms}","citation":"${rubric.citation}"}`,
     ].join('\n');
   }
 
@@ -653,6 +653,33 @@ export default async function handler(req, res) {
   const outputTokens = data.usageMetadata?.candidatesTokenCount || estimateTokens(rawText);
   const inputTokens  = data.usageMetadata?.promptTokenCount     || estInputTokens;
   log('info', rid, { event: 'done', score: parsed.overall, verdict: parsed.interviewer_verdict, input_tokens: inputTokens, output_tokens: outputTokens });
+
+  // ── Separate rewrite call — simple, isolated, no JSON ──────────
+  try {
+    const rwPrompt = `You are a ${rubric.shortName} interviewer. The candidate answered this question:\n\nQUESTION: ${cleanQuestion}\n\nCANDIDATE ANSWER: ${cleanAnswer}\n\nRewrite their answer as a model ${rubric.firms} response. Write it in first person as if you are the candidate speaking in an interview. Use their details where possible; invent realistic specifics where missing. Write 5-6 complete sentences covering: situation with context, your specific responsibility, 2-3 concrete actions you took personally using "I" language, a quantified result, and one reflection. Do not use any brackets or placeholders. Just write the answer as natural spoken prose starting with "During my..." or "In my role...". Minimum 100 words.`;
+
+    const rwBody = JSON.stringify({
+      contents: [{ parts: [{ text: rwPrompt }] }],
+      generationConfig: { temperature: 0.7, maxOutputTokens: 600 }
+    });
+
+    const rwController = new AbortController();
+    const rwTimeout = setTimeout(() => rwController.abort(), 15000);
+    const rwRes = await fetch(
+      \`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=\${process.env.GEMINI_API_KEY}\`,
+      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: rwBody, signal: rwController.signal }
+    );
+    clearTimeout(rwTimeout);
+    if (rwRes.ok) {
+      const rwData = await rwRes.json();
+      const rwText = rwData.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+      if (rwText && rwText.length > 50) {
+        parsed.improved_answer = rwText;
+      }
+    }
+  } catch (e) {
+    // rewrite failed - keep placeholder, not critical
+  }
 
   return res.status(200).json(parsed);
 }

@@ -470,7 +470,7 @@ svg{display:block}
     <p class="sub">A behavioral round scored question by question. Mocha reads what you actually said, finds the part you glossed over, and asks the follow-up that decides it.</p>
     <div class="hero-cta">
       <a class="btn btn--k" href="#try">Sit a round now</a>
-      <a class="btn btn--o" data-app href="/app" rel="noopener">Open the full product</a>
+      <a class="btn btn--o" data-app href="/app" rel="noopener">Open your dashboard</a>
     </div>
     <div class="hero-meta mono">
       <span>3,000 students</span><span>23 universities</span><span>Free forever</span>
@@ -871,12 +871,12 @@ new IntersectionObserver((es,o) => es.forEach(e => {
 /* ------------------------------------------------------------------
    Configuration. Set window.MOCHA in an earlier inline script tag to
    override, for example:
-       window.MOCHA = { appUrl: 'https://usemocha.app/app', markEndpoint: '/api/mark' }
+       window.MOCHA = { appUrl: '/dashboard.html',   // signed-in home is the new dashboard markEndpoint: '/api/mark' }
    markEndpoint must be YOUR OWN server route, which holds the API key.
    Never put an API key in this file.
 ------------------------------------------------------------------ */
 const CFG = Object.assign({
-  appUrl: 'https://usemocha.app/app',
+  appUrl: '/dashboard.html',   // signed-in home is the new dashboard
   markEndpoint: '/api/interview'   // the route already live in the repo
 }, window.MOCHA || {});
 

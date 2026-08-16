@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#FDFDFC">
+<meta name="robots" content="noindex">
+<title>Your progress | Mocha</title>
+<link rel="icon" type="image/png" sizes="256x256" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Archivo+Narrow:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SPLL85SBFX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-SPLL85SBFX');
+</script>
+<style>
+:root{
+  --paper:#FDFDFC; --ink:#16181C; --ink-2:#61656C; --ink-3:#9DA1A8;
+  --rule:rgba(22,24,28,.13); --blue:#1160D8; --yellow:#F2DE00; --ochre:#DFA13A;
+  --orange:#F04E23; --peri:#9BB0D6; --stone:#F7F5F0;
+  --sans:"Archivo",system-ui,sans-serif; --nar:"Archivo Narrow",system-ui,sans-serif;
+  --gut:clamp(20px,5.4vw,96px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:400;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;background:none;border:none;cursor:pointer;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.vh{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:-9999px;z-index:200;background:var(--ink);color:#fff;padding:12px 18px}
+.skip:focus{left:0;top:0}
+
+.mono{font-family:var(--nar);font-weight:500;font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.h1{font-size:clamp(34px,5.4vw,68px);font-weight:500;letter-spacing:-.038em;line-height:1.02}
+.h2{font-size:clamp(26px,3.6vw,46px);font-weight:500;letter-spacing:-.034em;line-height:1.04}
+.h3{font-size:clamp(19px,2.2vw,26px);font-weight:500;letter-spacing:-.026em;line-height:1.12}
+u.hl{text-decoration:none;box-shadow:inset 0 -.32em 0 var(--yellow)}
+u.hb{text-decoration:none;box-shadow:inset 0 -.32em 0 var(--peri)}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px var(--gut);border-bottom:1px solid var(--rule)}
+.brand{display:flex;align-items:center;gap:9px;font-weight:600;font-size:16px;letter-spacing:-.01em}
+.sw{width:11px;height:11px;background:var(--blue);flex:none}
+.top nav{display:flex;gap:24px}
+.top nav a{color:var(--ink-2);transition:color .25s}
+.top nav a:hover{color:var(--ink)}
+@media(max-width:760px){.top nav a:not(:last-child){display:none}}
+
+.btn{display:inline-flex;align-items:center;gap:9px;padding:14px 24px;font-size:15px;font-weight:500;transition:.25s}
+.btn--k{background:var(--ink);color:#fff}
+.btn--k:hover{background:var(--blue)}
+.btn--o{border:1px solid var(--rule)}
+.btn--o:hover{border-color:var(--ink)}
+
+.sec{padding:clamp(56px,7vw,110px) var(--gut);border-top:1px solid var(--rule)}
+.sec.stone{background:var(--stone)}
+.sec-head{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(24px,5vw,70px);align-items:end;margin-bottom:clamp(28px,4vw,48px)}
+.sec-head h2{max-width:15ch}
+.sec-head p{font-size:15.5px;line-height:1.62;color:var(--ink-2);max-width:44ch}
+@media(max-width:900px){.sec-head{grid-template-columns:1fr}}
+
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);border-left:1px solid var(--rule);border-top:1px solid var(--rule)}
+.grid4 > div{padding:22px 20px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.grid4 b{display:block;font-size:clamp(26px,3.2vw,42px);font-weight:500;letter-spacing:-.045em;line-height:1}
+.grid4 span{display:block;margin-top:10px;font-family:var(--nar);font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+@media(max-width:820px){.grid4{grid-template-columns:repeat(2,1fr)}}
+
+.ticker{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:clamp(14px,1.8vw,22px) 0;overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.tk{display:flex;width:max-content;animation:tk 44s linear infinite}
+.ticker:hover .tk{animation-play-state:paused}
+@keyframes tk{to{transform:translateX(-50%)}}
+.tk a{display:flex;align-items:center;gap:12px;padding:0 clamp(18px,2.4vw,36px);white-space:nowrap;
+  font-size:clamp(22px,3vw,38px);font-weight:500;letter-spacing:-.034em;color:var(--ink-3);transition:color .3s}
+.tk a:hover{color:var(--ink)}
+.tk i{width:8px;height:8px;flex:none}
+
+.up{opacity:0;transform:translateY(20px);transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1)}
+.up.in{opacity:1;transform:none}
+
+.foot{padding:24px var(--gut) 30px;border-top:1px solid var(--rule);display:flex;flex-wrap:wrap;gap:14px 28px;justify-content:space-between;color:var(--ink-3)}
+.foot nav{display:flex;gap:22px;flex-wrap:wrap}
+.foot a:hover{color:var(--ink)}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:.001s!important}
+  html{scroll-behavior:auto}
+  .up{opacity:1!important;transform:none!important}
+}
+
+
+.gate{min-height:100svh;display:grid;place-items:center;padding:40px}
+.gate p{font-family:var(--nar);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.dash-wrap{display:none}
+body.ready .dash-wrap{display:block}
+body.ready .gate{display:none}
+
+.bar{display:flex;align-items:center;gap:16px;padding:18px var(--gut);border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.bar .who{margin-left:auto;display:flex;align-items:center;gap:12px;color:var(--ink-2);font-size:14px}
+.bar .who i{width:30px;height:30px;background:var(--ink);color:#fff;display:grid;place-items:center;font-style:normal;font-size:13px;font-weight:500}
+.bar .who button{font-family:var(--nar);font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+.bar .who button:hover{color:var(--orange)}
+
+.head{padding:clamp(34px,5vw,72px) var(--gut) clamp(26px,3vw,44px)}
+.head .mono{color:var(--blue)}
+.head h1{margin-top:16px;max-width:16ch}
+.head .row{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;align-items:center}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-left:1px solid var(--rule);border-top:1px solid var(--rule);
+  margin:0 var(--gut)}
+.stats div{padding:22px 20px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.stats b{display:block;font-size:clamp(28px,3.4vw,46px);font-weight:500;letter-spacing:-.045em;line-height:1}
+.stats b i{font-style:normal;font-size:14px;color:var(--ink-3);margin-left:5px;letter-spacing:0}
+.stats span{display:block;margin-top:10px;font-family:var(--nar);font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+@media(max-width:820px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+.panels{display:grid;grid-template-columns:1.4fr 1fr;gap:clamp(16px,2.2vw,28px);padding:clamp(28px,3.6vw,52px) var(--gut)}
+@media(max-width:900px){.panels{grid-template-columns:1fr}}
+.panel{border:1px solid var(--rule);background:var(--paper);padding:clamp(20px,2.4vw,30px)}
+.panel .mono{color:var(--ink-3)}
+.panel h2{margin-top:12px;font-size:clamp(19px,2.2vw,25px);font-weight:500;letter-spacing:-.026em}
+
+.trend{display:flex;align-items:flex-end;gap:8px;height:170px;margin-top:24px}
+.trend s{flex:1;background:var(--peri);text-decoration:none;height:0;position:relative;transition:height .8s cubic-bezier(.22,1,.36,1)}
+.trend s.best{background:var(--blue)}
+.trend s em{position:absolute;top:-20px;left:0;right:0;text-align:center;font-family:var(--nar);font-size:11px;color:var(--ink-3);font-style:normal}
+.trend-x{display:flex;gap:8px;margin-top:8px}
+.trend-x span{flex:1;text-align:center;font-family:var(--nar);font-size:10.5px;letter-spacing:.08em;color:var(--ink-3)}
+
+.dims{margin-top:8px}
+.dimr{margin-top:16px}
+.dimr .l{display:flex;justify-content:space-between;font-family:var(--nar);font-size:12.5px;letter-spacing:.08em;color:var(--ink-2)}
+.dimr s{display:block;height:5px;margin-top:7px;background:rgba(22,24,28,.10);text-decoration:none;overflow:hidden}
+.dimr s i{display:block;height:100%;width:0;background:var(--ink);transition:width .9s cubic-bezier(.22,1,.36,1)}
+.dimr.weak s i{background:var(--orange)}
+
+.streak{display:grid;grid-template-columns:repeat(14,1fr);gap:5px;margin-top:22px}
+.streak s{aspect-ratio:1;background:rgba(22,24,28,.07);text-decoration:none;transition:background .3s}
+.streak s.on{background:var(--blue)}
+.streak s.today{outline:1px solid var(--ink);outline-offset:1px}
+.streak-l{display:flex;justify-content:space-between;margin-top:10px;font-family:var(--nar);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+
+.empty{margin-top:20px;padding:22px;border:1px dashed var(--rule);font-size:14.5px;line-height:1.62;color:var(--ink-2)}
+.empty b{display:block;font-weight:500;color:var(--ink);margin-bottom:6px}
+
+.next{margin:0 var(--gut) clamp(40px,6vw,90px);border:1px solid var(--ink);background:var(--stone);
+  padding:clamp(24px,3vw,40px);display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between}
+.next h2{font-size:clamp(21px,2.6vw,32px);font-weight:500;letter-spacing:-.03em;max-width:20ch}
+.next p{margin-top:10px;font-size:15px;line-height:1.6;color:var(--ink-2);max-width:44ch}
+
+</style>
+</head>
+<body>
+
+<div class="gate"><p id="gateMsg">Checking your session...</p></div>
+
+<div class="dash-wrap">
+  <header class="bar">
+    <a class="brand" href="/"><i class="sw" aria-hidden="true"></i>Mocha</a>
+    <nav class="mono" style="display:flex;gap:22px">
+      <a href="/app">Practise</a>
+      <a href="/pro.html">Pro</a>
+    </nav>
+    <div class="who">
+      <i id="avatar">M</i>
+      <span id="userEmail"></span>
+      <button id="signout">Sign out</button>
+    </div>
+  </header>
+
+  <section class="head">
+    <span class="mono" id="today"></span>
+    <h1 class="h1" id="greeting">Welcome back.</h1>
+    <div class="row">
+      <a class="btn btn--k" href="/app" id="practiseBtn">Start today's question</a>
+      <span class="mono" id="todayState" style="color:var(--ink-3)"></span>
+    </div>
+  </section>
+
+  <div class="stats">
+    <div><b id="sStreak">0</b><span>Day streak</span></div>
+    <div><b id="sSessions">0</b><span>Sessions completed</span></div>
+    <div><b id="sAvg">0.0<i>/10</i></b><span>Average score</span></div>
+    <div><b id="sBest">0.0<i>/10</i></b><span>Best answer</span></div>
+  </div>
+
+  <div class="panels">
+    <div class="panel">
+      <span class="mono">Score trend</span>
+      <h2 id="trendH">Your last sessions</h2>
+      <div id="trendWrap">
+        <div class="trend" id="trend"></div>
+        <div class="trend-x" id="trendX"></div>
+      </div>
+      <div class="empty" id="trendEmpty" style="display:none">
+        <b>Nothing marked yet</b>
+        Your scores appear here after your first session. One question takes about five minutes.
+      </div>
+    </div>
+
+    <div class="panel">
+      <span class="mono">Where you lose marks</span>
+      <h2>Dimension averages</h2>
+      <div class="dims" id="dims"></div>
+      <div class="empty" id="dimsEmpty" style="display:none">
+        <b>No dimension data yet</b>
+        Structure, Clarity, Ownership and Impact appear here once you have been marked.
+      </div>
+    </div>
+  </div>
+
+  <div class="panels" style="padding-top:0">
+    <div class="panel">
+      <span class="mono">Consistency</span>
+      <h2>The last fourteen days</h2>
+      <div class="streak" id="streakGrid"></div>
+      <div class="streak-l"><span>14 days ago</span><span id="streakNote"></span><span>Today</span></div>
+    </div>
+    <div class="panel">
+      <span class="mono">Next move</span>
+      <h2 id="adviceH">Keep the streak alive</h2>
+      <p style="margin-top:14px;font-size:15px;line-height:1.62;color:var(--ink-2)" id="advice"></p>
+    </div>
+  </div>
+
+  <section class="next">
+    <div>
+      <h2 id="nextH">One question a day is the whole method</h2>
+      <p id="nextP">Students who complete fourteen sessions move from about 6.1 to 8.5 on average. The reps are what change the score, not the reading.</p>
+    </div>
+    <a class="btn btn--k" href="/app">Practise now</a>
+  </section>
+
+  <footer class="foot mono">
+    <span>Mocha · usemocha.app</span>
+    <nav><a href="/">Product</a><a href="/pro.html">Pro</a><a href="/legal.html">Privacy and terms</a></nav>
+    <span>&copy; 2026 Mocha</span>
+  </footer>
+</div>
+
+<script>
+const SB_URL = 'https://xfwsnshhlfjzflobuoxd.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhmd3Nuc2hobGZqemZsb2J1b3hkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2ODg2NDUsImV4cCI6MjA5NDI2NDY0NX0.gZnNb3EEEy9H3ZZ-B-1lSSSbbldJkIuS0zcFmT6Wjec';
+const sb = window.supabase && window.supabase.createClient
+  ? window.supabase.createClient(SB_URL, SB_KEY, { auth:{ persistSession:true, autoRefreshToken:true, detectSessionInUrl:true } })
+  : null;
+
+const gateMsg = document.getElementById('gateMsg');
+const params = new URLSearchParams(location.search);
+
+function cached(){
+  try { return JSON.parse(localStorage.getItem('mocha_sb_session') || 'null'); } catch(e) { return null; }
+}
+
+(async () => {
+  let user = null;
+  if (sb) {
+    const at = params.get('at'), rt = params.get('rt');
+    if (at) {
+      const { data } = await sb.auth.setSession({ access_token: at, refresh_token: rt || '' });
+      if (data && data.session) user = data.session.user;
+    }
+    if (!user) {
+      const { data } = await sb.auth.getSession();
+      if (data && data.session) user = data.session.user;
+    }
+  }
+  if (!user) {
+    const c = cached();
+    if (c && c.user) user = c.user;
+  }
+  if (!user) {
+    gateMsg.textContent = 'Taking you to sign in...';
+    location.replace('/signin.html?next=' + encodeURIComponent('/dashboard.html'));
+    return;
+  }
+  boot(user);
+})();
+
+function boot(user){
+  document.body.classList.add('ready');
+  const email = user.email || '';
+  const name = (user.user_metadata && (user.user_metadata.full_name || user.user_metadata.name)) || email.split('@')[0];
+  document.getElementById('userEmail').textContent = email;
+  document.getElementById('avatar').textContent = (name || 'M').trim().charAt(0).toUpperCase();
+  const hour = new Date().getHours();
+  const part = hour < 12 ? 'Morning' : hour < 18 ? 'Afternoon' : 'Evening';
+  document.getElementById('greeting').textContent = part + ', ' + name.split(' ')[0] + '.';
+  document.getElementById('today').textContent = new Date().toLocaleDateString('en-GB',
+    { weekday:'long', day:'numeric', month:'long' });
+
+  render(loadHistory());
+}
+
+/* History is written locally by the practice app. Shape:
+   [{ date:'2026-08-16', overall:7.4, scores:{structure,clarity,ownership,impact} }] */
+function loadHistory(){
+  let h = [];
+  try { h = JSON.parse(localStorage.getItem('mocha_history') || '[]'); } catch(e) {}
+  if (!Array.isArray(h)) h = [];
+  return h.filter(x => x && typeof x.overall === 'number').slice(-30);
+}
+
+function render(h){
+  const streak = parseInt(localStorage.getItem('mocha_streak') || '0', 10) || 0;
+  const last = localStorage.getItem('mocha_last_session_date') || '';
+  const todayStr = new Date().toLocaleDateString('en-CA');
+  const doneToday = last === todayStr;
+
+  document.getElementById('sStreak').textContent = streak;
+  document.getElementById('sSessions').textContent = h.length;
+  document.getElementById('todayState').textContent = doneToday
+    ? 'Done for today, streak safe' : 'Not practised yet today';
+  document.getElementById('practiseBtn').textContent = doneToday ? 'Practise again' : "Start today's question";
+
+  if (!h.length) {
+    document.getElementById('trendWrap').style.display = 'none';
+    document.getElementById('trendEmpty').style.display = '';
+    document.getElementById('dimsEmpty').style.display = '';
+    document.getElementById('sAvg').innerHTML = '0.0<i>/10</i>';
+    document.getElementById('sBest').innerHTML = '0.0<i>/10</i>';
+    document.getElementById('advice').textContent =
+      'Start with one question in the track you are actually interviewing for. The first score is only a baseline, so answer it the way you would out loud rather than writing something polished.';
+    paintStreak([]);
+    return;
+  }
+
+  const vals = h.map(x => x.overall);
+  const avg = vals.reduce((a,b)=>a+b,0) / vals.length;
+  const best = Math.max.apply(null, vals);
+  document.getElementById('sAvg').innerHTML = avg.toFixed(1) + '<i>/10</i>';
+  document.getElementById('sBest').innerHTML = best.toFixed(1) + '<i>/10</i>';
+
+  const recent = h.slice(-10);
+  const trend = document.getElementById('trend'), tx = document.getElementById('trendX');
+  trend.innerHTML = recent.map(x =>
+    `<s class="${x.overall === best ? 'best' : ''}" data-h="${Math.max(6, x.overall*10)}"><em>${x.overall.toFixed(1)}</em></s>`).join('');
+  tx.innerHTML = recent.map((x,i) => `<span>${i+1}</span>`).join('');
+  requestAnimationFrame(() => trend.querySelectorAll('s').forEach(s => s.style.height = s.dataset.h + '%'));
+
+  const keys = ['structure','clarity','ownership','impact'];
+  const labels = { structure:'Structure', clarity:'Clarity', ownership:'Ownership', impact:'Impact' };
+  const avgs = {};
+  keys.forEach(k => {
+    const list = h.map(x => x.scores && x.scores[k]).filter(v => typeof v === 'number');
+    avgs[k] = list.length ? list.reduce((a,b)=>a+b,0)/list.length : null;
+  });
+  const have = keys.filter(k => avgs[k] !== null);
+  if (!have.length) {
+    document.getElementById('dimsEmpty').style.display = '';
+  } else {
+    const weakest = have.slice().sort((a,b) => avgs[a]-avgs[b])[0];
+    document.getElementById('dims').innerHTML = have.map(k =>
+      `<div class="dimr ${k === weakest ? 'weak' : ''}">
+         <div class="l"><span>${labels[k]}</span><span>${avgs[k].toFixed(1)}</span></div>
+         <s><i data-w="${avgs[k]*10}"></i></s>
+       </div>`).join('');
+    requestAnimationFrame(() => document.querySelectorAll('.dimr s i').forEach(i => i.style.width = i.dataset.w + '%'));
+    document.getElementById('adviceH').textContent = 'Your gap is ' + labels[weakest];
+    document.getElementById('advice').textContent =
+      labels[weakest] + ' is your lowest dimension at ' + avgs[weakest].toFixed(1) +
+      '. In your next session, fix that one thing only: '
+      + (weakest === 'ownership' ? 'say what you personally decided rather than what the team did.'
+      : weakest === 'impact' ? 'close with a number, even an estimate you can defend.'
+      : weakest === 'structure' ? 'set the situation in one sentence before anything else.'
+      : 'cut the preamble and reach the tension within about ten words.');
+  }
+
+  paintStreak(h);
+}
+
+function paintStreak(h){
+  const days = new Set(h.map(x => x.date));
+  const grid = document.getElementById('streakGrid');
+  const cells = [];
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const key = d.toLocaleDateString('en-CA');
+    cells.push(`<s class="${days.has(key) ? 'on' : ''} ${i === 0 ? 'today' : ''}" title="${key}"></s>`);
+  }
+  grid.innerHTML = cells.join('');
+  const hit = [...days].filter(k => {
+    const diff = (Date.now() - new Date(k).getTime()) / 86400000;
+    return diff >= 0 && diff < 14;
+  }).length;
+  document.getElementById('streakNote').textContent = hit + ' of 14 days';
+}
+
+document.getElementById('signout').addEventListener('click', async () => {
+  try { localStorage.removeItem('mocha_sb_session'); } catch(e) {}
+  if (sb) await sb.auth.signOut();
+  location.href = '/';
+});
+</script>
+</body>
+</html>

@@ -4777,7 +4777,7 @@ html, body {
   border-bottom-color: #16181C !important;
 }
 .ntab-ic { flex-shrink: 0; }
-.nav-right { display: flex !important; align-items: center !important; gap: 8px !important; }
+.nav-right { align-items: center !important; gap: 8px !important; }
 #streak-chip {
   background: none !important;
   color: #9DA1A8 !important;
@@ -6646,9 +6646,9 @@ body,
 
 /* Continue path card */
 .dash-path-card {
-  background: #1160D8; border-radius: 18px;
+  background: #F7F5F0; border-radius: 0;
   padding: 1.4rem 1.5rem; margin-bottom: 10px;
-  box-shadow: 0 4px 24px rgba(17,96,216,.18);
+  border: 1px solid #16181C;
 }
 .dash-path-inner {
   display: flex; align-items: center;
@@ -6656,20 +6656,20 @@ body,
 }
 .dash-path-eye {
   font-size: 9px; font-weight: 700; letter-spacing: .10em;
-  text-transform: uppercase; color: rgba(247,245,240,.55);
+  text-transform: uppercase; color: #9DA1A8;
   margin-bottom: 5px;
 }
 .dash-path-track {
   font-family: 'Archivo', system-ui, sans-serif;
-  font-size: 1.2rem; font-weight: 400; color: #F7F5F0;
+  font-size: 1.2rem; font-weight: 400; color: #16181C;
   letter-spacing: -.02em; margin-bottom: 3px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.dash-path-sub { font-size: 12px; color: rgba(247,245,240,.50); line-height: 1.5; }
+.dash-path-sub { font-size: 12px; color: #61656C; line-height: 1.5; }
 .dash-path-btn {
   display: flex; align-items: center; gap: 6px;
-  background: rgba(247,245,240,.90); color: #16181C;
-  border: none; border-radius: 99px;
+  background: #16181C; color: #fff;
+  border: 1px solid #16181C; border-radius: 0;
   padding: 10px 18px; font-size: 12px; font-weight: 700;
   cursor: pointer; font-family: 'Archivo', system-ui, sans-serif;
   white-space: nowrap; flex-shrink: 0; transition: opacity .12s;
@@ -6678,13 +6678,13 @@ body,
 
 /* Today's question card */
 .dash-today-card {
-  background: #16181C; border-radius: 18px;
+  background: #FDFDFC; border-radius: 0;
   padding: 1.4rem 1.5rem; margin-bottom: 10px;
-  box-shadow: 0 4px 24px rgba(0,0,0,.15);
+  border: 1px solid rgba(22,24,28,.13);
 }
 .dash-today-eye {
   font-size: 9px; font-weight: 700; letter-spacing: .10em;
-  text-transform: uppercase; color: rgba(247,245,240,.40);
+  text-transform: uppercase; color: #9DA1A8;
   margin-bottom: 8px;
 }
 .dash-today-badge {
@@ -6695,19 +6695,19 @@ body,
 }
 .dash-today-q {
   font-family: 'Archivo', system-ui, sans-serif;
-  font-size: 1.15rem; font-weight: 400; color: #F7F5F0;
+  font-size: 1.15rem; font-weight: 400; color: #16181C;
   line-height: 1.45; margin-bottom: 14px; letter-spacing: -.02em;
 }
 .dash-today-row { display: flex; align-items: center; gap: 12px; }
 .dash-today-btn {
   display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(247,245,240,.90); color: #16181C;
-  border: none; border-radius: 99px;
+  background: #16181C; color: #fff;
+  border: 1px solid #16181C; border-radius: 0;
   padding: 9px 18px; font-size: 12px; font-weight: 700;
   cursor: pointer; font-family: 'Archivo', system-ui, sans-serif; transition: opacity .12s;
 }
 .dash-today-btn:hover { opacity: .88; }
-.dash-today-meta { font-size: 11px; color: rgba(247,245,240,.35); font-weight: 500; }
+.dash-today-meta { font-size: 11px; color: #9DA1A8; font-weight: 500; }
 
 /* Week card */
 .dash-week-card {
@@ -6900,6 +6900,7 @@ nav.nav, #nav, .nav {
   letter-spacing: -.01em !important; color: var(--ink) !important;
 }
 .nav-right { gap: 8px !important; }
+#nav-guest[hidden], #nav-user[hidden] { display: none !important; }
 
 .nav-tabs { background: none !important; padding: 0 !important; gap: 0 !important; }
 .ntab {
@@ -7692,7 +7693,7 @@ nav.nav, #nav, .nav {
     <span class="nav-free" id="nav-free">1 free try</span>
     <button class="btn-nav" onclick="openModal('signup')">Start free</button>
   </div>
-  <div class="nav-right" id="nav-user" style="display:none;">
+  <div class="nav-right" id="nav-user" hidden style="display:none;">
     <span class="nav-free" id="streak-chip" style="display:inline-block;background:#F7F5F0;color:#16181C;border:1px solid rgba(22,24,28,.12);">5-day streak</span>
     <div class="nav-tabs">
       <button class="ntab on" id="nt-dash" onclick="showView('dashboard')">
@@ -10326,8 +10327,8 @@ async function signOut() {
   // Reset nav
   var navGuest = document.getElementById('nav-guest');
   var navUser  = document.getElementById('nav-user');
-  if (navGuest) navGuest.style.display = 'flex';
-  if (navUser)  navUser.style.display  = 'none';
+  if (navGuest) { navGuest.style.display = 'flex'; navGuest.removeAttribute('hidden'); }
+  if (navUser)  { navUser.style.display  = 'none'; navUser.setAttribute('hidden', ''); }
   window.location.href='/';
   setTab('');
 }
@@ -10342,8 +10343,10 @@ function launchApp() {
     _veil.classList.add('gone');
     setTimeout(function() { _veil.style.display = 'none'; }, 700);
   }
-  document.getElementById('nav-guest').style.display = 'none';
-  document.getElementById('nav-user').style.display  = 'flex';
+  var _ng = document.getElementById('nav-guest');
+  var _nu = document.getElementById('nav-user');
+  if (_ng) { _ng.style.display = 'none'; _ng.setAttribute('hidden', ''); }
+  if (_nu) { _nu.style.display = 'flex'; _nu.removeAttribute('hidden'); }
 
   // Nav avatar — support Google photo, uploaded photo, or initial
   var av = document.getElementById('nav-av');
@@ -13199,6 +13202,10 @@ async function _appBoot() {
   console.log('[mocha] saved session:', saved ? 'found' : 'none');
   if (saved && saved.access_token) {
     _sbSession = saved;
+    var g0 = document.getElementById('nav-guest');
+    var u0 = document.getElementById('nav-user');
+    if (g0) { g0.style.display = 'none'; g0.setAttribute('hidden', ''); }
+    if (u0) { u0.style.display = 'flex'; u0.removeAttribute('hidden'); }
     var u = saved.user;
     if (u && u.id) {
       appUser = {

@@ -10984,6 +10984,7 @@ var _qSpeaking = false;
 var _qLoading = false;
 var _qNeedsPlay = false;
 var _qUnlocked = false;
+var _qBrowserUtt = null;
 var SILENT_WAV = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
 
 function _setListenUI(state) {
@@ -10994,7 +10995,51 @@ function _setListenUI(state) {
   btn.classList.toggle('loading', state === 'loading');
   btn.setAttribute('aria-pressed', state === 'playing' ? 'true' : 'false');
   var lbl = btn.querySelector('.q-listen-lbl');
-  if (lbl) lbl.textContent = state === 'playing' ? 'Stop' : state === 'loading' ? '…' : 'Listen';
+  if (lbl) lbl.textContent = state === 'playing' ? 'Stop' : state === 'loading' ? 'Speaking…' : 'Listen';
+}
+
+function _browserSpeaking() {
+  try { return !!(window.speechSynthesis && speechSynthesis.speaking); } catch (e) { return false; }
+}
+
+function _stopBrowserSpeech() {
+  _qBrowserUtt = null;
+  try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {}
+}
+
+function _speakBrowserNow(text) {
+  if (!window.speechSynthesis || !text) return false;
+  _stopBrowserSpeech();
+  var u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.92;
+  u.pitch = 1;
+  u.lang = 'en-GB';
+  try {
+    var voices = speechSynthesis.getVoices() || [];
+    var pick = null;
+    for (var i = 0; i < voices.length; i++) {
+      var n = (voices[i].name || '') + ' ' + (voices[i].lang || '');
+      if (/en-GB|Daniel|Google UK/i.test(n)) { pick = voices[i]; break; }
+      if (!pick && /^en/i.test(voices[i].lang || '')) pick = voices[i];
+    }
+    if (pick) { u.voice = pick; u.lang = pick.lang || u.lang; }
+  } catch (e) {}
+  u.onend = function() {
+    if (_qBrowserUtt !== u) return;
+    _qBrowserUtt = null;
+    if (!_qLoading && !(_qAudioEl && !_qAudioEl.paused && _qAudioEl.currentTime > 0)) {
+      _qSpeaking = false;
+      _setListenUI('idle');
+    }
+  };
+  u.onerror = function() {
+    if (_qBrowserUtt === u) _qBrowserUtt = null;
+  };
+  _qBrowserUtt = u;
+  try { speechSynthesis.speak(u); } catch (e) { return false; }
+  _qSpeaking = true;
+  _setListenUI('playing');
+  return true;
 }
 
 function _unlockInterviewAudio() {
@@ -11026,6 +11071,7 @@ function stopQuestionSpeech() {
   _qSpeaking = false;
   _qLoading = false;
   _qNeedsPlay = false;
+  _stopBrowserSpeech();
   if (_qAudioEl) {
     try { _qAudioEl.pause(); } catch (e) {}
   }
@@ -11042,15 +11088,15 @@ function _playQuestionBlob(blob) {
   _qAudioEl.src = url;
   _qAudioEl.onended = function() { _qSpeaking = false; _qNeedsPlay = false; _setListenUI('idle'); };
   _qAudioEl.onerror = function() { _qSpeaking = false; _setListenUI('idle'); };
+  _stopBrowserSpeech();
   _qSpeaking = true;
   _qLoading = false;
   _setListenUI('playing');
   var p = _qAudioEl.play();
   if (p && p.catch) {
     p.catch(function() {
-      _qSpeaking = false;
       _qNeedsPlay = true;
-      _setListenUI('idle');
+      _speakBrowserNow((currentQ && currentQ.text) || '');
     });
   }
 }
@@ -11059,12 +11105,12 @@ function speakCurrentQuestion() {
   var text = (currentQ && currentQ.text) ? String(currentQ.text).replace(/\s+/g, ' ').trim() : '';
   if (!text || text === 'Loading question…') return;
   var seq = ++_qSpeakSeq;
+  _speakBrowserNow(text);
   if (_qSpeakCache[text]) {
     _playQuestionBlob(_qSpeakCache[text]);
     return;
   }
   _qLoading = true;
-  _setListenUI('loading');
   fetch('/api/speak', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -11077,23 +11123,28 @@ function speakCurrentQuestion() {
     return r.blob();
   }).then(function(blob) {
     if (seq !== _qSpeakSeq) return;
+    if (!blob || blob.size < 80) throw new Error('empty audio');
     _qSpeakCache[text] = blob;
     _playQuestionBlob(blob);
   }).catch(function() {
     if (seq !== _qSpeakSeq) return;
     _qLoading = false;
-    _qSpeaking = false;
-    _setListenUI('idle');
+    if (!_browserSpeaking()) _setListenUI(_qSpeaking ? 'playing' : 'idle');
   });
 }
 
 function toggleQuestionSpeech() {
   _unlockInterviewAudio();
-  if (_qSpeaking || _qLoading) {
+  var audioPlaying = !!( _qAudioEl && !_qAudioEl.paused && _qAudioEl.currentTime > 0 );
+  if (_browserSpeaking() || audioPlaying) {
     stopQuestionSpeech();
     return;
   }
   speakCurrentQuestion();
+}
+
+if (window.speechSynthesis && typeof speechSynthesis.onvoiceschanged !== 'undefined') {
+  speechSynthesis.onvoiceschanged = function() { try { speechSynthesis.getVoices(); } catch (e) {} };
 }
 
 document.addEventListener('click', function() {

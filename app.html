@@ -6847,7 +6847,7 @@ body, #page-dashboard, #page-practice, #page-feedback, #page-history, #page-pers
 /* Circles that must stay round. */
 .nav-av, .pd-avatar, .dash-stat-icon, .crit-idx, .app-timer-dot, .rdot,
 .pcard-chk, .crop-circle-guide, .band-photo-circle, .cursor,
-.puc-check, .urk-lock, .modal-brand-icon, .sc-logo-mark {
+.puc-check, .urk-lock, .modal-brand-icon {
   border-radius: 50% !important;
 }
 .crop-canvas-wrap { border-radius: 0 !important; }
@@ -7705,8 +7705,130 @@ nav.nav, #nav, .nav {
   .dash-stats { grid-template-columns: 1fr !important; }
   .pgrid { grid-template-columns: 1fr !important; }
   .dash-path-card::after, .dash-today-card::after, .fb-panel::after,
-  .pro-upgrade-card::after { width: 30px !important; height: 30px !important; }
+  .pro-upgrade-card::after, .share-card::after { width: 30px !important; height: 30px !important; }
 }
+
+/* ── Share score card — editorial poster, click through to the site ──────── */
+.share-card-wrap { margin: 1.5rem 0 0 !important; }
+a.share-card,
+.share-card {
+  display: block !important;
+  text-decoration: none !important;
+  color: inherit !important;
+  cursor: pointer !important;
+  background: var(--paper3) !important;
+  border: 1px solid var(--ink) !important;
+  padding: clamp(22px, 2.6vw, 34px) !important;
+  padding-right: 58px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  text-align: left !important;
+}
+.share-card::before { content: none !important; display: none !important; }
+.share-card::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important; right: 0 !important;
+  width: 44px !important; height: 44px !important;
+  background: var(--yellow) !important;
+  font-size: 0 !important; line-height: 0 !important;
+  color: transparent !important;
+  pointer-events: none !important;
+}
+.share-card:hover { background: #F3F0E8 !important; }
+.sc-top-row { align-items: flex-start !important; margin-bottom: 1.4rem !important; }
+.sc-logo { gap: 8px !important; }
+.sc-logo-mark {
+  width: 11px !important; height: 11px !important;
+  border-radius: 0 !important;
+  background: var(--blue) !important;
+  font-size: 0 !important; color: transparent !important;
+  box-shadow: none !important;
+}
+.sc-logo-name {
+  font-family: var(--sans) !important; font-weight: 600 !important;
+  font-size: 16px !important; letter-spacing: -.01em !important;
+  color: var(--ink) !important;
+}
+.sc-track-badge {
+  font-family: var(--nar) !important; font-size: 11.5px !important;
+  font-weight: 500 !important; letter-spacing: .13em !important;
+  text-transform: uppercase !important;
+  color: var(--ink-3) !important;
+  background: none !important; border: none !important; padding: 0 !important;
+}
+.share-card-score {
+  font-size: clamp(3.2rem, 8vw, 5.2rem) !important;
+  font-weight: 500 !important; color: var(--ink) !important;
+  letter-spacing: -.05em !important; line-height: .9 !important;
+}
+.sc-denom {
+  font-family: var(--nar) !important; font-size: 15px !important;
+  letter-spacing: .08em !important; color: var(--ink-3) !important;
+}
+.share-card-verdict {
+  display: inline !important; font-family: var(--nar) !important;
+  font-size: 12px !important; font-weight: 500 !important;
+  letter-spacing: .13em !important; text-transform: uppercase !important;
+  background: none !important; padding: 0 !important; margin-bottom: 1.1rem !important;
+}
+.share-card-verdict.verd-advance { color: var(--blue) !important; background: none !important; }
+.share-card-verdict.verd-fence   { color: var(--ink-3) !important; background: none !important; }
+.share-card-verdict.verd-no      { color: var(--orange) !important; background: none !important; }
+.sc-divider { background: var(--ink) !important; height: 1px !important; opacity: .18 !important; margin: 0 0 1.1rem !important; }
+.share-card-bars { gap: 10px 28px !important; margin-bottom: 1.2rem !important; }
+.share-card-bar-label {
+  font-family: var(--nar) !important; font-size: 11px !important;
+  font-weight: 500 !important; letter-spacing: .12em !important;
+  color: var(--ink-3) !important; width: 52px !important;
+}
+.share-card-bar-track {
+  height: 2px !important; border-radius: 0 !important;
+  background: rgba(22,24,28,.12) !important;
+}
+.share-card-bar-fill {
+  border-radius: 0 !important;
+  background: var(--ink) !important;
+}
+.share-card-val {
+  font-family: var(--nar) !important; font-size: 12px !important;
+  font-weight: 500 !important; color: var(--ink) !important;
+}
+.sc-bottom-row {
+  padding-top: 1rem !important;
+  border-top: 1px solid var(--rule) !important;
+}
+.sc-url {
+  font-family: var(--nar) !important; font-size: 12px !important;
+  letter-spacing: .13em !important; text-transform: uppercase !important;
+  color: var(--ink-3) !important; font-weight: 500 !important;
+}
+.sc-go {
+  font-family: var(--nar) !important; font-size: 12px !important;
+  letter-spacing: .13em !important; text-transform: uppercase !important;
+  color: var(--blue) !important;
+}
+.share-card-wrap > .share-btn {
+  margin-top: 12px !important;
+  background: none !important;
+  border: 1px solid var(--ink) !important;
+  border-radius: 0 !important;
+  color: var(--ink) !important;
+  padding: 11px 18px !important;
+  box-shadow: none !important;
+  font-family: var(--nar) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  letter-spacing: .13em !important;
+  text-transform: uppercase !important;
+}
+.share-card-wrap > .share-btn:hover {
+  background: var(--ink) !important; color: var(--paper) !important;
+  opacity: 1 !important; transform: none !important;
+}
+.share-card-wrap > .share-btn svg { stroke: currentColor !important; }
 </style>
 </head>
 <body>
@@ -8512,37 +8634,33 @@ nav.nav, #nav, .nav {
         </div>
       </div>
 
-      <!-- ── SHARE CARD — cream/viral redesign ──────────────── -->
+      <!-- ── SHARE CARD — editorial poster, opens the site ──────────────── -->
       <div class="share-card-wrap" id="share-card-wrap" style="display:none;">
 
-        <!-- Share card itself -->
-        <div class="share-card" id="share-card">
-          <!-- Top row: logo + track -->
+        <a class="share-card" id="share-card" href="https://usemocha.app/" target="_blank" rel="noopener noreferrer">
           <div class="sc-top-row">
             <div class="sc-logo">
-              <div class="sc-logo-mark">m</div>
-              <span class="sc-logo-name">mocha</span>
+              <div class="sc-logo-mark" aria-hidden="true"></div>
+              <span class="sc-logo-name">Mocha</span>
             </div>
             <div class="sc-track-badge" id="sc-track">McKinsey · MBB PEI</div>
           </div>
-          <!-- Score -->
           <div class="sc-score-row">
             <div class="share-card-score" id="sc-score">8.5</div>
             <div class="sc-denom">/10</div>
           </div>
           <div class="share-card-verdict" id="sc-verdict">Strong answer</div>
           <div class="sc-divider"></div>
-          <!-- Dimension bars -->
           <div class="share-card-bars" id="sc-bars"></div>
-          <!-- Bottom: URL + share button -->
           <div class="sc-bottom-row">
             <span class="sc-url">usemocha.app</span>
-            <button class="share-btn" onclick="openShareModal()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
-              Share
-            </button>
+            <span class="sc-go">Open site →</span>
           </div>
-        </div>
+        </a>
+        <button class="share-btn" type="button" onclick="openShareModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+          Share
+        </button>
 
         <!-- University ranking section -->
         <div class="uni-rank-section" id="uni-rank-section" style="display:none;">
@@ -11945,6 +12063,15 @@ function sendFollowUp() {
 // ═══════════════════════════════════════
 // CANVAS SHARE IMAGE — 1080×1080 Instagram-ready PNG
 // ═══════════════════════════════════════
+function _shareSiteUrl() {
+  var scoreEl = document.getElementById('fb-score') || document.getElementById('sc-score');
+  var score = scoreEl ? scoreEl.textContent : '8.5';
+  var p = appPersona || PERSONAS[0];
+  var scoreNum = parseFloat(score) || 0;
+  var verdictShort = scoreNum >= 8 ? 'advance' : scoreNum >= 6.5 ? 'solid' : 'improve';
+  return 'https://usemocha.app/?s=' + encodeURIComponent(score) + '&t=' + encodeURIComponent((p && p.id) || 'consulting') + '&v=' + verdictShort;
+}
+
 function _generateShareImage(callback) {
   var score  = document.getElementById('fb-score') ? document.getElementById('fb-score').textContent : '8.5';
   var p = appPersona || PERSONAS[0];
@@ -11963,120 +12090,85 @@ function _generateShareImage(callback) {
   canvas.width = W; canvas.height = H;
   var ctx = canvas.getContext('2d');
 
-  // Background — cream with subtle warm gradient
   ctx.fillStyle = '#F7F5F0';
   ctx.fillRect(0, 0, W, H);
-  // Subtle radial glow top-right
-  var grad = ctx.createRadialGradient(W * 0.85, H * 0.1, 0, W * 0.85, H * 0.1, 400);
-  grad.addColorStop(0, 'rgba(223,161,58,0.15)');
-  grad.addColorStop(1, 'rgba(223,161,58,0)');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, W, H);
 
-  // Logo mark — espresso rounded square with italic m
-  var logoX = 80, logoY = 80, logoS = 72;
-  ctx.fillStyle = '#16181C';
-  _roundRect(ctx, logoX, logoY, logoS, logoS, 18);
-  ctx.fill();
-  ctx.font = 'italic 46px Georgia, \'Archivo\',system-ui,sans-serif';
-  ctx.fillStyle = '#F7F5F0';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('m', logoX + logoS / 2, logoY + logoS / 2 + 2);
+  ctx.fillStyle = '#F2DE00';
+  ctx.fillRect(W - 88, 0, 88, 88);
 
-  // Logo text
-  ctx.font = '400 38px Georgia, \'Archivo\',system-ui,sans-serif';
+  ctx.fillStyle = '#1160D8';
+  ctx.fillRect(80, 96, 22, 22);
+
+  ctx.font = '600 42px Archivo, system-ui, sans-serif';
   ctx.fillStyle = '#16181C';
   ctx.textAlign = 'left';
   ctx.textBaseline = 'middle';
-  ctx.fillText('mocha', logoX + logoS + 18, logoY + logoS / 2);
+  ctx.fillText('Mocha', 116, 107);
 
-  // Track badge
-  ctx.font = '700 22px \'Archivo\',system-ui,sans-serif';
+  ctx.font = '500 22px "Archivo Narrow", Archivo, system-ui, sans-serif';
   ctx.fillStyle = '#9DA1A8';
   ctx.textAlign = 'left';
-  ctx.fillText(trackName.toUpperCase(), 82, 200);
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText(trackName.toUpperCase(), 80, 186);
 
-  // Score — big hero number
-  ctx.font = '400 260px Georgia, \'Archivo\',system-ui,sans-serif';
+  ctx.font = '500 280px Archivo, system-ui, sans-serif';
   ctx.fillStyle = '#16181C';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(score, W / 2, 440);
-
-  // /10
-  ctx.font = '500 48px \'Archivo\',system-ui,sans-serif';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText(score, 80, 500);
+  var scoreW = ctx.measureText(score).width;
+  ctx.font = '500 36px "Archivo Narrow", Archivo, system-ui, sans-serif';
   ctx.fillStyle = '#9DA1A8';
-  ctx.textAlign = 'center';
-  ctx.fillText('/10', W / 2 + 160, 440);
+  ctx.fillText('/10', 80 + scoreW + 18, 480);
 
-  // Verdict — color-coded
   var verdColor = scoreNum >= 8 ? '#1160D8' : scoreNum >= 6.5 ? '#9DA1A8' : '#F04E23';
-  ctx.font = '800 28px \'Archivo\',system-ui,sans-serif';
+  ctx.font = '500 26px "Archivo Narrow", Archivo, system-ui, sans-serif';
   ctx.fillStyle = verdColor;
-  ctx.textAlign = 'center';
-  ctx.letterSpacing = '3px';
-  ctx.fillText((verdictText || 'Score').toUpperCase(), W / 2, 580);
+  ctx.fillText((verdictText || 'Score').toUpperCase(), 80, 560);
 
-  // Divider
-  ctx.strokeStyle = 'rgba(22,24,28,0.08)';
+  ctx.strokeStyle = 'rgba(22,24,28,0.18)';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(120, 640);
-  ctx.lineTo(W - 120, 640);
+  ctx.moveTo(80, 610);
+  ctx.lineTo(W - 80, 610);
   ctx.stroke();
 
-  // Dimension bars
   var dims = [
     { label: 'STRUCTURE', val: parseFloat(sc.structure || 0) },
     { label: 'CLARITY',   val: parseFloat(sc.clarity || 0) },
     { label: 'OWNERSHIP', val: parseFloat(sc.ownership || 0) },
     { label: 'IMPACT',    val: parseFloat(sc.impact || 0) }
   ];
-  var barY = 690, barH = 16, barGap = 70, barLeft = 120, barRight = W - 120;
-  var labelW = 200, valW = 80;
+  var barY = 660, barH = 4, barGap = 64, barLeft = 80, barRight = W - 80;
+  var labelW = 210, valW = 80;
   for (var i = 0; i < dims.length; i++) {
     var y = barY + i * barGap;
-    // Label
-    ctx.font = '700 20px \'Archivo\',system-ui,sans-serif';
-    ctx.fillStyle = 'rgba(22,24,28,0.35)';
+    ctx.font = '500 22px "Archivo Narrow", Archivo, system-ui, sans-serif';
+    ctx.fillStyle = '#9DA1A8';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     ctx.fillText(dims[i].label, barLeft, y + barH / 2);
-    // Track
     var trackLeft = barLeft + labelW;
     var trackW = barRight - trackLeft - valW;
-    ctx.fillStyle = 'rgba(22,24,28,0.06)';
-    _roundRect(ctx, trackLeft, y, trackW, barH, 8);
-    ctx.fill();
-    // Fill
+    ctx.fillStyle = 'rgba(22,24,28,0.12)';
+    ctx.fillRect(trackLeft, y, trackW, barH);
     var pct = Math.min(dims[i].val / 10, 1);
     if (pct > 0) {
-      var fillGrad = ctx.createLinearGradient(trackLeft, 0, trackLeft + trackW * pct, 0);
-      fillGrad.addColorStop(0, '#16181C');
-      fillGrad.addColorStop(1, '#61656C');
-      ctx.fillStyle = fillGrad;
-      _roundRect(ctx, trackLeft, y, trackW * pct, barH, 8);
-      ctx.fill();
+      ctx.fillStyle = '#16181C';
+      ctx.fillRect(trackLeft, y, trackW * pct, barH);
     }
-    // Value
-    ctx.font = '700 22px \'Archivo\',system-ui,sans-serif';
+    ctx.font = '500 22px "Archivo Narrow", Archivo, system-ui, sans-serif';
     ctx.fillStyle = '#16181C';
     ctx.textAlign = 'right';
     ctx.fillText(dims[i].val.toFixed(1), barRight, y + barH / 2);
   }
 
-  // Bottom URL
-  ctx.font = '600 24px \'Archivo\',system-ui,sans-serif';
+  ctx.textAlign = 'left';
+  ctx.font = '500 24px "Archivo Narrow", Archivo, system-ui, sans-serif';
   ctx.fillStyle = '#9DA1A8';
-  ctx.textAlign = 'center';
-  ctx.fillText('usemocha.app', W / 2, H - 70);
-
-  // Watermark m
-  ctx.font = 'italic 180px Georgia, \'Archivo\',system-ui,sans-serif';
-  ctx.fillStyle = 'rgba(22,24,28,0.025)';
+  ctx.fillText('USEMOCHA.APP', 80, H - 80);
   ctx.textAlign = 'right';
-  ctx.fillText('m', W - 60, H - 30);
+  ctx.fillStyle = '#1160D8';
+  ctx.fillText('OPEN SITE →', W - 80, H - 80);
 
   canvas.toBlob(function(blob) {
     if (blob) {
@@ -12106,8 +12198,6 @@ function openShareModal() {
   var p = appPersona || PERSONAS[0];
   var track = p ? p.role : 'Consulting';
   var verdict = document.getElementById('sc-verdict') ? document.getElementById('sc-verdict').textContent : '';
-  var scoreNum = parseFloat(score) || 0;
-  var verdictShort = scoreNum >= 8 ? 'advance' : scoreNum >= 6.5 ? 'solid' : 'improve';
 
   // Store scores for canvas generation
   var sc = {};
@@ -12121,7 +12211,7 @@ function openShareModal() {
   if (fbConf)    sc.impact     = parseFloat(fbConf.textContent) || 0;
   window._lastFeedbackScores = sc;
 
-  var shareUrl = 'https://usemocha.app/?s=' + encodeURIComponent(score) + '&t=' + encodeURIComponent(p.id || 'consulting') + '&v=' + verdictShort;
+  var shareUrl = _shareSiteUrl();
 
   var shareOptions = [
     {
@@ -13024,6 +13114,10 @@ function updateShareCard(r) {
   var verdictText = iv || (score >= 8 ? 'Strong answer' : score >= 6.5 ? 'On the fence' : 'Needs work');
 
   document.getElementById('sc-score').textContent = score.toFixed(1);
+  var shareCard = document.getElementById('share-card');
+  if (shareCard && shareCard.tagName === 'A') shareCard.href = _shareSiteUrl();
+  var wrap = document.getElementById('share-card-wrap');
+  if (wrap) wrap.style.display = 'block';
   var verdictEl = document.getElementById('sc-verdict');
   if (verdictEl) {
     verdictEl.textContent = verdictText;

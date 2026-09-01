@@ -9745,6 +9745,7 @@ function goFromPersona() {
 function showPage(id) {
   // Clear practice timer if navigating away from practice
   if (id !== 'page-practice' && timerInt) { clearInterval(timerInt); timerInt = null; }
+  if (id !== 'page-practice') stopQuestionSpeech();
   var pages = document.querySelectorAll('.page');
   for (var i = 0; i < pages.length; i++) { pages[i].classList.remove('active'); }
   var pg = document.getElementById(id);

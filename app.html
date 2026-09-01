@@ -2689,8 +2689,8 @@ body {
 @keyframes veilIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
 
 /* Mocha product polish */
-.ntab.on { background:#16181C !important; color:#F7F5F0 !important; }
-.ntab:hover { background:rgba(22,24,28,0.06) !important; }
+.ntab.on { background:none !important; color:#16181C !important; }
+.ntab:hover { background:none !important; }
 .btn-primary, .dash-start-btn, .cta-pill { background:#16181C !important; color:#F7F5F0 !important; }
 .btn-primary:hover { background:#1160D8 !important; }
 .prac-send { background:#16181C !important; }
@@ -2731,13 +2731,13 @@ body { background: #FDFDFC !important; font-family: 'Archivo', system-ui, sans-s
 
 /* ── NAV ── */
 .app-nav, nav.nav, [class*="app-nav"] {
-  background: var(--forest) !important;
-  border-bottom: 1px solid rgba(255,255,255,.06) !important;
+  background: #FDFDFC !important;
+  border-bottom: 1px solid rgba(22,24,28,.13) !important;
   backdrop-filter: none !important;
-  height: 52px;
+  height: 56px;
 }
 #nav-guest, #nav-user {
-  background: var(--forest) !important;
+  background: transparent !important;
 }
 
 /* ── DASHBOARD PAGE ── */
@@ -3216,9 +3216,9 @@ body {
 /* ── NAVIGATION ── */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  height: 52px; padding: 0 20px;
-  background: #16181C !important;
-  border-bottom: 1px solid rgba(255,255,255,.07) !important;
+  height: 56px; padding: 0 20px;
+  background: #FDFDFC !important;
+  border-bottom: 1px solid rgba(22,24,28,.13) !important;
   display: flex; align-items: center; justify-content: space-between;
 }
 .nav-logo { 
@@ -3715,11 +3715,11 @@ html, body {
   max-width: 100vw !important;
 }
 
-/* ── NAV: perfect forest green ── */
+/* ── NAV: paper rule ── */
 .nav {
-  background: #16181C !important;
-  border-bottom: 1px solid rgba(255,255,255,.06) !important;
-  height: 52px;
+  background: #FDFDFC !important;
+  border-bottom: 1px solid rgba(22,24,28,.13) !important;
+  height: 56px;
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   overflow: hidden !important;
   max-width: 100vw !important;
@@ -4112,54 +4112,58 @@ html, body {
 
 /* ── NAVIGATION ── */
 .nav {
-  background: var(--forest) !important;
-  border-bottom: 1px solid rgba(255,255,255,.06) !important;
-  height: 52px !important;
+  background: #FDFDFC !important;
+  border-bottom: 1px solid rgba(22,24,28,.13) !important;
+  height: 56px !important;
   display: flex !important;
   align-items: center !important;
-  padding: 0 20px !important;
+  padding: 0 clamp(16px, 4vw, 40px) !important;
   position: fixed !important;
   top: 0 !important; left: 0 !important; right: 0 !important;
   z-index: 200 !important;
-  box-shadow: 0 1px 0 rgba(0,0,0,.12) !important;
+  box-shadow: none !important;
 }
 .logo-word {
   font-family: 'Archivo', system-ui, sans-serif !important;
-  font-style: italic !important;
-  font-size: 20px !important;
-  color: var(--cream) !important;
-  letter-spacing: -.02em !important;
-}
-.ntab {
-  color: rgba(247,245,240,.42) !important;
-  font-size: 13px !important;
+  font-style: normal !important;
+  font-size: 16px !important;
   font-weight: 600 !important;
-  padding: 6px 11px !important;
-  border-radius: 7px !important;
-  transition: all .15s !important;
+  color: #16181C !important;
   letter-spacing: -.01em !important;
 }
-.ntab:hover { color: rgba(247,245,240,.72) !important; background: rgba(255,255,255,.07) !important; }
-.ntab.on { color: var(--cream) !important; background: rgba(255,255,255,.12) !important; }
+.ntab {
+  color: #61656C !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  padding: 7px 14px !important;
+  border-radius: 0 !important;
+  transition: color .25s !important;
+  letter-spacing: .12em !important;
+  text-transform: uppercase !important;
+}
+.ntab:hover { color: #16181C !important; background: none !important; }
+.ntab.on { color: #16181C !important; background: none !important; }
 #streak-chip {
-  background: rgba(17,96,216,.14) !important;
-  color: var(--mint) !important;
-  border: 1px solid rgba(17,96,216,.22) !important;
-  border-radius: 99px !important;
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  padding: 3px 10px !important;
+  background: none !important;
+  color: #9DA1A8 !important;
+  border: 1px solid rgba(22,24,28,.13) !important;
+  border-radius: 0 !important;
+  font-size: 11.5px !important;
+  font-weight: 500 !important;
+  padding: 6px 12px !important;
   white-space: nowrap !important;
 }
 .nav-av {
-  width: 32px !important; height: 32px !important;
+  width: 30px !important; height: 30px !important;
   border-radius: 50% !important;
-  border: 1.5px solid rgba(247,245,240,.20) !important;
+  border: none !important;
+  background: #16181C !important;
+  color: #fff !important;
   cursor: pointer !important;
-  transition: border-color .15s !important;
+  transition: background .15s !important;
   overflow: hidden !important;
 }
-.nav-av:hover { border-color: rgba(247,245,240,.45) !important; }
+.nav-av:hover { background: #1160D8 !important; }
 
 /* ── DASHBOARD ── */
 .dash-pg {
@@ -4699,7 +4703,7 @@ html, body { overflow-x:hidden!important; overflow-y:auto!important; overscroll-
   --m-cream:    #F7F5F0;
   --m-linen:    #F7F5F0;
   --m-green:    #1160D8;
-  --m-nav:      #16181C;
+  --m-nav:      #FDFDFC;
   --m-r-sm:     10px;
   --m-r-md:     14px;
   --m-r-lg:     18px;
@@ -4726,14 +4730,14 @@ html, body {
 #page-history,
 #page-personas { background: var(--m-bg) !important; }
 
-/* ── NAVIGATION — dark forest bar ──────────────────────────────── */
+/* ── NAVIGATION — paper rule, landing chrome ───────────────────── */
 .nav {
   position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important;
-  z-index: 400 !important; height: 54px !important;
+  z-index: 400 !important; height: 56px !important;
   background: var(--m-nav) !important;
-  border-bottom: 1px solid rgba(255,255,255,.06) !important;
+  border-bottom: 1px solid rgba(22,24,28,.13) !important;
   display: flex !important; align-items: center !important;
-  padding: 0 20px !important;
+  padding: 0 clamp(16px, 4vw, 40px) !important;
   gap: 0 !important;
 }
 .nav-logo {
@@ -4746,59 +4750,64 @@ html, body {
 .nav-logo:hover { opacity: .8 !important; }
 .logo-word {
   font-family: 'Archivo', system-ui, sans-serif !important;
-  font-style: italic !important;
-  font-size: 19px !important; color: #F7F5F0 !important; letter-spacing: -.02em !important;
+  font-style: normal !important;
+  font-size: 16px !important; font-weight: 600 !important;
+  color: #16181C !important; letter-spacing: -.01em !important;
 }
 .nav-tabs {
-  display: flex !important; gap: 2px !important;
-  background: rgba(255,255,255,.06) !important;
-  border-radius: 10px !important; padding: 3px !important;
+  display: flex !important; gap: 0 !important;
+  background: none !important;
+  border-radius: 0 !important; padding: 0 !important;
 }
 .ntab {
-  background: none !important; border: none !important; cursor: pointer !important;
-  font-family: 'Archivo', system-ui, sans-serif !important;
-  font-size: 12.5px !important; font-weight: 600 !important;
-  color: rgba(247,245,240,.45) !important;
-  padding: 5px 12px !important; border-radius: 7px !important;
-  transition: all .15s !important; letter-spacing: -.01em !important;
+  background: none !important; border: 1px solid transparent !important; cursor: pointer !important;
+  font-family: 'Archivo Narrow', system-ui, sans-serif !important;
+  font-size: 12px !important; font-weight: 500 !important;
+  color: #61656C !important;
+  padding: 7px 14px !important; border-radius: 0 !important;
+  transition: color .25s, border-color .25s !important; letter-spacing: .12em !important;
+  text-transform: uppercase !important;
   display: flex !important; align-items: center !important; gap: 5px !important;
   white-space: nowrap !important;
 }
-.ntab:hover { color: rgba(247,245,240,.78) !important; background: rgba(255,255,255,.08) !important; }
+.ntab:hover { color: #16181C !important; background: none !important; }
 .ntab.on, .ntab.active {
-  color: #F7F5F0 !important;
-  background: rgba(255,255,255,.14) !important;
+  color: #16181C !important;
+  background: none !important;
+  border-bottom-color: #16181C !important;
 }
 .ntab-ic { flex-shrink: 0; }
-.nav-right { display: flex !important; align-items: center !important; gap: 10px !important; }
+.nav-right { display: flex !important; align-items: center !important; gap: 8px !important; }
 #streak-chip {
-  background: rgba(17,96,216,.15) !important;
-  color: #1160D8 !important;
-  border: 1px solid rgba(17,96,216,.25) !important;
-  border-radius: 99px !important; padding: 4px 11px !important;
-  font-size: 11px !important; font-weight: 700 !important;
-  letter-spacing: .02em !important; white-space: nowrap !important;
-  font-family: 'Archivo', system-ui, sans-serif !important;
+  background: none !important;
+  color: #9DA1A8 !important;
+  border: 1px solid rgba(22,24,28,.13) !important;
+  border-radius: 0 !important; padding: 6px 12px !important;
+  font-size: 11.5px !important; font-weight: 500 !important;
+  letter-spacing: .12em !important; text-transform: uppercase !important;
+  white-space: nowrap !important;
+  font-family: 'Archivo Narrow', system-ui, sans-serif !important;
 }
 /* nav-free override — see base rule */
 .btn-nav {
-  background: rgba(247,245,240,.12) !important; color: #F7F5F0 !important;
-  border: 1px solid rgba(247,245,240,.18) !important; border-radius: 99px !important;
-  padding: 6px 16px !important; font-size: 12.5px !important; font-weight: 600 !important;
+  background: #16181C !important; color: #fff !important;
+  border: 1px solid #16181C !important; border-radius: 0 !important;
+  padding: 8px 18px !important; font-size: 13.5px !important; font-weight: 500 !important;
   cursor: pointer !important; font-family: 'Archivo', system-ui, sans-serif !important;
-  transition: all .15s !important; white-space: nowrap !important;
+  transition: background .25s, border-color .25s !important; white-space: nowrap !important;
 }
-.btn-nav:hover { background: rgba(247,245,240,.22) !important; }
+.btn-nav:hover { background: #1160D8 !important; border-color: #1160D8 !important; }
 .nav-av {
-  width: 34px !important; height: 34px !important; border-radius: 50% !important;
-  background: rgba(247,245,240,.14) !important; color: #F7F5F0 !important;
+  width: 30px !important; height: 30px !important; border-radius: 50% !important;
+  background: #16181C !important; color: #fff !important;
   display: flex !important; align-items: center !important; justify-content: center !important;
-  font-weight: 700 !important; font-size: 13px !important; cursor: pointer !important;
-  border: 1.5px solid rgba(247,245,240,.18) !important;
+  font-weight: 500 !important; font-size: 12px !important; cursor: pointer !important;
+  border: none !important;
   transition: background .15s !important; overflow: hidden !important;
   flex-shrink: 0 !important;
+  font-family: 'Archivo Narrow', system-ui, sans-serif !important;
 }
-.nav-av:hover { background: rgba(247,245,240,.24) !important; }
+.nav-av:hover { background: #1160D8 !important; }
 
 /* ── PROFILE DROPDOWN ───────────────────────────────────────────── */
 .profile-dropdown {
@@ -6871,12 +6880,14 @@ body, #page-dashboard, #page-practice, #page-feedback, #page-history, #page-pers
 }
 
 /* ── 3. Navigation ────────────────────────────────────────────────────────── */
-.nav {
+nav.nav, #nav, .nav {
   background: var(--paper) !important;
   border-bottom: 1px solid var(--rule) !important;
   height: 56px !important;
   padding: 0 clamp(16px, 4vw, 40px) !important;
+  box-shadow: none !important;
 }
+#nav-guest, #nav-user { background: transparent !important; }
 .nav-logo { gap: 9px !important; }
 .logo-mark {
   width: 11px !important; height: 11px !important;
@@ -7123,6 +7134,42 @@ body, #page-dashboard, #page-practice, #page-feedback, #page-history, #page-pers
 }
 .dash-week-card .dash-wdays { padding: 22px clamp(20px, 3vw, 30px) !important; gap: 8px !important; }
 .dash-week-title, .dash-sess-title { font-size: 12px !important; }
+.wday { gap: 8px !important; }
+.wday-c {
+  width: 28px !important; height: 28px !important;
+  border-radius: 0 !important;
+  font-family: var(--nar) !important; font-size: 12px !important; font-weight: 500 !important;
+  letter-spacing: .08em !important;
+  background: none !important; border: 1px solid var(--rule) !important; color: var(--ink-3) !important;
+}
+.wd-done .wday-c { background: var(--ink) !important; border-color: var(--ink) !important; color: #fff !important; }
+.wd-today .wday-c { background: none !important; border-color: var(--blue) !important; color: var(--blue) !important; }
+.wd-fut .wday-c { background: none !important; color: var(--ink-3) !important; }
+.wday-l {
+  font-family: var(--nar) !important; font-size: 11px !important; font-weight: 500 !important;
+  letter-spacing: .12em !important; text-transform: uppercase !important; color: var(--ink-3) !important;
+}
+.srow {
+  display: grid !important; grid-template-columns: 1fr auto auto !important;
+  gap: 16px !important; align-items: center !important;
+  padding: 16px clamp(20px, 3vw, 30px) !important;
+  border-bottom: 1px solid var(--rule) !important;
+}
+.srow:last-child { border-bottom: none !important; }
+.srow:hover { background: var(--paper2) !important; }
+.srow-q { font-size: 15px !important; color: var(--ink) !important; line-height: 1.5 !important; }
+.srow-sc {
+  font-family: var(--nar) !important; font-size: 12px !important; font-weight: 500 !important;
+  letter-spacing: .08em !important; background: none !important;
+  border: 1px solid var(--rule) !important; padding: 4px 8px !important; color: var(--ink) !important;
+}
+.sc-hi { color: var(--blue) !important; border-color: var(--blue) !important; }
+.sc-md { color: var(--ink) !important; }
+.sc-lo { color: var(--ink-3) !important; }
+.srow-d {
+  font-family: var(--nar) !important; font-size: 11.5px !important;
+  letter-spacing: .11em !important; text-transform: uppercase !important; color: var(--ink-3) !important;
+}
 .dash-week-sub {
   font-family: var(--nar) !important; font-size: 12px !important;
   letter-spacing: .13em !important; text-transform: uppercase !important;
@@ -8998,9 +9045,12 @@ async function _sbInsertSession(row) {
 
 async function _sbSelectSessions(userId) {
   try {
+    var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function(){ try { ctrl.abort(); } catch(e) {} }, 2500) : null;
     var url = _SB_URL + '/rest/v1/sessions?user_id=eq.' + encodeURIComponent(userId) +
               '&order=created_at.desc&limit=100';
-    var res = await fetch(url, { headers: _sbHeaders() });
+    var res = await fetch(url, { headers: _sbHeaders(), signal: ctrl ? ctrl.signal : undefined });
+    if (timer) clearTimeout(timer);
     if (!res.ok) return [];
     return await res.json();
   } catch(e) { return []; }
@@ -10534,7 +10584,7 @@ function renderDash() {
     var s = rows[i];
     var cls = s.score >= 8 ? 'sc-hi' : s.score >= 6 ? 'sc-md' : 'sc-lo';
     rHtml += '<div class="srow"><div class="srow-q">' + s.q + '</div>';
-    rHtml += '<div class="srow-sc ' + cls + '">' + s.score + '/10</div>';
+    rHtml += '<div class="srow-sc ' + cls + '">' + Number(s.score).toFixed(1) + '/10</div>';
     rHtml += '<div class="srow-d">' + s.date + '</div></div>';
   }
   sd.innerHTML = rHtml;
@@ -11788,7 +11838,7 @@ function renderHist() {
     var cls = s.score >= 8 ? 'sc-hi' : s.score >= 6 ? 'sc-md' : 'sc-lo';
     rHtml += '<div class="ht-row">';
     rHtml += '<div class="ht-q">' + s.q + '</div>';
-    rHtml += '<div class="ht-sc ' + cls + '">' + s.score + '/10</div>';
+    rHtml += '<div class="ht-sc ' + cls + '">' + Number(s.score).toFixed(1) + '/10</div>';
     rHtml += '<div class="ht-cat">' + s.cat + '</div>';
     rHtml += '<div class="ht-date">' + s.date + '</div>';
     rHtml += '</div>';

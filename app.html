@@ -7707,6 +7707,26 @@ nav.nav, #nav, .nav {
   .dash-path-card::after, .dash-today-card::after, .fb-panel::after,
   .pro-upgrade-card::after { width: 30px !important; height: 30px !important; }
 }
+
+/* Listen — speak the practice question. */
+.app-coach-row {
+  display: flex !important; align-items: center !important; flex-wrap: wrap !important;
+  gap: 8px 12px !important; margin-bottom: 10px !important;
+}
+.app-coach-row .app-coach-label { margin-bottom: 0 !important; }
+.q-listen {
+  margin-left: auto !important;
+  display: inline-flex !important; align-items: center !important; gap: 7px !important;
+  background: none !important; border: 1px solid var(--rule) !important;
+  color: var(--blue) !important; cursor: pointer !important;
+  font-family: var(--nar) !important; font-size: 11.5px !important; font-weight: 500 !important;
+  letter-spacing: .13em !important; text-transform: uppercase !important;
+  padding: 5px 10px !important;
+}
+.q-listen:hover { border-color: var(--ink) !important; color: var(--ink) !important; }
+.q-listen.on { border-color: var(--ink) !important; color: var(--ink) !important; }
+.q-listen svg { width: 11px !important; height: 11px !important; flex: none !important; }
+.q-listen[hidden] { display: none !important; }
 </style>
 </head>
 <body>
@@ -8238,7 +8258,13 @@ nav.nav, #nav, .nav {
 
         <!-- Mocha Coach question bubble -->
         <div class="app-msg app-msg-coach">
-          <div class="app-coach-label">MOCHA COACH <span class="q-pill qp-beh" id="prac-pill" style="margin-left:6px;vertical-align:middle;"></span></div>
+          <div class="app-coach-row">
+            <div class="app-coach-label">MOCHA COACH <span class="q-pill qp-beh" id="prac-pill" style="margin-left:6px;vertical-align:middle;"></span></div>
+            <button type="button" class="q-listen" id="q-listen" onclick="toggleQuestionSpeech()" aria-pressed="false" aria-label="Listen to question">
+              <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 5.5v3h2.2L7 11V3L4.2 5.5H2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M9.2 5.2a2.4 2.4 0 010 3.6M10.8 3.8a4.4 4.4 0 010 6.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              <span class="q-listen-lbl">Listen</span>
+            </button>
+          </div>
           <div class="app-msg-bubble app-bubble-coach" id="prac-q">Loading question…</div>
         </div>
 
@@ -10641,6 +10667,7 @@ function renderDash() {
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function initPractice() {
   clearInterval(timerInt);
+  stopQuestionSpeech();
   var p = appPersona || PERSONAS[0];
   var qs = QUESTIONS[p.id] || QUESTIONS.consulting;
   // If currentQ already set (e.g. after a submission), use it; otherwise pick random
@@ -10649,6 +10676,11 @@ function initPractice() {
   }
 
   document.getElementById('prac-q').textContent = currentQ.text;
+  var listenBtn = document.getElementById('q-listen');
+  if (listenBtn) {
+    if (window.speechSynthesis) listenBtn.removeAttribute('hidden');
+    else listenBtn.setAttribute('hidden', '');
+  }
   var pill = document.getElementById('prac-pill');
   pill.textContent = currentQ.cat;
   pill.className = 'q-pill ' + (currentQ.cat === 'Situational' ? 'qp-sit' : currentQ.cat === 'Networking' ? 'qp-net' : 'qp-beh');
@@ -10939,8 +10971,79 @@ function updateMicUI() {
   }
 }
 
+function stopQuestionSpeech() {
+  try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {}
+  var btn = document.getElementById('q-listen');
+  if (btn) {
+    btn.classList.remove('on');
+    btn.setAttribute('aria-pressed', 'false');
+    var lbl = btn.querySelector('.q-listen-lbl');
+    if (lbl) lbl.textContent = 'Listen';
+  }
+}
+
+function _pickQuestionVoice() {
+  if (!window.speechSynthesis) return null;
+  var voices = speechSynthesis.getVoices() || [];
+  var rank = function(v) {
+    var n = (v.name || '') + ' ' + (v.lang || '');
+    if (/en-GB|en_GB|Daniel|Google UK/i.test(n)) return 3;
+    if (/en-US|en_US|Samantha|Google US/i.test(n)) return 2;
+    if (/^en/i.test(v.lang || '')) return 1;
+    return 0;
+  };
+  var best = null, bestR = 0;
+  for (var i = 0; i < voices.length; i++) {
+    var r = rank(voices[i]);
+    if (r > bestR) { best = voices[i]; bestR = r; }
+  }
+  return best;
+}
+
+function toggleQuestionSpeech() {
+  if (!window.speechSynthesis) return;
+  if (speechSynthesis.speaking || speechSynthesis.pending) {
+    stopQuestionSpeech();
+    return;
+  }
+  var text = (currentQ && currentQ.text) || '';
+  if (!text) {
+    var el = document.getElementById('prac-q');
+    text = el ? (el.textContent || '') : '';
+  }
+  text = String(text).replace(/\s+/g, ' ').trim();
+  if (!text || text === 'Loading question…') return;
+
+  var u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.94;
+  u.pitch = 1;
+  u.lang = 'en-GB';
+  var voice = _pickQuestionVoice();
+  if (voice) { u.voice = voice; u.lang = voice.lang || u.lang; }
+  u.onend = function() { stopQuestionSpeech(); };
+  u.onerror = function() { stopQuestionSpeech(); };
+
+  var btn = document.getElementById('q-listen');
+  if (btn) {
+    btn.classList.add('on');
+    btn.setAttribute('aria-pressed', 'true');
+    var lbl = btn.querySelector('.q-listen-lbl');
+    if (lbl) lbl.textContent = 'Stop';
+  }
+  try { speechSynthesis.cancel(); } catch (e) {}
+  setTimeout(function() { speechSynthesis.speak(u); }, 40);
+}
+
+if (window.speechSynthesis) {
+  speechSynthesis.getVoices();
+  if (typeof speechSynthesis.onvoiceschanged !== 'undefined') {
+    speechSynthesis.onvoiceschanged = function() { speechSynthesis.getVoices(); };
+  }
+}
+
 function toggleMic() {
   if (isRec) { stopMic(); return; }
+  stopQuestionSpeech();
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) {
     var bar = document.getElementById('perm-bar');

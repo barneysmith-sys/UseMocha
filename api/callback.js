@@ -20,7 +20,7 @@ export default async function handler(req, res) {
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Content-Security-Policy', "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'");
   res.status(200).send(`<!DOCTYPE html><html><head>
-<style>html,body{margin:0;background:#fef7f0}</style>
+<style>html,body{margin:0;background:#FDFDFC}</style>
 <script>
 var h=location.hash.slice(1),p={};
 h.split('&').forEach(function(s){var i=s.indexOf('=');if(i>0)p[s.slice(0,i)]=decodeURIComponent(s.slice(i+1));});

@@ -25,12 +25,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://cdn.jsdelivr.net; img-src 'self' data: https:; worker-src blob:;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://cdn.jsdelivr.net; img-src 'self' data: https:; media-src 'self' blob: data:; worker-src blob:;">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline' https://www.googletagmanager.com https://cdn.jsdelivr.net; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://formspree.io https://www.google-analytics.com https://analytics.google.com https://*.supabase.co https://generativelanguage.googleapis.com https://cdn.jsdelivr.net; img-src 'self' data: https:; worker-src blob:;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline' https://www.googletagmanager.com https://cdn.jsdelivr.net; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://formspree.io https://www.google-analytics.com https://analytics.google.com https://*.supabase.co https://generativelanguage.googleapis.com https://cdn.jsdelivr.net; img-src 'self' data: https:; media-src 'self' blob: data:; worker-src blob:;">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-SPLL85SBFX"></script>
@@ -7727,6 +7727,7 @@ nav.nav, #nav, .nav {
 .q-listen.on { border-color: var(--ink) !important; color: var(--ink) !important; }
 .q-listen svg { width: 11px !important; height: 11px !important; flex: none !important; }
 .q-listen[hidden] { display: none !important; }
+.q-listen.loading { opacity: .55 !important; }
 </style>
 </head>
 <body>
@@ -9734,6 +9735,7 @@ function goFromPersona() {
   if (!appPersona) return;
   _savePersona(appPersona);
   currentQ = null;
+  _unlockInterviewAudio();
   initPractice();
   showPage('page-practice');
   setTab('prac');
@@ -9782,6 +9784,7 @@ function goNextQuestion() {
   if (!appUser && freeTries <= 0) { _showLimitReached(); return; }
   if (!appPersona) appPersona = PERSONAS[0];
   // currentQ is already set to next question by doSubmit; initPractice will use it
+  _unlockInterviewAudio();
   initPractice();
   showPage('page-practice');
   setTab('prac');
@@ -9795,6 +9798,7 @@ function goToPractice() {
     showView('personas');
     return;
   }
+  _unlockInterviewAudio();
   initPractice();
   showPage('page-practice');
   setTab('prac');
@@ -10678,10 +10682,7 @@ function initPractice() {
 
   document.getElementById('prac-q').textContent = currentQ.text;
   var listenBtn = document.getElementById('q-listen');
-  if (listenBtn) {
-    if (window.speechSynthesis) listenBtn.removeAttribute('hidden');
-    else listenBtn.setAttribute('hidden', '');
-  }
+  if (listenBtn) listenBtn.removeAttribute('hidden');
   var pill = document.getElementById('prac-pill');
   pill.textContent = currentQ.cat;
   pill.className = 'q-pill ' + (currentQ.cat === 'Situational' ? 'qp-sit' : currentQ.cat === 'Networking' ? 'qp-net' : 'qp-beh');
@@ -10713,6 +10714,8 @@ function initPractice() {
   if (userMsgEl) userMsgEl.style.display = 'none';
   var userBubble = document.getElementById('app-user-bubble');
   if (userBubble) userBubble.textContent = '';
+
+  speakCurrentQuestion();
 }
 
 // ── Render sidebar tracks ────────────────────────────────────────
@@ -10772,6 +10775,7 @@ function switchTrack(trackId) {
   if (newPersona) {
     _savePersona(newPersona);
     currentQ = null;
+    _unlockInterviewAudio();
     initPractice();
     renderAppSidebar();
     resetFeedbackPanel();
@@ -10972,75 +10976,129 @@ function updateMicUI() {
   }
 }
 
-function stopQuestionSpeech() {
-  try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {}
+var _qAudioEl = null;
+var _qUnlockEl = null;
+var _qSpeakSeq = 0;
+var _qSpeakCache = {};
+var _qSpeaking = false;
+var _qLoading = false;
+var _qNeedsPlay = false;
+var _qUnlocked = false;
+var SILENT_WAV = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+
+function _setListenUI(state) {
   var btn = document.getElementById('q-listen');
-  if (btn) {
-    btn.classList.remove('on');
-    btn.setAttribute('aria-pressed', 'false');
-    var lbl = btn.querySelector('.q-listen-lbl');
-    if (lbl) lbl.textContent = 'Listen';
+  if (!btn) return;
+  btn.removeAttribute('hidden');
+  btn.classList.toggle('on', state === 'playing' || state === 'loading');
+  btn.classList.toggle('loading', state === 'loading');
+  btn.setAttribute('aria-pressed', state === 'playing' ? 'true' : 'false');
+  var lbl = btn.querySelector('.q-listen-lbl');
+  if (lbl) lbl.textContent = state === 'playing' ? 'Stop' : state === 'loading' ? '…' : 'Listen';
+}
+
+function _unlockInterviewAudio() {
+  if (!_qUnlocked) {
+    try {
+      if (!_qUnlockEl) _qUnlockEl = new Audio(SILENT_WAV);
+      var p = _qUnlockEl.play();
+      if (p && p.then) {
+        p.then(function() {
+          _qUnlocked = true;
+          _qUnlockEl.pause();
+        }).catch(function() {});
+      } else {
+        _qUnlocked = true;
+      }
+    } catch (e) {}
+  }
+  if (_qNeedsPlay && _qAudioEl && _qAudioEl._objUrl) {
+    _qNeedsPlay = false;
+    var replay = _qAudioEl.play();
+    if (replay && replay.then) {
+      replay.then(function() { _qSpeaking = true; _setListenUI('playing'); }).catch(function() {});
+    }
   }
 }
 
-function _pickQuestionVoice() {
-  if (!window.speechSynthesis) return null;
-  var voices = speechSynthesis.getVoices() || [];
-  var rank = function(v) {
-    var n = (v.name || '') + ' ' + (v.lang || '');
-    if (/en-GB|en_GB|Daniel|Google UK/i.test(n)) return 3;
-    if (/en-US|en_US|Samantha|Google US/i.test(n)) return 2;
-    if (/^en/i.test(v.lang || '')) return 1;
-    return 0;
-  };
-  var best = null, bestR = 0;
-  for (var i = 0; i < voices.length; i++) {
-    var r = rank(voices[i]);
-    if (r > bestR) { best = voices[i]; bestR = r; }
+function stopQuestionSpeech() {
+  _qSpeakSeq++;
+  _qSpeaking = false;
+  _qLoading = false;
+  _qNeedsPlay = false;
+  if (_qAudioEl) {
+    try { _qAudioEl.pause(); } catch (e) {}
   }
-  return best;
+  _setListenUI('idle');
+}
+
+function _playQuestionBlob(blob) {
+  if (!_qAudioEl) _qAudioEl = new Audio();
+  if (_qAudioEl._objUrl) {
+    try { URL.revokeObjectURL(_qAudioEl._objUrl); } catch (e) {}
+  }
+  var url = URL.createObjectURL(blob);
+  _qAudioEl._objUrl = url;
+  _qAudioEl.src = url;
+  _qAudioEl.onended = function() { _qSpeaking = false; _qNeedsPlay = false; _setListenUI('idle'); };
+  _qAudioEl.onerror = function() { _qSpeaking = false; _setListenUI('idle'); };
+  _qSpeaking = true;
+  _qLoading = false;
+  _setListenUI('playing');
+  var p = _qAudioEl.play();
+  if (p && p.catch) {
+    p.catch(function() {
+      _qSpeaking = false;
+      _qNeedsPlay = true;
+      _setListenUI('idle');
+    });
+  }
+}
+
+function speakCurrentQuestion() {
+  var text = (currentQ && currentQ.text) ? String(currentQ.text).replace(/\s+/g, ' ').trim() : '';
+  if (!text || text === 'Loading question…') return;
+  var seq = ++_qSpeakSeq;
+  if (_qSpeakCache[text]) {
+    _playQuestionBlob(_qSpeakCache[text]);
+    return;
+  }
+  _qLoading = true;
+  _setListenUI('loading');
+  fetch('/api/speak', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      question: text,
+      industry: (appPersona && appPersona.id) || 'consulting'
+    })
+  }).then(function(r) {
+    if (!r.ok) throw new Error('speak ' + r.status);
+    return r.blob();
+  }).then(function(blob) {
+    if (seq !== _qSpeakSeq) return;
+    _qSpeakCache[text] = blob;
+    _playQuestionBlob(blob);
+  }).catch(function() {
+    if (seq !== _qSpeakSeq) return;
+    _qLoading = false;
+    _qSpeaking = false;
+    _setListenUI('idle');
+  });
 }
 
 function toggleQuestionSpeech() {
-  if (!window.speechSynthesis) return;
-  if (speechSynthesis.speaking || speechSynthesis.pending) {
+  _unlockInterviewAudio();
+  if (_qSpeaking || _qLoading) {
     stopQuestionSpeech();
     return;
   }
-  var text = (currentQ && currentQ.text) || '';
-  if (!text) {
-    var el = document.getElementById('prac-q');
-    text = el ? (el.textContent || '') : '';
-  }
-  text = String(text).replace(/\s+/g, ' ').trim();
-  if (!text || text === 'Loading question…') return;
-
-  var u = new SpeechSynthesisUtterance(text);
-  u.rate = 0.94;
-  u.pitch = 1;
-  u.lang = 'en-GB';
-  var voice = _pickQuestionVoice();
-  if (voice) { u.voice = voice; u.lang = voice.lang || u.lang; }
-  u.onend = function() { stopQuestionSpeech(); };
-  u.onerror = function() { stopQuestionSpeech(); };
-
-  var btn = document.getElementById('q-listen');
-  if (btn) {
-    btn.classList.add('on');
-    btn.setAttribute('aria-pressed', 'true');
-    var lbl = btn.querySelector('.q-listen-lbl');
-    if (lbl) lbl.textContent = 'Stop';
-  }
-  try { speechSynthesis.cancel(); } catch (e) {}
-  setTimeout(function() { speechSynthesis.speak(u); }, 40);
+  speakCurrentQuestion();
 }
 
-if (window.speechSynthesis) {
-  speechSynthesis.getVoices();
-  if (typeof speechSynthesis.onvoiceschanged !== 'undefined') {
-    speechSynthesis.onvoiceschanged = function() { speechSynthesis.getVoices(); };
-  }
-}
+document.addEventListener('click', function() {
+  _unlockInterviewAudio();
+}, true);
 
 function toggleMic() {
   if (isRec) { stopMic(); return; }
@@ -11567,6 +11625,7 @@ function practiceAdaptiveFollowUp() {
   if (!q) { goNextQuestion(); return; }
   if (!appUser && freeTries <= 0) { openModal('signup'); return; }
   currentQ = { text: q, cat: 'Behavioral' };
+  _unlockInterviewAudio();
   initPractice();
   showPage('page-practice');
   setTab('prac');

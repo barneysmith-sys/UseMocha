@@ -3,6 +3,9 @@
     "api/interview.js": {
       "maxDuration": 60
     },
+    "api/speak.js": {
+      "maxDuration": 30
+    },
     "api/callback.js": {
       "maxDuration": 10
     }

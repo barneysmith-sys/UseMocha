@@ -50,44 +50,58 @@ async function synthesize(apiKey, question, model) {
     question,
   ].join('\n');
 
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+  const contents = [{ parts: [{ text: prompt }] }];
+  const speechConfig = {
+    voiceConfig: {
+      prebuiltVoiceConfig: { voiceName: VOICE },
+    },
+  };
+  const bodies = [
     {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          responseModalities: ['AUDIO'],
-          speechConfig: {
-            voiceConfig: {
-              prebuiltVoiceConfig: { voiceName: VOICE },
-            },
-          },
-        },
-      }),
+      contents,
+      generationConfig: {
+        responseModalities: ['AUDIO'],
+        speechConfig,
+      },
+    },
+    {
+      contents,
+      generationConfig: { responseModalities: ['AUDIO'] },
+      speechConfig,
+    },
+  ];
+
+  let lastErr = null;
+  for (const body of bodies) {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      }
+    );
+    const raw = await res.text();
+    let data;
+    try { data = JSON.parse(raw); } catch { data = null; }
+    if (!res.ok) {
+      lastErr = new Error(data?.error?.message || raw.slice(0, 240));
+      lastErr.status = res.status;
+      continue;
     }
-  );
-
-  const raw = await res.text();
-  let data;
-  try { data = JSON.parse(raw); } catch { data = null; }
-  if (!res.ok) {
-    const msg = data?.error?.message || raw.slice(0, 240);
-    const err = new Error(msg);
-    err.status = res.status;
-    throw err;
+    const parts = data?.candidates?.[0]?.content?.parts || [];
+    const audioPart = parts.find((p) => p.inlineData && p.inlineData.data);
+    if (!audioPart) {
+      lastErr = new Error('No audio in TTS response');
+      continue;
+    }
+    const mime = audioPart.inlineData.mimeType || '';
+    const bytes = Buffer.from(audioPart.inlineData.data, 'base64');
+    if (/wav|wave/i.test(mime)) return { buf: bytes, type: 'audio/wav' };
+    if (/mpeg|mp3/i.test(mime)) return { buf: bytes, type: 'audio/mpeg' };
+    return { buf: pcmToWav(bytes, sampleRateFromMime(mime)), type: 'audio/wav' };
   }
-
-  const parts = data?.candidates?.[0]?.content?.parts || [];
-  const audioPart = parts.find((p) => p.inlineData && p.inlineData.data);
-  if (!audioPart) throw new Error('No audio in TTS response');
-
-  const mime = audioPart.inlineData.mimeType || '';
-  const bytes = Buffer.from(audioPart.inlineData.data, 'base64');
-  if (/wav|wave/i.test(mime)) return { buf: bytes, type: 'audio/wav' };
-  if (/mpeg|mp3/i.test(mime)) return { buf: bytes, type: 'audio/mpeg' };
-  return { buf: pcmToWav(bytes, sampleRateFromMime(mime)), type: 'audio/wav' };
+  throw lastErr || new Error('TTS failed');
 }
 
 export default async function handler(req, res) {

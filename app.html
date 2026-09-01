@@ -9397,7 +9397,7 @@ function _showLimitReached() {
   var box = document.createElement('div');
   box.style.cssText = 'background:#FDFDFC;border-radius:22px;width:100%;max-width:380px;padding:2.5rem 2rem 2rem;text-align:center;box-shadow:0 40px 100px rgba(0,0,0,0.22);border:1px solid rgba(22,24,28,0.06);';
   var heading = document.createElement('div');
-  heading.style.cssText = 'font-family:'Archivo', system-ui, sans-serif;font-size:1.6rem;color:#16181C;margin-bottom:10px;letter-spacing:-0.03em;font-weight:400;line-height:1.2;';
+  heading.style.cssText = 'font-family:\'Archivo\',system-ui,sans-serif;font-size:1.6rem;color:#16181C;margin-bottom:10px;letter-spacing:-0.03em;font-weight:400;line-height:1.2;';
   heading.innerHTML = 'Come back tomorrow \u2615';
   var body = document.createElement('div');
   body.style.cssText = 'font-size:14px;color:rgba(22,24,28,0.60);line-height:1.7;margin-bottom:1.5rem;';
@@ -9410,7 +9410,7 @@ function _showLimitReached() {
   note.style.cssText = 'font-size:11px;color:rgba(22,24,28,0.35);margin-bottom:1.5rem;letter-spacing:0.01em;';
   note.textContent = 'Students who practice daily get offers. See you tomorrow.';
   var btn = document.createElement('button');
-  btn.style.cssText = 'padding:11px 28px;background:#16181C;color:#F7F5F0;border:none;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:-0.01em;font-family:'Archivo', system-ui, sans-serif;';
+  btn.style.cssText = 'padding:11px 28px;background:#16181C;color:#F7F5F0;border:none;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:-0.01em;font-family:\'Archivo\',system-ui,sans-serif;';
   btn.textContent = 'Got it';
   btn.onclick = function() { overlay.style.display = 'none'; };
   var icon = document.createElement('div');
@@ -10525,7 +10525,7 @@ function renderDash() {
 
   var sd = document.getElementById('dash-sess');
   if (!appHistory.length) {
-    sd.innerHTML = '<div style="padding:2rem;text-align:center;"><div style="font-size:1.4rem;font-weight:600;color:#16181C;letter-spacing:-0.03em;font-family:'Archivo', system-ui, sans-serif;margin-bottom:6px;">Day 1.</div><div style="font-size:13px;color:#61656C;margin-bottom:1.25rem;line-height:1.6;">The students who get offers practice every day. Start your first session now.</div><button class=\"btn-cta\" onclick=\"goToPractice()\" style=\"font-size:13px;padding:10px 22px;\">Answer today&rsquo;s question &rarr;</button></div>';
+    sd.innerHTML = '<div style="padding:2rem;text-align:center;"><div style="font-size:1.4rem;font-weight:600;color:#16181C;letter-spacing:-0.03em;font-family:\'Archivo\',system-ui,sans-serif;margin-bottom:6px;">Day 1.</div><div style="font-size:13px;color:#61656C;margin-bottom:1.25rem;line-height:1.6;">The students who get offers practice every day. Start your first session now.</div><button class=\"btn-cta\" onclick=\"goToPractice()\" style=\"font-size:13px;padding:10px 22px;\">Answer today&rsquo;s question &rarr;</button></div>';
     return;
   }
   var rows = appHistory.slice(0, 5);
@@ -11890,41 +11890,41 @@ function _generateShareImage(callback) {
   ctx.fillStyle = '#16181C';
   _roundRect(ctx, logoX, logoY, logoS, logoS, 18);
   ctx.fill();
-  ctx.font = 'italic 46px Georgia, 'Archivo', system-ui, sans-serif';
+  ctx.font = 'italic 46px Georgia, \'Archivo\',system-ui,sans-serif';
   ctx.fillStyle = '#F7F5F0';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText('m', logoX + logoS / 2, logoY + logoS / 2 + 2);
 
   // Logo text
-  ctx.font = '400 38px Georgia, 'Archivo', system-ui, sans-serif';
+  ctx.font = '400 38px Georgia, \'Archivo\',system-ui,sans-serif';
   ctx.fillStyle = '#16181C';
   ctx.textAlign = 'left';
   ctx.textBaseline = 'middle';
   ctx.fillText('mocha', logoX + logoS + 18, logoY + logoS / 2);
 
   // Track badge
-  ctx.font = '700 22px 'Archivo', system-ui, sans-serif';
+  ctx.font = '700 22px \'Archivo\',system-ui,sans-serif';
   ctx.fillStyle = '#9DA1A8';
   ctx.textAlign = 'left';
   ctx.fillText(trackName.toUpperCase(), 82, 200);
 
   // Score — big hero number
-  ctx.font = '400 260px Georgia, 'Archivo', system-ui, sans-serif';
+  ctx.font = '400 260px Georgia, \'Archivo\',system-ui,sans-serif';
   ctx.fillStyle = '#16181C';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText(score, W / 2, 440);
 
   // /10
-  ctx.font = '500 48px 'Archivo', system-ui, sans-serif';
+  ctx.font = '500 48px \'Archivo\',system-ui,sans-serif';
   ctx.fillStyle = '#9DA1A8';
   ctx.textAlign = 'center';
   ctx.fillText('/10', W / 2 + 160, 440);
 
   // Verdict — color-coded
   var verdColor = scoreNum >= 8 ? '#1160D8' : scoreNum >= 6.5 ? '#9DA1A8' : '#F04E23';
-  ctx.font = '800 28px 'Archivo', system-ui, sans-serif';
+  ctx.font = '800 28px \'Archivo\',system-ui,sans-serif';
   ctx.fillStyle = verdColor;
   ctx.textAlign = 'center';
   ctx.letterSpacing = '3px';
@@ -11950,7 +11950,7 @@ function _generateShareImage(callback) {
   for (var i = 0; i < dims.length; i++) {
     var y = barY + i * barGap;
     // Label
-    ctx.font = '700 20px 'Archivo', system-ui, sans-serif';
+    ctx.font = '700 20px \'Archivo\',system-ui,sans-serif';
     ctx.fillStyle = 'rgba(22,24,28,0.35)';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
@@ -11972,20 +11972,20 @@ function _generateShareImage(callback) {
       ctx.fill();
     }
     // Value
-    ctx.font = '700 22px 'Archivo', system-ui, sans-serif';
+    ctx.font = '700 22px \'Archivo\',system-ui,sans-serif';
     ctx.fillStyle = '#16181C';
     ctx.textAlign = 'right';
     ctx.fillText(dims[i].val.toFixed(1), barRight, y + barH / 2);
   }
 
   // Bottom URL
-  ctx.font = '600 24px 'Archivo', system-ui, sans-serif';
+  ctx.font = '600 24px \'Archivo\',system-ui,sans-serif';
   ctx.fillStyle = '#9DA1A8';
   ctx.textAlign = 'center';
   ctx.fillText('usemocha.app', W / 2, H - 70);
 
   // Watermark m
-  ctx.font = 'italic 180px Georgia, 'Archivo', system-ui, sans-serif';
+  ctx.font = 'italic 180px Georgia, \'Archivo\',system-ui,sans-serif';
   ctx.fillStyle = 'rgba(22,24,28,0.025)';
   ctx.textAlign = 'right';
   ctx.fillText('m', W - 60, H - 30);

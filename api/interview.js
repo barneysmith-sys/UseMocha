@@ -464,8 +464,8 @@ export default async function handler(req, res) {
 
   log('info', rid, { event: 'request', industry: cleanIndustry, mode: cleanMode || 'grade', words: wordCount, kv: USE_KV });
 
-  // Lite mode — under 50 words
-  if (wordCount < 50 && cleanMode !== 'followup') {
+  // Lite mode — only skip Gemini for tiny fragments. 20+ words still get a real mark.
+  if (wordCount < 20 && cleanMode !== 'followup') {
     log('info', rid, { event: 'lite_mode', words: wordCount });
     return res.status(200).json(buildLite(cleanQuestion, cleanAnswer, cleanIndustry, rid));
   }

@@ -7720,6 +7720,7 @@ a.share-card,
   border: 1px solid var(--ink) !important;
   padding: clamp(22px, 2.6vw, 34px) !important;
   padding-right: 58px !important;
+  margin: 1.5rem 0 0 !important;
   position: relative !important;
   overflow: hidden !important;
   box-shadow: none !important;
@@ -7810,7 +7811,7 @@ a.share-card,
   letter-spacing: .13em !important; text-transform: uppercase !important;
   color: var(--blue) !important;
 }
-.share-card-wrap > .share-btn {
+#share-card-btn {
   margin-top: 12px !important;
   background: none !important;
   border: 1px solid var(--ink) !important;
@@ -7824,11 +7825,11 @@ a.share-card,
   letter-spacing: .13em !important;
   text-transform: uppercase !important;
 }
-.share-card-wrap > .share-btn:hover {
+#share-card-btn:hover {
   background: var(--ink) !important; color: var(--paper) !important;
   opacity: 1 !important; transform: none !important;
 }
-.share-card-wrap > .share-btn svg { stroke: currentColor !important; }
+#share-card-btn svg { stroke: currentColor !important; }
 </style>
 </head>
 <body>
@@ -8635,32 +8636,32 @@ a.share-card,
       </div>
 
       <!-- ── SHARE CARD — editorial poster, opens the site ──────────────── -->
-      <div class="share-card-wrap" id="share-card-wrap" style="display:none;">
+      <a class="share-card" id="share-card" href="https://usemocha.app/" target="_blank" rel="noopener noreferrer" style="display:none;">
+        <div class="sc-top-row">
+          <div class="sc-logo">
+            <div class="sc-logo-mark" aria-hidden="true"></div>
+            <span class="sc-logo-name">Mocha</span>
+          </div>
+          <div class="sc-track-badge" id="sc-track">McKinsey · MBB PEI</div>
+        </div>
+        <div class="sc-score-row">
+          <div class="share-card-score" id="sc-score">8.5</div>
+          <div class="sc-denom">/10</div>
+        </div>
+        <div class="share-card-verdict" id="sc-verdict">Strong answer</div>
+        <div class="sc-divider"></div>
+        <div class="share-card-bars" id="sc-bars"></div>
+        <div class="sc-bottom-row">
+          <span class="sc-url">usemocha.app</span>
+          <span class="sc-go">Open site →</span>
+        </div>
+      </a>
+      <button class="share-btn" id="share-card-btn" type="button" style="display:none;" onclick="openShareModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+        Share
+      </button>
 
-        <a class="share-card" id="share-card" href="https://usemocha.app/" target="_blank" rel="noopener noreferrer">
-          <div class="sc-top-row">
-            <div class="sc-logo">
-              <div class="sc-logo-mark" aria-hidden="true"></div>
-              <span class="sc-logo-name">Mocha</span>
-            </div>
-            <div class="sc-track-badge" id="sc-track">McKinsey · MBB PEI</div>
-          </div>
-          <div class="sc-score-row">
-            <div class="share-card-score" id="sc-score">8.5</div>
-            <div class="sc-denom">/10</div>
-          </div>
-          <div class="share-card-verdict" id="sc-verdict">Strong answer</div>
-          <div class="sc-divider"></div>
-          <div class="share-card-bars" id="sc-bars"></div>
-          <div class="sc-bottom-row">
-            <span class="sc-url">usemocha.app</span>
-            <span class="sc-go">Open site →</span>
-          </div>
-        </a>
-        <button class="share-btn" type="button" onclick="openShareModal()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
-          Share
-        </button>
+      <div class="share-card-wrap" id="share-card-wrap" style="display:none;">
 
         <!-- University ranking section -->
         <div class="uni-rank-section" id="uni-rank-section" style="display:none;">
@@ -13115,9 +13116,12 @@ function updateShareCard(r) {
 
   document.getElementById('sc-score').textContent = score.toFixed(1);
   var shareCard = document.getElementById('share-card');
-  if (shareCard && shareCard.tagName === 'A') shareCard.href = _shareSiteUrl();
-  var wrap = document.getElementById('share-card-wrap');
-  if (wrap) wrap.style.display = 'block';
+  if (shareCard) {
+    if (shareCard.tagName === 'A') shareCard.href = _shareSiteUrl();
+    shareCard.style.display = 'block';
+  }
+  var shareBtn = document.getElementById('share-card-btn');
+  if (shareBtn) shareBtn.style.display = 'inline-flex';
   var verdictEl = document.getElementById('sc-verdict');
   if (verdictEl) {
     verdictEl.textContent = verdictText;

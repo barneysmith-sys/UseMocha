@@ -9780,12 +9780,10 @@ function goDash() {
 }
 
 function goNextQuestion() {
-  // currentQ was already advanced at end of doSubmit — go straight to practice
   if (!appUser && freeTries <= 0) { _showLimitReached(); return; }
   if (!appPersona) appPersona = PERSONAS[0];
-  // currentQ is already set to next question by doSubmit; initPractice will use it
   _unlockInterviewAudio();
-  initPractice();
+  initPractice({ freshQuestion: true });
   showPage('page-practice');
   setTab('prac');
 }
@@ -10670,13 +10668,25 @@ function renderDash() {
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // PRACTICE
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function initPractice() {
+function _pickDifferentQuestion(qs) {
+  if (!qs || !qs.length) return;
+  var pool = qs;
+  if (currentQ && currentQ.text && qs.length > 1) {
+    var others = qs.filter(function(q) { return q.text !== currentQ.text; });
+    if (others.length) pool = others;
+  }
+  currentQ = pool[Math.floor(Math.random() * pool.length)];
+}
+
+function initPractice(opts) {
+  opts = opts || {};
   clearInterval(timerInt);
   stopQuestionSpeech();
   var p = appPersona || PERSONAS[0];
   var qs = QUESTIONS[p.id] || QUESTIONS.consulting;
-  // If currentQ already set (e.g. after a submission), use it; otherwise pick random
-  if (!currentQ || !qs.some(function(q) { return q.text === currentQ.text; })) {
+  if (opts.freshQuestion) {
+    _pickDifferentQuestion(qs);
+  } else if (!currentQ || !currentQ.text) {
     currentQ = qs[Math.floor(Math.random() * qs.length)];
   }
 
@@ -10977,14 +10987,15 @@ function updateMicUI() {
 }
 
 var _qAudioEl = null;
-var _qUnlockEl = null;
+var _qAudioCtx = null;
+var _qBufferSrc = null;
 var _qSpeakSeq = 0;
 var _qSpeakCache = {};
 var _qSpeaking = false;
 var _qLoading = false;
 var _qNeedsPlay = false;
+var _qPendingBlob = null;
 var _qUnlocked = false;
-var _qBrowserUtt = null;
 var SILENT_WAV = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
 
 function _setListenUI(state) {
@@ -10998,71 +11009,60 @@ function _setListenUI(state) {
   if (lbl) lbl.textContent = state === 'playing' ? 'Stop' : state === 'loading' ? 'Speaking…' : 'Listen';
 }
 
-function _browserSpeaking() {
-  try { return !!(window.speechSynthesis && speechSynthesis.speaking); } catch (e) { return false; }
+function _ensureAudioEl() {
+  if (_qAudioEl) return _qAudioEl;
+  _qAudioEl = new Audio();
+  _qAudioEl.preload = 'auto';
+  try { _qAudioEl.setAttribute('playsinline', ''); } catch (e) {}
+  return _qAudioEl;
 }
 
-function _stopBrowserSpeech() {
-  _qBrowserUtt = null;
-  try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {}
+function _questionAudioPlaying() {
+  if (_qBufferSrc) return true;
+  return !!( _qAudioEl && !_qAudioEl.paused && _qAudioEl.currentTime > 0 );
 }
 
-function _speakBrowserNow(text) {
-  if (!window.speechSynthesis || !text) return false;
-  _stopBrowserSpeech();
-  var u = new SpeechSynthesisUtterance(text);
-  u.rate = 0.92;
-  u.pitch = 1;
-  u.lang = 'en-GB';
-  try {
-    var voices = speechSynthesis.getVoices() || [];
-    var pick = null;
-    for (var i = 0; i < voices.length; i++) {
-      var n = (voices[i].name || '') + ' ' + (voices[i].lang || '');
-      if (/en-GB|Daniel|Google UK/i.test(n)) { pick = voices[i]; break; }
-      if (!pick && /^en/i.test(voices[i].lang || '')) pick = voices[i];
-    }
-    if (pick) { u.voice = pick; u.lang = pick.lang || u.lang; }
-  } catch (e) {}
-  u.onend = function() {
-    if (_qBrowserUtt !== u) return;
-    _qBrowserUtt = null;
-    if (!_qLoading && !(_qAudioEl && !_qAudioEl.paused && _qAudioEl.currentTime > 0)) {
-      _qSpeaking = false;
-      _setListenUI('idle');
-    }
-  };
-  u.onerror = function() {
-    if (_qBrowserUtt === u) _qBrowserUtt = null;
-  };
-  _qBrowserUtt = u;
-  try { speechSynthesis.speak(u); } catch (e) { return false; }
-  _qSpeaking = true;
-  _setListenUI('playing');
-  return true;
+function _stopGeminiNodes() {
+  if (_qBufferSrc) {
+    try { _qBufferSrc.onended = null; } catch (e) {}
+    try { _qBufferSrc.stop(); } catch (e) {}
+    try { _qBufferSrc.disconnect(); } catch (e) {}
+    _qBufferSrc = null;
+  }
+  if (_qAudioEl) {
+    try { _qAudioEl.pause(); } catch (e) {}
+    try { _qAudioEl.currentTime = 0; } catch (e) {}
+  }
 }
 
 function _unlockInterviewAudio() {
-  if (!_qUnlocked) {
+  try {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (AC) {
+      if (!_qAudioCtx) _qAudioCtx = new AC();
+      if (_qAudioCtx.state === 'suspended') _qAudioCtx.resume();
+    }
+  } catch (e) {}
+  var el = _ensureAudioEl();
+  if (!_qUnlocked && !_questionAudioPlaying()) {
     try {
-      if (!_qUnlockEl) _qUnlockEl = new Audio(SILENT_WAV);
-      var p = _qUnlockEl.play();
+      el.src = SILENT_WAV;
+      var p = el.play();
       if (p && p.then) {
         p.then(function() {
           _qUnlocked = true;
-          _qUnlockEl.pause();
+          if ((el.src || '').indexOf('blob:') === 0) return;
+          el.pause();
+          try { el.currentTime = 0; } catch (e2) {}
         }).catch(function() {});
       } else {
         _qUnlocked = true;
       }
     } catch (e) {}
   }
-  if (_qNeedsPlay && _qAudioEl && _qAudioEl._objUrl) {
+  if (_qNeedsPlay && _qPendingBlob && !_questionAudioPlaying()) {
     _qNeedsPlay = false;
-    var replay = _qAudioEl.play();
-    if (replay && replay.then) {
-      replay.then(function() { _qSpeaking = true; _setListenUI('playing'); }).catch(function() {});
-    }
+    _playQuestionBlob(_qPendingBlob);
   }
 }
 
@@ -11071,33 +11071,94 @@ function stopQuestionSpeech() {
   _qSpeaking = false;
   _qLoading = false;
   _qNeedsPlay = false;
-  _stopBrowserSpeech();
-  if (_qAudioEl) {
-    try { _qAudioEl.pause(); } catch (e) {}
-  }
+  _stopGeminiNodes();
+  try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {}
   _setListenUI('idle');
 }
 
+function _playViaContext(blob) {
+  var seq = _qSpeakSeq;
+  if (!_qAudioCtx) {
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) _qAudioCtx = new AC();
+    } catch (e) {}
+  }
+  if (!_qAudioCtx) {
+    _qNeedsPlay = true;
+    _qSpeaking = false;
+    _setListenUI('idle');
+    return;
+  }
+  var startBuf = function(audioBuf) {
+    if (!audioBuf || seq !== _qSpeakSeq) return;
+    if (_qAudioCtx.state !== 'running') {
+      _qNeedsPlay = true;
+      _qSpeaking = false;
+      _setListenUI('idle');
+      return;
+    }
+    _stopGeminiNodes();
+    var src = _qAudioCtx.createBufferSource();
+    src.buffer = audioBuf;
+    src.connect(_qAudioCtx.destination);
+    src.onended = function() {
+      if (_qBufferSrc !== src) return;
+      _qBufferSrc = null;
+      _qSpeaking = false;
+      _qNeedsPlay = false;
+      _setListenUI('idle');
+    };
+    _qBufferSrc = src;
+    src.start(0);
+    _qSpeaking = true;
+    _qNeedsPlay = false;
+    _qLoading = false;
+    _setListenUI('playing');
+  };
+  blob.arrayBuffer().then(function(buf) {
+    if (seq !== _qSpeakSeq) return null;
+    return _qAudioCtx.decodeAudioData(buf.slice(0));
+  }).then(function(audioBuf) {
+    if (!audioBuf || seq !== _qSpeakSeq) return;
+    if (_qAudioCtx.state === 'suspended') {
+      return _qAudioCtx.resume().then(function() { startBuf(audioBuf); });
+    }
+    startBuf(audioBuf);
+  }).catch(function() {
+    if (seq !== _qSpeakSeq) return;
+    _qNeedsPlay = true;
+    _qSpeaking = false;
+    _setListenUI('idle');
+  });
+}
+
 function _playQuestionBlob(blob) {
-  if (!_qAudioEl) _qAudioEl = new Audio();
-  if (_qAudioEl._objUrl) {
-    try { URL.revokeObjectURL(_qAudioEl._objUrl); } catch (e) {}
+  if (!blob) return;
+  _qPendingBlob = blob;
+  var el = _ensureAudioEl();
+  if (el._objUrl) {
+    try { URL.revokeObjectURL(el._objUrl); } catch (e) {}
   }
   var url = URL.createObjectURL(blob);
-  _qAudioEl._objUrl = url;
-  _qAudioEl.src = url;
-  _qAudioEl.onended = function() { _qSpeaking = false; _qNeedsPlay = false; _setListenUI('idle'); };
-  _qAudioEl.onerror = function() { _qSpeaking = false; _setListenUI('idle'); };
-  _stopBrowserSpeech();
-  _qSpeaking = true;
+  el._objUrl = url;
+  el.src = url;
+  el.onended = function() { _qSpeaking = false; _qNeedsPlay = false; _setListenUI('idle'); };
+  el.onerror = function() { _qSpeaking = false; _setListenUI(_qLoading ? 'loading' : 'idle'); };
   _qLoading = false;
   _setListenUI('playing');
-  var p = _qAudioEl.play();
-  if (p && p.catch) {
-    p.catch(function() {
-      _qNeedsPlay = true;
-      _speakBrowserNow((currentQ && currentQ.text) || '');
+  var p = el.play();
+  if (p && p.then) {
+    p.then(function() {
+      _qSpeaking = true;
+      _qNeedsPlay = false;
+      _setListenUI('playing');
+    }).catch(function() {
+      _playViaContext(blob);
     });
+  } else {
+    _qSpeaking = true;
+    _qNeedsPlay = false;
   }
 }
 
@@ -11105,12 +11166,15 @@ function speakCurrentQuestion() {
   var text = (currentQ && currentQ.text) ? String(currentQ.text).replace(/\s+/g, ' ').trim() : '';
   if (!text || text === 'Loading question…') return;
   var seq = ++_qSpeakSeq;
-  _speakBrowserNow(text);
+  _stopGeminiNodes();
+  try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {}
+  _qLoading = true;
+  _qSpeaking = false;
+  _setListenUI('loading');
   if (_qSpeakCache[text]) {
     _playQuestionBlob(_qSpeakCache[text]);
     return;
   }
-  _qLoading = true;
   fetch('/api/speak', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -11129,25 +11193,21 @@ function speakCurrentQuestion() {
   }).catch(function() {
     if (seq !== _qSpeakSeq) return;
     _qLoading = false;
-    if (!_browserSpeaking()) _setListenUI(_qSpeaking ? 'playing' : 'idle');
+    _qSpeaking = false;
+    _setListenUI('idle');
   });
 }
 
 function toggleQuestionSpeech() {
   _unlockInterviewAudio();
-  var audioPlaying = !!( _qAudioEl && !_qAudioEl.paused && _qAudioEl.currentTime > 0 );
-  if (_browserSpeaking() || audioPlaying) {
+  if (_questionAudioPlaying() || _qLoading) {
     stopQuestionSpeech();
     return;
   }
   speakCurrentQuestion();
 }
 
-if (window.speechSynthesis && typeof speechSynthesis.onvoiceschanged !== 'undefined') {
-  speechSynthesis.onvoiceschanged = function() { try { speechSynthesis.getVoices(); } catch (e) {} };
-}
-
-document.addEventListener('click', function() {
+document.addEventListener('pointerdown', function() {
   _unlockInterviewAudio();
 }, true);
 
@@ -11677,7 +11737,7 @@ function practiceAdaptiveFollowUp() {
   if (!appUser && freeTries <= 0) { openModal('signup'); return; }
   currentQ = { text: q, cat: 'Behavioral' };
   _unlockInterviewAudio();
-  initPractice();
+  initPractice({ keepQuestion: true });
   showPage('page-practice');
   setTab('prac');
 }
@@ -12964,7 +13024,7 @@ function renderTracks() {
 }
 
 var _tcTypeTimer = null;
-function switchTrack(idx) {
+function switchLandingTrack(idx) {
   if (idx < 0 || idx >= TRACKS_DISPLAY) return;
   _activeTrackIdx = idx;
   var rows = document.querySelectorAll('.track-row');
@@ -12993,7 +13053,7 @@ function switchTrack(idx) {
   }
 }
 function switchTrackUser(idx) {
-  _userOverrode = true; switchTrack(idx);
+  _userOverrode = true; switchLandingTrack(idx);
   clearTimeout(_userOverrodeTimer);
   _userOverrodeTimer = setTimeout(function(){ _userOverrode = false; }, 4000);
 }
@@ -13154,7 +13214,7 @@ function initTrackScrollDriver() {
     var trackH = (outer.offsetHeight - window.innerHeight) / TRACKS_DISPLAY;
     if (trackH <= 0) return;
     var idx = Math.min(Math.floor(scrolled / trackH), TRACKS_DISPLAY - 1);
-    if (idx !== _activeTrackIdx) switchTrack(idx);
+    if (idx !== _activeTrackIdx) switchLandingTrack(idx);
   }
   window.addEventListener('scroll', function() {
     if (!_trafPending) { _trafPending = true; requestAnimationFrame(doCalc); }

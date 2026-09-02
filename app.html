@@ -9797,6 +9797,13 @@ function goToPractice() {
     return;
   }
   _unlockInterviewAudio();
+  var prac = document.getElementById('page-practice');
+  var alreadyThere = !!(prac && prac.classList.contains('active') && currentQ && currentQ.text);
+  if (alreadyThere) {
+    if (!_qLoading && !_questionAudioPlaying()) speakCurrentQuestion();
+    setTab('prac');
+    return;
+  }
   initPractice();
   showPage('page-practice');
   setTab('prac');
@@ -10388,6 +10395,7 @@ async function signOut() {
   appUser = null;
   appHistory = [];
   appPersona = null;
+  _appLaunched = false;
   _sbSession = null;
   try { localStorage.removeItem('mocha_sb_session'); } catch(e) {}
   // Reset nav
@@ -10400,8 +10408,11 @@ async function signOut() {
 }
 
 
+var _appLaunched = false;
 function launchApp() {
   if (!appUser) return;
+  if (_appLaunched) return;
+  _appLaunched = true;
   if (twTimer) { clearTimeout(twTimer); twTimer = null; }
   // Dismiss veil — auth confirmed, show dashboard
   var _veil = document.getElementById('pl-veil');
@@ -10726,7 +10737,7 @@ function initPractice(opts) {
   var userBubble = document.getElementById('app-user-bubble');
   if (userBubble) userBubble.textContent = '';
 
-  speakCurrentQuestion();
+  speakCurrentQuestion(true);
 }
 
 // ── Render sidebar tracks ────────────────────────────────────────
@@ -11191,9 +11202,12 @@ function _playQuestionBlob(blob) {
   }
 }
 
-function speakCurrentQuestion() {
+var _qSpeakText = '';
+function speakCurrentQuestion(force) {
   var text = (currentQ && currentQ.text) ? String(currentQ.text).replace(/\s+/g, ' ').trim() : '';
   if (!text || text === 'Loading question…') return;
+  if (!force && _qSpeakText === text && (_qLoading || _questionAudioPlaying())) return;
+  _qSpeakText = text;
   var seq = ++_qSpeakSeq;
   _stopGeminiNodes();
   _killBrowserTts();

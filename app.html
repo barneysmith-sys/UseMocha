@@ -10682,6 +10682,7 @@ function initPractice(opts) {
   opts = opts || {};
   clearInterval(timerInt);
   stopQuestionSpeech();
+  _unlockInterviewAudio(false);
   var p = appPersona || PERSONAS[0];
   var qs = QUESTIONS[p.id] || QUESTIONS.consulting;
   if (opts.freshQuestion) {
@@ -10987,6 +10988,7 @@ function updateMicUI() {
 }
 
 var _qAudioEl = null;
+var _qUnlockEl = null;
 var _qAudioCtx = null;
 var _qBufferSrc = null;
 var _qSpeakSeq = 0;
@@ -11009,6 +11011,10 @@ function _setListenUI(state) {
   if (lbl) lbl.textContent = state === 'playing' ? 'Stop' : state === 'loading' ? 'Speaking…' : 'Listen';
 }
 
+function _killBrowserTts() {
+  try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {}
+}
+
 function _ensureAudioEl() {
   if (_qAudioEl) return _qAudioEl;
   _qAudioEl = new Audio();
@@ -11017,9 +11023,27 @@ function _ensureAudioEl() {
   return _qAudioEl;
 }
 
+function _ensureUnlockEl() {
+  if (_qUnlockEl) return _qUnlockEl;
+  _qUnlockEl = new Audio(SILENT_WAV);
+  _qUnlockEl.loop = true;
+  _qUnlockEl.volume = 0.01;
+  try { _qUnlockEl.setAttribute('playsinline', ''); } catch (e) {}
+  return _qUnlockEl;
+}
+
 function _questionAudioPlaying() {
   if (_qBufferSrc) return true;
-  return !!( _qAudioEl && !_qAudioEl.paused && _qAudioEl.currentTime > 0 );
+  return !!( _qAudioEl && !_qAudioEl.paused && _qAudioEl.currentTime > 0 && (_qAudioEl.src || '').indexOf('blob:') === 0 );
+}
+
+function _resumeAudioContext() {
+  try {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    if (!_qAudioCtx) _qAudioCtx = new AC();
+    if (_qAudioCtx.state === 'suspended') _qAudioCtx.resume();
+  } catch (e) {}
 }
 
 function _stopGeminiNodes() {
@@ -11035,32 +11059,31 @@ function _stopGeminiNodes() {
   }
 }
 
-function _unlockInterviewAudio() {
+function _armPlaybackElement() {
+  var el = _ensureAudioEl();
+  if (_questionAudioPlaying()) return;
   try {
-    var AC = window.AudioContext || window.webkitAudioContext;
-    if (AC) {
-      if (!_qAudioCtx) _qAudioCtx = new AC();
-      if (_qAudioCtx.state === 'suspended') _qAudioCtx.resume();
+    el.loop = true;
+    el.src = SILENT_WAV;
+    var p = el.play();
+    if (p && p.catch) p.catch(function() {});
+  } catch (e) {}
+}
+
+function _unlockInterviewAudio(playPending) {
+  _killBrowserTts();
+  _resumeAudioContext();
+  try {
+    var unlock = _ensureUnlockEl();
+    var p = unlock.play();
+    if (p && p.then) {
+      p.then(function() { _qUnlocked = true; }).catch(function() {});
+    } else {
+      _qUnlocked = true;
     }
   } catch (e) {}
-  var el = _ensureAudioEl();
-  if (!_qUnlocked && !_questionAudioPlaying()) {
-    try {
-      el.src = SILENT_WAV;
-      var p = el.play();
-      if (p && p.then) {
-        p.then(function() {
-          _qUnlocked = true;
-          if ((el.src || '').indexOf('blob:') === 0) return;
-          el.pause();
-          try { el.currentTime = 0; } catch (e2) {}
-        }).catch(function() {});
-      } else {
-        _qUnlocked = true;
-      }
-    } catch (e) {}
-  }
-  if (_qNeedsPlay && _qPendingBlob && !_questionAudioPlaying()) {
+  _armPlaybackElement();
+  if (playPending !== false && _qNeedsPlay && _qPendingBlob && !_questionAudioPlaying()) {
     _qNeedsPlay = false;
     _playQuestionBlob(_qPendingBlob);
   }
@@ -11072,22 +11095,17 @@ function stopQuestionSpeech() {
   _qLoading = false;
   _qNeedsPlay = false;
   _stopGeminiNodes();
-  try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {}
+  _killBrowserTts();
   _setListenUI('idle');
 }
 
 function _playViaContext(blob) {
   var seq = _qSpeakSeq;
-  if (!_qAudioCtx) {
-    try {
-      var AC = window.AudioContext || window.webkitAudioContext;
-      if (AC) _qAudioCtx = new AC();
-    } catch (e) {}
-  }
+  _resumeAudioContext();
   if (!_qAudioCtx) {
     _qNeedsPlay = true;
     _qSpeaking = false;
-    _setListenUI('idle');
+    _setListenUI(_qLoading ? 'loading' : 'idle');
     return;
   }
   var startBuf = function(audioBuf) {
@@ -11098,7 +11116,15 @@ function _playViaContext(blob) {
       _setListenUI('idle');
       return;
     }
-    _stopGeminiNodes();
+    if (_qAudioEl) {
+      try { _qAudioEl.pause(); } catch (e) {}
+    }
+    if (_qBufferSrc) {
+      try { _qBufferSrc.onended = null; } catch (e) {}
+      try { _qBufferSrc.stop(); } catch (e) {}
+      try { _qBufferSrc.disconnect(); } catch (e) {}
+      _qBufferSrc = null;
+    }
     var src = _qAudioCtx.createBufferSource();
     src.buffer = audioBuf;
     src.connect(_qAudioCtx.destination);
@@ -11136,12 +11162,14 @@ function _playViaContext(blob) {
 function _playQuestionBlob(blob) {
   if (!blob) return;
   _qPendingBlob = blob;
+  _stopGeminiNodes();
   var el = _ensureAudioEl();
   if (el._objUrl) {
     try { URL.revokeObjectURL(el._objUrl); } catch (e) {}
   }
   var url = URL.createObjectURL(blob);
   el._objUrl = url;
+  el.loop = false;
   el.src = url;
   el.onended = function() { _qSpeaking = false; _qNeedsPlay = false; _setListenUI('idle'); };
   el.onerror = function() { _qSpeaking = false; _setListenUI(_qLoading ? 'loading' : 'idle'); };
@@ -11152,6 +11180,7 @@ function _playQuestionBlob(blob) {
     p.then(function() {
       _qSpeaking = true;
       _qNeedsPlay = false;
+      _qUnlocked = true;
       _setListenUI('playing');
     }).catch(function() {
       _playViaContext(blob);
@@ -11167,12 +11196,20 @@ function speakCurrentQuestion() {
   if (!text || text === 'Loading question…') return;
   var seq = ++_qSpeakSeq;
   _stopGeminiNodes();
-  try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {}
+  _killBrowserTts();
+  _armPlaybackElement();
   _qLoading = true;
   _qSpeaking = false;
   _setListenUI('loading');
+  var playBlob = function(blob) {
+    if (seq !== _qSpeakSeq) return;
+    if (!blob || blob.size < 80) throw new Error('empty audio');
+    _qSpeakCache[text] = blob;
+    _qPendingBlob = blob;
+    _playQuestionBlob(blob);
+  };
   if (_qSpeakCache[text]) {
-    _playQuestionBlob(_qSpeakCache[text]);
+    playBlob(_qSpeakCache[text]);
     return;
   }
   fetch('/api/speak', {
@@ -11185,12 +11222,7 @@ function speakCurrentQuestion() {
   }).then(function(r) {
     if (!r.ok) throw new Error('speak ' + r.status);
     return r.blob();
-  }).then(function(blob) {
-    if (seq !== _qSpeakSeq) return;
-    if (!blob || blob.size < 80) throw new Error('empty audio');
-    _qSpeakCache[text] = blob;
-    _playQuestionBlob(blob);
-  }).catch(function() {
+  }).then(playBlob).catch(function() {
     if (seq !== _qSpeakSeq) return;
     _qLoading = false;
     _qSpeaking = false;
@@ -11199,16 +11231,19 @@ function speakCurrentQuestion() {
 }
 
 function toggleQuestionSpeech() {
-  _unlockInterviewAudio();
-  if (_questionAudioPlaying() || _qLoading) {
+  _unlockInterviewAudio(false);
+  if (_questionAudioPlaying()) {
     stopQuestionSpeech();
     return;
   }
+  if (_qLoading) return;
   speakCurrentQuestion();
 }
 
-document.addEventListener('pointerdown', function() {
-  _unlockInterviewAudio();
+document.addEventListener('pointerdown', function(e) {
+  var listen = document.getElementById('q-listen');
+  var onListen = !!(listen && listen.contains(e.target));
+  _unlockInterviewAudio(!onListen);
 }, true);
 
 function toggleMic() {

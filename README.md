@@ -1,12 +1,12 @@
-# Mocha landscape prototype
+# Mocha
 
-An isolated design prototype for a future Mocha landing page. It does not modify the existing application, its routes, environment, or deployment.
+The homepage is the adaptive interview: a living alpine field, then a round that follows the answer you just gave. The practice app that grades a single answer stays at `/app`. Sign-in still lands on `/dashboard.html`.
 
-The visual system is a living alpine field: a particle reconstruction of the cobalt mountain studies, drawn with WebGL, with snowfall and a small cursor response. Under it, an interview selector walks from career track to a full adaptive interview. The interview runs in this prototype only. The production Mocha app is unchanged.
+The visual system is a living alpine field: a particle reconstruction of the cobalt mountain studies, drawn with WebGL, with snowfall and a small cursor response. Under it, an interview selector walks from career track to a full adaptive interview.
 
 ## Run
 
-From this directory:
+From the repository root:
 
 ```bash
 npm install
@@ -21,9 +21,7 @@ npm test
 npm run build
 ```
 
-Copy `.env.example` to `.env.local` and set `GEMINI_API_KEY` — the same key `/api/speak.js` already uses. The key stays on the server. Speech uses the same Charon voice as production and tries `gemini-3.8-flash-tts`, then `gemini-3.8-flash-lite-tts`, then the earlier preview models. Send `{ "text" }` or `{ "question" }`. Without the key, the round still runs in text, and the browser can transcribe when speech recognition is available. Do not point this key at a production database, and do not commit it.
-
-The existing Mocha site is untouched. Do not install these dependencies at the repository root.
+Copy `.env.example` to `.env.local` and set `GEMINI_API_KEY` — the same key `/api/speak` already uses. On Vercel that key is the project environment variable. The key stays on the server. Speech uses the Charon voice and tries `gemini-3.8-flash-tts`, then `gemini-3.8-flash-lite-tts`, then the earlier preview models. Send `{ "text" }` or `{ "question" }`. Without the key, the round still runs in text, and the browser can transcribe when speech recognition is available. Do not point this key at a production database, and do not commit it.
 
 ## What you can do
 
@@ -72,16 +70,11 @@ If the canvas cannot be created, `FallbackLandscape` draws the same field in 2D.
 
 Gemini is used only as a voice. `/api/voice/speak` is the same Charon text-to-speech path Mocha already uses, starting with `gemini-3.8-flash-tts`. `/api/voice/live` mints a short-lived token for Gemini Live (`gemini-3.8-live`) so the browser can stream audio without receiving the API key. The live tool is blocking, so the model waits and speaks the director's line instead of inventing the interview. If that connection fails, the screen keeps the director's line. The live site's grader (`/api/interview`) calls `gemini-3.8-flash` at a low thinking level, without temperature or topP overrides, and falls back to `gemini-2.5-flash` when the current model is unavailable.
 
-## What could move into Mocha later
+## What is live
 
-Candidates, after a separate decision to integrate:
-
-- `MountainScene`, `MountainParticles`, `SnowfallSystem`, and the terrain field, as a hero background.
-- The career selector pattern (`CareerSearch`, `CareerTrackSelector`, `InterviewSetupPreview`) as the way a round is chosen. The track list should be reconciled with the live directory before that happens. This prototype’s eight paths are a concept set (consulting, banking, product, software, marketing, data, strategy, general behavioral). The live app’s directory is the source of truth for what a round actually contains.
-- The interview engine in `lib/interview`: a deterministic director, structured memory, and scripted case facts. The model is allowed to speak a line the director already chose. It does not choose the stage.
-- The product-preview structure: question, marked line, adaptive follow-up, and the four scores Mocha already uses — Structure, Clarity, Ownership, Impact.
-
-Do not copy this prototype over the production app, and do not point it at production data. Voice routes in this folder read `GEMINI_API_KEY` from the prototype environment only.
+- `/` is this landing and the adaptive interview.
+- `/app` is the practice room that grades one answer. `/api/interview` and `/api/speak` are the same handlers the practice room already calls.
+- Sign-in returns through `/api/callback`, which still forwards tokens to `/?at=`. That request finishes on the dashboard.
 
 ## Product notes
 

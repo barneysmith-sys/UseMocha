@@ -17,8 +17,14 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Mocha — The interview that adapts to you.",
   description:
-    "A design prototype for Mocha. Practice with adaptive AI interviews, get role-specific feedback, and turn every answer into measurable improvement.",
-  icons: { icon: "/favicon.svg" },
+    "Practice with an adaptive interview. Mocha listens to the answer you gave and asks the follow-up that decides it.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.png", type: "image/png", sizes: "256x256" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

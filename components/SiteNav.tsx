@@ -46,15 +46,20 @@ export function SiteNav({ onStart }: { onStart: () => void }) {
             </a>
           ))}
         </nav>
-        <button
-          type="button"
-          onClick={onStart}
-          className={`rounded-lg px-3.5 py-2 text-[13.5px] font-medium tracking-[-0.01em] ${
-            onCobalt ? "border border-white/45 text-white hover:bg-white hover:text-cobalt" : "bg-blue text-white hover:bg-[#0440C4]"
-          }`}
-        >
-          New interview
-        </button>
+        <div className="flex items-center gap-4">
+          <a href="/signin.html" className={onCobalt ? "text-[13.5px] text-white/80 hover:text-white" : "text-[13.5px] text-muted hover:text-ink"}>
+            Sign in
+          </a>
+          <button
+            type="button"
+            onClick={onStart}
+            className={`rounded-lg px-3.5 py-2 text-[13.5px] font-medium tracking-[-0.01em] ${
+              onCobalt ? "border border-white/45 text-white hover:bg-white hover:text-cobalt" : "bg-blue text-white hover:bg-[#0440C4]"
+            }`}
+          >
+            New interview
+          </button>
+        </div>
       </div>
     </header>
   );

@@ -1,4 +1,5 @@
 {
+  "framework": "nextjs",
   "functions": {
     "api/interview.js": {
       "maxDuration": 60

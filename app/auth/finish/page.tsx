@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { signedInHome } from "@/lib/chooser";
 
 const SUPABASE_URL = "https://xfwsnshhlfjzflobuoxd.supabase.co";
 const SUPABASE_ANON =
@@ -66,7 +67,7 @@ export default function FinishSignIn() {
         } catch {
           setMessage("Signed in");
         }
-        window.location.replace("/dashboard.html");
+        window.location.replace(signedInHome());
       });
     }, 60);
 

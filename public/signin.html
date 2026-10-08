@@ -208,7 +208,7 @@ function saveSession(session){
 const msg = document.getElementById('msg');
 const emailEl = document.getElementById('email');
 const params = new URLSearchParams(location.search);
-const next = params.get('next') || '/dashboard.html';
+const next = params.get('next') || '/setup?track=product&option=product-design&minutes=30&mode=voice&difficulty=Challenging&format=Product+sense';
 
 if (params.get('email')) emailEl.value = params.get('email');
 if (params.get('intent') === 'pro') {
@@ -261,7 +261,7 @@ document.getElementById('mailbtn').addEventListener('click', async () => {
   msg.textContent = 'Sending your link...'; msg.className = 'msg mono';
   const { error } = await sb.auth.signInWithOtp({
     email: v,
-    options: { emailRedirectTo: 'https://usemocha.app/dashboard.html' }
+    options: { emailRedirectTo: 'https://usemocha.app/api/callback' }
   });
   if (error) {
     msg.textContent = error.message || 'Could not send that link. Try Google instead.';

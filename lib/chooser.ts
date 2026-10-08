@@ -156,6 +156,10 @@ export function selectionFromSearch(params: URLSearchParams): Selection | null {
   };
 }
 
+export function signedInHome() {
+  return `/setup?${setupQuery(DEFAULT_SELECTION).toString()}`;
+}
+
 export function setupQuery(selection: Selection, extra?: { role?: string; company?: string }) {
   const params = new URLSearchParams({
     track: selection.trackId,

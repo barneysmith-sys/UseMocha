@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import type { ReactNode } from "react";
 import { X } from "lucide-react";
+import { MochaLockup } from "@/components/MochaLockup";
 
 const MountainScene = dynamic(
   () => import("@/components/mountain/MountainScene").then((mod) => mod.MountainScene),
@@ -28,7 +29,7 @@ export function CobaltRoom({ kicker, stageLabel, filled, elapsed, total, onExit,
       </div>
       <header className="relative z-10 flex flex-wrap items-center justify-between gap-x-6 gap-y-4 px-5 py-[18px] sm:px-7">
         <div className="flex flex-wrap items-center gap-4">
-          <span className="text-[15px] tracking-[0.32em]">mocha</span>
+          <MochaLockup />
           <i className="hidden h-4 w-px bg-white/30 sm:block" />
           <span className="text-[13px] text-white/90">{kicker}</span>
         </div>

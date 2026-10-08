@@ -85,7 +85,7 @@ export function ChooseInterview() {
     : "";
 
   return (
-    <section id="practice" data-surface="paper" className="relative z-20 -mt-16 scroll-mt-24 rounded-t-[28px] bg-white text-ink shadow-[0_-24px_48px_-32px_rgba(0,20,80,0.45)]">
+    <section id="practice" data-surface="paper" className="relative z-20 -mt-6 scroll-mt-24 rounded-t-[28px] bg-white text-ink shadow-[0_-24px_48px_-32px_rgba(0,20,80,0.45)]">
       <div className="mx-auto flex max-w-[720px] flex-col gap-7 px-5 pb-24 pt-14 sm:pt-16">
         <div className="flex flex-col gap-3">
           <span className="cap">New interview</span>

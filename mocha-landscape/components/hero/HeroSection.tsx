@@ -69,12 +69,13 @@ export function HeroSection() {
   }, []);
 
   return (
-    <section id="top" data-surface="cobalt" className="relative min-h-[100svh] bg-cobalt text-white">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[100svh]">
-        <MountainScene className="h-full w-full" />
-      </div>
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1200px] flex-col px-5 pb-28 pt-28 sm:px-8 sm:pt-32">
-        <div className="enter max-w-[760px]">
+    <section id="top" data-surface="cobalt" className="relative bg-cobalt text-white">
+      <div className="relative aspect-[2056/765] min-h-[520px] w-full">
+        <div className="pointer-events-none absolute inset-0">
+          <MountainScene frame="banner" className="h-full w-full" />
+        </div>
+      <div className="relative z-10 mx-auto flex h-full max-w-[1200px] flex-col px-5 pb-16 pt-28 sm:px-8 sm:pt-32">
+        <div className="enter max-w-[760px] pb-6 [text-shadow:0_1px_2px_rgba(0,32,150,0.55),0_10px_28px_rgba(0,40,180,0.35)]">
           <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-white/75">Adaptive interview practice</p>
           <h1 className="mt-4 max-w-[12em] text-[clamp(44px,6.4vw,80px)] font-normal leading-[0.98] tracking-[-0.035em]">
             The interview that adapts to you.
@@ -87,13 +88,13 @@ export function HeroSection() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={reduced ? undefined : { opacity: 0, y: -6 }}
                 transition={{ duration: reduced ? 0 : 0.35, ease: tokens.ease }}
-                className="mt-5 max-w-[46ch] text-[17px] leading-relaxed text-white/80"
+                className="mt-5 max-w-[46ch] text-[17px] leading-relaxed text-white"
               >
                 {line}
               </motion.p>
             </AnimatePresence>
           ) : (
-            <p className="mt-5 max-w-[46ch] text-[17px] leading-relaxed text-white/80">{DEFAULT_LINE}</p>
+            <p className="mt-5 max-w-[46ch] text-[17px] leading-relaxed text-white">{DEFAULT_LINE}</p>
           )}
           <div className="mt-7 flex flex-wrap gap-3">
             <a
@@ -111,6 +112,7 @@ export function HeroSection() {
             </a>
           </div>
         </div>
+      </div>
       </div>
     </section>
   );

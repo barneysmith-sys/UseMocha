@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft, ArrowRight, Mic } from "lucide-react";
+import { MochaLockup } from "@/components/MochaLockup";
 import { findOption, findTrack } from "@/lib/careers";
 import { DIFFICULTY_NOTE, isDifficulty, selectionFromSearch, setupQuery, type Difficulty } from "@/lib/chooser";
 import { stageBudgetMs } from "@/lib/interview/time";
@@ -50,9 +51,7 @@ export function SetupScreen() {
   return (
     <div className="flex min-h-screen flex-col bg-paper text-ink">
       <nav className="flex items-center justify-between gap-4 px-6 py-5 sm:px-8">
-        <a href="/" className="wordmark text-[16px] text-ink">
-          mocha
-        </a>
+        <MochaLockup tone="ink" />
       </nav>
       <main className="mx-auto flex w-full max-w-[1200px] flex-wrap items-start gap-12 px-6 pb-12 sm:px-8">
         <section className="flex min-w-0 flex-[999_1_560px] flex-col gap-7">

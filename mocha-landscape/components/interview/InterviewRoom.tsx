@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
+import { MochaLockup } from "@/components/MochaLockup";
 import { findOption, findTrack, tracks, type CareerTrack, type InterviewOption } from "@/lib/careers";
 import { closeSession, openSession, submitAnswer, type Session } from "@/lib/interview";
 import { CobaltRoom } from "./CobaltRoom";
@@ -527,9 +528,7 @@ function Shell({ children }: { children: ReactNode }) {
     <main className="min-h-screen bg-paper text-ink">
       <header className="border-b border-line">
         <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-5">
-          <a href="/" className="text-[15px] font-medium tracking-[0.18em]">
-            mocha
-          </a>
+          <MochaLockup tone="ink" />
           <p className="text-[11px] uppercase tracking-[0.16em] text-muted">Prototype interview</p>
         </div>
       </header>

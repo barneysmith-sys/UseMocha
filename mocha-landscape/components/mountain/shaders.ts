@@ -17,6 +17,7 @@ uniform float uEnergy;
 uniform float uFocus;
 uniform float uPulse;
 uniform float uQuiet;
+uniform float uDrift;
 
 varying float vAlpha;
 varying float vSquare;
@@ -26,7 +27,7 @@ void main() {
   vec2 uv = position.xy;
   float depth = position.z;
 
-  float x = (uv.x - 0.5) * uPlane.x;
+  float x = (uv.x - 0.5) * uPlane.x + uDrift;
   float y = (0.5 - uv.y) * uPlane.y + uAnchor;
   vec3 pos = vec3(x, y, mix(-0.15, 0.9, depth));
 

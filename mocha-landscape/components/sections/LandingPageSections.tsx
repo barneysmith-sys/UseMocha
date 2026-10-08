@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import { MochaLockup } from "@/components/MochaLockup";
 import { tracks } from "@/lib/careers";
 import { useInterviewDraft } from "@/components/search/InterviewDraft";
 import { ProductPreview } from "./ProductPreview";
@@ -153,7 +154,7 @@ function ClosingSection() {
           </button>
         </div>
         <footer className="mt-20 flex flex-wrap items-end justify-between gap-4 border-t border-white/20 pt-5 text-[13px] text-white/75">
-          <span className="wordmark text-[14px] text-white">mocha</span>
+          <MochaLockup />
           <span>Design prototype</span>
           <a href="https://usemocha.app" className="underline decoration-white/30 underline-offset-4 hover:decoration-white">
             usemocha.app

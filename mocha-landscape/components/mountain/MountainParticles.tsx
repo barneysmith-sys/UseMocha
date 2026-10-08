@@ -11,9 +11,11 @@ type Props = {
   field: TerrainField;
   quiet?: boolean;
   reduced: boolean;
+  /** Full first screen: the range fills the frame and drifts behind the headline. */
+  banner?: boolean;
 };
 
-export function MountainParticles({ field, quiet = false, reduced }: Props) {
+export function MountainParticles({ field, quiet = false, reduced, banner = false }: Props) {
   const material = useRef<THREE.ShaderMaterial>(null);
   const reveal = useRef(reduced ? 1 : 0);
   const strength = useRef(0);
@@ -49,6 +51,7 @@ export function MountainParticles({ field, quiet = false, reduced }: Props) {
       uFocus: { value: 0 },
       uPulse: { value: 0 },
       uQuiet: { value: quiet ? 1 : 0 },
+      uDrift: { value: 0 },
     }),
     [quiet, reduced],
   );
@@ -63,10 +66,21 @@ export function MountainParticles({ field, quiet = false, reduced }: Props) {
     const dt = Math.min(delta, 0.05);
     const narrow = size.width < 760;
     const boost = narrow ? 1.08 : quiet ? 1.04 : 1.02;
-    const planeW = viewport.width * boost;
+    let planeW = viewport.width * boost;
     let planeH = planeW / (field.sourceWidth / field.sourceHeight);
-    if (narrow) planeH *= 1.45;
-    const anchor = -viewport.height / 2 + planeH / 2 - viewport.height * (narrow ? 0.035 : 0.018);
+    if (narrow && !banner) planeH *= 1.45;
+    let anchor = -viewport.height / 2 + planeH / 2 - viewport.height * (narrow ? 0.035 : 0.018);
+    if (banner) {
+      // Match the original study: full width, both peaks, centered in the hero frame.
+      planeW = viewport.width * 1.02;
+      planeH = planeW / (field.sourceWidth / field.sourceHeight);
+      if (planeH < viewport.height * 0.92) {
+        const scale = Math.min((viewport.height * 0.96) / planeH, narrow ? 1.65 : 1.04);
+        planeW *= scale;
+        planeH *= scale;
+      }
+      anchor = 0;
+    }
 
     reveal.current = reduced
       ? 1
@@ -86,7 +100,11 @@ export function MountainParticles({ field, quiet = false, reduced }: Props) {
     pointer.current.y += (worldY - pointer.current.y) * (1 - Math.exp(-dt * 5));
 
     const fit = size.width / field.sourceWidth;
-    const sizeScale = Math.max(fit, narrow ? 0.5 : 0.48) * Math.min(state.gl.getPixelRatio(), 1.5) * (narrow ? 1.35 : 1.7);
+    const sizeScale =
+      Math.max(fit, narrow ? 0.5 : 0.48) *
+      Math.min(state.gl.getPixelRatio(), 1.5) *
+      (narrow ? 1.35 : banner ? 1.85 : 1.7);
+    const drift = banner && !reduced ? Math.sin(state.clock.elapsedTime * 0.16) * viewport.width * 0.028 : 0;
 
     mat.uniforms.uTime.value += dt * (quiet ? 0.65 : 1);
     mat.uniforms.uReveal.value = reveal.current;
@@ -100,6 +118,7 @@ export function MountainParticles({ field, quiet = false, reduced }: Props) {
     mat.uniforms.uFocus.value = focus.current;
     mat.uniforms.uPulse.value = pulse.current;
     mat.uniforms.uQuiet.value = quiet ? 1 : 0;
+    mat.uniforms.uDrift.value = drift;
   });
 
   return (

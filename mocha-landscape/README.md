@@ -21,7 +21,7 @@ npm test
 npm run build
 ```
 
-Copy `.env.example` to `.env.local` and set `GEMINI_API_KEY` if you want the interviewer to speak. The key stays on the server. Without it, the round still runs in text, and the browser can transcribe when speech recognition is available. Do not point this key at a production database, and do not commit it.
+Copy `.env.example` to `.env.local` and set `GEMINI_API_KEY` — the same key `/api/speak.js` already uses. The key stays on the server. Speech uses the same Charon voice and the same model list as production (`gemini-3.1-flash-tts-preview`, then `gemini-2.5-flash-preview-tts`, then `gemini-2.5-flash-tts`). Send `{ "text" }` or `{ "question" }`. Without the key, the round still runs in text, and the browser can transcribe when speech recognition is available. Do not point this key at a production database, and do not commit it.
 
 The existing Mocha site is untouched. Do not install these dependencies at the repository root.
 

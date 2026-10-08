@@ -187,16 +187,10 @@ export function CareerSearch() {
                 />
               ) : null}
               {(draft.step === "preview" || draft.step === "complete") && track && option ? (
-                <InterviewSetupPreview
-                  track={track}
-                  option={option}
-                  complete={draft.step === "complete"}
-                  onBack={draft.back}
-                  onStart={draft.complete}
-                />
+                <InterviewSetupPreview track={track} option={option} onBack={draft.back} />
               ) : null}
               <div className="border-t border-line px-4 py-2 text-[11px] uppercase tracking-[0.14em] text-muted">
-                Prototype · not a live session
+                Practice prototype · runs in this browser
               </div>
             </motion.div>
           ) : null}

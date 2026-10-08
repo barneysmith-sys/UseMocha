@@ -2,7 +2,7 @@
 
 An isolated design prototype for a future Mocha landing page. It does not modify the existing application, its routes, environment, or deployment.
 
-The visual system is a living alpine field: a particle reconstruction of the cobalt mountain studies, drawn with WebGL, with snowfall and a small cursor response. Under it, an interview selector walks from career track to session preview. Nothing here starts a real interview.
+The visual system is a living alpine field: a particle reconstruction of the cobalt mountain studies, drawn with WebGL, with snowfall and a small cursor response. Under it, an interview selector walks from career track to a full adaptive interview. The interview runs in this prototype only. The production Mocha app is unchanged.
 
 ## Run
 
@@ -17,8 +17,11 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ```bash
 npm run lint   # tsc --noEmit
+npm test
 npm run build
 ```
+
+Copy `.env.example` to `.env.local` and set `GEMINI_API_KEY` if you want the interviewer to speak. The key stays on the server. Without it, the round still runs in text, and the browser can transcribe when speech recognition is available. Do not point this key at a production database, and do not commit it.
 
 The existing Mocha site is untouched. Do not install these dependencies at the repository root.
 
@@ -26,7 +29,9 @@ The existing Mocha site is untouched. Do not install these dependencies at the r
 
 - Move the cursor across the hero. Nearby particles ease aside and settle back. Snow takes a little wind. This is active for a fine pointer only.
 - Open **What interview are you preparing for?** Click, type, or use the arrow keys, Enter, and Escape.
-- Choose a track, then an interview, then **Start practicing**. The last step is a labeled prototype stop. It does not call Mocha’s API.
+- Choose a track, then an interview, then a length (8 or 20 minutes), then **Start practicing**. That opens `/interview` in this prototype.
+- The round has five stages: introduction, experience, a role-specific case, pressure, and a close. The interviewer does not score you until the debrief.
+- Type at any time. **Begin** tries Gemini Live audio first, then Gemini speech plus the browser’s microphone. If neither is available, the same interview continues on screen. There is no stand-in audio.
 - The same tracks are listed again under Career pathways. **Practice this track** returns to the hero selector.
 - The product preview plays an illustrative consulting round. The step buttons scrub it.
 
@@ -60,16 +65,25 @@ If the canvas cannot be created, `FallbackLandscape` draws the same field in 2D.
 - Antialiasing is off. Point edges are antialiased in the fragment shader.
 - The closing scene is quieter: fewer particles, slower time, no snow, no cursor.
 
+## Interview engine
+
+`lib/interview` runs in the browser and does not need a model. After each answer it updates memory (what was stated, what was only inferred, what is still unknown) and chooses one action: probe, ask for evidence, challenge an assumption, clarify, introduce the case, advance, or close. A controller rejects early endings, repeated questions, praise, and scores. Follow-ups are capped.
+
+Gemini is used only as a voice. `/api/voice/speak` is the same Charon text-to-speech path Mocha already uses. `/api/voice/live` mints a short-lived token for Gemini Live (`gemini-3.8-live`) so the browser can stream audio without receiving the API key. The live model is instructed to speak the director's line, not to invent the interview. If that connection fails, the screen keeps the director's line.
+
 ## What could move into Mocha later
 
 Candidates, after a separate decision to integrate:
 
 - `MountainScene`, `MountainParticles`, `SnowfallSystem`, and the terrain field, as a hero background.
 - The career selector pattern (`CareerSearch`, `CareerTrackSelector`, `InterviewSetupPreview`) as the way a round is chosen. The track list should be reconciled with the live directory before that happens. This prototype’s eight paths are a concept set (consulting, banking, product, software, marketing, data, strategy, general behavioral). The live app’s directory is the source of truth for what a round actually contains.
+- The interview engine in `lib/interview`: a deterministic director, structured memory, and scripted case facts. The model is allowed to speak a line the director already chose. It does not choose the stage.
 - The product-preview structure: question, marked line, adaptive follow-up, and the four scores Mocha already uses — Structure, Clarity, Ownership, Impact.
 
-Do not copy this prototype over `index.html` or point its final button at `/api/interview`. The session action is intentionally a dead end.
+Do not copy this prototype over the production app, and do not point it at production data. Voice routes in this folder read `GEMINI_API_KEY` from the prototype environment only.
 
 ## Product notes
 
-Copy is grounded in how Mocha works today: a spoken behavioral round, a line-level mark, an adaptive follow-up, and a role-specific reading of the same four dimensions. Firm names describe the interview the rubric is patterned on. They are not partnerships, and the prototype does not claim licensed case or interview content.
+The landing copy is grounded in how Mocha works today: a spoken behavioral round, a line-level mark, an adaptive follow-up, and a role-specific reading of Structure, Clarity, Ownership, and Impact. The interview room is the next step: a full round whose next question depends on the previous answer. Firm names describe the interview the rubric is patterned on. They are not partnerships, and the prototype does not claim licensed case or interview content.
+
+Case numbers are fixed in `lib/interview/scenarios.ts`. The interviewer reveals them one at a time and does not invent a second set. The case key appears only in the debrief.

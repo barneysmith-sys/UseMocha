@@ -4,3 +4,6 @@ out
 *.log
 *.tsbuildinfo
 scripts/alpine-preview.png
+.env
+.env.local
+.env*.local

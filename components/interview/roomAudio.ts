@@ -58,6 +58,61 @@ export class RoomAudio {
   }
 }
 
+export async function watchForSpeech(context: AudioContext, onSpeech: () => void) {
+  let stream: MediaStream | null = null;
+  let tripped = false;
+  let loudSince = 0;
+  let timer = 0;
+  let source: MediaStreamAudioSourceNode | null = null;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true },
+    });
+    source = context.createMediaStreamSource(stream);
+    const analyser = context.createAnalyser();
+    analyser.fftSize = 1024;
+    source.connect(analyser);
+    const bins = new Uint8Array(analyser.fftSize);
+    timer = window.setInterval(() => {
+      if (tripped) return;
+      analyser.getByteTimeDomainData(bins);
+      let sum = 0;
+      for (const value of bins) {
+        const centered = (value - 128) / 128;
+        sum += centered * centered;
+      }
+      const level = Math.min(1, Math.sqrt(sum / bins.length) * 4);
+      if (level > 0.18) {
+        if (!loudSince) loudSince = performance.now();
+        if (performance.now() - loudSince > 280) {
+          tripped = true;
+          onSpeech();
+        }
+      } else {
+        loudSince = 0;
+      }
+    }, 80);
+  } catch {
+    stream = null;
+  }
+  return {
+    get speaking() {
+      return tripped;
+    },
+    close() {
+      window.clearInterval(timer);
+      try {
+        source?.disconnect();
+      } catch {
+        /* already disconnected */
+      }
+      stream?.getTracks().forEach((track) => track.stop());
+      source = null;
+      stream = null;
+    },
+  };
+}
+
 type Rec = {
   continuous: boolean;
   interimResults: boolean;

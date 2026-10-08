@@ -28,9 +28,12 @@ export class GeminiLive {
   private expectSpeech = false;
   private playing = false;
   private loudSince = 0;
+  private level = 0;
+  private candidateVoice = false;
   private closed = false;
-  private upload = true;
+  private upload = false;
   private listenTimer = 0;
+  private quietTimer = 0;
 
   constructor(audio: RoomAudio, events: LiveEvents) {
     this.audio = audio;
@@ -89,25 +92,19 @@ export class GeminiLive {
   }
 
   say(line: string) {
-    this.expectSpeech = true;
-    this.handled = true;
-    this.upload = false;
-    this.events.onStatus("speaking");
-    if (this.pendingId) {
-      this.send({
-        toolResponse: {
-          functionResponses: [{ id: this.pendingId, name: "submit_candidate_turn", response: { say: line } }],
-        },
-      });
-      this.pendingId = null;
+    this.speakLine(line);
+  }
+
+  offer(line: string) {
+    if (this.candidateVoice) {
+      this.audio.stop();
+      this.playing = false;
+      this.expectSpeech = false;
+      this.upload = true;
+      this.events.onStatus("listening");
       return;
     }
-    this.send({
-      clientContent: {
-        turns: [{ role: "user", parts: [{ text: `SAY VERBATIM:\n${line}` }] }],
-        turnComplete: true,
-      },
-    });
+    this.speakLine(line);
   }
 
   interrupt() {
@@ -121,6 +118,7 @@ export class GeminiLive {
     this.closed = true;
     this.audio.stop();
     window.clearTimeout(this.listenTimer);
+    window.clearTimeout(this.quietTimer);
     if (this.meter) window.clearInterval(this.meter);
     this.processor?.disconnect();
     this.stream?.getTracks().forEach((track) => track.stop());
@@ -149,16 +147,16 @@ export class GeminiLive {
       sum += centered * centered;
     }
     const level = Math.min(1, Math.sqrt(sum / bins.length) * 4);
+    this.level = level;
     this.events.onLevel(level);
-    if (!this.playing) {
-      this.loudSince = 0;
-      return;
-    }
     if (level > 0.18) {
       if (!this.loudSince) this.loudSince = performance.now();
       if (performance.now() - this.loudSince > 280) {
-        this.interrupt();
-        this.events.onStatus("listening");
+        this.markCandidate();
+        if (this.playing || this.expectSpeech) {
+          this.interrupt();
+          this.events.onStatus("listening");
+        }
       }
     } else {
       this.loudSince = 0;
@@ -186,21 +184,32 @@ export class GeminiLive {
     if (message.setupComplete && ready) ready();
     const content = message.serverContent;
     if (content?.interrupted) this.interrupt();
+    const hearingCandidate = this.candidateVoice || !this.expectSpeech;
     const interim = content?.interimInputTranscription?.text;
-    if (interim) this.events.onInterim(interim);
+    if (interim && hearingCandidate) {
+      this.markCandidate();
+      this.events.onInterim(interim);
+    }
     const piece = content?.inputTranscription?.text;
-    if (piece) {
-      this.transcript = `${this.transcript} ${piece}`.trim();
+    if (piece && hearingCandidate) {
+      this.remember(piece);
       this.handled = false;
+      this.markCandidate();
       this.events.onInterim(this.transcript);
     }
     const calls = message.toolCall?.functionCalls ?? [];
     for (const call of calls) {
       if (call.name !== "submit_candidate_turn") continue;
-      this.pendingId = call.id ?? null;
-      this.finishTurn(call.args?.transcript || this.transcript);
+      if (call.id && !this.pendingId) this.pendingId = call.id;
+      this.remember(call.args?.transcript || "");
+      if (this.transcript.trim()) this.handled = false;
+      if (this.candidateVoice || this.level > 0.18) {
+        this.markCandidate();
+        continue;
+      }
+      this.finishTurn(this.transcript);
     }
-    if (content?.modelTurn?.parts && this.expectSpeech) {
+    if (content?.modelTurn?.parts && this.expectSpeech && !this.candidateVoice) {
       for (const part of content.modelTurn.parts) {
         const data = part.inlineData?.data;
         if (!data) continue;
@@ -211,6 +220,9 @@ export class GeminiLive {
         this.events.onStatus("speaking");
         this.armListen();
       }
+    } else if (content?.modelTurn?.parts && this.candidateVoice) {
+      this.interrupt();
+      this.events.onStatus("listening");
     }
     if (content?.turnComplete) this.armListen();
   }
@@ -221,15 +233,68 @@ export class GeminiLive {
       this.playing = false;
       this.upload = true;
       this.expectSpeech = false;
+      if (this.candidateVoice) {
+        if (!this.closed) this.events.onStatus("listening");
+        return;
+      }
       if (!this.handled && this.transcript.trim()) this.finishTurn(this.transcript);
       else if (!this.closed) this.events.onStatus("listening");
     }, this.audio.remaining * 1000 + 160);
   }
 
+  private markCandidate() {
+    this.candidateVoice = true;
+    window.clearTimeout(this.quietTimer);
+    this.quietTimer = window.setTimeout(() => this.onQuiet(), 2200);
+  }
+
+  private onQuiet() {
+    this.candidateVoice = false;
+    if (this.closed) return;
+    const text = this.transcript.trim();
+    if (this.pendingId || (!this.handled && text)) this.finishTurn(text);
+  }
+
+  private remember(text: string) {
+    const next = text.trim();
+    if (!next) return;
+    if (!this.transcript) {
+      this.transcript = next;
+      return;
+    }
+    if (next.length > this.transcript.length && next.includes(this.transcript)) this.transcript = next;
+    else if (!this.transcript.endsWith(next)) this.transcript = `${this.transcript} ${next}`.trim();
+  }
+
+  private speakLine(line: string) {
+    window.clearTimeout(this.quietTimer);
+    this.candidateVoice = false;
+    this.transcript = "";
+    this.expectSpeech = true;
+    this.handled = true;
+    this.upload = false;
+    this.events.onStatus("speaking");
+    if (this.pendingId) {
+      this.send({
+        toolResponse: {
+          functionResponses: [{ id: this.pendingId, name: "submit_candidate_turn", response: { say: line } }],
+        },
+      });
+      this.pendingId = null;
+      return;
+    }
+    this.send({
+      clientContent: {
+        turns: [{ role: "user", parts: [{ text: `SAY VERBATIM:\n${line}` }] }],
+        turnComplete: true,
+      },
+    });
+  }
+
   private finishTurn(transcript: string) {
     const text = transcript.trim();
+    if (!text || this.handled) return;
     this.transcript = "";
-    if (this.handled || !text) return;
     this.handled = true;
     this.events.onCandidate(text, (line) => this.say(line));
   }

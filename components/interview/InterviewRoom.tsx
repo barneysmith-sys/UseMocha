@@ -7,7 +7,7 @@ import { findOption, findTrack, tracks, type CareerTrack, type InterviewOption }
 import { closeSession, openSession, submitAnswer, type Session } from "@/lib/interview";
 import { CobaltRoom } from "./CobaltRoom";
 import { GeminiLive } from "./geminiLive";
-import { listenForAnswer, RoomAudio, speechRecognitionAvailable } from "./roomAudio";
+import { listenForAnswer, RoomAudio, speechRecognitionAvailable, watchForSpeech } from "./roomAudio";
 
 type Phase = "ready" | "live" | "debrief";
 type Status = "connecting" | "speaking" | "listening";
@@ -178,21 +178,29 @@ function Room({
       return;
     }
     setStatus("speaking");
+    const gate = await watchForSpeech(audio.context, () => {});
     try {
       const response = await fetch("/api/voice/speak", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text }),
       });
+      const began = gate.speaking;
+      gate.close();
       if (response.status === 503) {
         setNotice("Spoken voice needs a Gemini key in this prototype. The questions stay on screen.");
         beginListening();
         return;
       }
       if (!response.ok) throw new Error("speak failed");
+      if (began) {
+        beginListening();
+        return;
+      }
       const duration = await audio.playResponse(await response.arrayBuffer());
       window.setTimeout(() => beginListening(), Math.max(400, duration * 1000));
     } catch {
+      gate.close();
       setNotice("The voice didn't come through. The line is on screen.");
       beginListening();
     }
@@ -246,7 +254,7 @@ function Room({
         await live.connect(data.websocketUrl);
         liveRef.current = live;
         setMode("live");
-        live.say(opened.decision.say);
+        live.offer(opened.decision.say);
         return;
       }
     } catch {

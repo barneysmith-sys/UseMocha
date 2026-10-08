@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cobalt: #0053fd;
+  --color-cobalt-deep: #0043e0;
+  --color-snow: #ffffff;
+  --color-ice: #e6eeff;
+  --color-paper: #f4f7fb;
+  --color-ink: #0c1730;
+  --color-muted: #5c6c88;
+  --color-line: rgba(12, 23, 48, 0.12);
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #0053fd;
+  color: white;
+}
+
+:focus-visible {
+  outline: 2px solid #0053fd;
+  outline-offset: 3px;
+}
+
+[data-surface="cobalt"] :focus-visible {
+  outline-color: white;
+}
+
+.wordmark {
+  font-weight: 400;
+  letter-spacing: 0.42em;
+  text-transform: lowercase;
+  margin-right: -0.42em;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -40px;
+  z-index: 80;
+  background: white;
+  color: #0c1730;
+  padding: 8px 12px;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+.enter {
+  animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both;
+}
+
+.enter-late {
+  animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.7s both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter,
+  .enter-late {
+    animation: none;
+  }
+}
+
+mark {
+  padding: 0 0.12em;
+}

@@ -12,7 +12,7 @@ export const WEIGHT_SUM = STAGES.reduce((sum, stage) => sum + STAGE_WEIGHTS[stag
 
 export function clampDuration(minutes: number): number {
   if (!Number.isFinite(minutes)) return 20;
-  return Math.min(30, Math.max(6, Math.round(minutes)));
+  return Math.min(45, Math.max(6, Math.round(minutes)));
 }
 
 export function stageBudgetMs(durationMin: number, stage: StageId): number {

@@ -28,11 +28,12 @@ The existing Mocha site is untouched. Do not install these dependencies at the r
 ## What you can do
 
 - Move the cursor across the hero. Nearby particles ease aside and settle back. Snow takes a little wind. This is active for a fine pointer only.
-- Open **What interview are you preparing for?** Click, type, or use the arrow keys, Enter, and Escape.
-- Choose a track, then an interview, then a length (8 or 20 minutes), then **Start practicing**. That opens `/interview` in this prototype.
+- The first screen is the animated mountain field. **Start practicing** moves to **What interview are you preparing for?**
+- Open a track. Set interview type, difficulty, duration (15, 30, or 45 minutes), and voice or text. **Continue** opens setup, then **Enter interview room**.
+- Arrow keys, Enter, and Escape work in the search. ⌘K focuses it.
 - The round has five stages: introduction, experience, a role-specific case, pressure, and a close. The interviewer does not score you until the debrief.
 - Type at any time. **Begin** tries Gemini Live audio first, then Gemini speech plus the browser’s microphone. If neither is available, the same interview continues on screen. There is no stand-in audio.
-- The same tracks are listed again under Career pathways. **Practice this track** returns to the hero selector.
+- The same tracks are listed again under Career pathways. **Practice this track** returns to the chooser.
 - The product preview plays an illustrative consulting round. The step buttons scrub it.
 
 Query flags:

@@ -50,11 +50,11 @@ export function SiteNav({ onStart }: { onStart: () => void }) {
         <button
           type="button"
           onClick={onStart}
-          className={`px-3.5 py-2 text-[13.5px] font-medium tracking-[-0.01em] ${
-            onCobalt ? "border border-white/45 text-white hover:bg-white hover:text-cobalt" : "bg-ink text-white hover:bg-cobalt"
+          className={`rounded-lg px-3.5 py-2 text-[13.5px] font-medium tracking-[-0.01em] ${
+            onCobalt ? "border border-white/45 text-white hover:bg-white hover:text-cobalt" : "bg-blue text-white hover:bg-[#0440C4]"
           }`}
         >
-          Start practicing
+          New interview
         </button>
       </div>
     </header>

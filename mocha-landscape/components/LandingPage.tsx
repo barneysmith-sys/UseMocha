@@ -2,6 +2,7 @@
 
 import { MotionConfig } from "framer-motion";
 import { HeroSection } from "@/components/hero/HeroSection";
+import { ChooseInterview } from "@/components/search/ChooseInterview";
 import { InterviewDraftProvider, useInterviewDraft } from "@/components/search/InterviewDraft";
 import { LandingPageSections } from "@/components/sections/LandingPageSections";
 import { SiteNav } from "@/components/SiteNav";
@@ -23,15 +24,10 @@ function Page() {
       <a href="#practice" className="skip-link">
         Skip to interview search
       </a>
-      <SiteNav
-        onStart={() => {
-          document.getElementById("practice")?.scrollIntoView({ behavior: "smooth", block: "center" });
-          draft.open();
-          window.setTimeout(() => document.querySelector<HTMLInputElement>("#practice input")?.focus(), 60);
-        }}
-      />
+      <SiteNav onStart={() => draft.focusSearch()} />
       <main>
         <HeroSection />
+        <ChooseInterview />
         <LandingPageSections />
       </main>
     </>

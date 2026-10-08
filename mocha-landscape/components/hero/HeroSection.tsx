@@ -6,7 +6,6 @@ import dynamic from "next/dynamic";
 import { findTrack } from "@/lib/careers";
 import { landscape } from "@/lib/landscape";
 import { motion as tokens } from "@/lib/tokens";
-import { CareerSearch } from "@/components/search/CareerSearch";
 import { useInterviewDraft } from "@/components/search/InterviewDraft";
 
 const MountainScene = dynamic(
@@ -21,7 +20,7 @@ export function HeroSection() {
   const reduced = useReducedMotion();
   const draft = useInterviewDraft();
   const track = findTrack(draft.trackId);
-  const line = track && draft.step !== "tracks" ? track.line : DEFAULT_LINE;
+  const line = track ? track.line : DEFAULT_LINE;
   const last = useRef({ nx: 0, t: 0 });
   const [booted, setBooted] = useState(false);
 
@@ -74,10 +73,10 @@ export function HeroSection() {
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[100svh]">
         <MountainScene className="h-full w-full" />
       </div>
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1200px] flex-col px-5 pb-16 pt-28 sm:px-8 sm:pt-32">
+      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1200px] flex-col px-5 pb-28 pt-28 sm:px-8 sm:pt-32">
         <div className="enter max-w-[760px]">
-          <p className="text-[12px] uppercase tracking-[0.22em] text-white/70">Adaptive interview practice</p>
-          <h1 className="mt-4 max-w-[11em] text-[clamp(42px,6vw,78px)] font-medium leading-[0.96] tracking-[-0.045em]">
+          <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-white/75">Adaptive interview practice</p>
+          <h1 className="mt-4 max-w-[12em] text-[clamp(44px,6.4vw,80px)] font-normal leading-[0.98] tracking-[-0.035em]">
             The interview that adapts to you.
           </h1>
           {booted ? (
@@ -88,34 +87,29 @@ export function HeroSection() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={reduced ? undefined : { opacity: 0, y: -6 }}
                 transition={{ duration: reduced ? 0 : 0.35, ease: tokens.ease }}
-                className="mt-5 max-w-[46ch] text-[17px] leading-relaxed text-white/78"
+                className="mt-5 max-w-[46ch] text-[17px] leading-relaxed text-white/80"
               >
                 {line}
               </motion.p>
             </AnimatePresence>
           ) : (
-            <p className="mt-5 max-w-[46ch] text-[17px] leading-relaxed text-white/78">{DEFAULT_LINE}</p>
+            <p className="mt-5 max-w-[46ch] text-[17px] leading-relaxed text-white/80">{DEFAULT_LINE}</p>
           )}
           <div className="mt-7 flex flex-wrap gap-3">
             <a
               href="#practice"
               onClick={(event) => {
                 event.preventDefault();
-                document.getElementById("practice")?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
-                window.setTimeout(() => draft.open(), 50);
-                window.setTimeout(() => document.querySelector<HTMLInputElement>("#practice input")?.focus(), 80);
+                draft.focusSearch();
               }}
-              className="bg-white px-4 py-3 text-[14.5px] font-medium text-cobalt hover:bg-ice"
+              className="rounded-lg bg-white px-4 py-3 text-[14.5px] font-medium text-cobalt hover:bg-ice"
             >
               Start practicing
             </a>
-            <a href="#how" className="border border-white/40 px-4 py-3 text-[14.5px] font-medium text-white hover:bg-white/10">
+            <a href="#how" className="rounded-lg border border-white/40 px-4 py-3 text-[14.5px] font-medium text-white hover:bg-white/10">
               See how it works
             </a>
           </div>
-        </div>
-        <div className="enter-late">
-          <CareerSearch />
         </div>
       </div>
     </section>

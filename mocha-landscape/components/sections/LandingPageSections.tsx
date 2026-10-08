@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
-import { useReducedMotion } from "framer-motion";
 import { tracks } from "@/lib/careers";
 import { useInterviewDraft } from "@/components/search/InterviewDraft";
 import { ProductPreview } from "./ProductPreview";
@@ -66,7 +65,6 @@ function HowItWorks() {
 function CareerPathways() {
   const draft = useInterviewDraft();
   const [openId, setOpenId] = useState<string | null>("consulting");
-  const reduced = useReducedMotion();
 
   return (
     <section id="pathways" data-surface="paper" className="border-t border-line bg-paper text-ink">
@@ -79,7 +77,7 @@ function CareerPathways() {
             </h2>
           </div>
           <p className="max-w-[40ch] text-[16px] leading-relaxed text-muted">
-            Every track uses the hero selector. The rubric stays Structure, Clarity, Ownership, and Impact. What changes is the question, and the follow-up it deserves.
+            Every track opens in the interview chooser. The rubric stays Structure, Clarity, Ownership, and Impact. What changes is the question, and the follow-up it deserves.
           </p>
         </div>
 
@@ -117,7 +115,7 @@ function CareerPathways() {
                     </ul>
                     <button
                       type="button"
-                      onClick={() => draft.selectTrack(track.id, reduced ? "auto" : "smooth")}
+                      onClick={() => draft.focusTrack(track.id)}
                       className="mt-4 bg-ink px-4 py-3 text-[14px] font-medium text-white hover:bg-cobalt"
                     >
                       Practice this track
@@ -134,7 +132,6 @@ function CareerPathways() {
 }
 
 function ClosingSection() {
-  const reduced = useReducedMotion();
   const draft = useInterviewDraft();
 
   return (
@@ -149,13 +146,7 @@ function ClosingSection() {
           </h2>
           <button
             type="button"
-            onClick={() => {
-              document.getElementById("top")?.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
-              window.setTimeout(() => {
-                draft.open();
-                document.querySelector<HTMLInputElement>("#practice input")?.focus();
-              }, reduced ? 0 : 450);
-            }}
+            onClick={() => draft.focusSearch()}
             className="mt-8 bg-white px-4 py-3 text-[14.5px] font-medium text-cobalt hover:bg-ice"
           >
             Start practicing

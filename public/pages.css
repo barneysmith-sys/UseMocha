@@ -1,0 +1,328 @@
+:root {
+  --paper: #f6f7f9;
+  --ink: #0b1220;
+  --ink-2: #5e6779;
+  --ink-3: #8b93a7;
+  --rule: #e4e7ee;
+  --blue: #0754ff;
+  --stone: #f6f7f9;
+  --sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --nar: "Geist Mono", ui-monospace, monospace;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+u.hl,
+u.hb {
+  box-shadow: none;
+  text-decoration: none;
+}
+
+.wordmark,
+.brand {
+  font-weight: 400;
+  letter-spacing: 0.32em;
+  text-transform: lowercase;
+  font-size: 15px;
+}
+
+.brand .sw {
+  display: none;
+}
+
+.top {
+  border-bottom-color: var(--rule);
+}
+
+.btn {
+  border-radius: 10px;
+  padding: 12px 18px;
+}
+
+.btn--k {
+  background: #0754ff;
+  color: #fff;
+}
+
+.btn--k:hover {
+  background: #0438b0;
+}
+
+.btn--o {
+  border: 1px solid #e4e7ee;
+  background: #fff;
+  border-radius: 10px;
+}
+
+.btn--o:hover {
+  border-color: #0b1220;
+}
+
+.auth {
+  min-height: 100svh;
+  background: #f6f7f9;
+}
+
+.auth-l {
+  position: relative;
+  justify-content: center;
+  padding: 88px clamp(24px, 5vw, 72px) 48px;
+}
+
+.auth-l .wordmark {
+  position: absolute;
+  top: 28px;
+  left: clamp(24px, 5vw, 72px);
+  color: #0b1220;
+}
+
+.auth-l .mono {
+  color: #8b93a7;
+  letter-spacing: 0.16em;
+}
+
+.auth-l h1 {
+  max-width: 10ch;
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  font-size: clamp(48px, 5vw, 68px);
+}
+
+.auth-l .lede {
+  color: #3d4659;
+  font-size: 16px;
+  max-width: 36ch;
+}
+
+.gbtn {
+  border: 1px solid #e4e7ee;
+  border-radius: 12px;
+  background: #fff;
+  color: #0b1220;
+  font-weight: 500;
+  box-shadow: 0 1px 0 rgba(11, 18, 32, 0.02);
+}
+
+.gbtn:hover {
+  background: #f6f7f9;
+  color: #0b1220;
+}
+
+.gbtn:hover svg {
+  filter: none;
+}
+
+.or {
+  color: #8b93a7;
+  font-family: "Geist Mono", ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0b1220;
+}
+
+.auth .mailrow,
+.wait {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 0;
+  border-bottom: 0;
+  max-width: 420px;
+}
+
+.auth .mailrow input,
+.wait input,
+.form input,
+.form select {
+  width: 100%;
+  min-width: 0;
+  flex: none;
+  border: 1px solid #e4e7ee;
+  border-bottom: 1px solid #e4e7ee;
+  border-radius: 12px;
+  background: #fff;
+  padding: 14px 16px;
+  font: inherit;
+  font-size: 15.5px;
+  color: #0b1220;
+}
+
+.mailrow input:focus,
+.wait input:focus,
+.form input:focus,
+.form select:focus {
+  outline: 2px solid #0754ff;
+  outline-offset: 2px;
+  border-color: #0754ff;
+}
+
+.auth #mailbtn,
+.auth .mailrow button,
+.wait button,
+.form .btn--k {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 0;
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 12px;
+  background: #0754ff;
+  color: #fff;
+  font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  opacity: 1;
+}
+
+.auth #mailbtn:hover,
+.auth .mailrow button:hover,
+.wait button:hover,
+.form .btn--k:hover {
+  background: #0438b0;
+  color: #fff;
+  opacity: 1;
+}
+
+.terms {
+  color: #8b93a7;
+}
+
+.terms a {
+  color: #3d4659;
+}
+
+.auth-r,
+.hero-r {
+  position: relative;
+  align-self: stretch;
+  background: #0053fd;
+  border-left: 0;
+  overflow: hidden;
+  min-height: clamp(320px, 46vw, 640px);
+}
+
+.auth-r canvas.range,
+.hero-r canvas.range {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.scorecard {
+  position: absolute;
+  left: 50%;
+  bottom: 11%;
+  transform: translateX(-42%);
+  width: min(360px, 82%);
+  padding: 18px 18px 16px;
+  border-radius: 16px;
+  background: #fff;
+  color: #0b1220;
+  box-shadow: 0 18px 50px rgba(0, 24, 90, 0.22);
+}
+
+.scorecard .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.scorecard .kicker {
+  font-family: "Geist Mono", ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8b93a7;
+}
+
+.scorecard .delta {
+  font-family: "Geist Mono", ui-monospace, monospace;
+  font-size: 12px;
+  color: #0754ff;
+}
+
+.scorecard .score {
+  margin-top: 8px;
+  font-size: 40px;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.scorecard .score span,
+.scorecard .from {
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: #8b93a7;
+}
+
+.scorecard .quote {
+  margin-top: 8px;
+  font-size: 13.5px;
+  color: #3d4659;
+}
+
+.form .btn {
+  margin-top: 22px;
+}
+
+.hero-l .mono {
+  color: #8b93a7;
+}
+
+.form {
+  border: 1px solid #e4e7ee;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.form label {
+  font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #0b1220;
+  font-weight: 500;
+}
+
+.form .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.form small {
+  font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 13px;
+}
+
+@media (max-width: 860px) {
+  .auth-r {
+    display: block;
+    min-height: 280px;
+    order: -1;
+  }
+
+  .auth {
+    grid-template-columns: 1fr;
+  }
+}

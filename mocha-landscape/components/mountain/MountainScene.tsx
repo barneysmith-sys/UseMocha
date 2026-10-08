@@ -17,6 +17,8 @@ import { SnowfallSystem } from "./SnowfallSystem";
 
 type Props = {
   variant?: "hero" | "quiet";
+  /** Banner framing lifts the range so it travels behind the hero headline. */
+  frame?: "settle" | "banner";
   className?: string;
 };
 
@@ -79,7 +81,7 @@ class SceneBoundary extends Component<{ fallback: ReactNode; children: ReactNode
   }
 }
 
-export function MountainScene({ variant = "hero", className }: Props) {
+export function MountainScene({ variant = "hero", frame = "settle", className }: Props) {
   const reduced = useReducedMotion() ?? false;
   const quiet = variant === "quiet";
   const { setNode, playing } = useInView(variant === "hero");
@@ -122,7 +124,7 @@ export function MountainScene({ variant = "hero", className }: Props) {
               gl.setClearColor(0x000000, 0);
             }}
           >
-            <MountainParticles field={drawn} quiet={quiet} reduced={reduced} />
+            <MountainParticles field={drawn} quiet={quiet} reduced={reduced} banner={frame === "banner"} />
             {!quiet && !reduced ? (
               <>
                 <SnowfallSystem count={narrow ? 70 : 180} far reduced={reduced} />

@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const outfit = Outfit({
+const geist = Geist({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-outfit",
-  weight: ["300", "400", "500", "600"],
+  variable: "--font-geist",
+});
+
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-geist-mono",
 });
 
 export const metadata: Metadata = {
@@ -18,8 +23,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={outfit.variable}>
-      <body className={`${outfit.className} min-h-screen antialiased`}>{children}</body>
+    <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
+      <body className={`${geist.className} min-h-screen antialiased`}>{children}</body>
     </html>
   );
 }

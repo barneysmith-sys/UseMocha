@@ -29,9 +29,10 @@ function limited(request: Request) {
 
 async function synthesize(apiKey: string, text: string, model: string) {
   const prompt = [
-    "Read the interview line below exactly as written.",
-    "You are a senior interviewer sitting across from the candidate.",
-    "Calm, clear, unhurried. No greeting, no extra words, no commentary.",
+    "Read the interview question below exactly as written.",
+    "You are a senior interviewer at a top firm, sitting across from the candidate.",
+    "Calm, clear, unhurried. A short pause after the first sentence.",
+    "No greeting, no extra words, no commentary.",
     "",
     text,
   ].join("\n");

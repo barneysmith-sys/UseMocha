@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { MochaLockup } from "@/components/MochaLockup";
 
 const links = [
   { href: "#how", label: "How it works" },
@@ -37,9 +38,7 @@ export function SiteNav({ onStart }: { onStart: () => void }) {
       }`}
     >
       <div className="mx-auto flex h-[68px] max-w-[1200px] items-center justify-between gap-6 px-5 sm:px-8">
-        <a href="#top" className="wordmark text-[15px]">
-          mocha
-        </a>
+        <MochaLockup tone={onCobalt ? "light" : "ink"} href="#top" />
         <nav aria-label="Primary" className="hidden items-center gap-7 text-[14px] md:flex">
           {links.map((link) => (
             <a key={link.href} href={link.href} className={onCobalt ? "text-white/80 hover:text-white" : "text-muted hover:text-ink"}>
@@ -50,11 +49,11 @@ export function SiteNav({ onStart }: { onStart: () => void }) {
         <button
           type="button"
           onClick={onStart}
-          className={`px-3.5 py-2 text-[13.5px] font-medium tracking-[-0.01em] ${
-            onCobalt ? "border border-white/45 text-white hover:bg-white hover:text-cobalt" : "bg-ink text-white hover:bg-cobalt"
+          className={`rounded-lg px-3.5 py-2 text-[13.5px] font-medium tracking-[-0.01em] ${
+            onCobalt ? "border border-white/45 text-white hover:bg-white hover:text-cobalt" : "bg-blue text-white hover:bg-[#0440C4]"
           }`}
         >
-          Start practicing
+          New interview
         </button>
       </div>
     </header>

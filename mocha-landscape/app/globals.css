@@ -3,13 +3,19 @@
 @theme {
   --color-cobalt: #0053fd;
   --color-cobalt-deep: #0043e0;
+  --color-blue: #0754ff;
+  --color-blue-deep: #0438b0;
+  --color-blue-soft: #eef3ff;
   --color-snow: #ffffff;
   --color-ice: #e6eeff;
-  --color-paper: #f4f7fb;
-  --color-ink: #0c1730;
-  --color-muted: #5c6c88;
-  --color-line: rgba(12, 23, 48, 0.12);
-  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --color-paper: #f6f7f9;
+  --color-ink: #0b1220;
+  --color-muted: #5e6779;
+  --color-quiet: #3d4659;
+  --color-line: #e4e7ee;
+  --color-line-strong: #d5dae3;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 html {
@@ -46,9 +52,18 @@ body {
 
 .wordmark {
   font-weight: 400;
-  letter-spacing: 0.42em;
+  letter-spacing: 0.32em;
   text-transform: lowercase;
-  margin-right: -0.42em;
+  margin-right: -0.32em;
+}
+
+.cap {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5e6779;
 }
 
 .skip-link {

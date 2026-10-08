@@ -2,8 +2,10 @@
 
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
+import { MochaLockup } from "@/components/MochaLockup";
 import { findOption, findTrack, tracks, type CareerTrack, type InterviewOption } from "@/lib/careers";
 import { closeSession, openSession, submitAnswer, type Session } from "@/lib/interview";
+import { CobaltRoom } from "./CobaltRoom";
 import { GeminiLive } from "./geminiLive";
 import { listenForAnswer, RoomAudio, speechRecognitionAvailable } from "./roomAudio";
 
@@ -24,11 +26,28 @@ export function InterviewRoom() {
   const track = findTrack(params.get("track"));
   const option = findOption(params.get("track"), params.get("option"));
   const minutes = clampMinutes(params.get("minutes"));
+  const preferred = params.get("mode") === "text" ? "text" : "voice";
+  const format = params.get("format") || option?.type || "";
+  const detail = [params.get("role"), params.get("company")].filter(Boolean).join(" · ");
   if (!track || !option) return <Missing />;
-  return <Room track={track} option={option} minutes={minutes} />;
+  return <Room track={track} option={option} minutes={minutes} preferred={preferred} format={format} detail={detail} />;
 }
 
-function Room({ track, option, minutes }: { track: CareerTrack; option: InterviewOption; minutes: number }) {
+function Room({
+  track,
+  option,
+  minutes,
+  preferred,
+  format,
+  detail,
+}: {
+  track: CareerTrack;
+  option: InterviewOption;
+  minutes: number;
+  preferred: "voice" | "text";
+  format: string;
+  detail: string;
+}) {
   const [phase, setPhase] = useState<Phase>("ready");
   const [session, setSession] = useState<Session | null>(null);
   const [line, setLine] = useState("");
@@ -46,6 +65,9 @@ function Room({ track, option, minutes }: { track: CareerTrack; option: Intervie
   const listenRef = useRef<{ stop: () => void; finish: () => void } | null>(null);
   const modeRef = useRef<Mode>("text");
   const fieldRef = useRef<HTMLTextAreaElement>(null);
+  const beginRef = useRef<(kind: "voice" | "text") => void>(() => {});
+  const preferredRef = useRef(preferred);
+  preferredRef.current = preferred;
 
   useEffect(() => {
     return () => {
@@ -71,6 +93,24 @@ function Room({ track, option, minutes }: { track: CareerTrack; option: Intervie
       setPhase("debrief");
     }, 500);
     return () => window.clearInterval(id);
+  }, [phase]);
+
+  useEffect(() => {
+    if (phase !== "ready") return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== " " || event.repeat) return;
+      const target = event.target;
+      if (
+        target instanceof HTMLElement &&
+        (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.tagName === "BUTTON" || target.isContentEditable)
+      ) {
+        return;
+      }
+      event.preventDefault();
+      beginRef.current(preferredRef.current);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [phase]);
 
   function setMode(next: Mode) {
@@ -257,36 +297,52 @@ function Room({ track, option, minutes }: { track: CareerTrack; option: Intervie
     fieldRef.current?.focus();
   }
 
+  beginRef.current = begin;
+  const kicker = [track.name, format, detail].filter(Boolean).join(" · ");
+  const totalLabel = `${minutes}:00`;
+
   if (phase === "ready") {
     return (
-      <Shell>
-        <p className="text-[11px] uppercase tracking-[0.18em] text-cobalt">{track.name}</p>
-        <h1 className="mt-3 max-w-[16ch] text-[2.4rem] font-medium leading-[1.05] tracking-[-0.04em]">{option.name}</h1>
-        <p className="mt-4 max-w-[42ch] text-[16px] leading-relaxed text-muted">
-          A complete round. The next question depends on what you just said. Feedback waits until the end.
-        </p>
-        <dl className="mt-8 flex gap-8 text-[13px]">
-          <div>
-            <dt className="text-[10px] uppercase tracking-[0.16em] text-muted">Length</dt>
-            <dd className="mt-1 text-ink">{minutes} min</dd>
-          </div>
-          <div>
-            <dt className="text-[10px] uppercase tracking-[0.16em] text-muted">Format</dt>
-            <dd className="mt-1 text-ink">{option.type}</dd>
-          </div>
-        </dl>
-        <div className="mt-10 flex flex-wrap gap-3">
-          <button type="button" onClick={() => void begin("voice")} className="bg-ink px-4 py-2.5 text-[14px] font-medium text-white hover:bg-cobalt">
-            Begin
+      <CobaltRoom
+        kicker={kicker}
+        stageLabel="00 / 05 · Not started"
+        filled={0}
+        elapsed="00:00"
+        total={totalLabel}
+        onExit={() => window.location.assign("/")}
+        footer={
+          <p className="max-w-md text-[13px] leading-relaxed text-white/75">
+            Voice uses the microphone when you begin. If live audio isn’t configured, the round stays on screen. This prototype does not save anything to Mocha.
+          </p>
+        }
+      >
+        <div className="flex max-w-[640px] flex-col items-center gap-3">
+          <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-white/85">Interviewer ready</span>
+          <h1 className="text-[34px] font-light leading-[42px] tracking-[-0.015em]">Whenever you’re ready, we’ll begin.</h1>
+          <p className="max-w-[46ch] text-[15px] leading-6 text-white/88">
+            Five stages, about {minutes} minutes. Follow-ups depend on what you say, and feedback waits until the end.
+          </p>
+        </div>
+        <div className="mt-7 flex flex-wrap justify-center gap-3">
+          <button
+            type="button"
+            onClick={() => void begin(preferred)}
+            className="inline-flex h-[52px] items-center gap-2.5 rounded-full bg-white px-6 text-[15px] font-medium text-cobalt hover:bg-ice"
+          >
+            {preferred === "text" ? "Begin by typing" : "Begin interview"}
+            {preferred === "voice" ? (
+              <kbd className="rounded border border-[#B6CBFF] px-1.5 font-mono text-[11px] text-blue-deep">Space</kbd>
+            ) : null}
           </button>
-          <button type="button" onClick={() => void begin("text")} className="border border-line px-4 py-2.5 text-[14px] text-ink hover:border-ink">
-            Type instead
+          <button
+            type="button"
+            onClick={() => void begin(preferred === "text" ? "voice" : "text")}
+            className="h-[52px] rounded-full border border-white/35 px-5 text-[15px] hover:bg-white/10"
+          >
+            {preferred === "text" ? "Use voice" : "Type instead"}
           </button>
         </div>
-        <p className="mt-6 max-w-[46ch] text-[12.5px] leading-relaxed text-muted">
-          Voice uses the microphone. If Gemini live audio isn't configured, the round still runs on screen. This prototype does not save anything to Mocha.
-        </p>
-      </Shell>
+      </CobaltRoom>
     );
   }
 
@@ -294,77 +350,77 @@ function Room({ track, option, minutes }: { track: CareerTrack; option: Intervie
     return <Debrief session={session} track={track} option={option} minutes={minutes} />;
   }
 
-  const remaining = session ? session.durationMin * 60_000 - (now - session.startedAtMs) : minutes * 60_000;
+  const elapsedMs = session && now ? Math.max(0, now - session.startedAtMs) : 0;
   const stage = session?.stage ?? "introduction";
+  const index = Math.max(0, stageIndex(stage));
 
   return (
-    <Shell>
-      <div className="flex items-end justify-between gap-6">
-        <div>
-          <p className="text-[11px] uppercase tracking-[0.18em] text-cobalt">{STAGE_LABEL[stage]}</p>
-          <p className="mt-1 text-[13px] text-muted">
-            {track.name}
-            <span className="px-1.5 text-line">/</span>
-            {option.name}
-          </p>
-        </div>
-        <p className="font-mono text-[13px] tabular-nums text-ink" role="timer">
-          {formatClock(remaining)}
-        </p>
-      </div>
-      <ol className="mt-4 flex gap-1.5" aria-label="Interview stages">
-        {Object.keys(STAGE_LABEL).map((key) => (
-          <li key={key} className={`h-0.5 flex-1 ${stageIndex(key) <= stageIndex(stage) ? "bg-cobalt" : "bg-line"}`} />
-        ))}
-      </ol>
-      <p className="mt-10 max-w-[28ch] text-[1.7rem] font-medium leading-[1.25] tracking-[-0.035em] text-ink sm:text-[2rem]" aria-live="polite">
+    <CobaltRoom
+      kicker={kicker}
+      stageLabel={`${String(index + 1).padStart(2, "0")} / 05 · ${STAGE_LABEL[stage]}`}
+      filled={index + 1}
+      elapsed={formatClock(elapsedMs)}
+      total={totalLabel}
+      onExit={() => {
+        stopVoice();
+        window.location.assign("/");
+      }}
+      footer={
+        <form onSubmit={submitDraft} className="flex w-full max-w-3xl items-end gap-3">
+          <button
+            type="button"
+            onClick={onMic}
+            aria-pressed={status === "listening" && mode !== "text"}
+            className="grid h-14 w-14 shrink-0 place-items-center rounded-full border border-white/35 text-white hover:bg-white/10"
+          >
+            <span className="sr-only">
+              {status === "speaking" ? "Interrupt" : status === "connecting" ? "Connecting" : "Microphone"}
+            </span>
+            <MicIcon />
+          </button>
+          <label className="block min-w-0 flex-1 text-left">
+            <span className="sr-only">Type your answer</span>
+            <textarea
+              ref={fieldRef}
+              value={draft}
+              onChange={(event) => setDraft(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && !event.shiftKey) {
+                  event.preventDefault();
+                  submitDraft();
+                }
+              }}
+              rows={2}
+              placeholder="Or type. Enter sends."
+              className="w-full resize-none rounded-2xl border border-white/25 bg-white/10 px-4 py-3 text-[15px] leading-relaxed text-white outline-none placeholder:text-white/55"
+            />
+          </label>
+          <button type="submit" className="h-11 rounded-full bg-white px-4 text-[14px] font-medium text-cobalt">
+            Send
+          </button>
+        </form>
+      }
+    >
+      <p className="max-w-[22em] text-[clamp(26px,3vw,34px)] font-light leading-snug tracking-[-0.015em]" aria-live="polite">
         {line}
       </p>
-      {heard ? <p className="mt-8 max-w-[52ch] text-[14.5px] leading-relaxed text-muted">{heard}</p> : null}
-      <div className="mt-10 flex items-center gap-4">
-        <button
-          type="button"
-          onClick={onMic}
-          className="bg-ink px-4 py-2.5 text-[14px] font-medium text-white hover:bg-cobalt"
-          aria-pressed={status === "listening"}
-        >
-          {status === "speaking" ? "Interrupt" : status === "connecting" ? "Connecting" : status === "listening" && mode === "speech" ? "Done speaking" : "Microphone"}
-        </button>
-        <span className="text-[12px] uppercase tracking-[0.16em] text-muted">
-          {status === "speaking" ? "Speaking" : status === "connecting" ? "Connecting" : "Listening"}
-        </span>
-        {mode === "live" ? (
-          <span className="h-1 w-16 bg-line" aria-hidden="true">
-            <span className="block h-full bg-cobalt" style={{ width: `${Math.round(level * 100)}%` }} />
-          </span>
-        ) : null}
-      </div>
-      {caption ? <p className="mt-4 max-w-[52ch] text-[14px] leading-relaxed text-ink/70">{caption}</p> : null}
-      {notice ? <p className="mt-4 max-w-[52ch] text-[13px] leading-relaxed text-muted">{notice}</p> : null}
-      <form onSubmit={submitDraft} className="mt-8 flex items-end gap-3 border-t border-line pt-4">
-        <label className="block flex-1">
-          <span className="sr-only">Type your answer</span>
-          <textarea
-            ref={fieldRef}
-            value={draft}
-            onChange={(event) => setDraft(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" && !event.shiftKey) {
-                event.preventDefault();
-                submitDraft();
-              }
-            }}
-            rows={2}
-            placeholder="Or type. Enter sends."
-            className="w-full resize-none bg-transparent text-[15px] leading-relaxed text-ink outline-none placeholder:text-muted"
-          />
-        </label>
-        <button type="submit" className="text-[14px] text-ink underline decoration-cobalt/40 underline-offset-4">
-          Send
-        </button>
-      </form>
-      {session ? <Transcript session={session} /> : null}
-    </Shell>
+      <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.08em] text-white/70">
+        {status === "speaking" ? "Speaking" : status === "connecting" ? "Connecting" : "Listening"}
+        {mode === "live" ? ` · ${Math.round(level * 100)}` : null}
+      </p>
+      {heard ? <p className="mt-6 max-w-[52ch] text-[15px] leading-relaxed text-white/75">{heard}</p> : null}
+      {caption ? <p className="mt-4 max-w-[52ch] text-[14px] leading-relaxed text-white/80">{caption}</p> : null}
+      {notice ? <p className="mt-4 max-w-[52ch] text-[13px] leading-relaxed text-white/70">{notice}</p> : null}
+    </CobaltRoom>
+  );
+}
+
+function MicIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
+      <rect x="9" y="3" width="6" height="11" rx="3" />
+      <path d="M5 11a7 7 0 0 0 14 0M12 18v3" />
+    </svg>
   );
 }
 
@@ -472,9 +528,7 @@ function Shell({ children }: { children: ReactNode }) {
     <main className="min-h-screen bg-paper text-ink">
       <header className="border-b border-line">
         <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-5">
-          <a href="/" className="text-[15px] font-medium tracking-[0.18em]">
-            mocha
-          </a>
+          <MochaLockup tone="ink" />
           <p className="text-[11px] uppercase tracking-[0.16em] text-muted">Prototype interview</p>
         </div>
       </header>
@@ -496,7 +550,7 @@ function Missing() {
           if (!option) return null;
           return (
             <li key={track.id}>
-              <a className="flex items-baseline justify-between gap-4 py-3 hover:text-cobalt" href={`/interview?track=${track.id}&option=${option.id}&minutes=20`}>
+              <a className="flex items-baseline justify-between gap-4 py-3 hover:text-blue" href="/#practice">
                 <span>{track.name}</span>
                 <span className="text-[13px] text-muted">{option.name}</span>
               </a>
@@ -510,8 +564,8 @@ function Missing() {
 
 function clampMinutes(value: string | null) {
   const parsed = Number(value);
-  if (!Number.isFinite(parsed)) return 20;
-  return Math.min(30, Math.max(6, Math.round(parsed)));
+  if (!Number.isFinite(parsed)) return 30;
+  return Math.min(45, Math.max(6, Math.round(parsed)));
 }
 
 function formatClock(ms: number) {

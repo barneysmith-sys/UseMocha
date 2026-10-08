@@ -21,7 +21,7 @@ npm test
 npm run build
 ```
 
-Copy `.env.example` to `.env.local` and set `GEMINI_API_KEY` — the same key `/api/speak.js` already uses. The key stays on the server. Speech uses the same Charon voice and the same model list as production (`gemini-3.1-flash-tts-preview`, then `gemini-2.5-flash-preview-tts`, then `gemini-2.5-flash-tts`). Send `{ "text" }` or `{ "question" }`. Without the key, the round still runs in text, and the browser can transcribe when speech recognition is available. Do not point this key at a production database, and do not commit it.
+Copy `.env.example` to `.env.local` and set `GEMINI_API_KEY` — the same key `/api/speak.js` already uses. The key stays on the server. Speech uses the same Charon voice as production and tries `gemini-3.8-flash-tts`, then `gemini-3.8-flash-lite-tts`, then the earlier preview models. Send `{ "text" }` or `{ "question" }`. Without the key, the round still runs in text, and the browser can transcribe when speech recognition is available. Do not point this key at a production database, and do not commit it.
 
 The existing Mocha site is untouched. Do not install these dependencies at the repository root.
 
@@ -70,7 +70,7 @@ If the canvas cannot be created, `FallbackLandscape` draws the same field in 2D.
 
 `lib/interview` runs in the browser and does not need a model. After each answer it updates memory (what was stated, what was only inferred, what is still unknown) and chooses one action: probe, ask for evidence, challenge an assumption, clarify, introduce the case, advance, or close. A controller rejects early endings, repeated questions, praise, and scores. Follow-ups are capped.
 
-Gemini is used only as a voice. `/api/voice/speak` is the same Charon text-to-speech path Mocha already uses. `/api/voice/live` mints a short-lived token for Gemini Live (`gemini-3.8-live`) so the browser can stream audio without receiving the API key. The live model is instructed to speak the director's line, not to invent the interview. If that connection fails, the screen keeps the director's line.
+Gemini is used only as a voice. `/api/voice/speak` is the same Charon text-to-speech path Mocha already uses, starting with `gemini-3.8-flash-tts`. `/api/voice/live` mints a short-lived token for Gemini Live (`gemini-3.8-live`) so the browser can stream audio without receiving the API key. The live tool is blocking, so the model waits and speaks the director's line instead of inventing the interview. If that connection fails, the screen keeps the director's line. The live site's grader (`/api/interview`) calls `gemini-3.8-flash` at a low thinking level, without temperature or topP overrides, and falls back to `gemini-2.5-flash` when the current model is unavailable.
 
 ## What could move into Mocha later
 

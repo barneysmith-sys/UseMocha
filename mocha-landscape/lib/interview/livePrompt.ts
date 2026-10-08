@@ -41,6 +41,7 @@ export function liveSetupMessage() {
             {
               name: "submit_candidate_turn",
               description: "Submit the candidate's completed answer. Call this instead of speaking.",
+              behavior: "BLOCKING",
               parameters: {
                 type: "object",
                 properties: {

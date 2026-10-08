@@ -4,7 +4,13 @@ import { pcmToWav, sampleRateFromMime } from "@/lib/voice/wav";
 
 export const runtime = "nodejs";
 
-const MODELS = ["gemini-3.1-flash-tts-preview", "gemini-2.5-flash-preview-tts", "gemini-2.5-flash-tts"];
+const MODELS = [
+  "gemini-3.8-flash-tts",
+  "gemini-3.8-flash-lite-tts",
+  "gemini-3.1-flash-tts-preview",
+  "gemini-2.5-flash-preview-tts",
+  "gemini-2.5-flash-tts",
+];
 const VOICE = "Charon";
 
 const cache = new Map<string, { body: Uint8Array; type: string; model: string }>();
@@ -118,7 +124,7 @@ export async function POST(request: Request) {
       });
     } catch (error) {
       lastError = error as Error & { status?: number };
-      if (lastError.status && lastError.status !== 404) break;
+      if (lastError.status === 401) break;
     }
   }
   console.error(JSON.stringify({ ts: new Date().toISOString(), event: "speak_failed", message: lastError?.message ?? "unknown" }));

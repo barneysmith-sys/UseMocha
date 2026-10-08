@@ -4,6 +4,8 @@
 import { createHash } from 'crypto';
 
 const MODELS = [
+  'gemini-3.8-flash-tts',
+  'gemini-3.8-flash-lite-tts',
   'gemini-3.1-flash-tts-preview',
   'gemini-2.5-flash-preview-tts',
   'gemini-2.5-flash-tts',
@@ -149,7 +151,7 @@ export default async function handler(req, res) {
       return;
     } catch (err) {
       lastErr = err;
-      if (err.status && err.status !== 404) break;
+      if (err.status === 401) break;
     }
   }
 

@@ -1,14 +1,14 @@
 // ═══════════════════════════════════════════════════════════════════
-// Mocha — /api/interview  v8 — clean direct API, no gateway
-// Vercel Pro: 60s max. We target 55s with one retry on timeout.
-// Root fix v4→v5: timeout raised 25s→50s (was killing Gemini 2.5 Flash
-// which routinely takes 20-40s for full grading responses).
+// Mocha — /api/interview
+// Primary grader: gemini-3.8-flash. If that model is unavailable on
+// this key, fall back to gemini-2.5-flash so a round still gets a mark.
+// Vercel Pro: 60s max. Grade calls use a 50s timeout and one retry.
 // ═══════════════════════════════════════════════════════════════════
 
 import { createHash } from 'crypto';
 
-const GEMINI_ENDPOINT =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+const GEMINI_CURRENT = 'gemini-3.8-flash';
+const GEMINI_PREVIOUS = 'gemini-2.5-flash';
 
 // ── Vercel KV (optional) ─────────────────────────────────────────
 const KV_URL   = process.env.KV_REST_API_URL;
@@ -369,54 +369,111 @@ function buildLite(question, answer, industry, rid) {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// GEMINI CALL — with retry on first timeout
-// KEY FIX: timeout raised from 25s → 50s.
-// Gemini 2.5 Flash grading responses regularly take 20–40s.
-// The old 25s timeout was silently killing real AI responses
-// and returning fallback every time, making it look like it worked
-// (200 status) but giving structural-only scores.
+// GEMINI CALL
+// gemini-3.8-flash ignores temperature / topP / topK and can loop if
+// they are forced below 1.0, so the current model only sets a low
+// thinking level. The previous model keeps the sampling that it was
+// graded with. Thought parts are not the answer — read the other text.
+// A 50s timeout leaves headroom inside the 60s function limit. One
+// retry covers a cold start. A missing or refused current model falls
+// through to gemini-2.5-flash instead of a structural-only score.
 // ═══════════════════════════════════════════════════════════════════
-async function callGemini(prompt, rid, attempt = 1) {
-  const controller = new AbortController();
-  // 50s — leaves 10s buffer within Vercel Pro 60s limit
-  const timeout = setTimeout(() => controller.abort(), 50000);
+function geminiEndpoint(model) {
+  return `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`;
+}
 
+function generationConfigFor(model, { json, maxOutputTokens, rewrite }) {
+  if (model === GEMINI_CURRENT) {
+    const config = {
+      maxOutputTokens,
+      thinkingConfig: { thinkingLevel: 'low' },
+    };
+    if (json) config.responseMimeType = 'application/json';
+    return config;
+  }
+  if (rewrite) return { temperature: 0.7, maxOutputTokens };
+  return { temperature: 0.4, maxOutputTokens, topP: 0.8 };
+}
+
+function visibleModelText(data) {
+  const parts = data?.candidates?.[0]?.content?.parts || [];
+  return parts
+    .filter((part) => part && typeof part.text === 'string' && part.thought !== true)
+    .map((part) => part.text)
+    .join('')
+    .trim();
+}
+
+function modelUnavailable(status) {
+  return status === 400 || status === 403 || status === 404 || status === 429;
+}
+
+async function postGemini(prompt, model, rid, options) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), options.timeoutMs);
   try {
-    const res = await fetch(`${GEMINI_ENDPOINT}?key=${process.env.GEMINI_API_KEY}`, {
+    const res = await fetch(geminiEndpoint(model), {
       method : 'POST',
       signal : controller.signal,
       headers: { 'Content-Type': 'application/json' },
       body   : JSON.stringify({
-        contents        : [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature    : 0.40,
-          maxOutputTokens: 8000,
-          topP           : 0.8,
-        },
-        // thinkingConfig removed — not supported by gemini-2.5-flash
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: generationConfigFor(model, options),
       }),
     });
     clearTimeout(timeout);
-    return { res, timedOut: false };
+    return { res, timedOut: false, model };
   } catch (err) {
     clearTimeout(timeout);
     if (err.name === 'AbortError') {
-      log('warn', rid, { event: 'gemini_timeout', attempt });
-      // One retry on timeout — Gemini 2.5 Flash cold starts can be slow
-      if (attempt === 1) {
-        log('info', rid, { event: 'retry', attempt: 2 });
-        return callGemini(prompt, rid, 2);
-      }
-      return { res: null, timedOut: true };
+      log('warn', rid, { event: 'gemini_timeout', attempt: options.attempt, model });
+      return { res: null, timedOut: true, model };
     }
-    log('error', rid, { event: 'gemini_fetch_error', message: err.message });
-    return { res: null, timedOut: false, networkError: true };
+    log('error', rid, { event: 'gemini_fetch_error', message: err.message, model });
+    return { res: null, timedOut: false, networkError: true, model };
   }
+}
+
+async function callGemini(prompt, rid, options = {}) {
+  const models = options.models || [GEMINI_CURRENT, GEMINI_PREVIOUS];
+  const attempts = options.rewrite ? 1 : 2;
+  const callOptions = {
+    json: !!options.json,
+    rewrite: !!options.rewrite,
+    maxOutputTokens: options.maxOutputTokens || (options.rewrite ? 4000 : 8000),
+    timeoutMs: options.timeoutMs || (options.rewrite ? 20000 : 50000),
+  };
+  let last = { res: null, timedOut: false, networkError: false, model: models[0] };
+
+  for (const model of models) {
+    for (let attempt = 1; attempt <= attempts; attempt++) {
+      last = await postGemini(prompt, model, rid, { ...callOptions, attempt });
+      if (last.timedOut) {
+        if (attempt < attempts) {
+          log('info', rid, { event: 'retry', attempt: attempt + 1, model });
+          continue;
+        }
+        break;
+      }
+      if (last.networkError || !last.res) break;
+      if (last.res.ok) return last;
+      if (model !== models[models.length - 1] && modelUnavailable(last.res.status)) {
+        log('warn', rid, { event: 'gemini_model_fallback', from: model, status: last.res.status });
+        await last.res.arrayBuffer().catch(() => {});
+        break;
+      }
+      return last;
+    }
+    if (last.timedOut || last.networkError) return last;
+  }
+  return last;
 }
 
 // ═══════════════════════════════════════════════════════════════════
 // MAIN HANDLER
 // ═══════════════════════════════════════════════════════════════════
+export { visibleModelText, generationConfigFor, callGemini, GEMINI_CURRENT, GEMINI_PREVIOUS };
+
 export default async function handler(req, res) {
   const rid = requestId();
 
@@ -529,10 +586,12 @@ export default async function handler(req, res) {
   }
 
   const estInputTokens = estimateTokens(prompt);
-  log('info', rid, { event: 'gemini_call', est_input_tokens: estInputTokens });
+  log('info', rid, { event: 'gemini_call', est_input_tokens: estInputTokens, model: GEMINI_CURRENT });
 
   // ── Call Gemini with retry ───────────────────────────────────────
-  const { res: geminiRes, timedOut, networkError } = await callGemini(prompt, rid);
+  const { res: geminiRes, timedOut, networkError, model } = await callGemini(prompt, rid, {
+    json: cleanMode !== 'followup',
+  });
 
   if (timedOut || networkError || !geminiRes) {
     return res.status(200).json({
@@ -562,15 +621,34 @@ export default async function handler(req, res) {
     });
   }
 
-  const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  let modelUsed = model;
+  let rawText = visibleModelText(data);
+  if (!rawText && modelUsed === GEMINI_CURRENT && geminiRes.ok && !data.error) {
+    log('warn', rid, { event: 'empty_response_fallback', model: modelUsed });
+    const second = await callGemini(prompt, rid, {
+      json: cleanMode !== 'followup',
+      models: [GEMINI_PREVIOUS],
+    });
+    if (second.res) {
+      try {
+        const secondData = await second.res.json();
+        const secondText = visibleModelText(secondData);
+        if (secondText && !secondData.error) {
+          data = secondData;
+          rawText = secondText;
+          modelUsed = second.model;
+        }
+      } catch { /* keep the empty current-model response */ }
+    }
+  }
   if (!rawText) {
-    log('warn', rid, { event: 'empty_response' });
+    log('warn', rid, { event: 'empty_response', model: modelUsed });
     return res.status(200).json({ ...buildFallback(cleanQuestion, cleanAnswer, cleanIndustry, rid), _rid: rid });
   }
 
   if (cleanMode === 'followup') {
     log('info', rid, { event: 'done_followup' });
-    return res.status(200).json({ reply: rawText.trim(), _rid: rid });
+    return res.status(200).json({ reply: rawText.trim(), _rid: rid, _model: modelUsed });
   }
 
   // ── Parse JSON ───────────────────────────────────────────────────
@@ -649,33 +727,22 @@ export default async function handler(req, res) {
   parsed.firms_standard = parsed.firms_standard || rubric.firms;
   parsed.citation       = parsed.citation       || rubric.citation;
   parsed._rid           = rid;
+  parsed._model         = modelUsed;
 
   const outputTokens = data.usageMetadata?.candidatesTokenCount || estimateTokens(rawText);
   const inputTokens  = data.usageMetadata?.promptTokenCount     || estInputTokens;
-  log('info', rid, { event: 'done', score: parsed.overall, verdict: parsed.interviewer_verdict, input_tokens: inputTokens, output_tokens: outputTokens });
+  log('info', rid, { event: 'done', model: modelUsed, score: parsed.overall, verdict: parsed.interviewer_verdict, input_tokens: inputTokens, output_tokens: outputTokens });
 
   // ── Separate rewrite call — simple, isolated, no JSON ──────────
   try {
     const rwPrompt = 'You are a ' + rubric.shortName + ' interviewer. The candidate answered this question:\n\nQUESTION: ' + cleanQuestion + '\n\nCANDIDATE ANSWER: ' + cleanAnswer + '\n\nRewrite their answer as a model ' + rubric.firms + ' response. Write it in first person as if you are the candidate speaking in an interview. Use their details where possible; invent realistic specifics where missing. Write 5-6 complete sentences: situation with specific context, your personal responsibility, 2-3 concrete actions using I-language, a quantified result, one reflection. No brackets. No instructions. Just the answer starting with During my or In my role. Minimum 100 words.';
-
-    const rwBody = JSON.stringify({
-      contents: [{ parts: [{ text: rwPrompt }] }],
-      generationConfig: { temperature: 0.7, maxOutputTokens: 2000 }
-    });
-
-    const rwController = new AbortController();
-    const rwTimeout = setTimeout(() => rwController.abort(), 25000);
-    const rwEndpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + process.env.GEMINI_API_KEY;
-    const rwRes = await fetch(rwEndpoint,
-      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: rwBody, signal: rwController.signal }
-    );
-    clearTimeout(rwTimeout);
-    if (rwRes.ok) {
-      const rwData = await rwRes.json();
-      const rwText = (rwData.candidates && rwData.candidates[0] && rwData.candidates[0].content && rwData.candidates[0].content.parts && rwData.candidates[0].content.parts[0] && rwData.candidates[0].content.parts[0].text) ? rwData.candidates[0].content.parts[0].text.trim() : '';
-      if (rwText && rwText.length > 50) {
-        parsed.improved_answer = rwText;
-      }
+    const rw = await callGemini(rwPrompt, rid, { rewrite: true, maxOutputTokens: 4000, timeoutMs: 20000 });
+    if (rw.res && rw.res.ok) {
+      const rwData = await rw.res.json();
+      const rwText = visibleModelText(rwData);
+      if (rwText && rwText.length > 50) parsed.improved_answer = rwText;
+    } else if (rw.res) {
+      await rw.res.arrayBuffer().catch(() => {});
     }
   } catch (e) {
     // rewrite failed silently

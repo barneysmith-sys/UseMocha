@@ -57,6 +57,11 @@ export function openSession(input: OpenInput): { state: Session; decision: Decis
   return { state: applyInterviewer(state, decision, nowMs), decision };
 }
 
+export function startClock(state: Session, nowMs: number): Session {
+  if (state.closed) return state;
+  return { ...state, startedAtMs: nowMs, stageStartedAtMs: nowMs };
+}
+
 export function closeSession(state: Session, nowMs: number): { state: Session; decision: Decision } {
   if (state.closed) {
     const decision = decisionOf(state, "CLOSE_INTERVIEW", CLOSE_LINE, "The interview has already ended.", { closed: true });

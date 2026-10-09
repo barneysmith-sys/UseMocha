@@ -32,6 +32,7 @@ export class GeminiLive {
   private candidateVoice = false;
   private closed = false;
   private upload = false;
+  private held = true;
   private listenTimer = 0;
   private quietTimer = 0;
 
@@ -91,27 +92,41 @@ export class GeminiLive {
     });
   }
 
-  say(line: string) {
-    this.speakLine(line);
+  say(_line: string) {
+    this.acknowledge();
   }
 
-  offer(line: string) {
-    if (this.candidateVoice) {
-      this.audio.stop();
-      this.playing = false;
-      this.expectSpeech = false;
-      this.upload = true;
-      this.events.onStatus("listening");
-      return;
-    }
-    this.speakLine(line);
+  offer(_line: string) {
+    this.acknowledge();
+  }
+
+  listen() {
+    this.held = false;
+    this.upload = true;
+    this.expectSpeech = false;
+    this.candidateVoice = false;
+    this.transcript = "";
+    this.handled = true;
+    window.clearTimeout(this.listenTimer);
+    window.clearTimeout(this.quietTimer);
+    if (!this.closed) this.events.onStatus("listening");
+  }
+
+  quiet() {
+    this.held = true;
+    this.upload = false;
+    this.candidateVoice = false;
+    this.transcript = "";
+    this.handled = true;
+    window.clearTimeout(this.listenTimer);
+    window.clearTimeout(this.quietTimer);
   }
 
   interrupt() {
     this.audio.stop();
     this.playing = false;
-    this.upload = true;
     this.expectSpeech = false;
+    if (!this.held) this.upload = true;
   }
 
   close() {
@@ -149,7 +164,9 @@ export class GeminiLive {
     const level = Math.min(1, Math.sqrt(sum / bins.length) * 4);
     this.level = level;
     this.events.onLevel(level);
-    if (level > 0.18) {
+    if (this.held) {
+      this.loudSince = 0;
+    } else if (level > 0.18) {
       if (!this.loudSince) this.loudSince = performance.now();
       if (performance.now() - this.loudSince > 280) {
         this.markCandidate();
@@ -183,8 +200,11 @@ export class GeminiLive {
     }
     if (message.setupComplete && ready) ready();
     const content = message.serverContent;
-    if (content?.interrupted) this.interrupt();
-    const hearingCandidate = this.candidateVoice || !this.expectSpeech;
+    if (content?.interrupted) {
+      this.playing = false;
+      this.expectSpeech = false;
+    }
+    const hearingCandidate = !this.held && (this.candidateVoice || !this.expectSpeech);
     const interim = content?.interimInputTranscription?.text;
     if (interim && hearingCandidate) {
       this.markCandidate();
@@ -201,6 +221,10 @@ export class GeminiLive {
     for (const call of calls) {
       if (call.name !== "submit_candidate_turn") continue;
       if (call.id && !this.pendingId) this.pendingId = call.id;
+      if (this.held) {
+        this.acknowledge();
+        continue;
+      }
       this.remember(call.args?.transcript || "");
       if (this.transcript.trim()) this.handled = false;
       if (this.candidateVoice || this.level > 0.18) {
@@ -209,25 +233,15 @@ export class GeminiLive {
       }
       this.finishTurn(this.transcript);
     }
-    if (content?.modelTurn?.parts && this.expectSpeech && !this.candidateVoice) {
-      for (const part of content.modelTurn.parts) {
-        const data = part.inlineData?.data;
-        if (!data) continue;
-        const rate = Number(part.inlineData?.mimeType?.match(/rate=(\d+)/)?.[1] ?? 24000);
-        this.audio.playPcm16(data, rate);
-        this.playing = true;
-        this.upload = false;
-        this.events.onStatus("speaking");
-        this.armListen();
-      }
-    } else if (content?.modelTurn?.parts && this.candidateVoice) {
-      this.interrupt();
-      this.events.onStatus("listening");
+    if (content?.modelTurn?.parts) {
+      this.playing = false;
+      this.expectSpeech = false;
     }
     if (content?.turnComplete) this.armListen();
   }
 
   private armListen() {
+    if (this.held || this.closed) return;
     window.clearTimeout(this.listenTimer);
     this.listenTimer = window.setTimeout(() => {
       this.playing = false;
@@ -266,32 +280,30 @@ export class GeminiLive {
     else if (!this.transcript.endsWith(next)) this.transcript = `${this.transcript} ${next}`.trim();
   }
 
-  private speakLine(line: string) {
+  private acknowledge() {
     window.clearTimeout(this.quietTimer);
+    window.clearTimeout(this.listenTimer);
     this.candidateVoice = false;
     this.transcript = "";
-    this.expectSpeech = true;
+    this.expectSpeech = false;
     this.handled = true;
+    this.held = true;
     this.upload = false;
-    this.events.onStatus("speaking");
-    if (this.pendingId) {
-      this.send({
-        toolResponse: {
-          functionResponses: [{ id: this.pendingId, name: "submit_candidate_turn", response: { say: line } }],
-        },
-      });
-      this.pendingId = null;
-      return;
-    }
+    this.playing = false;
+    if (!this.pendingId) return;
     this.send({
-      clientContent: {
-        turns: [{ role: "user", parts: [{ text: `SAY VERBATIM:\n${line}` }] }],
-        turnComplete: true,
+      toolResponse: {
+        functionResponses: [{ id: this.pendingId, name: "submit_candidate_turn", response: { noted: true } }],
       },
     });
+    this.pendingId = null;
   }
 
   private finishTurn(transcript: string) {
+    if (this.held) {
+      this.acknowledge();
+      return;
+    }
     const text = transcript.trim();
     if (!text || this.handled) return;
     this.transcript = "";

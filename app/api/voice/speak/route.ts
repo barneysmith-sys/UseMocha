@@ -34,15 +34,7 @@ function limited(request: Request) {
 }
 
 async function synthesize(apiKey: string, text: string, model: string) {
-  const prompt = [
-    "Read the interview question below exactly as written.",
-    "You are a senior interviewer at a top firm, sitting across from the candidate.",
-    "Calm, clear, unhurried. A short pause after the first sentence.",
-    "No greeting, no extra words, no commentary.",
-    "",
-    text,
-  ].join("\n");
-  const contents = [{ parts: [{ text: prompt }] }];
+  const contents = [{ parts: [{ text }] }];
   const speechConfig = { voiceConfig: { prebuiltVoiceConfig: { voiceName: VOICE } } };
   const bodies = [
     { contents, generationConfig: { responseModalities: ["AUDIO"], speechConfig } },
@@ -95,7 +87,7 @@ export async function POST(request: Request) {
   const text = sanitise(payload.text ?? payload.question, 1200);
   if (!text) return NextResponse.json({ error: "text is required." }, { status: 400 });
 
-  const hash = createHash("sha256").update(text).digest("hex").slice(0, 16);
+  const hash = createHash("sha256").update(`spoken-line-v2\n${text}`).digest("hex").slice(0, 16);
   const cached = cache.get(hash);
   if (cached) {
     return new NextResponse(Buffer.from(cached.body), {

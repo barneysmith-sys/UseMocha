@@ -71,6 +71,7 @@ export interface Debrief {
   contradictions: string[];
   summary: string;
   caseKey?: string;
+  mark?: "room" | "transcript";
 }
 
 export interface Session {

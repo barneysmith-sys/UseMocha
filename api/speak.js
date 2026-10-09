@@ -44,16 +44,7 @@ function sampleRateFromMime(mime) {
 }
 
 async function synthesize(apiKey, question, model) {
-  const prompt = [
-    'Read the interview question below exactly as written.',
-    'You are a senior interviewer at a top firm, sitting across from the candidate.',
-    'Calm, clear, unhurried. A short pause after the first sentence.',
-    'No greeting, no extra words, no commentary.',
-    '',
-    question,
-  ].join('\n');
-
-  const contents = [{ parts: [{ text: prompt }] }];
+  const contents = [{ parts: [{ text: question }] }];
   const speechConfig = {
     voiceConfig: {
       prebuiltVoiceConfig: { voiceName: VOICE },

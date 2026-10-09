@@ -90,6 +90,7 @@ export function buildDebrief(state: Session): Debrief {
     contradictions,
     summary,
     caseKey: scenario.caseKey,
+    mark: "room" as const,
   };
 }
 

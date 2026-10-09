@@ -4,12 +4,13 @@ import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "rea
 import { useSearchParams } from "next/navigation";
 import { MochaLockup } from "@/components/MochaLockup";
 import { findOption, findTrack, tracks, type CareerTrack, type InterviewOption } from "@/lib/careers";
-import { closeSession, openSession, submitAnswer, type Session } from "@/lib/interview";
+import { closeSession, openSession, startClock, submitAnswer, type Session } from "@/lib/interview";
+import type { Debrief } from "@/lib/interview/types";
 import { CobaltRoom } from "./CobaltRoom";
 import { GeminiLive } from "./geminiLive";
-import { listenForAnswer, RoomAudio, speechRecognitionAvailable, watchForSpeech } from "./roomAudio";
+import { listenForAnswer, RoomAudio, speechRecognitionAvailable } from "./roomAudio";
 
-type Phase = "ready" | "live" | "debrief";
+type Phase = "ready" | "asking" | "live" | "debrief";
 type Status = "connecting" | "speaking" | "listening";
 type Mode = "text" | "speech" | "live";
 
@@ -28,9 +29,20 @@ export function InterviewRoom() {
   const minutes = clampMinutes(params.get("minutes"));
   const preferred = params.get("mode") === "text" ? "text" : "voice";
   const format = params.get("format") || option?.type || "";
+  const difficulty = params.get("difficulty") || "Challenging";
   const detail = [params.get("role"), params.get("company")].filter(Boolean).join(" · ");
   if (!track || !option) return <Missing />;
-  return <Room track={track} option={option} minutes={minutes} preferred={preferred} format={format} detail={detail} />;
+  return (
+    <Room
+      track={track}
+      option={option}
+      minutes={minutes}
+      preferred={preferred}
+      format={format}
+      difficulty={difficulty}
+      detail={detail}
+    />
+  );
 }
 
 function Room({
@@ -39,6 +51,7 @@ function Room({
   minutes,
   preferred,
   format,
+  difficulty,
   detail,
 }: {
   track: CareerTrack;
@@ -46,6 +59,7 @@ function Room({
   minutes: number;
   preferred: "voice" | "text";
   format: string;
+  difficulty: string;
   detail: string;
 }) {
   const [phase, setPhase] = useState<Phase>("ready");
@@ -58,6 +72,7 @@ function Room({
   const [notice, setNotice] = useState<string | null>(null);
   const [level, setLevel] = useState(0);
   const [now, setNow] = useState(0);
+  const [questionHeard, setQuestionHeard] = useState(false);
   const [mode, setModeState] = useState<Mode>("text");
   const sessionRef = useRef<Session | null>(null);
   const audioRef = useRef<RoomAudio | null>(null);
@@ -66,6 +81,10 @@ function Room({
   const modeRef = useRef<Mode>("text");
   const fieldRef = useRef<HTMLTextAreaElement>(null);
   const beginRef = useRef<(kind: "voice" | "text") => void>(() => {});
+  const startRef = useRef<() => void>(() => {});
+  const clockRef = useRef(false);
+  const questionHeardRef = useRef(false);
+  const voiceReadyRef = useRef<Promise<void>>(Promise.resolve());
   const preferredRef = useRef(preferred);
   preferredRef.current = preferred;
 
@@ -113,6 +132,22 @@ function Room({
     return () => window.removeEventListener("keydown", onKey);
   }, [phase]);
 
+  useEffect(() => {
+    if (phase !== "asking") return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== " " || event.repeat) return;
+      const target = event.target;
+      if (target instanceof HTMLElement && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
+        return;
+      }
+      event.preventDefault();
+      if (!questionHeardRef.current) return;
+      startRef.current();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [phase]);
+
   function setMode(next: Mode) {
     modeRef.current = next;
     setModeState(next);
@@ -127,6 +162,7 @@ function Room({
   }
 
   function applyTurn(text: string) {
+    if (!clockRef.current) return null;
     const current = sessionRef.current;
     if (!current || current.closed) return null;
     const result = submitAnswer(current, text, Date.now());
@@ -151,8 +187,9 @@ function Room({
       onPartial: setCaption,
       onEnd: (text) => {
         listenRef.current = null;
+        if (!clockRef.current) return;
         const next = applyTurn(text);
-        if (next) void speak(next);
+        if (next) void deliverFollowUp(next);
       },
       onError: (message) => {
         setNotice(message);
@@ -167,50 +204,111 @@ function Room({
     }
   }
 
-  async function speak(text: string) {
-    if (modeRef.current === "live" && liveRef.current) {
-      liveRef.current.say(text);
-      return;
-    }
+  async function readAloud(text: string) {
+    liveRef.current?.quiet();
     const audio = audioRef.current;
-    if (!audio || modeRef.current === "text") {
-      setStatus("listening");
-      return;
-    }
-    setStatus("speaking");
-    const gate = await watchForSpeech(audio.context, () => {});
+    if (!audio) return;
+    if (clockRef.current) setStatus("speaking");
     try {
       const response = await fetch("/api/voice/speak", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text }),
       });
-      const began = gate.speaking;
-      gate.close();
       if (response.status === 503) {
-        setNotice("Spoken voice needs a Gemini key in this prototype. The questions stay on screen.");
-        beginListening();
+        setNotice("The question is on screen. Spoken voice needs a Gemini key in this prototype.");
         return;
       }
       if (!response.ok) throw new Error("speak failed");
-      if (began) {
-        beginListening();
-        return;
-      }
       const duration = await audio.playResponse(await response.arrayBuffer());
-      window.setTimeout(() => beginListening(), Math.max(400, duration * 1000));
+      await new Promise((resolve) => window.setTimeout(resolve, Math.max(500, duration * 1000)));
     } catch {
-      gate.close();
-      setNotice("The voice didn't come through. The line is on screen.");
-      beginListening();
+      setNotice("The voice didn't come through. The question is on screen.");
     }
   }
 
+  async function deliverFollowUp(text: string) {
+    await readAloud(text);
+    if (!clockRef.current || sessionRef.current?.closed) return;
+    resumeListening();
+  }
+
+  function resumeListening() {
+    if (!clockRef.current || sessionRef.current?.closed) return;
+    if (modeRef.current === "live") {
+      liveRef.current?.listen();
+      setStatus("listening");
+      return;
+    }
+    if (modeRef.current === "speech") {
+      beginListening();
+      return;
+    }
+    setStatus("listening");
+    window.setTimeout(() => fieldRef.current?.focus(), 50);
+  }
+
+  async function connectVoice() {
+    setStatus("connecting");
+    try {
+      const response = await fetch("/api/voice/live", { method: "POST" });
+      const data = (await response.json()) as { available?: boolean; websocketUrl?: string };
+      if (data.available && data.websocketUrl && audioRef.current) {
+        const live = new GeminiLive(audioRef.current, {
+          onInterim: (text) => {
+            if (clockRef.current) setCaption(text);
+          },
+          onLevel: setLevel,
+          onStatus: (next) => {
+            if (clockRef.current) setStatus(next);
+          },
+          onFallback: (reason) => {
+            setNotice(`${reason} You can keep going by typing.`);
+            setMode(speechRecognitionAvailable() ? "speech" : "text");
+            liveRef.current = null;
+            if (clockRef.current && modeRef.current === "speech") beginListening();
+          },
+          onCandidate: (transcript, reply) => {
+            if (!clockRef.current) {
+              reply(transcript);
+              return;
+            }
+            const next = applyTurn(transcript);
+            reply(next ?? "");
+            if (next) void deliverFollowUp(next);
+          },
+        });
+        await live.connect(data.websocketUrl);
+        live.quiet();
+        liveRef.current = live;
+        setMode("live");
+        if (clockRef.current) live.listen();
+        return;
+      }
+    } catch {
+      setNotice("Live voice didn't connect. The question is read aloud, and you can type your answer.");
+    }
+    if (liveRef.current) return;
+    const fallback = speechRecognitionAvailable() ? "speech" : "text";
+    setMode(fallback);
+    if (fallback === "text") {
+      setNotice("This browser has no speech recognition. Type your answers. Nothing about the interview changes.");
+    }
+    if (clockRef.current && fallback === "speech") beginListening();
+  }
+
   async function begin(kind: "voice" | "text") {
+    clockRef.current = false;
+    questionHeardRef.current = false;
+    setQuestionHeard(false);
+    setHeard("");
+    setCaption("");
+    setDraft("");
+    setNotice(null);
+    setLevel(0);
     const context = new AudioContext();
     void context.resume();
-    const audio = new RoomAudio(context);
-    audioRef.current = audio;
+    audioRef.current = new RoomAudio(context);
     const opened = openSession({
       trackId: track.id,
       optionId: option.id,
@@ -223,72 +321,57 @@ function Room({
     sessionRef.current = opened.state;
     setSession(opened.state);
     setLine(opened.decision.say);
-    setPhase("live");
-    setNow(Date.now());
+    setPhase("asking");
+    setNow(0);
+    setStatus("speaking");
     if (kind === "text") {
       setMode("text");
-      setStatus("listening");
-      window.setTimeout(() => fieldRef.current?.focus(), 50);
-      return;
+      voiceReadyRef.current = Promise.resolve();
+    } else {
+      voiceReadyRef.current = connectVoice();
     }
-    setStatus("connecting");
-    try {
-      const response = await fetch("/api/voice/live", { method: "POST" });
-      const data = (await response.json()) as { available?: boolean; websocketUrl?: string };
-      if (data.available && data.websocketUrl) {
-        const live = new GeminiLive(audio, {
-          onInterim: setCaption,
-          onLevel: setLevel,
-          onStatus: setStatus,
-          onFallback: (reason) => {
-            setNotice(`${reason} You can keep going by typing.`);
-            setMode(speechRecognitionAvailable() ? "speech" : "text");
-            liveRef.current = null;
-            if (modeRef.current === "speech") beginListening();
-          },
-          onCandidate: (transcript, reply) => {
-            const next = applyTurn(transcript);
-            if (next) reply(next);
-          },
-        });
-        await live.connect(data.websocketUrl);
-        liveRef.current = live;
-        setMode("live");
-        live.offer(opened.decision.say);
-        return;
-      }
-    } catch {
-      setNotice("Live voice didn't connect. Questions will be read aloud if speech is configured, and you can type at any time.");
-    }
-    setMode(speechRecognitionAvailable() ? "speech" : "text");
-    if (modeRef.current === "text") {
-      setNotice("This browser has no speech recognition. Type your answers. Nothing about the interview changes.");
-      setStatus("listening");
-      return;
-    }
-    void speak(opened.decision.say);
+    await readAloud(opened.decision.say);
+    if (!sessionRef.current || sessionRef.current.closed) return;
+    questionHeardRef.current = true;
+    setQuestionHeard(true);
+  }
+
+  async function startAnswering() {
+    if (!questionHeardRef.current || clockRef.current) return;
+    const current = sessionRef.current;
+    if (!current || current.closed) return;
+    const started = startClock(current, Date.now());
+    sessionRef.current = started;
+    setSession(started);
+    clockRef.current = true;
+    setNow(Date.now());
+    setPhase("live");
+    setStatus("listening");
+    await voiceReadyRef.current;
+    if (!clockRef.current || sessionRef.current?.closed) return;
+    resumeListening();
   }
 
   function submitDraft(event?: FormEvent) {
     event?.preventDefault();
     const text = draft.trim();
-    if (!text || phase !== "live") return;
+    if (!text || !clockRef.current) return;
     listenRef.current?.stop();
     listenRef.current = null;
     audioRef.current?.stop();
-    liveRef.current?.interrupt();
     setDraft("");
     const next = applyTurn(text);
     if (!next) return;
     if (modeRef.current === "live") liveRef.current?.say(next);
-    else if (modeRef.current === "speech") void speak(next);
+    void deliverFollowUp(next);
   }
 
   function onMic() {
+    if (!clockRef.current) return;
     if (status === "speaking" || status === "connecting") {
       audioRef.current?.stop();
-      liveRef.current?.interrupt();
-      if (modeRef.current === "speech") beginListening();
+      if (modeRef.current === "live") liveRef.current?.listen();
+      else if (modeRef.current === "speech") beginListening();
       else setStatus("listening");
       return;
     }
@@ -306,6 +389,9 @@ function Room({
   }
 
   beginRef.current = begin;
+  startRef.current = () => {
+    void startAnswering();
+  };
   const kicker = [track.name, format, detail].filter(Boolean).join(" · ");
   const totalLabel = `${minutes}:00`;
 
@@ -355,25 +441,44 @@ function Room({
   }
 
   if (phase === "debrief" && session?.debrief) {
-    return <Debrief session={session} track={track} option={option} minutes={minutes} />;
+    return <Debrief session={session} track={track} option={option} minutes={minutes} difficulty={difficulty} />;
   }
 
-  const elapsedMs = session && now ? Math.max(0, now - session.startedAtMs) : 0;
+  const asking = phase === "asking";
+  const elapsedMs = !asking && session && now ? Math.max(0, now - session.startedAtMs) : 0;
   const stage = session?.stage ?? "introduction";
   const index = Math.max(0, stageIndex(stage));
 
   return (
     <CobaltRoom
       kicker={kicker}
-      stageLabel={`${String(index + 1).padStart(2, "0")} / 05 · ${STAGE_LABEL[stage]}`}
-      filled={index + 1}
-      elapsed={formatClock(elapsedMs)}
+      stageLabel={asking ? "00 / 05 · Question" : `${String(index + 1).padStart(2, "0")} / 05 · ${STAGE_LABEL[stage]}`}
+      filled={asking ? 0 : index + 1}
+      elapsed={asking ? "00:00" : formatClock(elapsedMs)}
       total={totalLabel}
       onExit={() => {
         stopVoice();
         window.location.assign("/");
       }}
       footer={
+        asking ? (
+          <div className="flex flex-col items-center gap-3">
+            <button
+              type="button"
+              disabled={!questionHeard}
+              onClick={() => void startAnswering()}
+              className="inline-flex h-[52px] items-center gap-2.5 rounded-full bg-white px-6 text-[15px] font-medium text-cobalt hover:bg-ice disabled:cursor-default disabled:bg-white/70 disabled:text-cobalt/60"
+            >
+              {questionHeard ? "Begin my answer" : "Listening to the question"}
+              {questionHeard ? (
+                <kbd className="rounded border border-[#B6CBFF] px-1.5 font-mono text-[11px] text-blue-deep">Space</kbd>
+              ) : null}
+            </button>
+            <p className="max-w-md text-center text-[13px] leading-relaxed text-white/75">
+              The clock starts when you begin your answer.
+            </p>
+          </div>
+        ) : (
         <form onSubmit={submitDraft} className="flex w-full max-w-3xl items-end gap-3">
           <button
             type="button"
@@ -407,17 +512,26 @@ function Room({
             Send
           </button>
         </form>
+        )
       }
     >
       <p className="max-w-[22em] text-[clamp(26px,3vw,34px)] font-light leading-snug tracking-[-0.015em]" aria-live="polite">
         {line}
       </p>
       <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.08em] text-white/70">
-        {status === "speaking" ? "Speaking" : status === "connecting" ? "Connecting" : "Listening"}
-        {mode === "live" ? ` · ${Math.round(level * 100)}` : null}
+        {asking
+          ? questionHeard
+            ? "Ready when you are"
+            : "Reading the question"
+          : status === "speaking"
+            ? "Speaking"
+            : status === "connecting"
+              ? "Connecting"
+              : "Listening"}
+        {!asking && mode === "live" ? ` · ${Math.round(level * 100)}` : null}
       </p>
-      {heard ? <p className="mt-6 max-w-[52ch] text-[15px] leading-relaxed text-white/75">{heard}</p> : null}
-      {caption ? <p className="mt-4 max-w-[52ch] text-[14px] leading-relaxed text-white/80">{caption}</p> : null}
+      {!asking && heard ? <p className="mt-6 max-w-[52ch] text-[15px] leading-relaxed text-white/75">{heard}</p> : null}
+      {!asking && caption ? <p className="mt-4 max-w-[52ch] text-[14px] leading-relaxed text-white/80">{caption}</p> : null}
       {notice ? <p className="mt-4 max-w-[52ch] text-[13px] leading-relaxed text-white/70">{notice}</p> : null}
     </CobaltRoom>
   );
@@ -437,25 +551,76 @@ function Debrief({
   track,
   option,
   minutes,
+  difficulty,
 }: {
   session: Session;
   track: CareerTrack;
   option: InterviewOption;
   minutes: number;
+  difficulty: string;
 }) {
-  const debrief = session.debrief;
-  if (!debrief) return null;
+  const initial = session.debrief;
+  const [reading, setReading] = useState<Debrief | null>(initial);
+  const [marking, setMarking] = useState(initial?.mark !== "transcript");
+  const [markNote, setMarkNote] = useState<string | null>(null);
+
+  useEffect(() => {
+    const debrief = session.debrief;
+    if (!debrief || debrief.mark === "transcript") {
+      setMarking(false);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const response = await fetch("/api/interview/debrief", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            trackName: session.trackName,
+            optionName: session.optionName,
+            difficulty,
+            turns: session.turns,
+            debrief,
+          }),
+        });
+        const data = (await response.json()) as { graded?: boolean; debrief?: Debrief };
+        if (cancelled) return;
+        if (data.graded && data.debrief?.mark === "transcript") {
+          setReading(data.debrief);
+          setMarkNote("Scored from the transcript.");
+        } else {
+          setMarkNote("The room reading stands. A transcript score did not come back.");
+        }
+      } catch {
+        if (!cancelled) setMarkNote("The room reading stands. A transcript score did not come back.");
+      } finally {
+        if (!cancelled) setMarking(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [session, difficulty]);
+
+  if (!reading) return null;
+  const scale = reading.mark === "transcript" ? 10 : 5;
   return (
     <Shell>
       <p className="text-[11px] uppercase tracking-[0.18em] text-cobalt">After the interview</p>
       <h1 className="mt-3 max-w-[18ch] text-[2.2rem] font-medium leading-[1.05] tracking-[-0.04em]">What the conversation supports.</h1>
-      <p className="mt-4 max-w-[54ch] text-[15.5px] leading-relaxed text-ink/80">{debrief.summary}</p>
+      <p className="mt-4 max-w-[54ch] text-[15.5px] leading-relaxed text-ink/80">{reading.summary}</p>
+      <p className="mt-3 text-[12px] uppercase tracking-[0.16em] text-muted">
+        {marking ? "Scoring the transcript." : markNote}
+      </p>
       <div className="mt-8 grid gap-px border border-line bg-line sm:grid-cols-2">
-        {debrief.dimensions.map((item) => (
+        {reading.dimensions.map((item) => (
           <article key={item.key} className="bg-paper p-4">
             <header className="flex items-baseline justify-between gap-3">
               <h2 className="text-[11px] uppercase tracking-[0.16em] text-cobalt">{item.label}</h2>
-              <p className="font-mono text-[13px] tabular-nums text-ink">{item.score} / 5</p>
+              <p className="font-mono text-[13px] tabular-nums text-ink">
+                {scale === 10 ? item.score.toFixed(1) : item.score} / {scale}
+              </p>
             </header>
             <p className="mt-3 text-[14px] leading-relaxed text-ink">{item.note}</p>
             {item.evidence[0] ? <q className="mt-3 block text-[13px] leading-relaxed text-muted">{item.evidence[0]}</q> : null}
@@ -463,24 +628,24 @@ function Debrief({
         ))}
       </div>
       <div className="mt-8 grid gap-6 sm:grid-cols-3">
-        <Memory title="Stated" items={debrief.stated} empty="No candidate statements were kept." />
-        <Memory title="Inferred" items={debrief.inferred} empty="Nothing was inferred." />
-        <Memory title="Unknown" items={debrief.unknown} empty="No open gaps were flagged." />
+        <Memory title="Stated" items={reading.stated} empty="No candidate statements were kept." />
+        <Memory title="Inferred" items={reading.inferred} empty="Nothing was inferred." />
+        <Memory title="Unknown" items={reading.unknown} empty="No open gaps were flagged." />
       </div>
-      {debrief.contradictions.length > 0 ? (
+      {reading.contradictions.length > 0 ? (
         <div className="mt-6">
           <h2 className="text-[11px] uppercase tracking-[0.16em] text-muted">Contradictions</h2>
           <ul className="mt-2 space-y-2 text-[14px] leading-relaxed text-ink">
-            {debrief.contradictions.map((item) => (
+            {reading.contradictions.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
         </div>
       ) : null}
-      {debrief.caseKey ? (
+      {reading.caseKey ? (
         <p className="mt-8 max-w-[62ch] border-l border-cobalt pl-3 text-[13.5px] leading-relaxed text-muted">
           <span className="text-ink">Case key, not said during the interview. </span>
-          {debrief.caseKey}
+          {reading.caseKey}
         </p>
       ) : null}
       <div className="mt-8 flex flex-wrap gap-4 text-[14px]">
@@ -577,7 +742,7 @@ function clampMinutes(value: string | null) {
 }
 
 function formatClock(ms: number) {
-  const total = Math.max(0, Math.ceil(ms / 1000));
+  const total = Math.max(0, Math.floor(ms / 1000));
   const minutes = Math.floor(total / 60);
   const seconds = total % 60;
   return `${minutes}:${seconds.toString().padStart(2, "0")}`;

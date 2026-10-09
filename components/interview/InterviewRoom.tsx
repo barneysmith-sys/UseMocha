@@ -573,7 +573,7 @@ function Debrief({
     let cancelled = false;
     (async () => {
       try {
-        const response = await fetch("/api/interview/debrief", {
+        const response = await fetch("/api/grade", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

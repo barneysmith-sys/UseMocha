@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { callGemini, visibleModelText } from "../../../../api/interview.js";
+import { callGemini, visibleModelText } from "../../../api/interview.js";
 import { applyGrade, gradePrompt, parseGrade } from "@/lib/interview/grade";
 import type { Debrief, Session, Turn } from "@/lib/interview/types";
 

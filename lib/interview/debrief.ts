@@ -62,7 +62,7 @@ export function buildDebrief(state: Session): Debrief {
       key: "impact",
       label: "Impact",
       score: impact,
-      evidence: metrics[0] ? take(() => true, metrics[0].quote) : [],
+      evidence: metrics[0]?.quote ? [trimQuote(metrics[0].quote)] : [],
       note: impactNote(state),
     },
   ];

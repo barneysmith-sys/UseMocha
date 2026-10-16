@@ -14,11 +14,14 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 
+const title = "Mocha | Adaptive AI Interview Simulator";
+const description =
+  "Prepare for consulting, banking, tech, and more with Mocha. Practice realistic AI interviews, receive adaptive follow-up questions, and improve with personalized feedback.";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://usemocha.app"),
-  title: "Mocha — The interview that adapts to you.",
-  description:
-    "Practice with an adaptive interview. Mocha listens to the answer you gave and asks the follow-up that decides it.",
+  title,
+  description,
   icons: {
     icon: [
       { url: "/favicon-32.png", type: "image/png", sizes: "32x32" },
@@ -28,10 +31,9 @@ export const metadata: Metadata = {
   },
   manifest: "/site.webmanifest",
   openGraph: {
-    title: "Mocha — The interview that adapts to you.",
-    description:
-      "Practice with an adaptive interview. Mocha listens to the answer you gave and asks the follow-up that decides it.",
-    url: "https://usemocha.app",
+    title,
+    description,
+    url: "https://usemocha.app/",
     siteName: "Mocha",
     type: "website",
     images: [
@@ -39,15 +41,14 @@ export const metadata: Metadata = {
         url: "/og/landing.png",
         width: 1200,
         height: 630,
-        alt: "Mocha. The interview that adapts to you.",
+        alt: title,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mocha — The interview that adapts to you.",
-    description:
-      "Practice with an adaptive interview. Mocha listens to the answer you gave and asks the follow-up that decides it.",
+    title,
+    description,
     images: ["/og/landing.png"],
   },
 };
